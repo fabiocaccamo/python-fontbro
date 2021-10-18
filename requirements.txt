@@ -1,0 +1,2 @@
+fonttools==4.27.1
+python-fsutil==0.5.0
