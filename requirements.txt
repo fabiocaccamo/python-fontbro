@@ -1,2 +1,2 @@
-fonttools==4.27.1
+fonttools[ufo,lxml,woff,unicode,interpolatable,plot,symfont,type1,pathops]==4.27.1
 python-fsutil==0.5.0
