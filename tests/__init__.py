@@ -12,9 +12,14 @@ class FontbroTestCase(unittest.TestCase):
     This class describes the abstract Fontbro test case
     with some methods that are used by different test cases.
     """
+    def setUp(self):
+        fsutil.remove_dir(self._get_font_temp_path())
+
+    def tearDown(self):
+        fsutil.remove_dir(self._get_font_temp_path())
 
     @classmethod
-    def _get_font_temp_path(cls, filepath):
+    def _get_font_temp_path(cls, filepath=''):
         return fsutil.join_path(__file__, 'temp/{}'.format(filepath))
 
     @classmethod
