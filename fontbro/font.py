@@ -17,7 +17,7 @@ import sys
 
 class Fontbro(object):
     """
-    human-friendly font operations on top of fontTools.
+    human-friendly font operations.
     """
 
     # Features:
@@ -548,7 +548,7 @@ class Fontbro(object):
         """
         Gets the font weight value and name.
 
-        :returns: The weight.
+        :returns: The weight name and value.
         :rtype: dict or None
         """
         font = self.get_ttfont()
@@ -566,7 +566,7 @@ class Fontbro(object):
         """
         Gets the font width value and name.
 
-        :returns: The width.
+        :returns: The width name and value.
         :rtype: dict or None
         """
         font = self.get_ttfont()
@@ -601,7 +601,7 @@ class Fontbro(object):
         """
         Saves the font at filepath.
 
-        :param filepath: The filepath
+        :param filepath: The filepath, if None the source filepath will be used
         :type filepath: str or None
 
         :returns: The filepath where the font has been saved to.
@@ -654,6 +654,8 @@ class Fontbro(object):
 
         :param filepath: The filepath
         :type filepath: str
+        :param overwrite: The overwrite, if True the source font file can be overwritten
+        :type overwrite: bool
 
         :returns: The filepath where the font has been saved to.
         :rtype: str
@@ -668,6 +670,8 @@ class Fontbro(object):
 
         :param filepath: The filepath
         :type filepath: str
+        :param overwrite: The overwrite, if True the source font file can be overwritten
+        :type overwrite: bool
 
         :returns: The filepath where the font has been saved to.
         :rtype: str
