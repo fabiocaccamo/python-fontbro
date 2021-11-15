@@ -184,6 +184,7 @@ class Font(object):
 
     def __init__(self, filepath):
         """
+        Constructs a new Font instance loading a font file from the given filepath.
 
         :param filepath: The filepath from which to load the font
         :type filepath: string or None
