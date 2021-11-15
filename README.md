@@ -67,6 +67,8 @@ font = Fontbro(filepath='MyFont.ttf')
 -   [`set_style_flags`](#set_style_flags)
 -   [`subset`](#subset)
 
+---
+
 -   #### get_characters
 ```python
 """
