@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from fontbro import Fontbro
+from fontbro import Font
 
 import fsutil
 import json
 import unittest
 
 
-class FontbroTestCase(unittest.TestCase):
+class AbstractTestCase(unittest.TestCase):
     """
-    This class describes the abstract Fontbro test case
+    This class describes the abstract Font test case
     with some methods that are used by different test cases.
     """
     def setUp(self):
@@ -29,7 +29,7 @@ class FontbroTestCase(unittest.TestCase):
     @classmethod
     def _get_font(cls, filepath):
         filepath = cls._get_font_path(filepath)
-        font = Fontbro(filepath=filepath)
+        font = Font(filepath=filepath)
         return font
 
     @staticmethod

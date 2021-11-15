@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from fontbro import Fontbro
+from fontbro import Font
 
-from tests import FontbroTestCase
+from tests import AbstractTestCase
 
 
-class SaveTestCase(FontbroTestCase):
+class SaveTestCase(AbstractTestCase):
     '''
     Test case for the methods related to the font save method.
     '''
@@ -30,9 +30,9 @@ class SaveTestCase(FontbroTestCase):
         font_saved_filepath = font.save_as_woff(output_filepath)
         self.assertTrue(font_saved_filepath.endswith('.woff'))
         # ensure that the original font format is not changed
-        self.assertEqual(font.get_format(), Fontbro.FORMAT_TTF)
-        font_saved = Fontbro(font_saved_filepath)
-        self.assertEqual(font_saved.get_format(), Fontbro.FORMAT_WOFF)
+        self.assertEqual(font.get_format(), Font.FORMAT_TTF)
+        font_saved = Font(font_saved_filepath)
+        self.assertEqual(font_saved.get_format(), Font.FORMAT_WOFF)
 
     def test_save_as_woff2(self):
         # font = self._get_font('/Noto_Sans_TC/NotoSansTC-Regular.otf')
@@ -42,9 +42,9 @@ class SaveTestCase(FontbroTestCase):
         font_saved_filepath = font.save_as_woff2(output_filepath)
         self.assertTrue(font_saved_filepath.endswith('.woff2'))
         # ensure that the original font format is not changed
-        self.assertEqual(font.get_format(), Fontbro.FORMAT_TTF)
-        font_saved = Fontbro(font_saved_filepath)
-        self.assertEqual(font_saved.get_format(), Fontbro.FORMAT_WOFF2)
+        self.assertEqual(font.get_format(), Font.FORMAT_TTF)
+        font_saved = Font(font_saved_filepath)
+        self.assertEqual(font_saved.get_format(), Font.FORMAT_WOFF2)
 
 
 if __name__ == '__main__':

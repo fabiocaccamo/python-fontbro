@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from tests import FontbroTestCase
+from tests import AbstractTestCase
 
 
-class ScriptsTestCase(FontbroTestCase):
+class ScriptsTestCase(AbstractTestCase):
     '''
     Test case for the methods related to the font scripts.
     '''

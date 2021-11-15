@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 
-from fontbro import Fontbro
+from fontbro import Font
 
-from tests import FontbroTestCase
+from tests import AbstractTestCase
 
 
-class NamesTestCase(FontbroTestCase):
+class NamesTestCase(AbstractTestCase):
     """
     Test case for the methods related to the font names.
     """
 
     def test_get_name_by_id(self):
         font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
-        family_name = font.get_name(Fontbro.NAME_FAMILY_NAME)
+        family_name = font.get_name(Font.NAME_FAMILY_NAME)
         self.assertEqual(family_name, 'Roboto Mono')
 
     def test_get_name_by_key(self):
@@ -63,8 +63,8 @@ class NamesTestCase(FontbroTestCase):
 
     def test_set_name(self):
         font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
-        font.set_name(Fontbro.NAME_FAMILY_NAME, 'Roboto Mono Renamed')
-        self.assertEqual(font.get_name(Fontbro.NAME_FAMILY_NAME), 'Roboto Mono Renamed')
+        font.set_name(Font.NAME_FAMILY_NAME, 'Roboto Mono Renamed')
+        self.assertEqual(font.get_name(Font.NAME_FAMILY_NAME), 'Roboto Mono Renamed')
 
     def test_set_name_by_invalid_id(self):
         font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
@@ -79,12 +79,12 @@ class NamesTestCase(FontbroTestCase):
     def test_set_names(self):
         font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
         font.set_names({
-            Fontbro.NAME_FAMILY_NAME: 'Roboto Mono Renamed',
-            Fontbro.NAME_SUBFAMILY_NAME: 'Regular Renamed',
+            Font.NAME_FAMILY_NAME: 'Roboto Mono Renamed',
+            Font.NAME_SUBFAMILY_NAME: 'Regular Renamed',
         })
-        family_name = font.get_name(Fontbro.NAME_FAMILY_NAME)
+        family_name = font.get_name(Font.NAME_FAMILY_NAME)
         self.assertEqual(family_name, 'Roboto Mono Renamed')
-        subfamily_name = font.get_name(Fontbro.NAME_SUBFAMILY_NAME)
+        subfamily_name = font.get_name(Font.NAME_SUBFAMILY_NAME)
         self.assertEqual(subfamily_name, 'Regular Renamed')
 
 

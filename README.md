@@ -32,9 +32,9 @@ pip install python-fontbro
 Just import the font class:
 
 ```python
-from fontbro import Fontbro
+from fontbro import Font
 
-font = Fontbro(filepath='MyFont.ttf')
+font = Font(filepath='MyFont.ttf')
 ```
 
 ### Methods
@@ -127,7 +127,7 @@ Gets the name by its identifier from the font name table.
 :returns: The name.
 :rtype: str or None
 """
-family_name = font.get_name(key=Fontbro.NAME_FAMILY_NAME)
+family_name = font.get_name(key=Font.NAME_FAMILY_NAME)
 ```
 
 -   #### get_names
@@ -368,7 +368,7 @@ Sets the name by its identifier in the font name table.
 :param value: The value
 :type value: str
 """
-font.set_name(Fontbro.NAME_FAMILY_NAME, 'Family Name Renamed')
+font.set_name(Font.NAME_FAMILY_NAME, 'Family Name Renamed')
 ```
 
 -   #### set_names
@@ -380,8 +380,8 @@ Sets the names by their identifier in the name table.
 :type names: dict
 """
 font.set_names(names={
-    Fontbro.NAME_FAMILY_NAME: 'Family Name Renamed',
-    Fontbro.NAME_SUBFAMILY_NAME: 'Regular Renamed',
+    Font.NAME_FAMILY_NAME: 'Family Name Renamed',
+    Font.NAME_SUBFAMILY_NAME: 'Regular Renamed',
 })
 ```
 

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from tests import FontbroTestCase
+from tests import AbstractTestCase
 
 
-class SubsetTestCase(FontbroTestCase):
+class SubsetTestCase(AbstractTestCase):
     """
     Test case for the font subsetting.
     """

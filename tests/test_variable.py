@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from tests import FontbroTestCase
+from tests import AbstractTestCase
 
 
-class VariableTestCase(FontbroTestCase):
+class VariableTestCase(AbstractTestCase):
     """
     Test case for the methods related to the static/variable font.
     """

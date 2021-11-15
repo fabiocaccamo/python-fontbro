@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from tests import FontbroTestCase
+from tests import AbstractTestCase
 
 
-class StyleFlagsTestCase(FontbroTestCase):
+class StyleFlagsTestCase(AbstractTestCase):
     """
     Test case for the methods related to the font style flags.
     """

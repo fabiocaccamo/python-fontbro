@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from tests import FontbroTestCase
+from tests import AbstractTestCase
 
 
-class FeaturesTestCase(FontbroTestCase):
+class FeaturesTestCase(AbstractTestCase):
     """
     Test case for the methods related to the font features.
     """

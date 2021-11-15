@@ -15,7 +15,7 @@ import os
 import sys
 
 
-class Fontbro(object):
+class Font(object):
     """
     human-friendly font operations.
     """
@@ -184,14 +184,13 @@ class Fontbro(object):
 
     def __init__(self, filepath):
         """
-        Constructs a new Fontbro instance loading a font file from the given filepath.
 
         :param filepath: The filepath from which to load the font
         :type filepath: string or None
 
         :raises ValueError: if the filepath is not a valid font path
         """
-        super(Fontbro, self).__init__()
+        super(Font, self).__init__()
 
         self._filepath = None
         self._ttfont = None
@@ -778,7 +777,7 @@ class Fontbro(object):
             )
 
         # TODO: add scripts argument support to generate unicodes,
-        # eg. scripts=[Fontbro.SCRIPTS.LATIN, Fontbro.SCRIPT_CYRILLIC]
+        # eg. scripts=[Font.SCRIPTS.LATIN, Font.SCRIPT_CYRILLIC]
 
         if isinstance(unicodes, (list, set, tuple)):
             unicodes = ', '.join(list(unicodes))
@@ -801,4 +800,4 @@ class Fontbro(object):
         :returns: String representation of the object.
         :rtype: str
         """
-        return f'Fontbro("{self._filepath}")'
+        return f'Font("{self._filepath}")'
