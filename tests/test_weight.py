@@ -1,0 +1,53 @@
+# -*- coding: utf-8 -*-
+
+from fontbro import Fontbro
+from tests import FontbroTestCase
+
+
+class WeightTestCase(FontbroTestCase):
+    """
+    Test case for the methods related to the font weight.
+    """
+
+    def _test_font_weight(self, filepath, expected_value, expected_name):
+        font = self._get_font(filepath)
+        weight = font.get_weight()
+        # print(filepath, weight)
+        expected_weight = {'value': expected_value, 'name': expected_name}
+        self.assertEqual(weight, expected_weight)
+
+    def test_get_weight(self):
+        self._test_font_weight(
+            filepath='/Noto_Sans_TC/NotoSansTC-Thin.otf',
+            expected_value=250,
+            expected_name=Fontbro.WEIGHT_EXTRA_LIGHT,
+        )
+        self._test_font_weight(
+            filepath='/Noto_Sans_TC/NotoSansTC-Light.otf',
+            expected_value=300,
+            expected_name=Fontbro.WEIGHT_LIGHT,
+        )
+        self._test_font_weight(
+            filepath='/Noto_Sans_TC/NotoSansTC-Regular.otf',
+            expected_value=400,
+            expected_name=Fontbro.WEIGHT_REGULAR,
+        )
+        self._test_font_weight(
+            filepath='/Noto_Sans_TC/NotoSansTC-Medium.otf',
+            expected_value=500,
+            expected_name=Fontbro.WEIGHT_MEDIUM,
+        )
+        self._test_font_weight(
+            filepath='/Noto_Sans_TC/NotoSansTC-Bold.otf',
+            expected_value=700,
+            expected_name=Fontbro.WEIGHT_BOLD,
+        )
+        self._test_font_weight(
+            filepath='/Noto_Sans_TC/NotoSansTC-Black.otf',
+            expected_value=900,
+            expected_name=Fontbro.WEIGHT_BLACK,
+        )
+
+
+if __name__ == '__main__':
+    unittest.main()

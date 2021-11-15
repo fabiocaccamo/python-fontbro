@@ -1,0 +1,128 @@
+# -*- coding: utf-8 -*-
+
+from tests import FontbroTestCase
+
+
+class VariableTestCase(FontbroTestCase):
+    """
+    Test case for the methods related to the static/variable font.
+    """
+
+    def test_get_variable_axes_with_static_font(self):
+        font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
+        axes = font.get_variable_axes()
+        self.assertEqual(axes, None)
+
+    def test_get_variable_axes_with_variable_font(self):
+        font = self._get_font('/Roboto_Mono/RobotoMono-VariableFont_wght.ttf')
+        axes = font.get_variable_axes()
+        self.assertEqual(len(axes), 1)
+        self.assertEqual(
+            axes[0],
+            {
+                'tag': 'wght',
+                'name': 'Weight',
+                'minValue': 100.0,
+                'maxValue': 700.0,
+                'defaultValue': 400.0,
+            },
+        )
+
+    def test_get_variable_axes_tags_with_static_font(self):
+        font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
+        axes = font.get_variable_axes_tags()
+        self.assertEqual(axes, None)
+
+    def test_get_variable_axes_tags_with_variable_font(self):
+        font = self._get_font('/Roboto_Mono/RobotoMono-VariableFont_wght.ttf')
+        axes = font.get_variable_axes_tags()
+        self.assertEqual(len(axes), 1)
+        self.assertEqual(axes, ['wght'])
+
+    def test_get_variable_axis_by_tag(self):
+        font = self._get_font('/Roboto_Mono/RobotoMono-VariableFont_wght.ttf')
+        axis = font.get_variable_axis_by_tag('wdht')
+        self.assertEqual(axis, None)
+        axis = font.get_variable_axis_by_tag('wght')
+        self.assertEqual(
+            axis,
+            {
+                'tag': 'wght',
+                'name': 'Weight',
+                'minValue': 100.0,
+                'maxValue': 700.0,
+                'defaultValue': 400.0,
+            },
+        )
+
+    def test_get_variable_instances(self):
+        font = self._get_font('/Roboto_Mono/RobotoMono-VariableFont_wght.ttf')
+        instances = font.get_variable_instances()
+        expected_instances = [
+            {
+                'coordinates': {'wght': 100.0},
+                'postscriptName': 'RobotoMono-Thin',
+                'subfamilyName': 'Thin',
+            },
+            {
+                'coordinates': {'wght': 300.0},
+                'postscriptName': 'RobotoMono-Light',
+                'subfamilyName': 'Light',
+            },
+            {
+                'coordinates': {'wght': 400.0},
+                'postscriptName': 'RobotoMono-Regular',
+                'subfamilyName': 'Regular',
+            },
+            {
+                'coordinates': {'wght': 500.0},
+                'postscriptName': 'RobotoMono-Medium',
+                'subfamilyName': 'Medium',
+            },
+            {
+                'coordinates': {'wght': 700.0},
+                'postscriptName': 'RobotoMono-Bold',
+                'subfamilyName': 'Bold',
+            },
+        ]
+        self.assertEqual(instances, expected_instances)
+
+    def test_get_variable_instances_with_static_font(self):
+        font = self._get_font('/Noto_Sans_TC/NotoSansTC-Regular.otf')
+        instances = font.get_variable_instances()
+        self.assertEqual(instances, None)
+
+    def test_get_variable_instance_closest_to_coordinates(self):
+        font = self._get_font('/Roboto_Mono/RobotoMono-VariableFont_wght.ttf')
+        closest_instance = font.get_variable_instance_closest_to_coordinates(
+            {'wght': 650}
+        )
+        self.assertEqual(
+            closest_instance,
+            {
+                'coordinates': {'wght': 700.0},
+                'postscriptName': 'RobotoMono-Bold',
+                'subfamilyName': 'Bold',
+            },
+        )
+
+    def test_get_variable_instance_closest_to_coordinates_with_static_font(self):
+        font = self._get_font('/Noto_Sans_TC/NotoSansTC-Regular.otf')
+        closest_instance = font.get_variable_instance_closest_to_coordinates(
+            {'wght': 650}
+        )
+        self.assertEqual(closest_instance, None)
+
+    def test_is_static(self):
+        font = self._get_font('/Noto_Sans_TC/NotoSansTC-Regular.otf')
+        self.assertTrue(font.is_static())
+        self.assertFalse(font.is_variable())
+
+    def test_is_variable(self):
+        font = self._get_font('/Roboto_Mono/RobotoMono-VariableFont_wght.ttf')
+        self.assertFalse(font.is_static())
+        self.assertTrue(font.is_variable())
+
+
+if __name__ == '__main__':
+    unittest.main()
