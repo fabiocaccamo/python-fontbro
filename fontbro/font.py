@@ -603,9 +603,13 @@ class Fontbro(object):
 
         :param filepath: The filepath, if None the source filepath will be used
         :type filepath: str or None
+        :param overwrite: The overwrite, if True the source font file can be overwritten
+        :type overwrite: bool
 
         :returns: The filepath where the font has been saved to.
         :rtype: str
+
+        :raises ValueError: If the filepath is the same of the source font and overwrite is not allowed.
         """
         if filepath is None:
             filepath = self._filepath
