@@ -27,13 +27,15 @@ class NamesTestCase(AbstractTestCase):
 
     def test_get_name_by_invalid_key(self):
         font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
-        name = font.get_name('invalid_key')
-        self.assertEqual(name, None)
+        with self.assertRaises(KeyError):
+            name = font.get_name('invalid_key')
+        # self.assertEqual(name, None)
 
     def test_get_name_by_invalid_id(self):
         font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
-        name = font.get_name(999999999)
-        self.assertEqual(name, None)
+        with self.assertRaises(KeyError):
+            name = font.get_name(999999999)
+        # self.assertEqual(name, None)
 
     def test_get_names(self):
         font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
@@ -68,12 +70,12 @@ class NamesTestCase(AbstractTestCase):
 
     def test_set_name_by_invalid_id(self):
         font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
-        with self.assertRaises(ValueError):
+        with self.assertRaises(KeyError):
             font.set_name(999999999, 'Roboto Mono Renamed')
 
     def test_set_name_by_invalid_key(self):
         font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
-        with self.assertRaises(ValueError):
+        with self.assertRaises(KeyError):
             font.set_name('invalid_family_name_key', 'Roboto Mono Renamed')
 
     def test_set_names(self):

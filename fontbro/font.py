@@ -35,65 +35,63 @@ class Font(object):
     _FORMATS_LIST = [FORMAT_OTF, FORMAT_TTF, FORMAT_WOFF, FORMAT_WOFF2]
 
     # Names:
-    NAME_COPYRIGHT_NOTICE = 0
-    NAME_FAMILY_NAME = 1
-    NAME_SUBFAMILY_NAME = 2
-    NAME_UNIQUE_IDENTIFIER = 3
-    NAME_FULL_NAME = 4
-    NAME_VERSION = 5
-    NAME_POSTSCRIPT_NAME = 6
-    NAME_TRADEMARK = 7
-    NAME_MANUFACTURER_NAME = 8
-    NAME_DESIGNER = 9
-    NAME_DESCRIPTION = 10
-    NAME_VENDOR_URL = 11
-    NAME_DESIGNER_URL = 12
-    NAME_LICENSE_DESCRIPTION = 13
-    NAME_LICENSE_INFO_URL = 14
-    NAME_RESERVED = 15
-    NAME_TYPOGRAPHIC_FAMILY_NAME = 16
-    NAME_TYPOGRAPHIC_SUBFAMILY_NAME = 17
-    NAME_COMPATIBLE_FULL = 18
-    NAME_SAMPLE_TEXT = 19
-    NAME_POSTSCRIPT_CID_FINDFONT_NAME = 20
-    NAME_WWS_FAMILY_NAME = 21
-    NAME_WWS_SUBFAMILY_NAME = 22
-    NAME_LIGHT_BACKGROUND_PALETTE = 23
-    NAME_DARK_BACKGROUND_PALETTE = 24
-    NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX = 25
+    NAME_COPYRIGHT_NOTICE = 'copyright_notice'
+    NAME_FAMILY_NAME = 'family_name'
+    NAME_SUBFAMILY_NAME = 'subfamily_name'
+    NAME_UNIQUE_IDENTIFIER = 'unique_identifier'
+    NAME_FULL_NAME = 'full_name'
+    NAME_VERSION = 'version'
+    NAME_POSTSCRIPT_NAME = 'postscript_name'
+    NAME_TRADEMARK = 'trademark'
+    NAME_MANUFACTURER_NAME = 'manufacturer_name'
+    NAME_DESIGNER = 'designer'
+    NAME_DESCRIPTION = 'description'
+    NAME_VENDOR_URL = 'vendor_url'
+    NAME_DESIGNER_URL = 'designer_url'
+    NAME_LICENSE_DESCRIPTION = 'license_description'
+    NAME_LICENSE_INFO_URL = 'license_info_url'
+    NAME_RESERVED = 'reserved'
+    NAME_TYPOGRAPHIC_FAMILY_NAME = 'typographic_family_name'
+    NAME_TYPOGRAPHIC_SUBFAMILY_NAME = 'typographic_subfamily_name'
+    NAME_COMPATIBLE_FULL = 'compatible_full'
+    NAME_SAMPLE_TEXT = 'sample_text'
+    NAME_POSTSCRIPT_CID_FINDFONT_NAME = 'postscript_cid_findfont_name'
+    NAME_WWS_FAMILY_NAME = 'wws_family_name'
+    NAME_WWS_SUBFAMILY_NAME = 'wws_subfamily_name'
+    NAME_LIGHT_BACKGROUND_PALETTE = 'light_background_palette'
+    NAME_DARK_BACKGROUND_PALETTE = 'dark_background_palette'
+    NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX = 'variations_postscript_name_prefix'
 
-    _NAMES_BY_ID = {
-        NAME_COPYRIGHT_NOTICE: 'Copyright Notice',
-        NAME_FAMILY_NAME: 'Family Name',
-        NAME_SUBFAMILY_NAME: 'Subfamily Name',
-        NAME_UNIQUE_IDENTIFIER: 'Unique Identifier',
-        NAME_FULL_NAME: 'Full Name',
-        NAME_VERSION: 'Version',
-        NAME_POSTSCRIPT_NAME: 'PostScript Name',
-        NAME_TRADEMARK: 'Trademark',
-        NAME_MANUFACTURER_NAME: 'Manufacturer Name',
-        NAME_DESIGNER: 'Designer',
-        NAME_DESCRIPTION: 'Description',
-        NAME_VENDOR_URL: 'Vendor URL',
-        NAME_DESIGNER_URL: 'Designer URL',
-        NAME_LICENSE_DESCRIPTION: 'License Description',
-        NAME_LICENSE_INFO_URL: 'License Info URL',
-        NAME_RESERVED: 'Reserved',
-        NAME_TYPOGRAPHIC_FAMILY_NAME: 'Typographic Family Name',
-        NAME_TYPOGRAPHIC_SUBFAMILY_NAME: 'Typographic Subfamily Name',
-        NAME_COMPATIBLE_FULL: 'Compatible Full',
-        NAME_SAMPLE_TEXT: 'Sample Text',
-        NAME_POSTSCRIPT_CID_FINDFONT_NAME: 'PostScript CID findfont Name',
-        NAME_WWS_FAMILY_NAME: 'WWS Family Name',
-        NAME_WWS_SUBFAMILY_NAME: 'WWS Subfamily Name',
-        NAME_LIGHT_BACKGROUND_PALETTE: 'Light Background Palette',
-        NAME_DARK_BACKGROUND_PALETTE: 'Dark Background Palette',
-        NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX: 'Variations PostScript Name Prefix',
-    }
-    _NAMES_BY_KEY = {
-        name_str.lower().replace(' ', '_'): name_id
-        for name_id, name_str in _NAMES_BY_ID.items()
-    }
+    _NAMES = [
+        {'id': 0, 'key': NAME_COPYRIGHT_NOTICE},
+        {'id': 1, 'key': NAME_FAMILY_NAME},
+        {'id': 2, 'key': NAME_SUBFAMILY_NAME},
+        {'id': 3, 'key': NAME_UNIQUE_IDENTIFIER},
+        {'id': 4, 'key': NAME_FULL_NAME},
+        {'id': 5, 'key': NAME_VERSION},
+        {'id': 6, 'key': NAME_POSTSCRIPT_NAME},
+        {'id': 7, 'key': NAME_TRADEMARK},
+        {'id': 8, 'key': NAME_MANUFACTURER_NAME},
+        {'id': 9, 'key': NAME_DESIGNER},
+        {'id': 10, 'key': NAME_DESCRIPTION},
+        {'id': 11, 'key': NAME_VENDOR_URL},
+        {'id': 12, 'key': NAME_DESIGNER_URL},
+        {'id': 13, 'key': NAME_LICENSE_DESCRIPTION},
+        {'id': 14, 'key': NAME_LICENSE_INFO_URL},
+        {'id': 15, 'key': NAME_RESERVED},
+        {'id': 16, 'key': NAME_TYPOGRAPHIC_FAMILY_NAME},
+        {'id': 17, 'key': NAME_TYPOGRAPHIC_SUBFAMILY_NAME},
+        {'id': 18, 'key': NAME_COMPATIBLE_FULL},
+        {'id': 19, 'key': NAME_SAMPLE_TEXT},
+        {'id': 20, 'key': NAME_POSTSCRIPT_CID_FINDFONT_NAME},
+        {'id': 21, 'key': NAME_WWS_FAMILY_NAME},
+        {'id': 22, 'key': NAME_WWS_SUBFAMILY_NAME},
+        {'id': 23, 'key': NAME_LIGHT_BACKGROUND_PALETTE},
+        {'id': 24, 'key': NAME_DARK_BACKGROUND_PALETTE},
+        {'id': 25, 'key': NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX},
+    ]
+    _NAMES_BY_ID = {item['id']: item for item in _NAMES}
+    _NAMES_BY_KEY = {item['key']: item for item in _NAMES}
 
     # Style Flags:
     STYLE_FLAG_BOLD = 'bold'
@@ -294,11 +292,10 @@ class Font(object):
         if isinstance(key, int):
             return key
         elif isinstance(key, str):
-            return cls._NAMES_BY_KEY.get(key)
+            return cls._NAMES_BY_KEY[key]['id']
         else:
             raise TypeError(
-                'Invalid name identifier type, expected int or str, found'
-                f' {type(key).__name__}.'
+                f'Invalid key type, expected int or str, found {type(key).__name__}.'
             )
 
     def get_name(self, key):
@@ -310,13 +307,15 @@ class Font(object):
 
         :returns: The name.
         :rtype: str or None
+
+        :raises KeyError: if the key is not a valid name key/id
         """
         name_id = self._get_name_id(key)
         font = self.get_ttfont()
         for record in font['name'].names:
             if record.nameID == name_id:
                 return f'{record}'
-        return None
+        raise KeyError(f'Invalid name key: {key}.')
 
     def get_names(self):
         """
@@ -328,9 +327,9 @@ class Font(object):
         font = self.get_ttfont()
         names_by_id = {record.nameID: f'{record}' for record in font['name'].names}
         names = {
-            self._NAMES_BY_ID.get(key).lower().replace(' ', '_'): value
-            for key, value in names_by_id.items()
-            if key in self._NAMES_BY_ID
+            self._NAMES_BY_ID[name_id]['key']: value
+            for name_id, value in names_by_id.items()
+            if name_id in self._NAMES_BY_ID
         }
         return names
 
@@ -699,7 +698,7 @@ class Font(object):
             if record.nameID == name_id:
                 record.string = str(value or '')
                 return
-        raise ValueError(f'Invalid name identifier: {name_id}')
+        raise KeyError(f'Invalid name key: {key}.')
 
     def set_names(self, names):
         """

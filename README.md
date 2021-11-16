@@ -113,7 +113,7 @@ Gets the font format: otf, ttf, woff, woff2.
 :returns: The format.
 :rtype: str or None
 """
-font.get_format(ignore_flavor=False)
+format = font.get_format(ignore_flavor=False)
 ```
 
 -   #### get_name
@@ -126,6 +126,8 @@ Gets the name by its identifier from the font name table.
 
 :returns: The name.
 :rtype: str or None
+
+:raises KeyError: if the key is not a valid name key/id
 """
 family_name = font.get_name(key=Font.NAME_FAMILY_NAME)
 ```
@@ -367,6 +369,8 @@ Sets the name by its identifier in the font name table.
 :type key: int or str
 :param value: The value
 :type value: str
+
+:raises KeyError: if the key is not a valid name key/id
 """
 font.set_name(Font.NAME_FAMILY_NAME, 'Family Name Renamed')
 ```
