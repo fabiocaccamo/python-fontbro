@@ -9,7 +9,7 @@ import unittest
 
 class AbstractTestCase(unittest.TestCase):
     """
-    This class describes the abstract Font test case
+    This class describes the abstract test case
     with some methods that are used by different test cases.
     """
     def setUp(self):
