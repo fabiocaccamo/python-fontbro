@@ -775,10 +775,6 @@ class Font(object):
                 'Subsetting requires at least one of the following args: unicode,'
                 ' glyphs, text.'
             )
-
-        # TODO: add scripts argument support to generate unicodes,
-        # eg. scripts=[Font.SCRIPTS.LATIN, Font.SCRIPT_CYRILLIC]
-
         if isinstance(unicodes, (list, set, tuple)):
             unicodes = ', '.join(list(unicodes))
         dash = '-'
