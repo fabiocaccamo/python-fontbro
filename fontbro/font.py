@@ -688,6 +688,8 @@ class Font(object):
         :type key: int or str
         :param value: The value
         :type value: str
+
+        :raises KeyError: if the key is not a valid name key/id
         """
         name_id = self._get_name_id(key)
         font = self.get_ttfont()
