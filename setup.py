@@ -57,8 +57,8 @@ setup(
         'writing-systems',
     ],
     install_requires=[
-        'fonttools[ufo,lxml,woff,unicode,interpolatable,plot,symfont,type1,pathops] >='
-        ' 4.27.0, < 5.0',
+        # 'fonttools[ufo,lxml,woff,unicode,interpolatable,plot,symfont,type1,pathops] >= 4.27.0, < 5.0',
+        'fonttools[woff,unicode,pathops] >= 4.27.0, < 5.0',
         'python-fsutil >= 0.5.0, < 1.0.0',
     ],
     classifiers=[
