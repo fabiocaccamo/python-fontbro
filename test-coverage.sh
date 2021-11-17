@@ -1,5 +1,5 @@
 #!/bin/bash
 
 coverage erase
-coverage run --source=fontbro setup.py test
+coverage run -m unittest discover tests/
 coverage report -m
