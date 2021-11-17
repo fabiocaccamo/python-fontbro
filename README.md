@@ -1,10 +1,11 @@
-[![](https://img.shields.io/github/workflow/status/fabiocaccamo/python-fontbro/Python%20package?label=GitHub%20build&logo=github)](https://github.com/fabiocaccamo/python-fontbro)
 [![](https://img.shields.io/pypi/pyversions/python-fontbro.svg?color=blue&logo=python&logoColor=white)](https://www.python.org/)
 [![](https://img.shields.io/pypi/v/python-fontbro.svg?color=blue&logo=pypi&logoColor=white)](https://pypi.org/project/python-fontbro/)
 [![](https://pepy.tech/badge/python-fontbro)](https://pepy.tech/project/python-fontbro)
 [![](https://img.shields.io/github/stars/fabiocaccamo/python-fontbro?logo=github)](https://github.com/fabiocaccamo/python-fontbro/)
 [![](https://badges.pufler.dev/visits/fabiocaccamo/python-fontbro?label=visitors&color=blue)](https://badges.pufler.dev)
 [![](https://img.shields.io/pypi/l/python-fontbro?color=blue)](https://github.com/fabiocaccamo/python-fontbro/blob/master/LICENSE.txt)
+
+[![](https://img.shields.io/github/workflow/status/fabiocaccamo/python-fontbro/Python%20package?label=build&logo=github)](https://github.com/fabiocaccamo/python-fontbro)
 [![](https://img.shields.io/codecov/c/gh/fabiocaccamo/python-fontbro?logo=codecov)](https://codecov.io/gh/fabiocaccamo/python-fontbro)
 [![](https://img.shields.io/codacy/grade/dd3a046db4b14b988a2f1fcfbfaa51eb?logo=codacy)](https://www.codacy.com/app/fabiocaccamo/python-fontbro)
 [![](https://img.shields.io/codeclimate/maintainability/fabiocaccamo/python-fontbro?logo=code-climate)](https://codeclimate.com/github/fabiocaccamo/python-fontbro/)
