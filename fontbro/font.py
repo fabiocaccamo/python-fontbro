@@ -7,6 +7,8 @@ from fontbro.features import FEATURES as _FEATURES_DATA
 from fontTools import unicodedata
 from fontTools.subset import parse_unicodes, Subsetter
 from fontTools.ttLib import TTFont, TTLibError
+from fontTools.varLib import instancer
+from fontTools.varLib.instancer import OverlapMode
 
 import fsutil
 import itertools
@@ -783,6 +785,117 @@ class Font(object):
         subs = Subsetter(**options)
         subs.populate(**subs_args)
         subs.subset(font)
+
+    @staticmethod
+    def _all_axes_pinned(axes):
+        """
+        Check if all the axes values are pinned or not.
+
+        :param axes: The axes
+        :type axes: dict
+        :returns: True if all the axes values are pinned, False otherwise.
+        :rtype: bool
+        """
+        return all(
+            [
+                isinstance(axis_value, (type(None), int, float))
+                for axis_value in axes.values()
+            ]
+        )
+
+    def to_sliced_variable(self, coordinates, **options):
+        """
+        Converts the variable font to a partial one slicing the variable axes at the given coordinates.
+        If an axis value is not specified, the axis will be left untouched.
+        If an axis min and max values are equal, the axis will be pinned.
+
+        :param coordinates: The coordinates dictionary, each item value must be tuple/list/dict (with min and max keys) for slicing or float/int for pinning, eg.
+            {'wdth':100, 'wght':(100,600), 'ital':(30,70)} or
+            {'wdth':100, 'wght':[100,600], 'ital':[30,70]} or
+            {'wdth':100, 'wght':{'min':100,'max':600}, 'ital':{'min':30,'max':70}}
+        :type coordinates: dict
+        :param options: The options for the fontTools.varLib.instancer
+        :type options: dictionary
+
+        :raises TypeError: If the font is not a variable font
+        :raises ValueError: If the coordinates are not defined (empty)
+        :raises ValueError: If the coordinates axes are all pinned
+        """
+        if not self.is_variable():
+            raise TypeError('Only a variable font can be sliced.')
+
+        font = self.get_ttfont()
+        coordinates = coordinates or {}
+        coordinates_axes_tags = coordinates.keys()
+
+        # make coordinates more friendly accepting also list and dict values
+        for axis_tag in coordinates_axes_tags:
+            axis_value = coordinates[axis_tag]
+            if isinstance(axis_value, list):
+                axis_value = tuple(axis_value)
+            elif isinstance(axis_value, dict):
+                axis = self.get_variable_axis_by_tag(axis_tag)
+                axis_min = axis_value.get('min', axis.get('minValue'))
+                axis_max = axis_value.get('max', axis.get('maxValue'))
+                axis_value = (axis_min, axis_max)
+            coordinates[axis_tag] = axis_value
+
+        # ensure that coordinates axes are defined and that are not all pinned
+        if len(coordinates_axes_tags) == 0:
+            raise ValueError('Invalid coordinates: axes not defined.')
+        elif set(coordinates_axes_tags) == set(self.get_variable_axes_tags()):
+            if self._all_axes_pinned(coordinates):
+                raise ValueError(
+                    'Invalid coordinates: all axes are pinned (use to_static method).'
+                )
+
+        # set default instancer options
+        options.setdefault('optimize', True)
+        options.setdefault('overlap', OverlapMode.KEEP_AND_SET_FLAGS)
+        options.setdefault('updateFontNames', False)
+
+        # instantiate the sliced variable font
+        instancer.instantiateVariableFont(font, coordinates, inplace=True, **options)
+
+    def to_static(self, coordinates=None, **options):
+        """
+        Converts the variable font to a static one pinning the variable axes at the given coordinates.
+        If an axis value is not specified, the axis will be pinned at its default value.
+        If coordinates are not specified each axis will be pinned at its default value.
+
+        :param coordinates: The coordinates, eg. {'wght':500, 'ital':50}
+        :type coordinates: dict or None
+        :param options: The options for the fontTools.varLib.instancer
+        :type options: dictionary
+
+        :raises TypeError: If the font is not a variable font
+        :raises ValueError: If the coordinates axes are not all pinned
+        """
+        if not self.is_variable():
+            raise TypeError('Only a variable font can be made static.')
+
+        font = self.get_ttfont()
+
+        # make coordinates more friendly by using default axis values by default
+        coordinates = coordinates or {}
+        default_coordinates = {
+            axis_tag: None
+            for axis_tag in self.get_variable_axes_tags()
+            if axis_tag not in coordinates
+        }
+        coordinates.update(default_coordinates)
+
+        # ensure that coordinates axes are all pinned
+        if not self._all_axes_pinned(coordinates):
+            raise ValueError('Invalid coordinates: all axes must be pinned.')
+
+        # set default instancer options
+        options.setdefault('optimize', True)
+        options.setdefault('overlap', OverlapMode.REMOVE)
+        options.setdefault('updateFontNames', False)
+
+        # instantiate the static font
+        instancer.instantiateVariableFont(font, coordinates, inplace=True, **options)
 
     def __str__(self):
         """

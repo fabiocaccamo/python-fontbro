@@ -13,7 +13,7 @@
 [![](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # python-fontbro
-human-friendly font operations. :tumbler_glass:
+friendly font operations. :billed_cap:
 
 ## Index
 -   [Installation](#installation)
@@ -66,6 +66,8 @@ font = Font(filepath='MyFont.ttf')
 -   [`set_names`](#set_names)
 -   [`set_style_flags`](#set_style_flags)
 -   [`subset`](#subset)
+-   [`to_sliced_variable`](#to_sliced_variable)
+-   [`to_static`](#to_static)
 
 ---
 
@@ -423,6 +425,46 @@ https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/subset/__init__.p
 :type options: dict
 """
 font.subset(unicodes='', glyphs=[], text='', **options)
+```
+
+-   #### to_sliced_variable
+```python
+"""
+Converts the variable font to a partial one slicing the variable axes at the given coordinates.
+If an axis value is not specified, the axis will be left untouched.
+If an axis min and max values are equal, the axis will be pinned.
+
+:param coordinates: The coordinates dictionary, each item value must be tuple/list/dict (with min and max keys) for slicing or float/int for pinning, eg.
+    {'wdth':100, 'wght':(100,600), 'ital':(30,70)} or
+    {'wdth':100, 'wght':[100,600], 'ital':[30,70]} or
+    {'wdth':100, 'wght':{'min':100,'max':600}, 'ital':{'min':30,'max':70}}
+:type coordinates: dict
+:param options: The options for the fontTools.varLib.instancer
+:type options: dictionary
+
+:raises TypeError: If the font is not a variable font
+:raises ValueError: If the coordinates are not defined (empty)
+:raises ValueError: If the coordinates axes are all pinned
+"""
+font.to_sliced_variable(coordinates, **options)
+```
+
+-   #### to_static
+```python
+"""
+Converts the variable font to a static one pinning the variable axes at the given coordinates.
+If an axis value is not specified, the axis will be pinned at its default value.
+If coordinates are not specified each axis will be pinned at its default value.
+
+:param coordinates: The coordinates, eg. {'wght':500, 'ital':50}
+:type coordinates: dict or None
+:param options: The options for the fontTools.varLib.instancer
+:type options: dictionary
+
+:raises TypeError: If the font is not a variable font
+:raises ValueError: If the coordinates axes are not all pinned
+"""
+font.to_static(coordinates=None, **options)
 ```
 
 ## Testing
