@@ -5,10 +5,8 @@
 [![](https://badges.pufler.dev/visits/fabiocaccamo/python-fontbro?label=visitors&color=blue)](https://badges.pufler.dev)
 [![](https://img.shields.io/pypi/l/python-fontbro.svg?color=blue)](https://github.com/fabiocaccamo/python-fontbro/blob/master/LICENSE.txt)
 
-[![](https://img.shields.io/travis/fabiocaccamo/python-fontbro?logo=travis&label=build)](https://travis-ci.org/fabiocaccamo/python-fontbro)
-[![](https://img.shields.io/circleci/build/gh/fabiocaccamo/python-fontbro?logo=circleci&label=build)](https://circleci.com/gh/fabiocaccamo/python-fontbro)
 [![](https://img.shields.io/codecov/c/gh/fabiocaccamo/python-fontbro?logo=codecov)](https://codecov.io/gh/fabiocaccamo/python-fontbro)
-[![](https://img.shields.io/codacy/grade/fc40788ae7d74d1fb34a38934113c4e5?logo=codacy)](https://www.codacy.com/app/fabiocaccamo/python-fontbro)
+[![](https://img.shields.io/codacy/grade/dd3a046db4b14b988a2f1fcfbfaa51eb?logo=codacy)](https://www.codacy.com/app/fabiocaccamo/python-fontbro)
 [![](https://img.shields.io/codeclimate/maintainability/fabiocaccamo/python-fontbro?logo=code-climate)](https://codeclimate.com/github/fabiocaccamo/python-fontbro/)
 [![](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
