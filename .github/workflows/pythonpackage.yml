@@ -24,7 +24,8 @@ jobs:
         pip install -r requirements-test.txt
     - name: Test with unittest
       run: |
-        coverage run -m unittest
+        coverage run -a -m unittest
+        coverage xml -o ./coverage.xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
       with:
