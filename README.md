@@ -34,7 +34,7 @@ Just import the font class:
 ```python
 from fontbro import Font
 
-font = Font(filepath='MyFont.ttf')
+font = Font('fonts/MyFont.ttf')
 ```
 
 ### Methods
