@@ -1,6 +1,6 @@
 name: Python package
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -24,6 +24,11 @@ jobs:
         pip install -r requirements-test.txt
     - name: Test with unittest
       run: |
-        coverage erase
-        coverage run -m unittest discover tests/
-        coverage report -m
+        coverage run -m unittest
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v2
+      with:
+        fail_ci_if_error: true
+        flags: unittests
+        name: codecov-umbrella
+        verbose: true
