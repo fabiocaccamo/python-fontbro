@@ -369,11 +369,6 @@ class Font(object):
         :returns: The scripts.
         :rtype: list of dict
         """
-
-        # TODO:
-        # add script coverage (0.0 < coverage <= 1.0)
-        # and coverage_threshold parameter.
-
         blocks_by_scripts_tags = {}
         for char in self.get_characters():
             script = self.get_script_by_code(char['code'])
