@@ -1,3 +1,4 @@
+[![](https://img.shields.io/github/workflow/status/fabiocaccamo/python-fontbro/Python%20package?label=GitHub%20build&logo=github)](https://github.com/fabiocaccamo/python-fontbro)
 [![](https://img.shields.io/pypi/pyversions/python-fontbro.svg?color=blue&logo=python&logoColor=white)](https://www.python.org/)
 [![](https://img.shields.io/pypi/v/python-fontbro.svg?color=blue&logo=pypi&logoColor=white)](https://pypi.org/project/python-fontbro/)
 [![](https://pepy.tech/badge/python-fontbro)](https://pepy.tech/project/python-fontbro)
