@@ -20,7 +20,7 @@ import sys
 
 class Font(object):
     """
-    human-friendly font operations.
+    friendly font operations.
     """
 
     # Features:
