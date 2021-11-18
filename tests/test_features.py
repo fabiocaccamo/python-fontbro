@@ -23,6 +23,11 @@ class FeaturesTestCase(AbstractTestCase):
             ],
         )
 
+    def test_get_features_tags(self):
+        font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
+        features = font.get_features_tags()
+        self.assertEqual(features, ['smcp'])
+
 
 if __name__ == '__main__':
     unittest.main()

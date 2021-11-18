@@ -41,6 +41,7 @@ font = Font('fonts/MyFont.ttf')
 -   [`get_characters`](#get_characters)
 -   [`get_characters_count`](#get_characters_count)
 -   [`get_features`](#get_features)
+-   [`get_features_tags`](#get_features_tags)
 -   [`get_format`](#get_format)
 -   [`get_name`](#get_name)
 -   [`get_names`](#get_names)
@@ -101,6 +102,17 @@ Gets the font opentype features.
 :rtype: list of dict
 """
 features = font.get_features()
+```
+
+-   #### get_features_tags
+```python
+"""
+Gets the font opentype features tags.
+
+:returns: The features tags list.
+:rtype: list of str
+"""
+features_tags = font.get_features_tags()
 ```
 
 -   #### get_format

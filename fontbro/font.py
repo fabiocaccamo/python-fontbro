@@ -2,7 +2,7 @@
 
 from curses import ascii
 
-from fontbro.features import FEATURES as _FEATURES_DATA
+from fontbro.features import FEATURES as _FEATURES_LIST
 from fontbro.flags import get_flag, set_flag
 
 from fontTools import unicodedata
@@ -26,8 +26,8 @@ class Font(object):
     # Features:
     # https://docs.microsoft.com/en-gb/typography/opentype/spec/featurelist
     # https://developer.mozilla.org/en-US/docs/Web/CSS/font-feature-settings
-    _FEATURES = _FEATURES_DATA
-    _FEATURES_BY_TAG = {feature['tag']: feature for feature in _FEATURES}
+    _FEATURES_LIST = _FEATURES_LIST
+    _FEATURES_BY_TAG = {feature['tag']: feature for feature in _FEATURES_LIST}
 
     # Formats:
     FORMAT_OTF = 'otf'
@@ -250,19 +250,29 @@ class Font(object):
         """
         Gets the font opentype features.
 
-        :returns: The features.
+        :returns: The features list.
         :rtype: list of dict
+        """
+        features_tags = self.get_features_tags()
+        return [
+            self._FEATURES_BY_TAG.get(features_tag).copy()
+            for features_tag in features_tags
+            if features_tag in self._FEATURES_BY_TAG
+        ]
+
+    def get_features_tags(self):
+        """
+        Gets the font opentype features tags.
+
+        :returns: The features tags list.
+        :rtype: list of str
         """
         font = self.get_ttfont()
         gsub = font.get('GSUB')
         if gsub:
             feature_record = gsub.table.FeatureList.FeatureRecord or []
             features_tags = [feature.FeatureTag for feature in feature_record]
-            return [
-                self._FEATURES_BY_TAG.get(features_tag).copy()
-                for features_tag in features_tags
-                if features_tag in self._FEATURES_BY_TAG
-            ]
+            return features_tags
         return []
 
     def get_format(self, ignore_flavor=False):
