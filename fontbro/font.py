@@ -3,6 +3,7 @@
 from curses import ascii
 
 from fontbro.features import FEATURES as _FEATURES_DATA
+from fontbro.flags import get_flag, set_flag
 
 from fontTools import unicodedata
 from fontTools.subset import parse_unicodes, Subsetter
@@ -390,10 +391,6 @@ class Font(object):
         ]
         return scripts
 
-    @classmethod
-    def _get_bool_flag(self, bits, bit):
-        return bool(bits & (1 << bit))
-
     def _get_style_flag_by_bits(self, bit_os2_fs, bit_head_mac):
         font = self.get_ttfont()
         # https://docs.microsoft.com/en-us/typography/opentype/spec/os2#fsselection
@@ -401,13 +398,13 @@ class Font(object):
         if bit_os2_fs is not None:
             os2 = font.get('OS/2')
             if os2:
-                flag_os2_fs = self._get_bool_flag(os2.fsSelection, bit_os2_fs)
+                flag_os2_fs = get_flag(os2.fsSelection, bit_os2_fs)
         # https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6head.html
         flag_head_mac = False
         if bit_head_mac is not None:
             head = font.get('head')
             if head:
-                flag_head_mac = self._get_bool_flag(head.macStyle, bit_head_mac)
+                flag_head_mac = get_flag(head.macStyle, bit_head_mac)
         return flag_os2_fs or flag_head_mac
 
     def get_style_flags(self):
@@ -709,12 +706,6 @@ class Font(object):
         for key, value in names.items():
             self.set_name(key, value)
 
-    @classmethod
-    def _set_bool_flag(self, bits, bit, flag):
-        mask = 1 << bit
-        bits = bits | mask if flag else bits & ~mask
-        return bits
-
     def _set_style_flag(self, flag, value):
         font = self.get_ttfont()
         bits = self._STYLE_FLAGS.get(flag)
@@ -723,13 +714,11 @@ class Font(object):
         if bit_os2_fs is not None:
             os2 = font.get('OS/2')
             if os2:
-                os2.fsSelection = self._set_bool_flag(
-                    os2.fsSelection, bit_os2_fs, value
-                )
+                os2.fsSelection = set_flag(os2.fsSelection, bit_os2_fs, value)
         if bit_head_mac is not None:
             head = font.get('head')
             if head:
-                head.macStyle = self._set_bool_flag(head.macStyle, bit_head_mac, value)
+                head.macStyle = set_flag(head.macStyle, bit_head_mac, value)
 
     def set_style_flags(
         self, regular=None, bold=None, italic=None, outline=None, underline=None
