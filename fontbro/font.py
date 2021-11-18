@@ -26,7 +26,7 @@ class Font(object):
     # https://docs.microsoft.com/en-gb/typography/opentype/spec/featurelist
     # https://developer.mozilla.org/en-US/docs/Web/CSS/font-feature-settings
     _FEATURES = _FEATURES_DATA
-    _FEATURES_DICT = {feature['tag']: feature for feature in _FEATURES}
+    _FEATURES_BY_TAG = {feature['tag']: feature for feature in _FEATURES}
 
     # Formats:
     FORMAT_OTF = 'otf'
@@ -128,7 +128,7 @@ class Font(object):
         {'tag': 'SOFT', 'name': 'Softness'},
         {'tag': 'WONK', 'name': 'Wonky'},
     ]
-    _VARIABLE_AXES_DICT = {axis['tag']: axis for axis in _VARIABLE_AXES}
+    _VARIABLE_AXES_BY_TAG = {axis['tag']: axis for axis in _VARIABLE_AXES}
 
     # Weights:
     # https://docs.microsoft.com/en-us/typography/opentype/otspec170/os2#usweightclass
@@ -144,7 +144,7 @@ class Font(object):
     WEIGHT_EXTRA_BOLD = 'Extra-bold'  # (Ultra-bold)
     WEIGHT_BLACK = 'Black'  # (Heavy)
     WEIGHT_EXTRA_BLACK = 'Extra-black'  # (Nord)
-    _WEIGHT_DICT = {
+    _WEIGHTS_BY_VALUE = {
         50: WEIGHT_EXTRA_THIN,
         100: WEIGHT_THIN,
         200: WEIGHT_EXTRA_LIGHT,
@@ -170,7 +170,7 @@ class Font(object):
     WIDTH_EXPANDED = 'Expanded'
     WIDTH_EXTRA_EXPANDED = 'Extra-expanded'
     WIDTH_ULTRA_EXPANDED = 'Ultra-expanded'
-    _WIDTH_DICT = {
+    _WIDTHS_BY_VALUE = {
         1: WIDTH_ULTRA_CONDENSED,
         2: WIDTH_EXTRA_CONDENSED,
         3: WIDTH_CONDENSED,
@@ -258,9 +258,9 @@ class Font(object):
             feature_record = gsub.table.FeatureList.FeatureRecord or []
             features_tags = [feature.FeatureTag for feature in feature_record]
             return [
-                self._FEATURES_DICT.get(features_tag).copy()
+                self._FEATURES_BY_TAG.get(features_tag).copy()
                 for features_tag in features_tags
-                if features_tag in self._FEATURES_DICT
+                if features_tag in self._FEATURES_BY_TAG
             ]
         return []
 
@@ -444,7 +444,7 @@ class Font(object):
         return [
             {
                 'tag': axis.axisTag,
-                'name': self._VARIABLE_AXES_DICT.get(axis.axisTag, {}).get(
+                'name': self._VARIABLE_AXES_BY_TAG.get(axis.axisTag, {}).get(
                     'name', axis.axisTag.title()
                 ),
                 'minValue': axis.minValue,
@@ -553,9 +553,9 @@ class Font(object):
             return None
         weight = os2.usWeightClass
         weight = min(max(0, weight), 1000)
-        weights = sorted(self._WEIGHT_DICT.keys())
+        weights = sorted(self._WEIGHTS_BY_VALUE.keys())
         closest_weight = min(weights, key=lambda weight_item: abs(weight_item - weight))
-        weight_name = self._WEIGHT_DICT.get(closest_weight)
+        weight_name = self._WEIGHTS_BY_VALUE.get(closest_weight)
         return {'name': weight_name, 'value': weight}
 
     def get_width(self):
@@ -571,7 +571,7 @@ class Font(object):
             return None
         width = os2.usWidthClass
         width = min(max(0, width), 9)
-        width_name = self._WIDTH_DICT.get(width)
+        width_name = self._WIDTHS_BY_VALUE.get(width)
         return {'name': width_name, 'value': width}
 
     def is_static(self):
