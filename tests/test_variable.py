@@ -122,7 +122,3 @@ class VariableTestCase(AbstractTestCase):
         font = self._get_font('/Roboto_Mono/RobotoMono-VariableFont_wght.ttf')
         self.assertFalse(font.is_static())
         self.assertTrue(font.is_variable())
-
-
-if __name__ == '__main__':
-    unittest.main()

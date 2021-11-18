@@ -30,7 +30,3 @@ class CharactersTestCase(AbstractTestCase):
         font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
         chars_count = font.get_characters_count()
         self.assertEqual(chars_count, 875)
-
-
-if __name__ == '__main__':
-    unittest.main()

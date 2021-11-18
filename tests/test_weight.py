@@ -47,7 +47,3 @@ class WeightTestCase(AbstractTestCase):
             expected_value=900,
             expected_name=Font.WEIGHT_BLACK,
         )
-
-
-if __name__ == '__main__':
-    unittest.main()

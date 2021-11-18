@@ -46,7 +46,3 @@ class FormatTestCase(AbstractTestCase):
         self.assertTrue(font.get_format() == Font.FORMAT_TTF)
         self.assertFalse(font.get_format() == Font.FORMAT_WOFF)
         self.assertFalse(font.get_format() == Font.FORMAT_WOFF2)
-
-
-if __name__ == '__main__':
-    unittest.main()

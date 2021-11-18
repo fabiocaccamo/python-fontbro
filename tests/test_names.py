@@ -80,15 +80,13 @@ class NamesTestCase(AbstractTestCase):
 
     def test_set_names(self):
         font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
-        font.set_names({
-            Font.NAME_FAMILY_NAME: 'Roboto Mono Renamed',
-            Font.NAME_SUBFAMILY_NAME: 'Regular Renamed',
-        })
+        font.set_names(
+            {
+                Font.NAME_FAMILY_NAME: 'Roboto Mono Renamed',
+                Font.NAME_SUBFAMILY_NAME: 'Regular Renamed',
+            }
+        )
         family_name = font.get_name(Font.NAME_FAMILY_NAME)
         self.assertEqual(family_name, 'Roboto Mono Renamed')
         subfamily_name = font.get_name(Font.NAME_SUBFAMILY_NAME)
         self.assertEqual(subfamily_name, 'Regular Renamed')
-
-
-if __name__ == '__main__':
-    unittest.main()

@@ -48,7 +48,3 @@ class WidthTestCase(AbstractTestCase):
             expected_value=5,
             expected_name=Font.WIDTH_MEDIUM,
         )
-
-
-if __name__ == '__main__':
-    unittest.main()

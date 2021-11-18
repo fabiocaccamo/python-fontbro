@@ -142,7 +142,3 @@ class ScriptsTestCase(AbstractTestCase):
         script = font.get_script_by_character('a')
         expected_script = {'tag': 'Latn', 'name': 'Latin', 'block': 'Basic Latin'}
         self.assertEqual(script, expected_script)
-
-
-if __name__ == '__main__':
-    unittest.main()

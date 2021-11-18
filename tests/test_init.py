@@ -57,7 +57,3 @@ class InitTestCase(AbstractTestCase):
     #         font = Font(filepath=True)
     #     # with self.assertRaises(ValueError):
     #     #     font = Font(font=True)
-
-
-if __name__ == '__main__':
-    unittest.main()

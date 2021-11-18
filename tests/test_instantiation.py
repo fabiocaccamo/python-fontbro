@@ -209,9 +209,6 @@ class InstantiationTestCase(AbstractTestCase):
                 'minValue': 100.0,
                 'name': 'Weight',
                 'tag': 'wght',
-            },
+            }
         ]
         self.assertEqual(font.get_variable_axes(), expected_axes)
-
-if __name__ == '__main__':
-    unittest.main()

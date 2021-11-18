@@ -118,7 +118,3 @@ class StyleFlagsTestCase(AbstractTestCase):
 
         font.set_style_flags(regular=True)
         self.assertTrue(font.get_style_flags()['regular'])
-
-
-if __name__ == '__main__':
-    unittest.main()

@@ -45,7 +45,3 @@ class SubsetTestCase(AbstractTestCase):
         font.subset(unicodes=['0000—007F', '0100—017F', '0180—024F'])
         chars_count = font.get_characters_count()
         self.assertEqual(chars_count, 240)
-
-
-if __name__ == '__main__':
-    unittest.main()
