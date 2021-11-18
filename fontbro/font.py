@@ -330,12 +330,11 @@ class Font(object):
 
         :raises KeyError: if the key is not a valid name key/id
         """
-        name_id = self._get_name_id(key)
         font = self.get_ttfont()
-        for record in font['name'].names:
-            if record.nameID == name_id:
-                return f'{record}'
-        raise KeyError(f'Invalid name key: {key}.')
+        name_id = self._get_name_id(key)
+        name_table = font['name']
+        name = name_table.getName(name_id, 3, 1)
+        return name.toUnicode() if name else None
 
     def get_names(self):
         """
@@ -616,6 +615,41 @@ class Font(object):
         font = self.get_ttfont()
         return 'fvar' in font
 
+    def rename(self, family_name='', style_name=''):
+        """
+        Renames the font names records according to the given family_name and style_name (subfamily_name).
+        If family_name is not defined it will be auto-detected.
+        If style_name is not defined it will be auto-detected.
+
+        :param family_name: The family name
+        :type family_name: str
+        :param style_name: The style name
+        :type style_name: str
+        """
+        family_name = (
+            family_name
+            or self.get_name(self.NAME_TYPOGRAPHIC_FAMILY_NAME)
+            or self.get_name(self.NAME_FAMILY_NAME)
+        )
+        style_name = (
+            style_name
+            or self.get_name(self.NAME_TYPOGRAPHIC_SUBFAMILY_NAME)
+            or self.get_name(self.NAME_SUBFAMILY_NAME)
+        )
+        full_name = f'{family_name} {style_name}'
+        postscript_family_name = family_name.replace(' ', '')
+        postscript_subfamily_name = style_name.replace(' ', '')
+        postscript_name = f'{postscript_family_name}-{postscript_subfamily_name}'
+        names = {
+            self.NAME_FAMILY_NAME: family_name,
+            self.NAME_SUBFAMILY_NAME: style_name,
+            self.NAME_FULL_NAME: full_name,
+            self.NAME_POSTSCRIPT_NAME: postscript_name,
+            self.NAME_TYPOGRAPHIC_FAMILY_NAME: family_name,
+            self.NAME_TYPOGRAPHIC_SUBFAMILY_NAME: style_name,
+        }
+        self.set_names(names=names)
+
     def save(self, filepath=None, overwrite=False):
         """
         Saves the font at filepath.
@@ -711,16 +745,11 @@ class Font(object):
         :type key: int or str
         :param value: The value
         :type value: str
-
-        :raises KeyError: if the key is not a valid name key/id
         """
-        name_id = self._get_name_id(key)
         font = self.get_ttfont()
-        for record in font['name'].names:
-            if record.nameID == name_id:
-                record.string = str(value or '')
-                return
-        raise KeyError(f'Invalid name key: {key}.')
+        name_id = self._get_name_id(key)
+        name_table = font['name']
+        name_table.setName(value, name_id, 3, 1, None)
 
     def set_names(self, names):
         """

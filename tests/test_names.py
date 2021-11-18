@@ -33,9 +33,8 @@ class NamesTestCase(AbstractTestCase):
 
     def test_get_name_by_invalid_id(self):
         font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
-        with self.assertRaises(KeyError):
-            name = font.get_name(999999999)
-        # self.assertEqual(name, None)
+        name = font.get_name(999999999)
+        self.assertEqual(name, None)
 
     def test_get_names(self):
         font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
@@ -67,11 +66,6 @@ class NamesTestCase(AbstractTestCase):
         font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
         font.set_name(Font.NAME_FAMILY_NAME, 'Roboto Mono Renamed')
         self.assertEqual(font.get_name(Font.NAME_FAMILY_NAME), 'Roboto Mono Renamed')
-
-    def test_set_name_by_invalid_id(self):
-        font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
-        with self.assertRaises(KeyError):
-            font.set_name(999999999, 'Roboto Mono Renamed')
 
     def test_set_name_by_invalid_key(self):
         font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')

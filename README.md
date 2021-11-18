@@ -60,6 +60,7 @@ font = Font('fonts/MyFont.ttf')
 -   [`get_width`](#get_width)
 -   [`is_static`](#is_static)
 -   [`is_variable`](#is_variable)
+-   [`rename`](#rename)
 -   [`save`](#save)
 -   [`save_as_woff`](#save_as_woff)
 -   [`save_as_woff2`](#save_as_woff2)
@@ -339,6 +340,21 @@ Determines if the font is a variable font.
 variable = font.is_variable()
 ```
 
+-   #### rename
+```python
+"""
+Renames the font names records according to the given family_name and style_name (subfamily_name).
+If family_name is not defined it will be auto-detected.
+If style_name is not defined it will be auto-detected.
+
+:param family_name: The family name
+:type family_name: str
+:param style_name: The style name
+:type style_name: str
+"""
+font.rename(family_name='My Font New', style_name='Bold Italic')
+```
+
 -   #### save
 ```python
 """
@@ -398,8 +414,6 @@ Sets the name by its identifier in the font name table.
 :type key: int or str
 :param value: The value
 :type value: str
-
-:raises KeyError: if the key is not a valid name key/id
 """
 font.set_name(Font.NAME_FAMILY_NAME, 'Family Name Renamed')
 ```
