@@ -9,48 +9,40 @@ class StyleFlagsTestCase(AbstractTestCase):
     """
 
     def test_get_style_flags(self):
-        font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
-        style_flags = font.get_style_flags()
-        expected_style_flags = {
+        expected_style_flags_default = {
             'bold': False,
+            'condensed': False,
+            'extended': False,
             'italic': False,
             'outline': False,
-            'regular': True,
+            'regular': False,
+            'shadow': False,
             'underline': False,
         }
+
+        font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
+        style_flags = font.get_style_flags()
+        expected_style_flags = expected_style_flags_default.copy()
+        expected_style_flags['regular'] = True
         self.assertEqual(style_flags, expected_style_flags)
 
         font = self._get_font('/Roboto_Mono/static/RobotoMono-Italic.ttf')
         style_flags = font.get_style_flags()
-        expected_style_flags = {
-            'bold': False,
-            'italic': True,
-            'outline': False,
-            'regular': False,
-            'underline': False,
-        }
+        expected_style_flags = expected_style_flags_default.copy()
+        expected_style_flags['italic'] = True
         self.assertEqual(style_flags, expected_style_flags)
 
         font = self._get_font('/Roboto_Mono/static/RobotoMono-Bold.ttf')
         style_flags = font.get_style_flags()
-        expected_style_flags = {
-            'bold': True,
-            'italic': False,
-            'outline': False,
-            'regular': False,
-            'underline': False,
-        }
+        expected_style_flags = expected_style_flags_default.copy()
+        expected_style_flags['bold'] = True
         self.assertEqual(style_flags, expected_style_flags)
 
         font = self._get_font('/Roboto_Mono/static/RobotoMono-BoldItalic.ttf')
         style_flags = font.get_style_flags()
-        expected_style_flags = {
-            'bold': True,
-            'italic': True,
-            'outline': False,
-            'regular': False,
-            'underline': False,
-        }
+        expected_style_flags = expected_style_flags_default.copy()
+        expected_style_flags['bold'] = True
+        expected_style_flags['italic'] = True
         self.assertEqual(style_flags, expected_style_flags)
 
     def test_is_set_bold_flag(self):
@@ -126,6 +118,7 @@ class StyleFlagsTestCase(AbstractTestCase):
 
         font.set_style_flags(regular=True)
         self.assertTrue(font.get_style_flags()['regular'])
+
 
 if __name__ == '__main__':
     unittest.main()

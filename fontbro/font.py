@@ -97,18 +97,25 @@ class Font(object):
     _NAMES_BY_KEY = {item['key']: item for item in _NAMES}
 
     # Style Flags:
+    # https://docs.microsoft.com/en-us/typography/opentype/spec/head
+    # https://docs.microsoft.com/en-us/typography/opentype/spec/os2#fsselection
+    STYLE_FLAG_REGULAR = 'regular'
     STYLE_FLAG_BOLD = 'bold'
     STYLE_FLAG_ITALIC = 'italic'
-    STYLE_FLAG_OUTLINE = 'outline'
-    STYLE_FLAG_REGULAR = 'regular'
     STYLE_FLAG_UNDERLINE = 'underline'
-
+    STYLE_FLAG_OUTLINE = 'outline'
+    STYLE_FLAG_SHADOW = 'shadow'
+    STYLE_FLAG_CONDENSED = 'condensed'
+    STYLE_FLAG_EXTENDED = 'extended'
     _STYLE_FLAGS = {
+        STYLE_FLAG_REGULAR: {'bit_head_mac': None, 'bit_os2_fs': 6},
         STYLE_FLAG_BOLD: {'bit_head_mac': 0, 'bit_os2_fs': 5},
         STYLE_FLAG_ITALIC: {'bit_head_mac': 1, 'bit_os2_fs': 0},
+        STYLE_FLAG_UNDERLINE: {'bit_head_mac': 2, 'bit_os2_fs': None},
         STYLE_FLAG_OUTLINE: {'bit_head_mac': 3, 'bit_os2_fs': 3},
-        STYLE_FLAG_REGULAR: {'bit_head_mac': None, 'bit_os2_fs': 6},
-        STYLE_FLAG_UNDERLINE: {'bit_head_mac': 2, 'bit_os2_fs': 1},
+        STYLE_FLAG_SHADOW: {'bit_head_mac': 4, 'bit_os2_fs': None},
+        STYLE_FLAG_CONDENSED: {'bit_head_mac': 5, 'bit_os2_fs': None},
+        STYLE_FLAG_EXTENDED: {'bit_head_mac': 6, 'bit_os2_fs': None},
     }
     _STYLE_FLAGS_KEYS = _STYLE_FLAGS.keys()
 
@@ -748,19 +755,35 @@ class Font(object):
                 head.macStyle = set_flag(head.macStyle, bit_head_mac, value)
 
     def set_style_flags(
-        self, regular=None, bold=None, italic=None, outline=None, underline=None
+        self,
+        regular=None,
+        bold=None,
+        italic=None,
+        underline=None,
+        outline=None,
+        shadow=None,
+        condensed=None,
+        extended=None,
     ):
         """
-        Sets the style flags, flags set to None will be ignored.
+        Sets the style flags, keys set to None will be ignored.
 
-        :param bold: The bold flag value.
+        :param regular: The regular style flag value
+        :type regular: bool or None
+        :param bold: The bold style flag value
         :type bold: bool or None
-        :param italic: The italic flag value.
+        :param italic: The italic style flag value
         :type italic: bool or None
-        :param underline: The underline flag value.
+        :param underline: The underline style flag value
         :type underline: bool or None
-        :param outline: The outline flag value.
+        :param outline: The outline style flag value
         :type outline: bool or None
+        :param shadow: The shadow style flag value
+        :type shadow: bool or None
+        :param condensed: The condensed style flag value
+        :type condensed: bool or None
+        :param extended: The extended style flag value
+        :type extended: bool or None
         """
         flags = locals()
         flags.pop('self')
