@@ -401,8 +401,20 @@ class Font(object):
         ]
         return scripts
 
-    def _get_style_flag_by_bits(self, bit_os2_fs, bit_head_mac):
+    def get_style_flag(self, key):
+        """
+        Gets the style flag reading OS/2 and macStyle tables.
+
+        :param key: The key
+        :type key: string
+
+        :returns: The style flag.
+        :rtype: bool
+        """
         font = self.get_ttfont()
+        bits = self._STYLE_FLAGS[key]
+        bit_os2_fs = bits['bit_os2_fs']
+        bit_head_mac = bits['bit_head_mac']
         # https://docs.microsoft.com/en-us/typography/opentype/spec/os2#fsselection
         flag_os2_fs = False
         if bit_os2_fs is not None:
@@ -424,10 +436,7 @@ class Font(object):
         :returns: The dict representing the style flags.
         :rtype: dict
         """
-        return {
-            key: self._get_style_flag_by_bits(**self._STYLE_FLAGS.get(key))
-            for key in self._STYLE_FLAGS_KEYS
-        }
+        return {key: self.get_style_flag(key) for key in self._STYLE_FLAGS_KEYS}
 
     def get_ttfont(self):
         """
@@ -716,11 +725,19 @@ class Font(object):
         for key, value in names.items():
             self.set_name(key, value)
 
-    def _set_style_flag(self, flag, value):
+    def set_style_flag(self, key, value):
+        """
+        Sets the style flag.
+
+        :param key: The flag key
+        :type key: str
+        :param value: The value
+        :type value: bool
+        """
         font = self.get_ttfont()
-        bits = self._STYLE_FLAGS.get(flag)
-        bit_os2_fs = bits.get('bit_os2_fs')
-        bit_head_mac = bits.get('bit_head_mac')
+        bits = self._STYLE_FLAGS[key]
+        bit_os2_fs = bits['bit_os2_fs']
+        bit_head_mac = bits['bit_head_mac']
         if bit_os2_fs is not None:
             os2 = font.get('OS/2')
             if os2:
@@ -747,10 +764,10 @@ class Font(object):
         """
         flags = locals()
         flags.pop('self')
-        for flag, value in flags.items():
-            assert flag in self._STYLE_FLAGS_KEYS
-            if isinstance(value, bool):
-                self._set_style_flag(flag, value)
+        for key, value in flags.items():
+            if value is not None:
+                assert isinstance(value, bool)
+                self.set_style_flag(key, value)
 
     def subset(self, unicodes='', glyphs=[], text='', **options):
         """

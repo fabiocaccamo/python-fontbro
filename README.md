@@ -48,6 +48,7 @@ font = Font('fonts/MyFont.ttf')
 -   [`get_script_by_character`](#get_script_by_character)
 -   [`get_script_by_code`](#get_script_by_code)
 -   [`get_scripts`](#get_scripts)
+-   [`get_style_flag`](#get_style_flag)
 -   [`get_style_flags`](#get_style_flags)
 -   [`get_ttfont`](#get_ttfont)
 -   [`get_variable_axes`](#get_variable_axes)
@@ -64,6 +65,7 @@ font = Font('fonts/MyFont.ttf')
 -   [`save_as_woff2`](#save_as_woff2)
 -   [`set_name`](#set_name)
 -   [`set_names`](#set_names)
+-   [`set_style_flag`](#set_style_flag)
 -   [`set_style_flags`](#set_style_flags)
 -   [`subset`](#subset)
 -   [`to_sliced_variable`](#to_sliced_variable)
@@ -193,6 +195,20 @@ Gets the scripts supported by the font.
 :rtype: list of dict
 """
 scripts = font.get_scripts()
+```
+
+-   #### get_style_flag
+```python
+"""
+Gets the style flag reading OS/2 and macStyle tables.
+
+:param key: The key
+:type key: string
+
+:returns: The style flag.
+:rtype: bool
+"""
+flag = font.get_style_flag(Font.STYLE_FLAG_BOLD)
 ```
 
 -   #### get_style_flags
@@ -400,6 +416,19 @@ font.set_names(names={
     Font.NAME_FAMILY_NAME: 'Family Name Renamed',
     Font.NAME_SUBFAMILY_NAME: 'Regular Renamed',
 })
+```
+
+-   #### set_style_flag
+```python
+"""
+Sets the style flag.
+
+:param key: The flag key
+:type key: str
+:param value: The value
+:type value: bool
+"""
+font.set_style_flag(Font.STYLE_FLAG_BOLD, True)
 ```
 
 -   #### set_style_flags
