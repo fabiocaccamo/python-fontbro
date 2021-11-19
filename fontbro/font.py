@@ -124,7 +124,7 @@ class Font(object):
         {'tag': 'ital', 'name': 'Italic'},
         {'tag': 'opsz', 'name': 'Optical Size'},
         {'tag': 'slnt', 'name': 'Slant'},
-        {'tag': 'wdht', 'name': 'Width'},
+        {'tag': 'wdth', 'name': 'Width'},
         {'tag': 'wght', 'name': 'Weight'},
         # https://fonts.google.com/variablefonts#axis-definitions
         {'tag': 'CASL', 'name': 'Casual'},

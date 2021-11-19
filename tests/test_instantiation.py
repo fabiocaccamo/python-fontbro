@@ -77,7 +77,7 @@ class InstantiationTestCase(AbstractTestCase):
                 'defaultValue': 100.0,
                 'maxValue': 125.0,
                 'minValue': 75.0,
-                'name': 'Wdth',
+                'name': 'Width',
                 'tag': 'wdth',
             },
         ]
@@ -95,7 +95,7 @@ class InstantiationTestCase(AbstractTestCase):
                 'defaultValue': 100.0,
                 'maxValue': 110.0,
                 'minValue': 100.0,
-                'name': 'Wdth',
+                'name': 'Width',
                 'tag': 'wdth',
             },
         ]
@@ -115,7 +115,7 @@ class InstantiationTestCase(AbstractTestCase):
                 'defaultValue': 100.0,
                 'maxValue': 125.0,
                 'minValue': 75.0,
-                'name': 'Wdth',
+                'name': 'Width',
                 'tag': 'wdth',
             },
         ]
@@ -133,7 +133,7 @@ class InstantiationTestCase(AbstractTestCase):
                 'defaultValue': 100.0,
                 'maxValue': 110.0,
                 'minValue': 100.0,
-                'name': 'Wdth',
+                'name': 'Width',
                 'tag': 'wdth',
             },
         ]
@@ -153,7 +153,7 @@ class InstantiationTestCase(AbstractTestCase):
                 'defaultValue': 100.0,
                 'maxValue': 125.0,
                 'minValue': 75.0,
-                'name': 'Wdth',
+                'name': 'Width',
                 'tag': 'wdth',
             },
         ]
@@ -176,7 +176,7 @@ class InstantiationTestCase(AbstractTestCase):
                 'defaultValue': 100.0,
                 'maxValue': 110.0,
                 'minValue': 100.0,
-                'name': 'Wdth',
+                'name': 'Width',
                 'tag': 'wdth',
             },
         ]
@@ -196,7 +196,7 @@ class InstantiationTestCase(AbstractTestCase):
                 'defaultValue': 100.0,
                 'maxValue': 125.0,
                 'minValue': 75.0,
-                'name': 'Wdth',
+                'name': 'Width',
                 'tag': 'wdth',
             },
         ]
