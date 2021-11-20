@@ -973,4 +973,4 @@ class Font(object):
         :returns: String representation of the object.
         :rtype: str
         """
-        return f'Font("{self._filepath}")'
+        return f'Font(\'{self._filepath}\')'
