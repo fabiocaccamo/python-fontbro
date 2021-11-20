@@ -61,28 +61,23 @@ class VariableTestCase(AbstractTestCase):
         expected_instances = [
             {
                 'coordinates': {'wght': 100.0},
-                'postscript_name': 'RobotoMono-Thin',
-                'subfamily_name': 'Thin',
+                'style_name': 'Thin',
             },
             {
                 'coordinates': {'wght': 300.0},
-                'postscript_name': 'RobotoMono-Light',
-                'subfamily_name': 'Light',
+                'style_name': 'Light',
             },
             {
                 'coordinates': {'wght': 400.0},
-                'postscript_name': 'RobotoMono-Regular',
-                'subfamily_name': 'Regular',
+                'style_name': 'Regular',
             },
             {
                 'coordinates': {'wght': 500.0},
-                'postscript_name': 'RobotoMono-Medium',
-                'subfamily_name': 'Medium',
+                'style_name': 'Medium',
             },
             {
                 'coordinates': {'wght': 700.0},
-                'postscript_name': 'RobotoMono-Bold',
-                'subfamily_name': 'Bold',
+                'style_name': 'Bold',
             },
         ]
         self.assertEqual(instances, expected_instances)
@@ -101,8 +96,7 @@ class VariableTestCase(AbstractTestCase):
             closest_instance,
             {
                 'coordinates': {'wght': 700.0},
-                'postscript_name': 'RobotoMono-Bold',
-                'subfamily_name': 'Bold',
+                'style_name': 'Bold',
             },
         )
 

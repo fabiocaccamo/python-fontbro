@@ -516,13 +516,10 @@ class Font(object):
             return None
         font = self.get_ttfont()
         name_table = font['name']
-        for instance in font['fvar'].instances:
-            print(name_table.getDebugName(instance.postscriptNameID), name_table.getDebugName(instance.subfamilyNameID))
         return [
             {
                 'coordinates': instance.coordinates,
-                'postscript_name': name_table.getDebugName(instance.postscriptNameID),
-                'subfamily_name': name_table.getDebugName(instance.subfamilyNameID),
+                'style_name': name_table.getDebugName(instance.subfamilyNameID),
             }
             for instance in font['fvar'].instances
         ]
