@@ -469,9 +469,9 @@ class Font(object):
                 'name': self._VARIABLE_AXES_BY_TAG.get(axis.axisTag, {}).get(
                     'name', axis.axisTag.title()
                 ),
-                'minValue': axis.minValue,
-                'maxValue': axis.maxValue,
-                'defaultValue': axis.defaultValue,
+                'min_value': axis.minValue,
+                'max_value': axis.maxValue,
+                'default_value': axis.defaultValue,
             }
             for axis in font['fvar'].axes
         ]
@@ -515,12 +515,14 @@ class Font(object):
         if not self.is_variable():
             return None
         font = self.get_ttfont()
-        nameTable = font['name']
+        name_table = font['name']
+        for instance in font['fvar'].instances:
+            print(name_table.getDebugName(instance.postscriptNameID), name_table.getDebugName(instance.subfamilyNameID))
         return [
             {
                 'coordinates': instance.coordinates,
-                'postscriptName': nameTable.getDebugName(instance.postscriptNameID),
-                'subfamilyName': nameTable.getDebugName(instance.subfamilyNameID),
+                'postscript_name': name_table.getDebugName(instance.postscriptNameID),
+                'subfamily_name': name_table.getDebugName(instance.subfamilyNameID),
             }
             for instance in font['fvar'].instances
         ]

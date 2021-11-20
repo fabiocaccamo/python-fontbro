@@ -67,16 +67,16 @@ class InstantiationTestCase(AbstractTestCase):
         font = self._get_variable_font()
         expected_axes = [
             {
-                'defaultValue': 100.0,
-                'maxValue': 900.0,
-                'minValue': 100.0,
+                'default_value': 100.0,
+                'max_value': 900.0,
+                'min_value': 100.0,
                 'name': 'Weight',
                 'tag': 'wght',
             },
             {
-                'defaultValue': 100.0,
-                'maxValue': 125.0,
-                'minValue': 75.0,
+                'default_value': 100.0,
+                'max_value': 125.0,
+                'min_value': 75.0,
                 'name': 'Width',
                 'tag': 'wdth',
             },
@@ -85,16 +85,16 @@ class InstantiationTestCase(AbstractTestCase):
         font.to_sliced_variable(coordinates={'wght': (100, 400), 'wdth': (100, 110)})
         expected_axes = [
             {
-                'defaultValue': 100.0,
-                'maxValue': 400.0,
-                'minValue': 100.0,
+                'default_value': 100.0,
+                'max_value': 400.0,
+                'min_value': 100.0,
                 'name': 'Weight',
                 'tag': 'wght',
             },
             {
-                'defaultValue': 100.0,
-                'maxValue': 110.0,
-                'minValue': 100.0,
+                'default_value': 100.0,
+                'max_value': 110.0,
+                'min_value': 100.0,
                 'name': 'Width',
                 'tag': 'wdth',
             },
@@ -105,16 +105,16 @@ class InstantiationTestCase(AbstractTestCase):
         font = self._get_variable_font()
         expected_axes = [
             {
-                'defaultValue': 100.0,
-                'maxValue': 900.0,
-                'minValue': 100.0,
+                'default_value': 100.0,
+                'max_value': 900.0,
+                'min_value': 100.0,
                 'name': 'Weight',
                 'tag': 'wght',
             },
             {
-                'defaultValue': 100.0,
-                'maxValue': 125.0,
-                'minValue': 75.0,
+                'default_value': 100.0,
+                'max_value': 125.0,
+                'min_value': 75.0,
                 'name': 'Width',
                 'tag': 'wdth',
             },
@@ -123,16 +123,16 @@ class InstantiationTestCase(AbstractTestCase):
         font.to_sliced_variable(coordinates={'wght': [100, 400], 'wdth': [100, 110]})
         expected_axes = [
             {
-                'defaultValue': 100.0,
-                'maxValue': 400.0,
-                'minValue': 100.0,
+                'default_value': 100.0,
+                'max_value': 400.0,
+                'min_value': 100.0,
                 'name': 'Weight',
                 'tag': 'wght',
             },
             {
-                'defaultValue': 100.0,
-                'maxValue': 110.0,
-                'minValue': 100.0,
+                'default_value': 100.0,
+                'max_value': 110.0,
+                'min_value': 100.0,
                 'name': 'Width',
                 'tag': 'wdth',
             },
@@ -143,16 +143,16 @@ class InstantiationTestCase(AbstractTestCase):
         font = self._get_variable_font()
         expected_axes = [
             {
-                'defaultValue': 100.0,
-                'maxValue': 900.0,
-                'minValue': 100.0,
+                'default_value': 100.0,
+                'max_value': 900.0,
+                'min_value': 100.0,
                 'name': 'Weight',
                 'tag': 'wght',
             },
             {
-                'defaultValue': 100.0,
-                'maxValue': 125.0,
-                'minValue': 75.0,
+                'default_value': 100.0,
+                'max_value': 125.0,
+                'min_value': 75.0,
                 'name': 'Width',
                 'tag': 'wdth',
             },
@@ -166,16 +166,16 @@ class InstantiationTestCase(AbstractTestCase):
         )
         expected_axes = [
             {
-                'defaultValue': 100.0,
-                'maxValue': 400.0,
-                'minValue': 100.0,
+                'default_value': 100.0,
+                'max_value': 400.0,
+                'min_value': 100.0,
                 'name': 'Weight',
                 'tag': 'wght',
             },
             {
-                'defaultValue': 100.0,
-                'maxValue': 110.0,
-                'minValue': 100.0,
+                'default_value': 100.0,
+                'max_value': 110.0,
+                'min_value': 100.0,
                 'name': 'Width',
                 'tag': 'wdth',
             },
@@ -186,16 +186,16 @@ class InstantiationTestCase(AbstractTestCase):
         font = self._get_variable_font()
         expected_axes = [
             {
-                'defaultValue': 100.0,
-                'maxValue': 900.0,
-                'minValue': 100.0,
+                'default_value': 100.0,
+                'max_value': 900.0,
+                'min_value': 100.0,
                 'name': 'Weight',
                 'tag': 'wght',
             },
             {
-                'defaultValue': 100.0,
-                'maxValue': 125.0,
-                'minValue': 75.0,
+                'default_value': 100.0,
+                'max_value': 125.0,
+                'min_value': 75.0,
                 'name': 'Width',
                 'tag': 'wdth',
             },
@@ -204,9 +204,9 @@ class InstantiationTestCase(AbstractTestCase):
         font.to_sliced_variable(coordinates={'wght': (100, 400), 'wdth': 100})
         expected_axes = [
             {
-                'defaultValue': 100.0,
-                'maxValue': 400.0,
-                'minValue': 100.0,
+                'default_value': 100.0,
+                'max_value': 400.0,
+                'min_value': 100.0,
                 'name': 'Weight',
                 'tag': 'wght',
             }

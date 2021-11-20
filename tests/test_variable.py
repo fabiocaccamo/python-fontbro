@@ -22,9 +22,9 @@ class VariableTestCase(AbstractTestCase):
             {
                 'tag': 'wght',
                 'name': 'Weight',
-                'minValue': 100.0,
-                'maxValue': 700.0,
-                'defaultValue': 400.0,
+                'min_value': 100.0,
+                'max_value': 700.0,
+                'default_value': 400.0,
             },
         )
 
@@ -49,9 +49,9 @@ class VariableTestCase(AbstractTestCase):
             {
                 'tag': 'wght',
                 'name': 'Weight',
-                'minValue': 100.0,
-                'maxValue': 700.0,
-                'defaultValue': 400.0,
+                'min_value': 100.0,
+                'max_value': 700.0,
+                'default_value': 400.0,
             },
         )
 
@@ -61,28 +61,28 @@ class VariableTestCase(AbstractTestCase):
         expected_instances = [
             {
                 'coordinates': {'wght': 100.0},
-                'postscriptName': 'RobotoMono-Thin',
-                'subfamilyName': 'Thin',
+                'postscript_name': 'RobotoMono-Thin',
+                'subfamily_name': 'Thin',
             },
             {
                 'coordinates': {'wght': 300.0},
-                'postscriptName': 'RobotoMono-Light',
-                'subfamilyName': 'Light',
+                'postscript_name': 'RobotoMono-Light',
+                'subfamily_name': 'Light',
             },
             {
                 'coordinates': {'wght': 400.0},
-                'postscriptName': 'RobotoMono-Regular',
-                'subfamilyName': 'Regular',
+                'postscript_name': 'RobotoMono-Regular',
+                'subfamily_name': 'Regular',
             },
             {
                 'coordinates': {'wght': 500.0},
-                'postscriptName': 'RobotoMono-Medium',
-                'subfamilyName': 'Medium',
+                'postscript_name': 'RobotoMono-Medium',
+                'subfamily_name': 'Medium',
             },
             {
                 'coordinates': {'wght': 700.0},
-                'postscriptName': 'RobotoMono-Bold',
-                'subfamilyName': 'Bold',
+                'postscript_name': 'RobotoMono-Bold',
+                'subfamily_name': 'Bold',
             },
         ]
         self.assertEqual(instances, expected_instances)
@@ -101,8 +101,8 @@ class VariableTestCase(AbstractTestCase):
             closest_instance,
             {
                 'coordinates': {'wght': 700.0},
-                'postscriptName': 'RobotoMono-Bold',
-                'subfamilyName': 'Bold',
+                'postscript_name': 'RobotoMono-Bold',
+                'subfamily_name': 'Bold',
             },
         )
 
