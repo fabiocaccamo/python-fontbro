@@ -295,17 +295,18 @@ class Font(object):
         font = self.get_ttfont()
         version = font.sfntVersion
         flavor = font.flavor
+        format = None
         if flavor in [self.FORMAT_WOFF, self.FORMAT_WOFF2] and not ignore_flavor:
-            return flavor
+            format = flavor
         elif version == 'OTTO' and 'CFF ' in font:
-            return self.FORMAT_OTF
+            format = self.FORMAT_OTF
         elif version == '\0\1\0\0':
-            return self.FORMAT_TTF
+            format = self.FORMAT_TTF
         elif version == 'wOFF':
-            return self.FORMAT_WOFF
+            format = self.FORMAT_WOFF
         elif version == 'wOF2':
-            return self.FORMAT_WOFF2
-        return None
+            format = self.FORMAT_WOFF2
+        return format
 
     @classmethod
     def _get_name_id(cls, key):
