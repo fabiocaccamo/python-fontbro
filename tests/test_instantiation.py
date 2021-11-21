@@ -182,6 +182,31 @@ class InstantiationTestCase(AbstractTestCase):
         ]
         self.assertEqual(font.get_variable_axes(), expected_axes)
 
+    def test_to_sliced_variable_with_coordinates_sliced_and_passed_as_dict_but_incomplete(
+        self,
+    ):
+        font = self._get_variable_font()
+        font.to_sliced_variable(
+            coordinates={'wght': {'min': 100}, 'wdth': {'min': 100}}
+        )
+        expected_axes = [
+            {
+                'default_value': 100.0,
+                'max_value': 900.0,
+                'min_value': 100.0,
+                'name': 'Weight',
+                'tag': 'wght',
+            },
+            {
+                'default_value': 100.0,
+                'max_value': 125.0,
+                'min_value': 100.0,
+                'name': 'Width',
+                'tag': 'wdth',
+            },
+        ]
+        self.assertEqual(font.get_variable_axes(), expected_axes)
+
     def test_to_sliced_variable_with_coordinates_sliced_and_pinned(self):
         font = self._get_variable_font()
         expected_axes = [

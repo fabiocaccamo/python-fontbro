@@ -905,8 +905,8 @@ class Font(object):
                 axis_value = tuple(axis_value)
             elif isinstance(axis_value, dict):
                 axis = self.get_variable_axis_by_tag(axis_tag)
-                axis_min = axis_value.get('min', axis.get('minValue'))
-                axis_max = axis_value.get('max', axis.get('maxValue'))
+                axis_min = axis_value.get('min', axis.get('min_value'))
+                axis_max = axis_value.get('max', axis.get('max_value'))
                 axis_value = (axis_min, axis_max)
             coordinates[axis_tag] = axis_value
 
