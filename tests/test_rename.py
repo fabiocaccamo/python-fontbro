@@ -53,3 +53,11 @@ class RenameTestCase(AbstractTestCase):
         self.assertEqual(names[Font.NAME_POSTSCRIPT_NAME], 'RobotoMono-Regular')
         self.assertEqual(names[Font.NAME_TYPOGRAPHIC_FAMILY_NAME], 'Roboto Mono')
         self.assertEqual(names[Font.NAME_TYPOGRAPHIC_SUBFAMILY_NAME], 'Regular')
+
+    def test_rename_with_final_postscript_name_too_long(self):
+        font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
+        with self.assertRaises(ValueError):
+            font.rename(
+                'Roboto Mono New Name Too Long For PostScript Name So Expect Exception',
+                'Bold Italic',
+            )

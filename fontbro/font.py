@@ -617,7 +617,9 @@ class Font(object):
 
     def rename(self, family_name='', style_name=''):
         """
-        Renames the font names records according to the given family_name and style_name (subfamily_name).
+        Renames the font names records (1, 2, 4, 6, 16, 17) according to
+        the given family_name and style_name (subfamily_name).
+
         If family_name is not defined it will be auto-detected.
         If style_name is not defined it will be auto-detected.
 
@@ -625,6 +627,8 @@ class Font(object):
         :type family_name: str
         :param style_name: The style name
         :type style_name: str
+
+        :raises ValueError: if the computed PostScript-name is longer than 63 characters.
         """
         family_name = (
             family_name
@@ -640,6 +644,12 @@ class Font(object):
         postscript_family_name = family_name.replace(' ', '')
         postscript_subfamily_name = style_name.replace(' ', '')
         postscript_name = f'{postscript_family_name}-{postscript_subfamily_name}'
+        postscript_name_length = len(postscript_name)
+        if postscript_name_length > 63:
+            raise ValueError(
+                'PostScript name max-length (63 characters) exceeded'
+                f' ({postscript_name_length} characters).'
+            )
         names = {
             self.NAME_FAMILY_NAME: family_name,
             self.NAME_SUBFAMILY_NAME: style_name,

@@ -343,7 +343,9 @@ variable = font.is_variable()
 -   #### rename
 ```python
 """
-Renames the font names records according to the given family_name and style_name (subfamily_name).
+Renames the font names records (1, 2, 4, 6, 16, 17) according to
+the given family_name and style_name (subfamily_name).
+
 If family_name is not defined it will be auto-detected.
 If style_name is not defined it will be auto-detected.
 
@@ -351,6 +353,8 @@ If style_name is not defined it will be auto-detected.
 :type family_name: str
 :param style_name: The style name
 :type style_name: str
+
+:raises ValueError: if the computed PostScript-name is longer than 63 characters.
 """
 font.rename(family_name='My Font New', style_name='Bold Italic')
 ```
