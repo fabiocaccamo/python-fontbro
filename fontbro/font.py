@@ -854,10 +854,9 @@ class Font(object):
             )
         if isinstance(unicodes, (list, set, tuple)):
             unicodes = ', '.join(list(unicodes))
-        dash = '-'
-        mdash = '—'
-        minus = '−'
-        unicodes = unicodes.replace(mdash, dash).replace(minus, dash)
+        # replace possible — ‐ − (&mdash; &dash; &minus;) with -
+        for s in ('—', '‐', '−', ):
+            unicodes = unicodes.replace(s, '-')
         unicodes = parse_unicodes(unicodes)
         # print(unicodes)
         subs_args = {'unicodes': unicodes, 'glyphs': glyphs, 'text': text}
