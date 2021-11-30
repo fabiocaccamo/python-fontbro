@@ -353,9 +353,10 @@ class Font(object):
         }
         return names
 
-    def get_script_by_character(self, char):
+    @classmethod
+    def get_script_by_character(cls, char):
         """
-        Gets the script by character.
+        Gets the script by character (even if not included in the font).
 
         :param char: The character
         :type char: str
@@ -363,11 +364,12 @@ class Font(object):
         :returns: The script by character.
         :rtype: dict
         """
-        return self.get_script_by_code(ord(char))
+        return cls.get_script_by_code(ord(char))
 
-    def get_script_by_code(self, code):
+    @classmethod
+    def get_script_by_code(cls, code):
         """
-        Gets the script by unicode code point.
+        Gets the script by unicode code point (even if not included in the font).
 
         :param code: The code
         :type code: int
@@ -382,16 +384,17 @@ class Font(object):
             'block': unicodedata.block(code),
         }
 
-    def get_scripts(self):
+    @classmethod
+    def get_scripts_by_characters(cls, chars):
         """
-        Gets the scripts supported by the font.
+        Gets the scripts by characters (even if not included in the font).
 
         :returns: The scripts.
         :rtype: list of dict
         """
         blocks_by_scripts_tags = {}
-        for char in self.get_characters():
-            script = self.get_script_by_code(char['code'])
+        for char in chars:
+            script = cls.get_script_by_code(char['code'])
             script_tag = script['tag']
             script_block = script['block']
             if script_tag not in blocks_by_scripts_tags:
@@ -407,6 +410,15 @@ class Font(object):
             for script_tag in scripts_tags
         ]
         return scripts
+
+    def get_scripts(self):
+        """
+        Gets the scripts supported by the font.
+
+        :returns: The scripts.
+        :rtype: list of dict
+        """
+        return self.get_scripts_by_characters(chars=self.get_characters())
 
     def get_style_flag(self, key):
         """
