@@ -867,7 +867,7 @@ class Font(object):
         if isinstance(unicodes, (list, set, tuple)):
             unicodes = ', '.join(list(unicodes))
         # replace possible — ‐ − (&mdash; &dash; &minus;) with -
-        for s in ('—', '‐', '−', ):
+        for s in ('—', '‐', '−'):
             unicodes = unicodes.replace(s, '-')
         unicodes = parse_unicodes(unicodes)
         # print(unicodes)
