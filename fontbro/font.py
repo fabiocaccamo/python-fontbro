@@ -334,7 +334,7 @@ class Font(object):
         font = self.get_ttfont()
         name_id = self._get_name_id(key)
         name_table = font['name']
-        name = name_table.getName(name_id, 3, 1)
+        name = name_table.getName(name_id, 3, 1, 0x0409)
         return name.toUnicode() if name else None
 
     def get_names(self):
@@ -771,8 +771,8 @@ class Font(object):
         font = self.get_ttfont()
         name_id = self._get_name_id(key)
         name_table = font['name']
-        # https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/ttLib/tables/_n_a_m_e.py#L786
-        name_table.setName(value, name_id, 3, 1, 0)
+        # https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/ttLib/tables/_n_a_m_e.py#L568
+        name_table.setName(value, name_id, 3, 1, 0x0409)
 
     def set_names(self, names):
         """
