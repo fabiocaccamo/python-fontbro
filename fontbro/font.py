@@ -771,7 +771,8 @@ class Font(object):
         font = self.get_ttfont()
         name_id = self._get_name_id(key)
         name_table = font['name']
-        name_table.setName(value, name_id, 3, 1, None)
+        # https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/ttLib/tables/_n_a_m_e.py#L786
+        name_table.setName(value, name_id, 3, 1, 0)
 
     def set_names(self, names):
         """
