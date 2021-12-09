@@ -390,7 +390,7 @@ Saves font as woff.
 :returns: The filepath where the font has been saved to.
 :rtype: str
 """
-saved_font_path = font.save_as_woff()
+saved_font_path = font.save_as_woff(filepath=None, overwrite=True)
 ```
 
 -   #### save_as_woff2
@@ -406,7 +406,7 @@ Saves font as woff2.
 :returns: The filepath where the font has been saved to.
 :rtype: str
 """
-saved_font_path = font.save_as_woff2()
+saved_font_path = font.save_as_woff2(filepath=None, overwrite=True)
 ```
 
 -   #### set_name
