@@ -95,6 +95,8 @@ class Font(object):
     ]
     _NAMES_BY_ID = {item['id']: item for item in _NAMES}
     _NAMES_BY_KEY = {item['key']: item for item in _NAMES}
+    _NAMES_MAC_IDS = {"platformID": 3, "platEncID": 1, "langID": 0x409}
+    _NAMES_WIN_IDS = {"platformID": 1, "platEncID": 0, "langID": 0x0}
 
     # Style Flags:
     # https://docs.microsoft.com/en-us/typography/opentype/spec/head
@@ -334,7 +336,9 @@ class Font(object):
         font = self.get_ttfont()
         name_id = self._get_name_id(key)
         name_table = font['name']
-        name = name_table.getName(name_id, 3, 1, 0x0409)
+        name = name_table.getName(name_id, **self._NAMES_MAC_IDS)
+        if not name:
+            name = name_table.getName(name_id, **self._NAMES_WIN_IDS)
         return name.toUnicode() if name else None
 
     def get_names(self):
@@ -772,7 +776,8 @@ class Font(object):
         name_id = self._get_name_id(key)
         name_table = font['name']
         # https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/ttLib/tables/_n_a_m_e.py#L568
-        name_table.setName(value, name_id, 3, 1, 0x0409)
+        name_table.setName(value, name_id, **self._NAMES_MAC_IDS)
+        name_table.setName(value, name_id, **self._NAMES_WIN_IDS)
 
     def set_names(self, names):
         """
