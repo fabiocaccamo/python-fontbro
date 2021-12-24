@@ -27,133 +27,133 @@ class Font(object):
     # https://docs.microsoft.com/en-gb/typography/opentype/spec/featurelist
     # https://developer.mozilla.org/en-US/docs/Web/CSS/font-feature-settings
     _FEATURES_LIST = _FEATURES_LIST
-    _FEATURES_BY_TAG = {feature['tag']: feature for feature in _FEATURES_LIST}
+    _FEATURES_BY_TAG = {feature["tag"]: feature for feature in _FEATURES_LIST}
 
     # Formats:
-    FORMAT_OTF = 'otf'
-    FORMAT_TTF = 'ttf'
-    FORMAT_WOFF = 'woff'
-    FORMAT_WOFF2 = 'woff2'
+    FORMAT_OTF = "otf"
+    FORMAT_TTF = "ttf"
+    FORMAT_WOFF = "woff"
+    FORMAT_WOFF2 = "woff2"
 
     _FORMATS_LIST = [FORMAT_OTF, FORMAT_TTF, FORMAT_WOFF, FORMAT_WOFF2]
 
     # Names:
-    NAME_COPYRIGHT_NOTICE = 'copyright_notice'
-    NAME_FAMILY_NAME = 'family_name'
-    NAME_SUBFAMILY_NAME = 'subfamily_name'
-    NAME_UNIQUE_IDENTIFIER = 'unique_identifier'
-    NAME_FULL_NAME = 'full_name'
-    NAME_VERSION = 'version'
-    NAME_POSTSCRIPT_NAME = 'postscript_name'
-    NAME_TRADEMARK = 'trademark'
-    NAME_MANUFACTURER_NAME = 'manufacturer_name'
-    NAME_DESIGNER = 'designer'
-    NAME_DESCRIPTION = 'description'
-    NAME_VENDOR_URL = 'vendor_url'
-    NAME_DESIGNER_URL = 'designer_url'
-    NAME_LICENSE_DESCRIPTION = 'license_description'
-    NAME_LICENSE_INFO_URL = 'license_info_url'
-    NAME_RESERVED = 'reserved'
-    NAME_TYPOGRAPHIC_FAMILY_NAME = 'typographic_family_name'
-    NAME_TYPOGRAPHIC_SUBFAMILY_NAME = 'typographic_subfamily_name'
-    NAME_COMPATIBLE_FULL = 'compatible_full'
-    NAME_SAMPLE_TEXT = 'sample_text'
-    NAME_POSTSCRIPT_CID_FINDFONT_NAME = 'postscript_cid_findfont_name'
-    NAME_WWS_FAMILY_NAME = 'wws_family_name'
-    NAME_WWS_SUBFAMILY_NAME = 'wws_subfamily_name'
-    NAME_LIGHT_BACKGROUND_PALETTE = 'light_background_palette'
-    NAME_DARK_BACKGROUND_PALETTE = 'dark_background_palette'
-    NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX = 'variations_postscript_name_prefix'
+    NAME_COPYRIGHT_NOTICE = "copyright_notice"
+    NAME_FAMILY_NAME = "family_name"
+    NAME_SUBFAMILY_NAME = "subfamily_name"
+    NAME_UNIQUE_IDENTIFIER = "unique_identifier"
+    NAME_FULL_NAME = "full_name"
+    NAME_VERSION = "version"
+    NAME_POSTSCRIPT_NAME = "postscript_name"
+    NAME_TRADEMARK = "trademark"
+    NAME_MANUFACTURER_NAME = "manufacturer_name"
+    NAME_DESIGNER = "designer"
+    NAME_DESCRIPTION = "description"
+    NAME_VENDOR_URL = "vendor_url"
+    NAME_DESIGNER_URL = "designer_url"
+    NAME_LICENSE_DESCRIPTION = "license_description"
+    NAME_LICENSE_INFO_URL = "license_info_url"
+    NAME_RESERVED = "reserved"
+    NAME_TYPOGRAPHIC_FAMILY_NAME = "typographic_family_name"
+    NAME_TYPOGRAPHIC_SUBFAMILY_NAME = "typographic_subfamily_name"
+    NAME_COMPATIBLE_FULL = "compatible_full"
+    NAME_SAMPLE_TEXT = "sample_text"
+    NAME_POSTSCRIPT_CID_FINDFONT_NAME = "postscript_cid_findfont_name"
+    NAME_WWS_FAMILY_NAME = "wws_family_name"
+    NAME_WWS_SUBFAMILY_NAME = "wws_subfamily_name"
+    NAME_LIGHT_BACKGROUND_PALETTE = "light_background_palette"
+    NAME_DARK_BACKGROUND_PALETTE = "dark_background_palette"
+    NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX = "variations_postscript_name_prefix"
 
     _NAMES = [
-        {'id': 0, 'key': NAME_COPYRIGHT_NOTICE},
-        {'id': 1, 'key': NAME_FAMILY_NAME},
-        {'id': 2, 'key': NAME_SUBFAMILY_NAME},
-        {'id': 3, 'key': NAME_UNIQUE_IDENTIFIER},
-        {'id': 4, 'key': NAME_FULL_NAME},
-        {'id': 5, 'key': NAME_VERSION},
-        {'id': 6, 'key': NAME_POSTSCRIPT_NAME},
-        {'id': 7, 'key': NAME_TRADEMARK},
-        {'id': 8, 'key': NAME_MANUFACTURER_NAME},
-        {'id': 9, 'key': NAME_DESIGNER},
-        {'id': 10, 'key': NAME_DESCRIPTION},
-        {'id': 11, 'key': NAME_VENDOR_URL},
-        {'id': 12, 'key': NAME_DESIGNER_URL},
-        {'id': 13, 'key': NAME_LICENSE_DESCRIPTION},
-        {'id': 14, 'key': NAME_LICENSE_INFO_URL},
-        {'id': 15, 'key': NAME_RESERVED},
-        {'id': 16, 'key': NAME_TYPOGRAPHIC_FAMILY_NAME},
-        {'id': 17, 'key': NAME_TYPOGRAPHIC_SUBFAMILY_NAME},
-        {'id': 18, 'key': NAME_COMPATIBLE_FULL},
-        {'id': 19, 'key': NAME_SAMPLE_TEXT},
-        {'id': 20, 'key': NAME_POSTSCRIPT_CID_FINDFONT_NAME},
-        {'id': 21, 'key': NAME_WWS_FAMILY_NAME},
-        {'id': 22, 'key': NAME_WWS_SUBFAMILY_NAME},
-        {'id': 23, 'key': NAME_LIGHT_BACKGROUND_PALETTE},
-        {'id': 24, 'key': NAME_DARK_BACKGROUND_PALETTE},
-        {'id': 25, 'key': NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX},
+        {"id": 0, "key": NAME_COPYRIGHT_NOTICE},
+        {"id": 1, "key": NAME_FAMILY_NAME},
+        {"id": 2, "key": NAME_SUBFAMILY_NAME},
+        {"id": 3, "key": NAME_UNIQUE_IDENTIFIER},
+        {"id": 4, "key": NAME_FULL_NAME},
+        {"id": 5, "key": NAME_VERSION},
+        {"id": 6, "key": NAME_POSTSCRIPT_NAME},
+        {"id": 7, "key": NAME_TRADEMARK},
+        {"id": 8, "key": NAME_MANUFACTURER_NAME},
+        {"id": 9, "key": NAME_DESIGNER},
+        {"id": 10, "key": NAME_DESCRIPTION},
+        {"id": 11, "key": NAME_VENDOR_URL},
+        {"id": 12, "key": NAME_DESIGNER_URL},
+        {"id": 13, "key": NAME_LICENSE_DESCRIPTION},
+        {"id": 14, "key": NAME_LICENSE_INFO_URL},
+        {"id": 15, "key": NAME_RESERVED},
+        {"id": 16, "key": NAME_TYPOGRAPHIC_FAMILY_NAME},
+        {"id": 17, "key": NAME_TYPOGRAPHIC_SUBFAMILY_NAME},
+        {"id": 18, "key": NAME_COMPATIBLE_FULL},
+        {"id": 19, "key": NAME_SAMPLE_TEXT},
+        {"id": 20, "key": NAME_POSTSCRIPT_CID_FINDFONT_NAME},
+        {"id": 21, "key": NAME_WWS_FAMILY_NAME},
+        {"id": 22, "key": NAME_WWS_SUBFAMILY_NAME},
+        {"id": 23, "key": NAME_LIGHT_BACKGROUND_PALETTE},
+        {"id": 24, "key": NAME_DARK_BACKGROUND_PALETTE},
+        {"id": 25, "key": NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX},
     ]
-    _NAMES_BY_ID = {item['id']: item for item in _NAMES}
-    _NAMES_BY_KEY = {item['key']: item for item in _NAMES}
+    _NAMES_BY_ID = {item["id"]: item for item in _NAMES}
+    _NAMES_BY_KEY = {item["key"]: item for item in _NAMES}
     _NAMES_MAC_IDS = {"platformID": 3, "platEncID": 1, "langID": 0x409}
     _NAMES_WIN_IDS = {"platformID": 1, "platEncID": 0, "langID": 0x0}
 
     # Style Flags:
     # https://docs.microsoft.com/en-us/typography/opentype/spec/head
     # https://docs.microsoft.com/en-us/typography/opentype/spec/os2#fsselection
-    STYLE_FLAG_REGULAR = 'regular'
-    STYLE_FLAG_BOLD = 'bold'
-    STYLE_FLAG_ITALIC = 'italic'
-    STYLE_FLAG_UNDERLINE = 'underline'
-    STYLE_FLAG_OUTLINE = 'outline'
-    STYLE_FLAG_SHADOW = 'shadow'
-    STYLE_FLAG_CONDENSED = 'condensed'
-    STYLE_FLAG_EXTENDED = 'extended'
+    STYLE_FLAG_REGULAR = "regular"
+    STYLE_FLAG_BOLD = "bold"
+    STYLE_FLAG_ITALIC = "italic"
+    STYLE_FLAG_UNDERLINE = "underline"
+    STYLE_FLAG_OUTLINE = "outline"
+    STYLE_FLAG_SHADOW = "shadow"
+    STYLE_FLAG_CONDENSED = "condensed"
+    STYLE_FLAG_EXTENDED = "extended"
     _STYLE_FLAGS = {
-        STYLE_FLAG_REGULAR: {'bit_head_mac': None, 'bit_os2_fs': 6},
-        STYLE_FLAG_BOLD: {'bit_head_mac': 0, 'bit_os2_fs': 5},
-        STYLE_FLAG_ITALIC: {'bit_head_mac': 1, 'bit_os2_fs': 0},
-        STYLE_FLAG_UNDERLINE: {'bit_head_mac': 2, 'bit_os2_fs': None},
-        STYLE_FLAG_OUTLINE: {'bit_head_mac': 3, 'bit_os2_fs': 3},
-        STYLE_FLAG_SHADOW: {'bit_head_mac': 4, 'bit_os2_fs': None},
-        STYLE_FLAG_CONDENSED: {'bit_head_mac': 5, 'bit_os2_fs': None},
-        STYLE_FLAG_EXTENDED: {'bit_head_mac': 6, 'bit_os2_fs': None},
+        STYLE_FLAG_REGULAR: {"bit_head_mac": None, "bit_os2_fs": 6},
+        STYLE_FLAG_BOLD: {"bit_head_mac": 0, "bit_os2_fs": 5},
+        STYLE_FLAG_ITALIC: {"bit_head_mac": 1, "bit_os2_fs": 0},
+        STYLE_FLAG_UNDERLINE: {"bit_head_mac": 2, "bit_os2_fs": None},
+        STYLE_FLAG_OUTLINE: {"bit_head_mac": 3, "bit_os2_fs": 3},
+        STYLE_FLAG_SHADOW: {"bit_head_mac": 4, "bit_os2_fs": None},
+        STYLE_FLAG_CONDENSED: {"bit_head_mac": 5, "bit_os2_fs": None},
+        STYLE_FLAG_EXTENDED: {"bit_head_mac": 6, "bit_os2_fs": None},
     }
     _STYLE_FLAGS_KEYS = _STYLE_FLAGS.keys()
 
     # Variable Axes:
     _VARIABLE_AXES = [
-        {'tag': 'ital', 'name': 'Italic'},
-        {'tag': 'opsz', 'name': 'Optical Size'},
-        {'tag': 'slnt', 'name': 'Slant'},
-        {'tag': 'wdth', 'name': 'Width'},
-        {'tag': 'wght', 'name': 'Weight'},
+        {"tag": "ital", "name": "Italic"},
+        {"tag": "opsz", "name": "Optical Size"},
+        {"tag": "slnt", "name": "Slant"},
+        {"tag": "wdth", "name": "Width"},
+        {"tag": "wght", "name": "Weight"},
         # https://fonts.google.com/variablefonts#axis-definitions
-        {'tag': 'CASL', 'name': 'Casual'},
-        {'tag': 'CRSV', 'name': 'Cursive'},
-        {'tag': 'XPRN', 'name': 'Expression'},
-        {'tag': 'FILL', 'name': 'Fill'},
-        {'tag': 'GRAD', 'name': 'Grade'},
-        {'tag': 'MONO', 'name': 'Monospace'},
-        {'tag': 'SOFT', 'name': 'Softness'},
-        {'tag': 'WONK', 'name': 'Wonky'},
+        {"tag": "CASL", "name": "Casual"},
+        {"tag": "CRSV", "name": "Cursive"},
+        {"tag": "XPRN", "name": "Expression"},
+        {"tag": "FILL", "name": "Fill"},
+        {"tag": "GRAD", "name": "Grade"},
+        {"tag": "MONO", "name": "Monospace"},
+        {"tag": "SOFT", "name": "Softness"},
+        {"tag": "WONK", "name": "Wonky"},
     ]
-    _VARIABLE_AXES_BY_TAG = {axis['tag']: axis for axis in _VARIABLE_AXES}
+    _VARIABLE_AXES_BY_TAG = {axis["tag"]: axis for axis in _VARIABLE_AXES}
 
     # Weights:
     # https://docs.microsoft.com/en-us/typography/opentype/otspec170/os2#usweightclass
-    WEIGHT_EXTRA_THIN = 'Extra-thin'  # (Hairline)
-    WEIGHT_THIN = 'Thin'
-    WEIGHT_EXTRA_LIGHT = 'Extra-light'  # (Ultra-light)
-    WEIGHT_LIGHT = 'Light'
-    WEIGHT_REGULAR = 'Regular'  # (Normal)
-    WEIGHT_BOOK = 'Book'
-    WEIGHT_MEDIUM = 'Medium'
-    WEIGHT_SEMI_BOLD = 'Semi-bold'  # (Demi-bold)
-    WEIGHT_BOLD = 'Bold'
-    WEIGHT_EXTRA_BOLD = 'Extra-bold'  # (Ultra-bold)
-    WEIGHT_BLACK = 'Black'  # (Heavy)
-    WEIGHT_EXTRA_BLACK = 'Extra-black'  # (Nord)
+    WEIGHT_EXTRA_THIN = "Extra-thin"  # (Hairline)
+    WEIGHT_THIN = "Thin"
+    WEIGHT_EXTRA_LIGHT = "Extra-light"  # (Ultra-light)
+    WEIGHT_LIGHT = "Light"
+    WEIGHT_REGULAR = "Regular"  # (Normal)
+    WEIGHT_BOOK = "Book"
+    WEIGHT_MEDIUM = "Medium"
+    WEIGHT_SEMI_BOLD = "Semi-bold"  # (Demi-bold)
+    WEIGHT_BOLD = "Bold"
+    WEIGHT_EXTRA_BOLD = "Extra-bold"  # (Ultra-bold)
+    WEIGHT_BLACK = "Black"  # (Heavy)
+    WEIGHT_EXTRA_BLACK = "Extra-black"  # (Nord)
     _WEIGHTS_BY_VALUE = {
         50: WEIGHT_EXTRA_THIN,
         100: WEIGHT_THIN,
@@ -171,15 +171,15 @@ class Font(object):
 
     # Widths:
     # https://docs.microsoft.com/en-us/typography/opentype/otspec170/os2#uswidthclass
-    WIDTH_ULTRA_CONDENSED = 'Ultra-condensed'
-    WIDTH_EXTRA_CONDENSED = 'Extra-condensed'
-    WIDTH_CONDENSED = 'Condensed'
-    WIDTH_SEMI_CONDENSED = 'Semi-condensed'
-    WIDTH_MEDIUM = 'Medium'  # (Normal)
-    WIDTH_SEMI_EXPANDED = 'Semi-expanded'
-    WIDTH_EXPANDED = 'Expanded'
-    WIDTH_EXTRA_EXPANDED = 'Extra-expanded'
-    WIDTH_ULTRA_EXPANDED = 'Ultra-expanded'
+    WIDTH_ULTRA_CONDENSED = "Ultra-condensed"
+    WIDTH_EXTRA_CONDENSED = "Extra-condensed"
+    WIDTH_CONDENSED = "Condensed"
+    WIDTH_SEMI_CONDENSED = "Semi-condensed"
+    WIDTH_MEDIUM = "Medium"  # (Normal)
+    WIDTH_SEMI_EXPANDED = "Semi-expanded"
+    WIDTH_EXPANDED = "Expanded"
+    WIDTH_EXTRA_EXPANDED = "Extra-expanded"
+    WIDTH_ULTRA_EXPANDED = "Ultra-expanded"
     _WIDTHS_BY_VALUE = {
         1: WIDTH_ULTRA_CONDENSED,
         2: WIDTH_EXTRA_CONDENSED,
@@ -211,7 +211,7 @@ class Font(object):
         else:
             filepath_type = type(filepath).__name__
             raise ValueError(
-                f'Invalid filepath type: expected str, found {filepath_type}'
+                f"Invalid filepath type: expected str, found {filepath_type}"
             )
 
     def _init_with_filepath(self, filepath):
@@ -219,7 +219,7 @@ class Font(object):
             self._ttfont = TTFont(filepath)
             self._filepath = filepath
         except TTLibError:
-            raise ValueError(f'Invalid font at filepath: {filepath}')
+            raise ValueError(f"Invalid font at filepath: {filepath}")
 
     def get_characters(self):
         """
@@ -234,16 +234,16 @@ class Font(object):
             char = chr(code)
             if ascii.iscntrl(char):
                 continue
-            name = ''
+            name = ""
             try:
                 name = unicodedata.name(char)
             except ValueError:
                 pass
             yield {
-                'character': char,
-                'character_name': char_name,
-                'code': code,
-                'name': name,
+                "character": char,
+                "character_name": char_name,
+                "code": code,
+                "name": name,
             }
 
     def get_characters_count(self):
@@ -277,7 +277,7 @@ class Font(object):
         :rtype: list of str
         """
         font = self.get_ttfont()
-        gsub = font.get('GSUB')
+        gsub = font.get("GSUB")
         if gsub:
             feature_record = gsub.table.FeatureList.FeatureRecord or []
             features_tags = [feature.FeatureTag for feature in feature_record]
@@ -300,13 +300,13 @@ class Font(object):
         format = None
         if flavor in [self.FORMAT_WOFF, self.FORMAT_WOFF2] and not ignore_flavor:
             format = flavor
-        elif version == 'OTTO' and 'CFF ' in font:
+        elif version == "OTTO" and "CFF " in font:
             format = self.FORMAT_OTF
-        elif version == '\0\1\0\0':
+        elif version == "\0\1\0\0":
             format = self.FORMAT_TTF
-        elif version == 'wOFF':
+        elif version == "wOFF":
             format = self.FORMAT_WOFF
-        elif version == 'wOF2':
+        elif version == "wOF2":
             format = self.FORMAT_WOFF2
         return format
 
@@ -315,10 +315,10 @@ class Font(object):
         if isinstance(key, int):
             return key
         elif isinstance(key, str):
-            return cls._NAMES_BY_KEY[key]['id']
+            return cls._NAMES_BY_KEY[key]["id"]
         else:
             raise TypeError(
-                f'Invalid key type, expected int or str, found {type(key).__name__}.'
+                f"Invalid key type, expected int or str, found {type(key).__name__}."
             )
 
     def get_name(self, key):
@@ -335,7 +335,7 @@ class Font(object):
         """
         font = self.get_ttfont()
         name_id = self._get_name_id(key)
-        name_table = font['name']
+        name_table = font["name"]
         name = name_table.getName(name_id, **self._NAMES_MAC_IDS)
         if not name:
             name = name_table.getName(name_id, **self._NAMES_WIN_IDS)
@@ -349,9 +349,9 @@ class Font(object):
         :rtype: dict
         """
         font = self.get_ttfont()
-        names_by_id = {record.nameID: f'{record}' for record in font['name'].names}
+        names_by_id = {record.nameID: f"{record}" for record in font["name"].names}
         names = {
-            self._NAMES_BY_ID[name_id]['key']: value
+            self._NAMES_BY_ID[name_id]["key"]: value
             for name_id, value in names_by_id.items()
             if name_id in self._NAMES_BY_ID
         }
@@ -383,9 +383,9 @@ class Font(object):
         """
         script_tag = unicodedata.script(code)
         return {
-            'tag': script_tag,
-            'name': unicodedata.script_name(script_tag),
-            'block': unicodedata.block(code),
+            "tag": script_tag,
+            "name": unicodedata.script_name(script_tag),
+            "block": unicodedata.block(code),
         }
 
     @classmethod
@@ -398,18 +398,18 @@ class Font(object):
         """
         blocks_by_scripts_tags = {}
         for char in chars:
-            script = cls.get_script_by_code(char['code'])
-            script_tag = script['tag']
-            script_block = script['block']
+            script = cls.get_script_by_code(char["code"])
+            script_tag = script["tag"]
+            script_block = script["block"]
             if script_tag not in blocks_by_scripts_tags:
                 blocks_by_scripts_tags[script_tag] = set()
             blocks_by_scripts_tags[script_tag].add(script_block)
         scripts_tags = sorted(blocks_by_scripts_tags.keys())
         scripts = [
             {
-                'tag': script_tag,
-                'name': unicodedata.script_name(script_tag),
-                'blocks': sorted(blocks_by_scripts_tags[script_tag]),
+                "tag": script_tag,
+                "name": unicodedata.script_name(script_tag),
+                "blocks": sorted(blocks_by_scripts_tags[script_tag]),
             }
             for script_tag in scripts_tags
         ]
@@ -436,18 +436,18 @@ class Font(object):
         """
         font = self.get_ttfont()
         bits = self._STYLE_FLAGS[key]
-        bit_os2_fs = bits['bit_os2_fs']
-        bit_head_mac = bits['bit_head_mac']
+        bit_os2_fs = bits["bit_os2_fs"]
+        bit_head_mac = bits["bit_head_mac"]
         # https://docs.microsoft.com/en-us/typography/opentype/spec/os2#fsselection
         flag_os2_fs = False
         if bit_os2_fs is not None:
-            os2 = font.get('OS/2')
+            os2 = font.get("OS/2")
             if os2:
                 flag_os2_fs = get_flag(os2.fsSelection, bit_os2_fs)
         # https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6head.html
         flag_head_mac = False
         if bit_head_mac is not None:
-            head = font.get('head')
+            head = font.get("head")
             if head:
                 flag_head_mac = get_flag(head.macStyle, bit_head_mac)
         return flag_os2_fs or flag_head_mac
@@ -482,15 +482,15 @@ class Font(object):
         font = self.get_ttfont()
         return [
             {
-                'tag': axis.axisTag,
-                'name': self._VARIABLE_AXES_BY_TAG.get(axis.axisTag, {}).get(
-                    'name', axis.axisTag.title()
+                "tag": axis.axisTag,
+                "name": self._VARIABLE_AXES_BY_TAG.get(axis.axisTag, {}).get(
+                    "name", axis.axisTag.title()
                 ),
-                'min_value': axis.minValue,
-                'max_value': axis.maxValue,
-                'default_value': axis.defaultValue,
+                "min_value": axis.minValue,
+                "max_value": axis.maxValue,
+                "default_value": axis.defaultValue,
             }
-            for axis in font['fvar'].axes
+            for axis in font["fvar"].axes
         ]
 
     def get_variable_axis_by_tag(self, tag):
@@ -506,7 +506,7 @@ class Font(object):
         axes = self.get_variable_axes()
         if axes:
             for axis in axes:
-                if axis.get('tag') == tag:
+                if axis.get("tag") == tag:
                     return axis
         return None
 
@@ -520,7 +520,7 @@ class Font(object):
         if not self.is_variable():
             return None
         font = self.get_ttfont()
-        return [axis.axisTag for axis in font['fvar'].axes]
+        return [axis.axisTag for axis in font["fvar"].axes]
 
     def get_variable_instances(self):
         """
@@ -532,13 +532,13 @@ class Font(object):
         if not self.is_variable():
             return None
         font = self.get_ttfont()
-        name_table = font['name']
+        name_table = font["name"]
         return [
             {
-                'coordinates': instance.coordinates,
-                'style_name': name_table.getDebugName(instance.subfamilyNameID),
+                "coordinates": instance.coordinates,
+                "style_name": name_table.getDebugName(instance.subfamilyNameID),
             }
-            for instance in font['fvar'].instances
+            for instance in font["fvar"].instances
         ]
 
     def get_variable_instance_closest_to_coordinates(self, coordinates):
@@ -571,7 +571,7 @@ class Font(object):
         closest_instance_distance = sys.maxsize
         closest_instance = None
         for instance in instances:
-            instance_values = instance['coordinates'].values()
+            instance_values = instance["coordinates"].values()
             instance_distance = get_euclidean_distance(lookup_values, instance_values)
             if instance_distance < closest_instance_distance:
                 closest_instance_distance = instance_distance
@@ -586,7 +586,7 @@ class Font(object):
         :rtype: dict or None
         """
         font = self.get_ttfont()
-        os2 = font.get('OS/2')
+        os2 = font.get("OS/2")
         if not os2:
             return None
         weight = os2.usWeightClass
@@ -594,7 +594,7 @@ class Font(object):
         weights = sorted(self._WEIGHTS_BY_VALUE.keys())
         closest_weight = min(weights, key=lambda weight_item: abs(weight_item - weight))
         weight_name = self._WEIGHTS_BY_VALUE.get(closest_weight)
-        return {'name': weight_name, 'value': weight}
+        return {"name": weight_name, "value": weight}
 
     def get_width(self):
         """
@@ -604,13 +604,13 @@ class Font(object):
         :rtype: dict or None
         """
         font = self.get_ttfont()
-        os2 = font.get('OS/2')
+        os2 = font.get("OS/2")
         if not os2:
             return None
         width = os2.usWidthClass
         width = min(max(0, width), 9)
         width_name = self._WIDTHS_BY_VALUE.get(width)
-        return {'name': width_name, 'value': width}
+        return {"name": width_name, "value": width}
 
     def is_static(self):
         """
@@ -629,9 +629,9 @@ class Font(object):
         :rtype: bool
         """
         font = self.get_ttfont()
-        return 'fvar' in font
+        return "fvar" in font
 
-    def rename(self, family_name='', style_name=''):
+    def rename(self, family_name="", style_name=""):
         """
         Renames the font names records (1, 2, 4, 6, 16, 17) according to
         the given family_name and style_name (subfamily_name).
@@ -656,15 +656,15 @@ class Font(object):
             or self.get_name(self.NAME_TYPOGRAPHIC_SUBFAMILY_NAME)
             or self.get_name(self.NAME_SUBFAMILY_NAME)
         )
-        full_name = f'{family_name} {style_name}'
-        postscript_family_name = family_name.replace(' ', '')
-        postscript_subfamily_name = style_name.replace(' ', '')
-        postscript_name = f'{postscript_family_name}-{postscript_subfamily_name}'
+        full_name = f"{family_name} {style_name}"
+        postscript_family_name = family_name.replace(" ", "")
+        postscript_subfamily_name = style_name.replace(" ", "")
+        postscript_name = f"{postscript_family_name}-{postscript_subfamily_name}"
         postscript_name_length = len(postscript_name)
         if postscript_name_length > 63:
             raise ValueError(
-                'PostScript name max-length (63 characters) exceeded'
-                f' ({postscript_name_length} characters).'
+                "PostScript name max-length (63 characters) exceeded"
+                f" ({postscript_name_length} characters)."
             )
         names = {
             self.NAME_FAMILY_NAME: family_name,
@@ -711,8 +711,8 @@ class Font(object):
         filepath = fsutil.join_filepath(dirpath, filename)
         if filepath == self._filepath and not overwrite:
             raise ValueError(
-                'Invalid filepath, value cannot be the same of the initial filepath'
-                ' to prevent accidental font files overwrites.'
+                "Invalid filepath, value cannot be the same of the initial filepath"
+                " to prevent accidental font files overwrites."
             )
         fsutil.make_dirs_for_file(filepath)
 
@@ -774,7 +774,7 @@ class Font(object):
         """
         font = self.get_ttfont()
         name_id = self._get_name_id(key)
-        name_table = font['name']
+        name_table = font["name"]
         # https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/ttLib/tables/_n_a_m_e.py#L568
         name_table.setName(value, name_id, **self._NAMES_MAC_IDS)
         name_table.setName(value, name_id, **self._NAMES_WIN_IDS)
@@ -800,14 +800,14 @@ class Font(object):
         """
         font = self.get_ttfont()
         bits = self._STYLE_FLAGS[key]
-        bit_os2_fs = bits['bit_os2_fs']
-        bit_head_mac = bits['bit_head_mac']
+        bit_os2_fs = bits["bit_os2_fs"]
+        bit_head_mac = bits["bit_head_mac"]
         if bit_os2_fs is not None:
-            os2 = font.get('OS/2')
+            os2 = font.get("OS/2")
             if os2:
                 os2.fsSelection = set_flag(os2.fsSelection, bit_os2_fs, value)
         if bit_head_mac is not None:
-            head = font.get('head')
+            head = font.get("head")
             if head:
                 head.macStyle = set_flag(head.macStyle, bit_head_mac, value)
 
@@ -843,13 +843,13 @@ class Font(object):
         :type extended: bool or None
         """
         flags = locals()
-        flags.pop('self')
+        flags.pop("self")
         for key, value in flags.items():
             if value is not None:
                 assert isinstance(value, bool)
                 self.set_style_flag(key, value)
 
-    def subset(self, unicodes='', glyphs=[], text='', **options):
+    def subset(self, unicodes="", glyphs=[], text="", **options):
         """
         Subsets the font using the given options (unicodes or glyphs or text),
         it is possible to pass also subsetter options, more info here:
@@ -867,17 +867,17 @@ class Font(object):
         font = self.get_ttfont()
         if not any([unicodes, glyphs, text]):
             raise ValueError(
-                'Subsetting requires at least one of the following args: unicode,'
-                ' glyphs, text.'
+                "Subsetting requires at least one of the following args: unicode,"
+                " glyphs, text."
             )
         if isinstance(unicodes, (list, set, tuple)):
-            unicodes = ', '.join(list(unicodes))
+            unicodes = ", ".join(list(unicodes))
         # replace possible — ‐ − (&mdash; &dash; &minus;) with -
-        for s in ('—', '‐', '−'):
-            unicodes = unicodes.replace(s, '-')
+        for s in ("—", "‐", "−"):
+            unicodes = unicodes.replace(s, "-")
         unicodes = parse_unicodes(unicodes)
         # print(unicodes)
-        subs_args = {'unicodes': unicodes, 'glyphs': glyphs, 'text': text}
+        subs_args = {"unicodes": unicodes, "glyphs": glyphs, "text": text}
         # https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/subset/__init__.py
         subs = Subsetter(**options)
         subs.populate(**subs_args)
@@ -919,7 +919,7 @@ class Font(object):
         :raises ValueError: If the coordinates axes are all pinned
         """
         if not self.is_variable():
-            raise TypeError('Only a variable font can be sliced.')
+            raise TypeError("Only a variable font can be sliced.")
 
         font = self.get_ttfont()
         coordinates = coordinates or {}
@@ -932,24 +932,24 @@ class Font(object):
                 axis_value = tuple(axis_value)
             elif isinstance(axis_value, dict):
                 axis = self.get_variable_axis_by_tag(axis_tag)
-                axis_min = axis_value.get('min', axis.get('min_value'))
-                axis_max = axis_value.get('max', axis.get('max_value'))
+                axis_min = axis_value.get("min", axis.get("min_value"))
+                axis_max = axis_value.get("max", axis.get("max_value"))
                 axis_value = (axis_min, axis_max)
             coordinates[axis_tag] = axis_value
 
         # ensure that coordinates axes are defined and that are not all pinned
         if len(coordinates_axes_tags) == 0:
-            raise ValueError('Invalid coordinates: axes not defined.')
+            raise ValueError("Invalid coordinates: axes not defined.")
         elif set(coordinates_axes_tags) == set(self.get_variable_axes_tags()):
             if self._all_axes_pinned(coordinates):
                 raise ValueError(
-                    'Invalid coordinates: all axes are pinned (use to_static method).'
+                    "Invalid coordinates: all axes are pinned (use to_static method)."
                 )
 
         # set default instancer options
-        options.setdefault('optimize', True)
-        options.setdefault('overlap', OverlapMode.KEEP_AND_SET_FLAGS)
-        options.setdefault('updateFontNames', False)
+        options.setdefault("optimize", True)
+        options.setdefault("overlap", OverlapMode.KEEP_AND_SET_FLAGS)
+        options.setdefault("updateFontNames", False)
 
         # instantiate the sliced variable font
         instancer.instantiateVariableFont(font, coordinates, inplace=True, **options)
@@ -969,7 +969,7 @@ class Font(object):
         :raises ValueError: If the coordinates axes are not all pinned
         """
         if not self.is_variable():
-            raise TypeError('Only a variable font can be made static.')
+            raise TypeError("Only a variable font can be made static.")
 
         font = self.get_ttfont()
 
@@ -984,12 +984,12 @@ class Font(object):
 
         # ensure that coordinates axes are all pinned
         if not self._all_axes_pinned(coordinates):
-            raise ValueError('Invalid coordinates: all axes must be pinned.')
+            raise ValueError("Invalid coordinates: all axes must be pinned.")
 
         # set default instancer options
-        options.setdefault('optimize', True)
-        options.setdefault('overlap', OverlapMode.REMOVE)
-        options.setdefault('updateFontNames', False)
+        options.setdefault("optimize", True)
+        options.setdefault("overlap", OverlapMode.REMOVE)
+        options.setdefault("updateFontNames", False)
 
         # instantiate the static font
         instancer.instantiateVariableFont(font, coordinates, inplace=True, **options)
@@ -1001,4 +1001,4 @@ class Font(object):
         :returns: String representation of the object.
         :rtype: str
         """
-        return f'{type(self).__name__}(\'{self._filepath}\')'
+        return f"{type(self).__name__}('{self._filepath}')"
