@@ -4,6 +4,10 @@ from curses import ascii
 
 from fontbro.features import FEATURES as _FEATURES_LIST
 from fontbro.flags import get_flag, set_flag
+from fontbro.uni import (
+    UNICODE_BLOCKS as _UNICODE_BLOCKS,
+    UNICODE_SCRIPTS as _UNICODE_SCRIPTS,
+)
 
 from fontTools import unicodedata
 from fontTools.subset import parse_unicodes, Subsetter
@@ -11,6 +15,7 @@ from fontTools.ttLib import TTFont, TTLibError
 from fontTools.varLib import instancer
 from fontTools.varLib.instancer import OverlapMode
 
+import copy
 import fsutil
 import itertools
 import math
@@ -239,11 +244,17 @@ class Font(object):
                 name = unicodedata.name(char)
             except ValueError:
                 pass
+            block_name = unicodedata.block(code)
+            script_tag = unicodedata.script(code)
+            script_name = unicodedata.script_name(script_tag)
             yield {
                 "character": char,
                 "character_name": char_name,
                 "code": code,
                 "name": name,
+                "block_name": block_name,
+                "script_name": script_name,
+                "script_tag": script_tag,
             }
 
     def get_characters_count(self):
@@ -357,73 +368,6 @@ class Font(object):
         }
         return names
 
-    @classmethod
-    def get_script_by_character(cls, char):
-        """
-        Gets the script by character (even if not included in the font).
-
-        :param char: The character
-        :type char: str
-
-        :returns: The script by character.
-        :rtype: dict
-        """
-        return cls.get_script_by_code(ord(char))
-
-    @classmethod
-    def get_script_by_code(cls, code):
-        """
-        Gets the script by unicode code point (even if not included in the font).
-
-        :param code: The code
-        :type code: int
-
-        :returns: The script by code.
-        :rtype: dict
-        """
-        script_tag = unicodedata.script(code)
-        return {
-            "tag": script_tag,
-            "name": unicodedata.script_name(script_tag),
-            "block": unicodedata.block(code),
-        }
-
-    @classmethod
-    def get_scripts_by_characters(cls, chars):
-        """
-        Gets the scripts by characters (even if not included in the font).
-
-        :returns: The scripts.
-        :rtype: list of dict
-        """
-        blocks_by_scripts_tags = {}
-        for char in chars:
-            script = cls.get_script_by_code(char["code"])
-            script_tag = script["tag"]
-            script_block = script["block"]
-            if script_tag not in blocks_by_scripts_tags:
-                blocks_by_scripts_tags[script_tag] = set()
-            blocks_by_scripts_tags[script_tag].add(script_block)
-        scripts_tags = sorted(blocks_by_scripts_tags.keys())
-        scripts = [
-            {
-                "tag": script_tag,
-                "name": unicodedata.script_name(script_tag),
-                "blocks": sorted(blocks_by_scripts_tags[script_tag]),
-            }
-            for script_tag in scripts_tags
-        ]
-        return scripts
-
-    def get_scripts(self):
-        """
-        Gets the scripts supported by the font.
-
-        :returns: The scripts.
-        :rtype: list of dict
-        """
-        return self.get_scripts_by_characters(chars=self.get_characters())
-
     def get_style_flag(self, key):
         """
         Gets the style flag reading OS/2 and macStyle tables.
@@ -469,6 +413,80 @@ class Font(object):
         :rtype: TTFont
         """
         return self._ttfont
+
+    @classmethod
+    def _populate_unicode_items_set(cls, items, items_cache, item):
+        item_key = item["name"]
+        if item_key not in items_cache:
+            item = item.copy()
+            item["characters_count"] = 0
+            items_cache[item_key] = item
+            items.append(item)
+        item = items_cache[item_key]
+        item["characters_count"] += 1
+
+    @staticmethod
+    def _get_unicode_items_set_with_coverage(all_items, items, coverage_threshold=0.0):
+        all_items = copy.deepcopy(all_items)
+        items_indexed = {item["name"]: item.copy() for item in items}
+        for item in all_items:
+            item_key = item["name"]
+            if item_key in items_indexed:
+                item["characters_count"] = items_indexed[item_key]["characters_count"]
+                item["coverage"] = item["characters_count"] / item["characters_total"]
+            else:
+                item["characters_count"] = 0
+                item["coverage"] = 0.0
+        items_filtered = [item for item in all_items if item["coverage"] >= coverage_threshold]
+        # items_filtered.sort(key=lambda item: item['name'])
+        return items_filtered
+
+    def get_unicode_blocks(self, coverage_threshold=0.00001):
+        """
+        Gets the unicode blocks and their coverage.
+        Only blocks with coverage >= coverage_threshold (0.0 <= coverage_threshold <= 1.0) will be returned.
+
+        :param coverage_threshold: The minumum required coverage for a block to be returned.
+        :type coverage_threshold: float
+
+        :returns: The list of unicode blocks.
+        :rtype: list of dicts
+        """
+        items = []
+        items_cache = {}
+        for char in self.get_characters():
+            item = {
+                "name": char["block_name"],
+            }
+            self._populate_unicode_items_set(items, items_cache, item)
+        blocks = self._get_unicode_items_set_with_coverage(
+            _UNICODE_BLOCKS, items, coverage_threshold=coverage_threshold
+        )
+        return blocks
+
+    def get_unicode_scripts(self, coverage_threshold=0.00001):
+        """
+        Gets the unicode scripts and their coverage.
+        Only scripts with coverage >= coverage_threshold (0.0 <= coverage_threshold <= 1.0) will be returned.
+
+        :param coverage_threshold: The minumum required coverage for a script to be returned.
+        :type coverage_threshold: float
+
+        :returns: The list of unicode scripts.
+        :rtype: list of dicts
+        """
+        items = []
+        items_cache = {}
+        for char in self.get_characters():
+            item = {
+                "name": char["script_name"],
+                "tag": char["script_tag"],
+            }
+            self._populate_unicode_items_set(items, items_cache, item)
+        scripts = self._get_unicode_items_set_with_coverage(
+            _UNICODE_SCRIPTS, items, coverage_threshold=coverage_threshold
+        )
+        return scripts
 
     def get_variable_axes(self):
         """
