@@ -45,12 +45,11 @@ font = Font('fonts/MyFont.ttf')
 -   [`get_format`](#get_format)
 -   [`get_name`](#get_name)
 -   [`get_names`](#get_names)
--   [`get_script_by_character`](#get_script_by_character)
--   [`get_script_by_code`](#get_script_by_code)
--   [`get_scripts`](#get_scripts)
 -   [`get_style_flag`](#get_style_flag)
 -   [`get_style_flags`](#get_style_flags)
 -   [`get_ttfont`](#get_ttfont)
+-   [`get_unicode_blocks`](#get_unicode_blocks)
+-   [`get_unicode_scripts`](#get_unicode_scripts)
 -   [`get_variable_axes`](#get_variable_axes)
 -   [`get_variable_axis_by_tag`](#get_variable_axis_by_tag)
 -   [`get_variable_axes_tags`](#get_variable_axes_tags)
@@ -159,45 +158,6 @@ Gets the names records mapped by their property name.
 names = font.get_names()
 ```
 
--   #### get_script_by_character
-```python
-"""
-Gets the script by character.
-
-:param char: The character
-:type char: str
-
-:returns: The script by character.
-:rtype: dict
-"""
-script = font.get_script_by_character(char='a')
-```
-
--   #### get_script_by_code
-```python
-"""
-Gets the script by unicode code point.
-
-:param code: The code
-:type code: int
-
-:returns: The script by code.
-:rtype: dict
-"""
-script = font.get_script_by_code(code=34)
-```
-
--   #### get_scripts
-```python
-"""
-Gets the scripts supported by the font.
-
-:returns: The scripts.
-:rtype: list of dict
-"""
-scripts = font.get_scripts()
-```
-
 -   #### get_style_flag
 ```python
 """
@@ -232,6 +192,36 @@ Gets the wrapped TTFont instance.
 :rtype: TTFont
 """
 ttfont = font.get_ttfont()
+```
+
+-   #### get_unicode_blocks
+```python
+"""
+Gets the unicode blocks and their coverage.
+Only blocks with coverage >= coverage_threshold (0.0 <= coverage_threshold <= 1.0) will be returned.
+
+:param coverage_threshold: The minumum required coverage for a block to be returned.
+:type coverage_threshold: float
+
+:returns: The list of unicode blocks.
+:rtype: list of dicts
+"""
+blocks = font.get_unicode_blocks(coverage_threshold=0.00001)
+```
+
+-   #### get_unicode_scripts
+```python
+"""
+Gets the unicode scripts and their coverage.
+Only scripts with coverage >= coverage_threshold (0.0 <= coverage_threshold <= 1.0) will be returned.
+
+:param coverage_threshold: The minumum required coverage for a script to be returned.
+:type coverage_threshold: float
+
+:returns: The list of unicode scripts.
+:rtype: list of dicts
+"""
+scripts = font.get_unicode_scripts(coverage_threshold=0.00001)
 ```
 
 -   #### get_variable_axes
