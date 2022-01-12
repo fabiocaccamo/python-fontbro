@@ -38,6 +38,22 @@ class SubsetTestCase(AbstractTestCase):
         chars_count = font.get_characters_count()
         self.assertEqual(chars_count, 240)
 
+    def test_subset_with_unicodes_str_and_unicode_prefix(self):
+        font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
+        chars_count = font.get_characters_count()
+        self.assertEqual(chars_count, 875)
+        font.subset(unicodes='U+0000—U+007F U+0100—U+017F U+0180—U+024F')
+        chars_count = font.get_characters_count()
+        self.assertEqual(chars_count, 240)
+
+    def test_subset_with_unicodes_str_and_unicode_escape_prefix(self):
+        font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
+        chars_count = font.get_characters_count()
+        self.assertEqual(chars_count, 875)
+        font.subset(unicodes='\\u0000—\\u007F \\u0100—\\u017F \\u0180—\\u024F')
+        chars_count = font.get_characters_count()
+        self.assertEqual(chars_count, 240)
+
     def test_subset_with_unicodes_list(self):
         font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
         chars_count = font.get_characters_count()
