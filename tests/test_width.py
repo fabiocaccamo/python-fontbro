@@ -14,37 +14,37 @@ class WidthTestCase(AbstractTestCase):
         font = Font(filepath=font_path)
         width = font.get_width()
         # print(filepath, width)
-        expected_width = {'value': expected_value, 'name': expected_name}
+        expected_width = {"value": expected_value, "name": expected_name}
         self.assertEqual(width, expected_width)
 
     def test_get_width(self):
         self._test_font_width(
-            filepath='/Noto_Sans_TC/NotoSansTC-Thin.otf',
+            filepath="/Noto_Sans_TC/NotoSansTC-Thin.otf",
             expected_value=5,
             expected_name=Font.WIDTH_MEDIUM,
         )
         self._test_font_width(
-            filepath='/Noto_Sans_TC/NotoSansTC-Light.otf',
+            filepath="/Noto_Sans_TC/NotoSansTC-Light.otf",
             expected_value=5,
             expected_name=Font.WIDTH_MEDIUM,
         )
         self._test_font_width(
-            filepath='/Noto_Sans_TC/NotoSansTC-Regular.otf',
+            filepath="/Noto_Sans_TC/NotoSansTC-Regular.otf",
             expected_value=5,
             expected_name=Font.WIDTH_MEDIUM,
         )
         self._test_font_width(
-            filepath='/Noto_Sans_TC/NotoSansTC-Medium.otf',
+            filepath="/Noto_Sans_TC/NotoSansTC-Medium.otf",
             expected_value=5,
             expected_name=Font.WIDTH_MEDIUM,
         )
         self._test_font_width(
-            filepath='/Noto_Sans_TC/NotoSansTC-Bold.otf',
+            filepath="/Noto_Sans_TC/NotoSansTC-Bold.otf",
             expected_value=5,
             expected_name=Font.WIDTH_MEDIUM,
         )
         self._test_font_width(
-            filepath='/Noto_Sans_TC/NotoSansTC-Black.otf',
+            filepath="/Noto_Sans_TC/NotoSansTC-Black.otf",
             expected_value=5,
             expected_name=Font.WIDTH_MEDIUM,
         )

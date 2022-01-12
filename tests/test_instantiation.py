@@ -9,12 +9,12 @@ class InstantiationTestCase(AbstractTestCase):
     """
 
     def _get_static_font(self):
-        font = self._get_font('/Tourney/static/Tourney/Tourney-Regular.ttf')
+        font = self._get_font("/Tourney/static/Tourney/Tourney-Regular.ttf")
         self.assertTrue(font.is_static())
         return font
 
     def _get_variable_font(self):
-        font = self._get_font('/Tourney/Tourney-VariableFont_wdth,wght.ttf')
+        font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
         self.assertTrue(font.is_variable())
         return font
 
@@ -30,21 +30,21 @@ class InstantiationTestCase(AbstractTestCase):
 
     def test_to_static_with_all_coordinates(self):
         font = self._get_variable_font()
-        font.to_static(coordinates={'wght': 200, 'wdth': 110})
+        font.to_static(coordinates={"wght": 200, "wdth": 110})
         self.assertTrue(font.is_static())
-        self.assertEqual(font.get_weight()['value'], 200)
+        self.assertEqual(font.get_weight()["value"], 200)
 
     def test_to_static_with_some_coordinates(self):
         font = self._get_variable_font()
-        font.to_static(coordinates={'wdth': 110})
+        font.to_static(coordinates={"wdth": 110})
         self.assertTrue(font.is_static())
         # weight axis pinned to default value
-        self.assertEqual(font.get_weight()['value'], 100)
+        self.assertEqual(font.get_weight()["value"], 100)
 
     def test_to_static_with_coordinates_for_slicing(self):
         font = self._get_variable_font()
         with self.assertRaises(ValueError):
-            font.to_static(coordinates={'wght': [100, 400]})
+            font.to_static(coordinates={"wght": [100, 400]})
 
     def test_to_sliced_variable_with_static_font(self):
         font = self._get_static_font()
@@ -61,42 +61,42 @@ class InstantiationTestCase(AbstractTestCase):
         # if all coordinates are pinned the result would be a static font
         font = self._get_variable_font()
         with self.assertRaises(ValueError):
-            font.to_sliced_variable(coordinates={'wght': 200, 'wdth': 110})
+            font.to_sliced_variable(coordinates={"wght": 200, "wdth": 110})
 
     def test_to_sliced_variable_with_coordinates_sliced_and_passed_as_tuple(self):
         font = self._get_variable_font()
         expected_axes = [
             {
-                'default_value': 100.0,
-                'max_value': 900.0,
-                'min_value': 100.0,
-                'name': 'Weight',
-                'tag': 'wght',
+                "default_value": 100.0,
+                "max_value": 900.0,
+                "min_value": 100.0,
+                "name": "Weight",
+                "tag": "wght",
             },
             {
-                'default_value': 100.0,
-                'max_value': 125.0,
-                'min_value': 75.0,
-                'name': 'Width',
-                'tag': 'wdth',
+                "default_value": 100.0,
+                "max_value": 125.0,
+                "min_value": 75.0,
+                "name": "Width",
+                "tag": "wdth",
             },
         ]
         self.assertEqual(font.get_variable_axes(), expected_axes)
-        font.to_sliced_variable(coordinates={'wght': (100, 400), 'wdth': (100, 110)})
+        font.to_sliced_variable(coordinates={"wght": (100, 400), "wdth": (100, 110)})
         expected_axes = [
             {
-                'default_value': 100.0,
-                'max_value': 400.0,
-                'min_value': 100.0,
-                'name': 'Weight',
-                'tag': 'wght',
+                "default_value": 100.0,
+                "max_value": 400.0,
+                "min_value": 100.0,
+                "name": "Weight",
+                "tag": "wght",
             },
             {
-                'default_value': 100.0,
-                'max_value': 110.0,
-                'min_value': 100.0,
-                'name': 'Width',
-                'tag': 'wdth',
+                "default_value": 100.0,
+                "max_value": 110.0,
+                "min_value": 100.0,
+                "name": "Width",
+                "tag": "wdth",
             },
         ]
         self.assertEqual(font.get_variable_axes(), expected_axes)
@@ -105,36 +105,36 @@ class InstantiationTestCase(AbstractTestCase):
         font = self._get_variable_font()
         expected_axes = [
             {
-                'default_value': 100.0,
-                'max_value': 900.0,
-                'min_value': 100.0,
-                'name': 'Weight',
-                'tag': 'wght',
+                "default_value": 100.0,
+                "max_value": 900.0,
+                "min_value": 100.0,
+                "name": "Weight",
+                "tag": "wght",
             },
             {
-                'default_value': 100.0,
-                'max_value': 125.0,
-                'min_value': 75.0,
-                'name': 'Width',
-                'tag': 'wdth',
+                "default_value": 100.0,
+                "max_value": 125.0,
+                "min_value": 75.0,
+                "name": "Width",
+                "tag": "wdth",
             },
         ]
         self.assertEqual(font.get_variable_axes(), expected_axes)
-        font.to_sliced_variable(coordinates={'wght': [100, 400], 'wdth': [100, 110]})
+        font.to_sliced_variable(coordinates={"wght": [100, 400], "wdth": [100, 110]})
         expected_axes = [
             {
-                'default_value': 100.0,
-                'max_value': 400.0,
-                'min_value': 100.0,
-                'name': 'Weight',
-                'tag': 'wght',
+                "default_value": 100.0,
+                "max_value": 400.0,
+                "min_value": 100.0,
+                "name": "Weight",
+                "tag": "wght",
             },
             {
-                'default_value': 100.0,
-                'max_value': 110.0,
-                'min_value': 100.0,
-                'name': 'Width',
-                'tag': 'wdth',
+                "default_value": 100.0,
+                "max_value": 110.0,
+                "min_value": 100.0,
+                "name": "Width",
+                "tag": "wdth",
             },
         ]
         self.assertEqual(font.get_variable_axes(), expected_axes)
@@ -143,41 +143,41 @@ class InstantiationTestCase(AbstractTestCase):
         font = self._get_variable_font()
         expected_axes = [
             {
-                'default_value': 100.0,
-                'max_value': 900.0,
-                'min_value': 100.0,
-                'name': 'Weight',
-                'tag': 'wght',
+                "default_value": 100.0,
+                "max_value": 900.0,
+                "min_value": 100.0,
+                "name": "Weight",
+                "tag": "wght",
             },
             {
-                'default_value': 100.0,
-                'max_value': 125.0,
-                'min_value': 75.0,
-                'name': 'Width',
-                'tag': 'wdth',
+                "default_value": 100.0,
+                "max_value": 125.0,
+                "min_value": 75.0,
+                "name": "Width",
+                "tag": "wdth",
             },
         ]
         self.assertEqual(font.get_variable_axes(), expected_axes)
         font.to_sliced_variable(
             coordinates={
-                'wght': {'min': 100, 'max': 400},
-                'wdth': {'min': 100, 'max': 110},
+                "wght": {"min": 100, "max": 400},
+                "wdth": {"min": 100, "max": 110},
             }
         )
         expected_axes = [
             {
-                'default_value': 100.0,
-                'max_value': 400.0,
-                'min_value': 100.0,
-                'name': 'Weight',
-                'tag': 'wght',
+                "default_value": 100.0,
+                "max_value": 400.0,
+                "min_value": 100.0,
+                "name": "Weight",
+                "tag": "wght",
             },
             {
-                'default_value': 100.0,
-                'max_value': 110.0,
-                'min_value': 100.0,
-                'name': 'Width',
-                'tag': 'wdth',
+                "default_value": 100.0,
+                "max_value": 110.0,
+                "min_value": 100.0,
+                "name": "Width",
+                "tag": "wdth",
             },
         ]
         self.assertEqual(font.get_variable_axes(), expected_axes)
@@ -187,22 +187,22 @@ class InstantiationTestCase(AbstractTestCase):
     ):
         font = self._get_variable_font()
         font.to_sliced_variable(
-            coordinates={'wght': {'min': 100}, 'wdth': {'min': 100}}
+            coordinates={"wght": {"min": 100}, "wdth": {"min": 100}}
         )
         expected_axes = [
             {
-                'default_value': 100.0,
-                'max_value': 900.0,
-                'min_value': 100.0,
-                'name': 'Weight',
-                'tag': 'wght',
+                "default_value": 100.0,
+                "max_value": 900.0,
+                "min_value": 100.0,
+                "name": "Weight",
+                "tag": "wght",
             },
             {
-                'default_value': 100.0,
-                'max_value': 125.0,
-                'min_value': 100.0,
-                'name': 'Width',
-                'tag': 'wdth',
+                "default_value": 100.0,
+                "max_value": 125.0,
+                "min_value": 100.0,
+                "name": "Width",
+                "tag": "wdth",
             },
         ]
         self.assertEqual(font.get_variable_axes(), expected_axes)
@@ -211,29 +211,29 @@ class InstantiationTestCase(AbstractTestCase):
         font = self._get_variable_font()
         expected_axes = [
             {
-                'default_value': 100.0,
-                'max_value': 900.0,
-                'min_value': 100.0,
-                'name': 'Weight',
-                'tag': 'wght',
+                "default_value": 100.0,
+                "max_value": 900.0,
+                "min_value": 100.0,
+                "name": "Weight",
+                "tag": "wght",
             },
             {
-                'default_value': 100.0,
-                'max_value': 125.0,
-                'min_value': 75.0,
-                'name': 'Width',
-                'tag': 'wdth',
+                "default_value": 100.0,
+                "max_value": 125.0,
+                "min_value": 75.0,
+                "name": "Width",
+                "tag": "wdth",
             },
         ]
         self.assertEqual(font.get_variable_axes(), expected_axes)
-        font.to_sliced_variable(coordinates={'wght': (100, 400), 'wdth': 100})
+        font.to_sliced_variable(coordinates={"wght": (100, 400), "wdth": 100})
         expected_axes = [
             {
-                'default_value': 100.0,
-                'max_value': 400.0,
-                'min_value': 100.0,
-                'name': 'Weight',
-                'tag': 'wght',
+                "default_value": 100.0,
+                "max_value": 400.0,
+                "min_value": 100.0,
+                "name": "Weight",
+                "tag": "wght",
             }
         ]
         self.assertEqual(font.get_variable_axes(), expected_axes)

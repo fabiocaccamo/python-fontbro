@@ -443,7 +443,9 @@ class Font(object):
             else:
                 item["characters_count"] = 0
                 item["coverage"] = 0.0
-        items_filtered = [item for item in all_items if item["coverage"] >= coverage_threshold]
+        items_filtered = [
+            item for item in all_items if item["coverage"] >= coverage_threshold
+        ]
         # items_filtered.sort(key=lambda item: item['name'])
         return items_filtered
 
@@ -566,6 +568,7 @@ class Font(object):
             for axis in axes:
                 if axis.get("tag") == tag:
                     return axis
+        # raise KeyError("Invalid axis tag: '{tag}'")
         return None
 
     def get_variable_axes_tags(self):

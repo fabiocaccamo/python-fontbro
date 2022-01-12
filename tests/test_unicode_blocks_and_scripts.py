@@ -10,13 +10,16 @@ class UnicodeBlocksAndScriptsTestCase(AbstractTestCase):
 
     def test_get_unicode_block_by_name(self):
         font = self._get_font("/Noto_Sans_TC/NotoSansTC-Regular.otf")
-        block = font.get_unicode_block_by_name(name='basic latin')
-        self.assertEqual(list(block.keys()), ['characters_total', 'name', 'characters_count', 'coverage'])
-        self.assertEqual(block['name'], 'Basic Latin')
+        block = font.get_unicode_block_by_name(name="basic latin")
+        self.assertEqual(
+            list(block.keys()),
+            ["characters_total", "name", "characters_count", "coverage"],
+        )
+        self.assertEqual(block["name"], "Basic Latin")
 
     def test_get_unicode_block_by_name_with_invalid_name(self):
         font = self._get_font("/Noto_Sans_TC/NotoSansTC-Regular.otf")
-        block = font.get_unicode_block_by_name(name='basic latin invalid')
+        block = font.get_unicode_block_by_name(name="basic latin invalid")
         self.assertEqual(block, None)
 
     def test_get_unicode_blocks_with_coverage_threshold(self):
@@ -27,110 +30,116 @@ class UnicodeBlocksAndScriptsTestCase(AbstractTestCase):
                 "characters_count": 95,
                 "characters_total": 96,
                 "coverage": 0.9895833333333334,
-                "name": "Basic Latin"
+                "name": "Basic Latin",
             },
             {
                 "characters_count": 160,
                 "characters_total": 160,
                 "coverage": 1.0,
-                "name": "Enclosed Alphanumerics"
+                "name": "Enclosed Alphanumerics",
             },
             {
                 "characters_count": 128,
                 "characters_total": 128,
                 "coverage": 1.0,
-                "name": "Box Drawing"
+                "name": "Box Drawing",
             },
             {
                 "characters_count": 32,
                 "characters_total": 32,
                 "coverage": 1.0,
-                "name": "Block Elements"
+                "name": "Block Elements",
             },
             {
                 "characters_count": 214,
                 "characters_total": 224,
                 "coverage": 0.9553571428571429,
-                "name": "Kangxi Radicals"
+                "name": "Kangxi Radicals",
             },
             {
                 "characters_count": 64,
                 "characters_total": 64,
                 "coverage": 1.0,
-                "name": "CJK Symbols and Punctuation"
+                "name": "CJK Symbols and Punctuation",
             },
             {
                 "characters_count": 93,
                 "characters_total": 96,
                 "coverage": 0.96875,
-                "name": "Hiragana"
+                "name": "Hiragana",
             },
             {
                 "characters_count": 96,
                 "characters_total": 96,
                 "coverage": 1.0,
-                "name": "Katakana"
+                "name": "Katakana",
             },
             {
                 "characters_count": 93,
                 "characters_total": 96,
                 "coverage": 0.96875,
-                "name": "Hangul Compatibility Jamo"
+                "name": "Hangul Compatibility Jamo",
             },
             {
                 "characters_count": 16,
                 "characters_total": 16,
                 "coverage": 1.0,
-                "name": "Kanbun"
+                "name": "Kanbun",
             },
             {
                 "characters_count": 16,
                 "characters_total": 16,
                 "coverage": 1.0,
-                "name": "Katakana Phonetic Extensions"
+                "name": "Katakana Phonetic Extensions",
             },
             {
                 "characters_count": 255,
                 "characters_total": 256,
                 "coverage": 0.99609375,
-                "name": "Enclosed CJK Letters and Months"
+                "name": "Enclosed CJK Letters and Months",
             },
             {
                 "characters_count": 255,
                 "characters_total": 256,
                 "coverage": 0.99609375,
-                "name": "CJK Compatibility"
+                "name": "CJK Compatibility",
             },
             {
                 "characters_count": 32,
                 "characters_total": 32,
                 "coverage": 1.0,
-                "name": "CJK Compatibility Forms"
+                "name": "CJK Compatibility Forms",
             },
             {
                 "characters_count": 224,
                 "characters_total": 240,
                 "coverage": 0.9333333333333333,
-                "name": "Halfwidth and Fullwidth Forms"
-            }
+                "name": "Halfwidth and Fullwidth Forms",
+            },
         ]
         self.assertEqual(blocks, expected_blocks)
 
     def test_get_unicode_script_by_name(self):
         font = self._get_font("/Noto_Sans_TC/NotoSansTC-Regular.otf")
-        script = font.get_unicode_script_by_name(name='Latin')
-        self.assertEqual(list(script.keys()), ['characters_total', 'name', 'tag', 'characters_count', 'coverage'])
-        self.assertEqual(script['name'], 'Latin')
+        script = font.get_unicode_script_by_name(name="Latin")
+        self.assertEqual(
+            list(script.keys()),
+            ["characters_total", "name", "tag", "characters_count", "coverage"],
+        )
+        self.assertEqual(script["name"], "Latin")
 
     def test_get_unicode_script_by_name_with_tag(self):
         font = self._get_font("/Noto_Sans_TC/NotoSansTC-Regular.otf")
-        script = font.get_unicode_script_by_name(name='latn')
-        self.assertEqual(list(script.keys()), ['characters_total', 'name', 'tag', 'characters_count', 'coverage'])
-        self.assertEqual(script['tag'], 'Latn')
+        script = font.get_unicode_script_by_name(name="latn")
+        self.assertEqual(
+            list(script.keys()),
+            ["characters_total", "name", "tag", "characters_count", "coverage"],
+        )
+        self.assertEqual(script["tag"], "Latn")
 
     def test_get_unicode_script_by_name_with_invalid_name(self):
         font = self._get_font("/Noto_Sans_TC/NotoSansTC-Regular.otf")
-        script = font.get_unicode_script_by_name(name='Latin Invalid')
+        script = font.get_unicode_script_by_name(name="Latin Invalid")
         self.assertEqual(script, None)
 
     def test_get_unicode_scripts(self):
@@ -142,71 +151,71 @@ class UnicodeBlocksAndScriptsTestCase(AbstractTestCase):
                 "characters_total": 8055,
                 "coverage": 0.18684047175667287,
                 "name": "Common",
-                "tag": "Zyyy"
+                "tag": "Zyyy",
             },
             {
                 "characters_count": 345,
                 "characters_total": 1374,
                 "coverage": 0.25109170305676853,
                 "name": "Latin",
-                "tag": "Latn"
+                "tag": "Latn",
             },
             {
                 "characters_count": 73,
                 "characters_total": 77,
                 "coverage": 0.948051948051948,
                 "name": "Bopomofo",
-                "tag": "Bopo"
+                "tag": "Bopo",
             },
             {
                 "characters_count": 13,
                 "characters_total": 573,
                 "coverage": 0.02268760907504363,
                 "name": "Inherited",
-                "tag": "Zinh"
+                "tag": "Zinh",
             },
             {
                 "characters_count": 50,
                 "characters_total": 518,
                 "coverage": 0.09652509652509653,
                 "name": "Greek",
-                "tag": "Grek"
+                "tag": "Grek",
             },
             {
                 "characters_count": 66,
                 "characters_total": 443,
                 "coverage": 0.1489841986455982,
                 "name": "Cyrillic",
-                "tag": "Cyrl"
+                "tag": "Cyrl",
             },
             {
                 "characters_count": 208,
                 "characters_total": 11739,
                 "coverage": 0.017718715393133997,
                 "name": "Hangul",
-                "tag": "Hang"
+                "tag": "Hang",
             },
             {
                 "characters_count": 18100,
                 "characters_total": 94204,
                 "coverage": 0.19213621502271666,
                 "name": "Han",
-                "tag": "Hani"
+                "tag": "Hani",
             },
             {
                 "characters_count": 90,
                 "characters_total": 379,
                 "coverage": 0.23746701846965698,
                 "name": "Hiragana",
-                "tag": "Hira"
+                "tag": "Hira",
             },
             {
                 "characters_count": 298,
                 "characters_total": 304,
                 "coverage": 0.9802631578947368,
                 "name": "Katakana",
-                "tag": "Kana"
-            }
+                "tag": "Kana",
+            },
         ]
         self.assertEqual(scripts, expected_scripts)
 
@@ -219,14 +228,14 @@ class UnicodeBlocksAndScriptsTestCase(AbstractTestCase):
                 "characters_total": 77,
                 "coverage": 0.948051948051948,
                 "name": "Bopomofo",
-                "tag": "Bopo"
+                "tag": "Bopo",
             },
             {
                 "characters_count": 298,
                 "characters_total": 304,
                 "coverage": 0.9802631578947368,
                 "name": "Katakana",
-                "tag": "Kana"
-            }
+                "tag": "Kana",
+            },
         ]
         self.assertEqual(scripts, expected_scripts)

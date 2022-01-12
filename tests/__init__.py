@@ -12,6 +12,7 @@ class AbstractTestCase(unittest.TestCase):
     This class describes the abstract test case
     with some methods that are used by different test cases.
     """
+
     def setUp(self):
         fsutil.remove_dir(self._get_font_temp_path())
 
@@ -19,12 +20,12 @@ class AbstractTestCase(unittest.TestCase):
         fsutil.remove_dir(self._get_font_temp_path())
 
     @classmethod
-    def _get_font_temp_path(cls, filepath=''):
-        return fsutil.join_path(__file__, 'temp/{}'.format(filepath))
+    def _get_font_temp_path(cls, filepath=""):
+        return fsutil.join_path(__file__, "temp/{}".format(filepath))
 
     @classmethod
     def _get_font_path(cls, filepath):
-        return fsutil.join_path(__file__, 'fonts/{}'.format(filepath))
+        return fsutil.join_path(__file__, "fonts/{}".format(filepath))
 
     @classmethod
     def _get_font(cls, filepath):
@@ -37,5 +38,5 @@ class AbstractTestCase(unittest.TestCase):
         print(json.dumps(obj, indent=4, sort_keys=True))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

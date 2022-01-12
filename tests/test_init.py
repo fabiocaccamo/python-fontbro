@@ -11,12 +11,12 @@ class InitTestCase(AbstractTestCase):
     """
 
     def test_init_with_filepath(self):
-        filepath = self._get_font_path('/Noto_Sans_TC/NotoSansTC-Regular.otf')
+        filepath = self._get_font_path("/Noto_Sans_TC/NotoSansTC-Regular.otf")
         font = Font(filepath=filepath)
 
     def test_init_with_filepath_but_invalid_font_file(self):
         with self.assertRaises(ValueError):
-            filepath = self._get_font_path('/Noto_Sans_TC/OFL.txt')
+            filepath = self._get_font_path("/Noto_Sans_TC/OFL.txt")
             font = Font(filepath=filepath)
 
     def test_init_with_invalid_filepath_value(self):
@@ -27,7 +27,7 @@ class InitTestCase(AbstractTestCase):
     def test_init_with_invalid_filepath(self):
         with self.assertRaises(FileNotFoundError):
             filepath = self._get_font_path(
-                '/Noto_Sans_TC/NotoSansTC-Regular-Invalid.otf'
+                "/Noto_Sans_TC/NotoSansTC-Regular-Invalid.otf"
             )
             font = Font(filepath=filepath)
 

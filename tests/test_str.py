@@ -9,8 +9,8 @@ class StrTestCase(AbstractTestCase):
     """
 
     def test_str(self):
-        filepath = '/Roboto_Mono/static/RobotoMono-Regular.ttf'
+        filepath = "/Roboto_Mono/static/RobotoMono-Regular.ttf"
         font = self._get_font(filepath)
         s = str(font)
-        self.assertTrue(s.startswith('Font(\''))
-        self.assertTrue(s.endswith(filepath + '\')'))
+        self.assertTrue(s.startswith("Font('"))
+        self.assertTrue(s.endswith(filepath + "')"))

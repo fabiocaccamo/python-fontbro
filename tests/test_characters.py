@@ -9,7 +9,7 @@ class CharactersTestCase(AbstractTestCase):
     """
 
     def test_get_characters(self):
-        font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
         chars = font.get_characters()
         chars_list = list(chars)
         # for c in chars_list:
@@ -30,14 +30,7 @@ class CharactersTestCase(AbstractTestCase):
         ]
         self.assertTrue(isinstance(chars, type(0 for i in [])))
         self.assertEqual(len(chars_list), 875)
-        self.assertTrue(
-            all(
-                [
-                    key in chars_list[0]
-                    for key in expected_keys
-                ]
-            )
-        )
+        self.assertTrue(all([key in chars_list[0] for key in expected_keys]))
 
     def test_get_characters_count(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
