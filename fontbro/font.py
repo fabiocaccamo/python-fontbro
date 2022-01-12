@@ -4,7 +4,7 @@ from curses import ascii
 
 from fontbro.features import FEATURES as _FEATURES_LIST
 from fontbro.flags import get_flag, set_flag
-from fontbro.uni import (
+from fontbro.unicodedata import (
     UNICODE_BLOCKS as _UNICODE_BLOCKS,
     UNICODE_SCRIPTS as _UNICODE_SCRIPTS,
 )
