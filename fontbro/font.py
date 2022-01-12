@@ -8,6 +8,7 @@ from fontbro.unicodedata import (
     UNICODE_BLOCKS as _UNICODE_BLOCKS,
     UNICODE_SCRIPTS as _UNICODE_SCRIPTS,
 )
+from fontbro.utils import slugify
 
 from fontTools import unicodedata
 from fontTools.subset import parse_unicodes, Subsetter
@@ -445,6 +446,23 @@ class Font(object):
         # items_filtered.sort(key=lambda item: item['name'])
         return items_filtered
 
+    def get_unicode_block_by_name(self, name):
+        """
+        Gets the unicode block by name (name is case-insensitive and ignores "-").
+
+        :param name: The name
+        :type name: str
+
+        :returns: The unicode block dict if the name is valid, None otherwise.
+        :rtype: dict or None
+        """
+        blocks = self.get_unicode_blocks(coverage_threshold=0.0)
+        for block in blocks:
+            if slugify(name) == slugify(block["name"]):
+                return block
+        # raise KeyError("Invalid unicode block name: '{name}'")
+        return None
+
     def get_unicode_blocks(self, coverage_threshold=0.00001):
         """
         Gets the unicode blocks and their coverage.
@@ -460,13 +478,30 @@ class Font(object):
         items_cache = {}
         for char in self.get_characters():
             item = {
-                "name": char["block_name"],
+                "name": char["unicode_block_name"],
             }
             self._populate_unicode_items_set(items, items_cache, item)
         blocks = self._get_unicode_items_set_with_coverage(
             _UNICODE_BLOCKS, items, coverage_threshold=coverage_threshold
         )
         return blocks
+
+    def get_unicode_script_by_name(self, name):
+        """
+        Gets the unicode script by name/tag (name/tag is case-insensitive and ignores "-").
+
+        :param name: The name
+        :type name: str
+
+        :returns: The unicode script dict if the name/tag is valid, None otherwise.
+        :rtype: dict or None
+        """
+        scripts = self.get_unicode_scripts(coverage_threshold=0.0)
+        for script in scripts:
+            if slugify(name) in (slugify(script["name"]), slugify(script["tag"])):
+                return script
+        # raise KeyError("Invalid unicode script name/tag: '{name}'")
+        return None
 
     def get_unicode_scripts(self, coverage_threshold=0.00001):
         """
@@ -483,8 +518,8 @@ class Font(object):
         items_cache = {}
         for char in self.get_characters():
             item = {
-                "name": char["script_name"],
-                "tag": char["script_tag"],
+                "name": char["unicode_script_name"],
+                "tag": char["unicode_script_tag"],
             }
             self._populate_unicode_items_set(items, items_cache, item)
         scripts = self._get_unicode_items_set_with_coverage(

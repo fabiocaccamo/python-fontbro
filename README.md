@@ -48,7 +48,9 @@ font = Font('fonts/MyFont.ttf')
 -   [`get_style_flag`](#get_style_flag)
 -   [`get_style_flags`](#get_style_flags)
 -   [`get_ttfont`](#get_ttfont)
+-   [`get_unicode_block_by_name`](#get_unicode_block_by_name)
 -   [`get_unicode_blocks`](#get_unicode_blocks)
+-   [`get_unicode_script_by_name`](#get_unicode_script_by_name)
 -   [`get_unicode_scripts`](#get_unicode_scripts)
 -   [`get_variable_axes`](#get_variable_axes)
 -   [`get_variable_axis_by_tag`](#get_variable_axis_by_tag)
@@ -194,6 +196,20 @@ Gets the wrapped TTFont instance.
 ttfont = font.get_ttfont()
 ```
 
+-   #### get_unicode_block_by_name
+```python
+"""
+Gets the unicode block by name (name is case-insensitive and ignores "-").
+
+:param name: The name
+:type name: str
+
+:returns: The unicode block dict if the name is valid, None otherwise.
+:rtype: dict or None
+"""
+block = font.get_unicode_block_by_name(name="Basic Latin")
+```
+
 -   #### get_unicode_blocks
 ```python
 """
@@ -207,6 +223,20 @@ Only blocks with coverage >= coverage_threshold (0.0 <= coverage_threshold <= 1.
 :rtype: list of dicts
 """
 blocks = font.get_unicode_blocks(coverage_threshold=0.00001)
+```
+
+-   #### get_unicode_block_by_name
+```python
+"""
+Gets the unicode script by name/tag (name/tag is case-insensitive and ignores "-").
+
+:param name: The name
+:type name: str
+
+:returns: The unicode script dict if the name/tag is valid, None otherwise.
+:rtype: dict or None
+"""
+script = font.get_unicode_script_by_name(name="Latn")
 ```
 
 -   #### get_unicode_scripts

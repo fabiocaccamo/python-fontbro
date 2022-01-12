@@ -8,6 +8,17 @@ class UnicodeBlocksAndScriptsTestCase(AbstractTestCase):
     Test case for the methods related to the font unicode blocks and scripts.
     """
 
+    def test_get_unicode_block_by_name(self):
+        font = self._get_font("/Noto_Sans_TC/NotoSansTC-Regular.otf")
+        block = font.get_unicode_block_by_name(name='basic latin')
+        self.assertEqual(list(block.keys()), ['characters_total', 'name', 'characters_count', 'coverage'])
+        self.assertEqual(block['name'], 'Basic Latin')
+
+    def test_get_unicode_block_by_name_with_invalid_name(self):
+        font = self._get_font("/Noto_Sans_TC/NotoSansTC-Regular.otf")
+        block = font.get_unicode_block_by_name(name='basic latin invalid')
+        self.assertEqual(block, None)
+
     def test_get_unicode_blocks_with_coverage_threshold(self):
         font = self._get_font("/Noto_Sans_TC/NotoSansTC-Regular.otf")
         blocks = font.get_unicode_blocks(coverage_threshold=0.9)
@@ -104,6 +115,23 @@ class UnicodeBlocksAndScriptsTestCase(AbstractTestCase):
             }
         ]
         self.assertEqual(blocks, expected_blocks)
+
+    def test_get_unicode_script_by_name(self):
+        font = self._get_font("/Noto_Sans_TC/NotoSansTC-Regular.otf")
+        script = font.get_unicode_script_by_name(name='Latin')
+        self.assertEqual(list(script.keys()), ['characters_total', 'name', 'tag', 'characters_count', 'coverage'])
+        self.assertEqual(script['name'], 'Latin')
+
+    def test_get_unicode_script_by_name_with_tag(self):
+        font = self._get_font("/Noto_Sans_TC/NotoSansTC-Regular.otf")
+        script = font.get_unicode_script_by_name(name='latn')
+        self.assertEqual(list(script.keys()), ['characters_total', 'name', 'tag', 'characters_count', 'coverage'])
+        self.assertEqual(script['tag'], 'Latn')
+
+    def test_get_unicode_script_by_name_with_invalid_name(self):
+        font = self._get_font("/Noto_Sans_TC/NotoSansTC-Regular.otf")
+        script = font.get_unicode_script_by_name(name='Latin Invalid')
+        self.assertEqual(script, None)
 
     def test_get_unicode_scripts(self):
         font = self._get_font("/Noto_Sans_TC/NotoSansTC-Regular.otf")
