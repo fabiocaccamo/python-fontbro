@@ -4,7 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.3.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.3.0) - 2022-01-??
+## [0.4.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.4.0) - 2022-01-12
+-   Added more informations to characters returned by `get_characters` method.
+-   Added `get_unicode_block_by_name` and `get_unicode_script_by_name` methods.
+-   Improved `subset` unicodes parsing.
+-   Renamed `uni` module to `unicodedata`.
+
+## [0.3.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.3.0) - 2022-01-11
 -   Added `get_unicode_blocks` method.
 -   Added `get_unicode_scripts` method.
 -   Changed `get_name` and `set_name` to read/write both Mac and Windows IDs.

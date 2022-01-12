@@ -12,7 +12,7 @@
 [![](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # python-fontbro
-friendly font operations. :billed_cap:
+friendly font operations on top of `fontTools`. :billed_cap:
 
 ## Index
 -   [Installation](#installation)
