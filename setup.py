@@ -12,6 +12,7 @@ sponsor_url = "https://github.com/sponsors/fabiocaccamo/"
 twitter_url = "https://twitter.com/fabiocaccamo"
 package_name = "python-fontbro"
 package_url = "{}/{}".format(github_url, package_name)
+package_issues_url = "{}/issues".format(github_url)
 package_path = os.path.abspath(os.path.dirname(__file__))
 long_description_file_path = os.path.join(package_path, "README.md")
 long_description_content_type = "text/markdown"
