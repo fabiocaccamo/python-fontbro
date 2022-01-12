@@ -236,25 +236,29 @@ class Font(object):
         font = self.get_ttfont()
         cmap = font.getBestCmap()
         for code, char_name in cmap.items():
+            code_hex = f"{code:04X}"
             char = chr(code)
             if ascii.iscntrl(char):
                 continue
-            name = ""
             try:
-                name = unicodedata.name(char)
+                unicode_name = unicodedata.name(char)
             except ValueError:
                 pass
-            block_name = unicodedata.block(code)
-            script_tag = unicodedata.script(code)
-            script_name = unicodedata.script_name(script_tag)
+            unicode_block_name = unicodedata.block(code)
+            unicode_script_tag = unicodedata.script(code)
+            unicode_script_name = unicodedata.script_name(unicode_script_tag)
             yield {
                 "character": char,
                 "character_name": char_name,
                 "code": code,
-                "name": name,
-                "block_name": block_name,
-                "script_name": script_name,
-                "script_tag": script_tag,
+                "escape_sequence": f"\\u{code_hex}",
+                "html_code": "&#{code};",
+                "unicode": f"U+{code_hex}",
+                "unicode_code": code,
+                "unicode_name": unicode_name,
+                "unicode_block_name": unicode_block_name,
+                "unicode_script_name": unicode_script_name,
+                "unicode_script_tag": unicode_script_tag,
             }
 
     def get_characters_count(self):

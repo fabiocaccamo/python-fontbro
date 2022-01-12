@@ -15,18 +15,31 @@ class CharactersTestCase(AbstractTestCase):
         # for c in chars_list:
         #     print(c)
         # check if chars type is generator
+        expected_keys = [
+            "character",
+            "character_name",
+            "code",
+            "escape_sequence",
+            "html_code",
+            "unicode",
+            "unicode_code",
+            "unicode_name",
+            "unicode_block_name",
+            "unicode_script_name",
+            "unicode_script_tag",
+        ]
         self.assertTrue(isinstance(chars, type(0 for i in [])))
         self.assertEqual(len(chars_list), 875)
         self.assertTrue(
             all(
                 [
                     key in chars_list[0]
-                    for key in ['character', 'character_name', 'code', 'name']
+                    for key in expected_keys
                 ]
             )
         )
 
     def test_get_characters_count(self):
-        font = self._get_font('/Roboto_Mono/static/RobotoMono-Regular.ttf')
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
         chars_count = font.get_characters_count()
         self.assertEqual(chars_count, 875)
