@@ -3,7 +3,7 @@
 
 UNICODE_BLOCKS = [
     {
-        "characters_total": 96,
+        "characters_total": 128,
         "name": "Basic Latin"
     },
     {
@@ -1238,7 +1238,7 @@ UNICODE_BLOCKS = [
 
 UNICODE_SCRIPTS = [
     {
-        "characters_total": 8055,
+        "characters_total": 8087,
         "name": "Common",
         "tag": "Zyyy"
     },
