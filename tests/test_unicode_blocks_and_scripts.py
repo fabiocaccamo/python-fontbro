@@ -27,12 +27,6 @@ class UnicodeBlocksAndScriptsTestCase(AbstractTestCase):
         blocks = font.get_unicode_blocks(coverage_threshold=0.9)
         expected_blocks = [
             {
-                "characters_count": 95,
-                "characters_total": 96,
-                "coverage": 0.9895833333333334,
-                "name": "Basic Latin",
-            },
-            {
                 "characters_count": 160,
                 "characters_total": 160,
                 "coverage": 1.0,
@@ -148,8 +142,8 @@ class UnicodeBlocksAndScriptsTestCase(AbstractTestCase):
         expected_scripts = [
             {
                 "characters_count": 1505,
-                "characters_total": 8055,
-                "coverage": 0.18684047175667287,
+                "characters_total": 8087,
+                "coverage": 0.18610114999381724,
                 "name": "Common",
                 "tag": "Zyyy",
             },
