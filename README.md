@@ -225,7 +225,7 @@ Only blocks with coverage >= coverage_threshold (0.0 <= coverage_threshold <= 1.
 blocks = font.get_unicode_blocks(coverage_threshold=0.00001)
 ```
 
--   #### get_unicode_block_by_name
+-   #### get_unicode_script_by_name
 ```python
 """
 Gets the unicode script by name/tag (name/tag is case-insensitive and ignores "-").
