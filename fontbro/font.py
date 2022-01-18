@@ -2,13 +2,8 @@
 
 from curses import ascii
 
-from fontbro.features import FEATURES as _FEATURES_LIST
 from fontbro.flags import get_flag, set_flag
-from fontbro.unicodedata import (
-    UNICODE_BLOCKS as _UNICODE_BLOCKS,
-    UNICODE_SCRIPTS as _UNICODE_SCRIPTS,
-)
-from fontbro.utils import slugify
+from fontbro.utils import read_json, slugify
 
 from fontTools import unicodedata
 from fontTools.subset import parse_unicodes, Subsetter
@@ -33,7 +28,7 @@ class Font(object):
     # Features:
     # https://docs.microsoft.com/en-gb/typography/opentype/spec/featurelist
     # https://developer.mozilla.org/en-US/docs/Web/CSS/font-feature-settings
-    _FEATURES_LIST = _FEATURES_LIST
+    _FEATURES_LIST = read_json("data/features.json")
     _FEATURES_BY_TAG = {feature["tag"]: feature for feature in _FEATURES_LIST}
 
     # Formats:
@@ -127,6 +122,10 @@ class Font(object):
         STYLE_FLAG_EXTENDED: {"bit_head_mac": 6, "bit_os2_fs": None},
     }
     _STYLE_FLAGS_KEYS = _STYLE_FLAGS.keys()
+
+    # Unicode blocks/scripts data:
+    _UNICODE_BLOCKS = read_json("data/unicode-blocks.json")
+    _UNICODE_SCRIPTS = read_json("data/unicode-scripts.json")
 
     # Variable Axes:
     _VARIABLE_AXES = [
@@ -485,7 +484,7 @@ class Font(object):
             }
             self._populate_unicode_items_set(items, items_cache, item)
         blocks = self._get_unicode_items_set_with_coverage(
-            _UNICODE_BLOCKS, items, coverage_threshold=coverage_threshold
+            self._UNICODE_BLOCKS, items, coverage_threshold=coverage_threshold
         )
         return blocks
 
@@ -526,7 +525,7 @@ class Font(object):
             }
             self._populate_unicode_items_set(items, items_cache, item)
         scripts = self._get_unicode_items_set_with_coverage(
-            _UNICODE_SCRIPTS, items, coverage_threshold=coverage_threshold
+            self._UNICODE_SCRIPTS, items, coverage_threshold=coverage_threshold
         )
         return scripts
 

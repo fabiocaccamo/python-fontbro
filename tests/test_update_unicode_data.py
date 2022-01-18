@@ -43,11 +43,12 @@ class UpdateUnicodeDataTestCase(AbstractTestCase):
             script["characters_total"] = script["characters_count"]
             script.pop("characters_count", None)
 
+        data_dir = fsutil.join_path(__file__, "../fontbro/data/")
         fsutil.write_file(
-            fsutil.join_path(__file__, "../data/blocks.json"),
+            fsutil.join_path(data_dir, "unicode-blocks.json"),
             json.dumps(blocks, sort_keys=True, indent=4),
         )
         fsutil.write_file(
-            fsutil.join_path(__file__, "../data/scripts.json"),
+            fsutil.join_path(data_dir, "unicode-scripts.json"),
             json.dumps(scripts, sort_keys=True, indent=4),
         )
