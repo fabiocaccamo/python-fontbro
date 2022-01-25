@@ -53,8 +53,8 @@ font = Font('fonts/MyFont.ttf')
 -   [`get_unicode_script_by_name`](#get_unicode_script_by_name)
 -   [`get_unicode_scripts`](#get_unicode_scripts)
 -   [`get_variable_axes`](#get_variable_axes)
--   [`get_variable_axis_by_tag`](#get_variable_axis_by_tag)
 -   [`get_variable_axes_tags`](#get_variable_axes_tags)
+-   [`get_variable_axis_by_tag`](#get_variable_axis_by_tag)
 -   [`get_variable_instances`](#get_variable_instances)
 -   [`get_variable_instance_closest_to_coordinates`](#get_variable_instance_closest_to_coordinates)
 -   [`get_weight`](#get_weight)
@@ -265,6 +265,17 @@ Gets the font variable axes.
 axes = font.get_variable_axes()
 ```
 
+-   #### get_variable_axes_tags
+```python
+"""
+Gets the variable axes tags.
+
+:returns: The variable axis tags.
+:rtype: list or None
+"""
+axes_tags = font.get_variable_axes_tags()
+```
+
 -   #### get_variable_axis_by_tag
 ```python
 """
@@ -277,17 +288,6 @@ Gets a variable axis by tag.
 :rtype: dict or None
 """
 axis = font.get_variable_axis_by_tag(tag='wght')
-```
-
--   #### get_variable_axes_tags
-```python
-"""
-Gets the variable axes tags.
-
-:returns: The variable axis tags.
-:rtype: list or None
-"""
-axes_tags = font.get_variable_axes_tags()
 ```
 
 -   #### get_variable_instances
