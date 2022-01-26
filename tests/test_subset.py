@@ -83,3 +83,17 @@ class SubsetTestCase(AbstractTestCase):
             "".join([char["character"] for char in font.get_characters()]),
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
         )
+
+    def test_subset_with_unicodes_set_of_int(self):
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        chars_count = font.get_characters_count()
+        self.assertEqual(chars_count, 875)
+        unicodes = set([*range(65, 91)])
+        font.subset(unicodes=unicodes)
+        chars_count = font.get_characters_count()
+        self.assertEqual(chars_count, len(unicodes))
+        self.assertEqual(chars_count, 26)
+        self.assertEqual(
+            "".join([char["character"] for char in font.get_characters()]),
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        )
