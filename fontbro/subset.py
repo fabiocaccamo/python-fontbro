@@ -8,7 +8,12 @@ import re
 def parse_unicodes(unicodes):
     unicodes = unicodes or ""
     if isinstance(unicodes, (list, set, tuple)):
+        # convert possible int codepoints to hex str
+        for index in range(len(unicodes)):
+            code = unicodes[index]
+            unicodes[index] = f"{code:04X}" if isinstance(code, int) else code
         unicodes = ",".join(list(set(unicodes)))
+    assert isinstance(unicodes, str)
     # replace possible — ‐ − (&mdash; &dash; &minus;) with -
     unicodes = re.sub(r"[\—\‐\−]", "-", unicodes)
     # remove U+, \u, u if present
