@@ -3,10 +3,11 @@
 from curses import ascii
 
 from fontbro.flags import get_flag, set_flag
+from fontbro.subset import parse_unicodes
 from fontbro.utils import read_json, slugify
 
 from fontTools import unicodedata
-from fontTools.subset import parse_unicodes, Subsetter
+from fontTools.subset import Subsetter
 from fontTools.ttLib import TTFont, TTLibError
 from fontTools.varLib import instancer
 from fontTools.varLib.instancer import OverlapMode
@@ -16,7 +17,6 @@ import fsutil
 import itertools
 import math
 import os
-import re
 import sys
 
 
@@ -909,19 +909,6 @@ class Font(object):
                 assert isinstance(value, bool)
                 self.set_style_flag(key, value)
 
-    @staticmethod
-    def _get_unicodes(unicodes):
-        unicodes = unicodes or ""
-        if isinstance(unicodes, (list, set, tuple)):
-            unicodes = ",".join(list(set(unicodes)))
-        # replace possible — ‐ − (&mdash; &dash; &minus;) with -
-        # remove U+ and \u if present
-        unicodes = re.sub(r"[\—\‐\−]", "-", unicodes)
-        unicodes = re.sub(r"(U\+)|(\\u)", "", unicodes)
-        unicodes = parse_unicodes(unicodes)
-        # print(unicodes)
-        return unicodes
-
     def subset(self, unicodes="", glyphs=[], text="", **options):
         """
         Subsets the font using the given options (unicodes or glyphs or text),
@@ -943,7 +930,7 @@ class Font(object):
                 "Subsetting requires at least one of the following args: unicode,"
                 " glyphs, text."
             )
-        unicodes = self._get_unicodes(unicodes)
+        unicodes = parse_unicodes(unicodes)
         subs_args = {"unicodes": unicodes, "glyphs": glyphs, "text": text}
         # https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/subset/__init__.py
         subs = Subsetter(**options)
