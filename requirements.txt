@@ -1,2 +1,2 @@
-fonttools[woff,unicode,pathops] ~= 4.27.1
+fonttools[woff,unicode,pathops] ~= 4.28.5
 python-fsutil ~= 0.6.0
