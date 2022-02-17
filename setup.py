@@ -3,7 +3,7 @@
 
 from setuptools import find_packages, setup
 
-import os, sys
+import os
 
 exec(open("fontbro/metadata.py").read())
 
@@ -18,10 +18,7 @@ long_description_file_path = os.path.join(package_path, "README.md")
 long_description_content_type = "text/markdown"
 long_description = ""
 try:
-    long_description_file_options = (
-        {} if sys.version_info[0] < 3 else {"encoding": "utf-8"}
-    )
-    with open(long_description_file_path, "r", **long_description_file_options) as f:
+    with open(long_description_file_path, "r", encoding="utf-8") as f:
         long_description = f.read()
 except IOError:
     pass
