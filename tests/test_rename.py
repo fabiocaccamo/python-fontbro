@@ -61,3 +61,16 @@ class RenameTestCase(AbstractTestCase):
                 "Roboto Mono New Name Too Long For PostScript Name So Expect Exception",
                 "Bold Italic",
             )
+
+    def test_rename_with_style_name_containing_characters_not_allowed_in_postscript_name(
+        self,
+    ):
+        font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
+        font.rename(" Tourney Custom ", " [wdth-wght] ")
+        names = font.get_names()
+        self.assertEqual(names[Font.NAME_FAMILY_NAME], "Tourney Custom")
+        self.assertEqual(names[Font.NAME_SUBFAMILY_NAME], "[wdth-wght]")
+        self.assertEqual(names[Font.NAME_FULL_NAME], "Tourney Custom [wdth-wght]")
+        self.assertEqual(names[Font.NAME_POSTSCRIPT_NAME], "TourneyCustom-wdth-wght")
+        self.assertEqual(names[Font.NAME_TYPOGRAPHIC_FAMILY_NAME], "Tourney Custom")
+        self.assertEqual(names[Font.NAME_TYPOGRAPHIC_SUBFAMILY_NAME], "[wdth-wght]")

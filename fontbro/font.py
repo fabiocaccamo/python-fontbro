@@ -17,6 +17,7 @@ import fsutil
 import itertools
 import math
 import os
+import re
 import sys
 
 
@@ -707,19 +708,21 @@ class Font(object):
         :raises ValueError: if the computed PostScript-name is longer than 63 characters.
         """
         family_name = (
-            family_name
+            family_name.strip()
             or self.get_name(self.NAME_TYPOGRAPHIC_FAMILY_NAME)
             or self.get_name(self.NAME_FAMILY_NAME)
         )
         style_name = (
-            style_name
+            style_name.strip()
             or self.get_name(self.NAME_TYPOGRAPHIC_SUBFAMILY_NAME)
             or self.get_name(self.NAME_SUBFAMILY_NAME)
         )
         full_name = f"{family_name} {style_name}"
         postscript_family_name = family_name.replace(" ", "")
-        postscript_subfamily_name = style_name.replace(" ", "")
-        postscript_name = f"{postscript_family_name}-{postscript_subfamily_name}"
+        postscript_style_name = style_name.replace(" ", "")
+        postscript_style_name = re.sub(r"[^a-zA-Z0-9\-]", "-", postscript_style_name)
+        postscript_style_name = re.sub(r"[\-]+", "-", postscript_style_name).strip("-")
+        postscript_name = f"{postscript_family_name}-{postscript_style_name}"
         postscript_name_length = len(postscript_name)
         if postscript_name_length > 63:
             raise ValueError(
