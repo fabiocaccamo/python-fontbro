@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.6.0) - 2022-02-21
+-   Added `close` method.
+-   Added possibility to use `Font` class as context manager.
+
 ## [0.5.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.5.0) - 2022-01-26
 -   Improved `subset` `unicodes` arg to support also list of `int` codepoints.
 -   Moved features and unicode data to json files.
