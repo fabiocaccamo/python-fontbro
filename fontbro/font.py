@@ -228,6 +228,13 @@ class Font(object):
         except TTLibError:
             raise ValueError(f"Invalid font at filepath: {filepath}")
 
+    def close(self):
+        """
+        Close the wrapped TTFont instance.
+        """
+        font = self.get_ttfont()
+        font.close()
+
     def get_characters(self):
         """
         Gets the font characters.

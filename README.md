@@ -38,6 +38,7 @@ font = Font('fonts/MyFont.ttf')
 
 ### Methods
 
+-   [`close`](#close)
 -   [`get_characters`](#get_characters)
 -   [`get_characters_count`](#get_characters_count)
 -   [`get_features`](#get_features)
@@ -74,6 +75,14 @@ font = Font('fonts/MyFont.ttf')
 -   [`to_static`](#to_static)
 
 ---
+
+-   #### close
+```python
+"""
+Close the wrapped TTFont instance.
+"""
+font.close()
+```
 
 -   #### get_characters
 ```python
