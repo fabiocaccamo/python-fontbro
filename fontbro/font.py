@@ -976,7 +976,8 @@ class Font(object):
         If an axis value is not specified, the axis will be left untouched.
         If an axis min and max values are equal, the axis will be pinned.
 
-        :param coordinates: The coordinates dictionary, each item value must be tuple/list/dict (with min and max keys) for slicing or float/int for pinning, eg.
+        :param coordinates: The coordinates dictionary, each item value must be
+            tuple/list/dict (with min and max keys) for slicing or float/int for pinning, eg.
             {'wdth':100, 'wght':(100,600), 'ital':(30,70)} or
             {'wdth':100, 'wght':[100,600], 'ital':[30,70]} or
             {'wdth':100, 'wght':{'min':100,'max':600}, 'ital':{'min':30,'max':70}}
