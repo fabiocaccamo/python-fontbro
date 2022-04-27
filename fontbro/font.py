@@ -218,7 +218,7 @@ class Font(object):
         else:
             filepath_type = type(filepath).__name__
             raise ValueError(
-                f"Invalid filepath type: expected str, found {filepath_type}"
+                f"Invalid filepath type: expected str, found '{filepath_type}'."
             )
 
     def _init_with_filepath(self, filepath):
@@ -226,7 +226,7 @@ class Font(object):
             self._ttfont = TTFont(filepath)
             self._filepath = filepath
         except TTLibError:
-            raise ValueError(f"Invalid font at filepath: {filepath}")
+            raise ValueError(f"Invalid font at filepath: '{filepath}'.")
 
     def __enter__(self):
         return self
@@ -348,7 +348,7 @@ class Font(object):
             return cls._NAMES_BY_KEY[key]["id"]
         else:
             raise TypeError(
-                f"Invalid key type, expected int or str, found {type(key).__name__}."
+                f"Invalid key type, expected int or str, found '{type(key).__name__}'."
             )
 
     def get_name(self, key):
