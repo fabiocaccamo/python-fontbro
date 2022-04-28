@@ -44,6 +44,7 @@ font = Font('fonts/MyFont.ttf')
 -   [`get_features`](#get_features)
 -   [`get_features_tags`](#get_features_tags)
 -   [`get_format`](#get_format)
+-   [`get_fingerprint`](#get_fingerprint)
 -   [`get_image`](#get_image)
 -   [`get_name`](#get_name)
 -   [`get_names`](#get_names)
@@ -127,6 +128,21 @@ Gets the font opentype features tags.
 :rtype: list of str
 """
 features_tags = font.get_features_tags()
+```
+
+-   #### get_fingerprint
+```python
+"""
+Gets the font fingerprint: an hash calculated from an image representation of the font.
+Changing the text option affects the returned fingerprint.
+
+:param text: The text used for generating the fingerprint, default value: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+:type text: str
+
+:returns: The fingerprint hash.
+:rtype: imagehash.ImageHash
+"""
+hash = font.get_fingerprint(text="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
 ```
 
 -   #### get_format

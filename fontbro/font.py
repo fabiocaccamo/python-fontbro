@@ -16,6 +16,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 import copy
 import fsutil
+import imagehash
 import itertools
 import math
 import os
@@ -318,6 +319,23 @@ class Font(object):
             features_tags = [feature.FeatureTag for feature in feature_record]
             return features_tags
         return []
+
+    def get_fingerprint(self, text=""):
+        """
+        Gets the font fingerprint: an hash calculated from an image representation of the font.
+        Changing the text option affects the returned fingerprint.
+
+        :param text: The text used for generating the fingerprint, default value: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        :type text: str
+
+        :returns: The fingerprint hash.
+        :rtype: imagehash.ImageHash
+        """
+        text = text or "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        img = self.get_image(text=text, size=72)
+        # img.show()
+        hash = imagehash.dhash(img, hash_size=32)
+        return hash
 
     def get_format(self, ignore_flavor=False):
         """
