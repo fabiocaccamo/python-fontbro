@@ -64,6 +64,7 @@ setup(
     install_requires=[
         # 'fonttools[ufo,lxml,woff,unicode,interpolatable,plot,symfont,type1,pathops] >= 4.27.0, < 5.0',
         "fonttools[woff,unicode,pathops] >= 4.27.0, < 5.0",
+        "pillow >= 8.4.0, < 9.0.0",
         "python-fsutil >= 0.6.0, < 1.0.0",
     ],
     classifiers=[

@@ -1,2 +1,3 @@
-fonttools[woff,unicode,pathops] ~= 4.33.2
-python-fsutil ~= 0.6.0
+fonttools[woff,unicode,pathops] == 4.33.2
+pillow == 8.4.0
+python-fsutil == 0.6.0

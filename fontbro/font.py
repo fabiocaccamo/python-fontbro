@@ -12,6 +12,8 @@ from fontTools.ttLib import TTFont, TTLibError
 from fontTools.varLib import instancer
 from fontTools.varLib.instancer import OverlapMode
 
+from PIL import Image, ImageDraw, ImageFont
+
 import copy
 import fsutil
 import itertools
@@ -19,6 +21,7 @@ import math
 import os
 import re
 import sys
+import tempfile
 
 
 class Font(object):
@@ -341,6 +344,33 @@ class Font(object):
         elif version == "wOF2":
             format = self.FORMAT_WOFF2
         return format
+
+    def get_image(
+        self, text, size, color=(0, 0, 0, 255), background_color=(255, 255, 255, 255)
+    ):
+        """
+        Gets an image representation of the font rendering
+        some text using the given options.
+
+        :param text: The text rendered in the image
+        :type text: str
+        :param size: The font size
+        :type size: int
+        :param color: The text color
+        :type color: tuple
+        :param background_color: The background color
+        :type background_color: tuple
+        """
+        with tempfile.TemporaryDirectory() as dest:
+            filepath = self.save(dest)
+            img = Image.new("RGBA", (2, 2), background_color)
+            draw = ImageDraw.Draw(img)
+            img_font = ImageFont.truetype(filepath, size)
+            img_size = draw.textsize(text, img_font)
+            img = img.resize(img_size)
+            draw = ImageDraw.Draw(img)
+            draw.text((0, 0), text, font=img_font, fill=color)
+            return img
 
     @classmethod
     def _get_name_id(cls, key):

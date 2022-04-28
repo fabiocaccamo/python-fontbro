@@ -44,6 +44,7 @@ font = Font('fonts/MyFont.ttf')
 -   [`get_features`](#get_features)
 -   [`get_features_tags`](#get_features_tags)
 -   [`get_format`](#get_format)
+-   [`get_image`](#get_image)
 -   [`get_name`](#get_name)
 -   [`get_names`](#get_names)
 -   [`get_style_flag`](#get_style_flag)
@@ -140,6 +141,24 @@ Gets the font format: otf, ttf, woff, woff2.
 :rtype: str or None
 """
 format = font.get_format(ignore_flavor=False)
+```
+
+-   #### get_image
+```python
+"""
+Gets an image representation of the font rendering
+some text using the given options.
+
+:param text: The text rendered in the image
+:type text: str
+:param size: The font size
+:type size: int
+:param color: The text color
+:type color: tuple
+:param background_color: The background color
+:type background_color: tuple
+"""
+img = font.get_image(text, size, color=(0, 0, 0, 255), background_color=(255, 255, 255, 255))
 ```
 
 -   #### get_name
