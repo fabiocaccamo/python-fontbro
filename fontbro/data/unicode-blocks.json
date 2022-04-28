@@ -80,6 +80,10 @@
         "name": "Syriac Supplement"
     },
     {
+        "characters_total": 48,
+        "name": "Arabic Extended-B"
+    },
+    {
         "characters_total": 96,
         "name": "Arabic Extended-A"
     },
@@ -732,8 +736,16 @@
         "name": "Caucasian Albanian"
     },
     {
+        "characters_total": 80,
+        "name": "Vithkuqi"
+    },
+    {
         "characters_total": 384,
         "name": "Linear A"
+    },
+    {
+        "characters_total": 64,
+        "name": "Latin Extended-F"
     },
     {
         "characters_total": 64,
@@ -832,6 +844,10 @@
         "name": "Sogdian"
     },
     {
+        "characters_total": 64,
+        "name": "Old Uyghur"
+    },
+    {
         "characters_total": 48,
         "name": "Chorasmian"
     },
@@ -908,7 +924,7 @@
         "name": "Takri"
     },
     {
-        "characters_total": 64,
+        "characters_total": 80,
         "name": "Ahom"
     },
     {
@@ -934,6 +950,10 @@
     {
         "characters_total": 96,
         "name": "Soyombo"
+    },
+    {
+        "characters_total": 16,
+        "name": "Unified Canadian Aboriginal Syllabics Extended-A"
     },
     {
         "characters_total": 64,
@@ -980,6 +1000,10 @@
         "name": "Early Dynastic Cuneiform"
     },
     {
+        "characters_total": 112,
+        "name": "Cypro-Minoan"
+    },
+    {
         "characters_total": 1072,
         "name": "Egyptian Hieroglyphs"
     },
@@ -998,6 +1022,10 @@
     {
         "characters_total": 48,
         "name": "Mro"
+    },
+    {
+        "characters_total": 96,
+        "name": "Tangsa"
     },
     {
         "characters_total": 48,
@@ -1032,8 +1060,12 @@
         "name": "Khitan Small Script"
     },
     {
-        "characters_total": 144,
+        "characters_total": 128,
         "name": "Tangut Supplement"
+    },
+    {
+        "characters_total": 16,
+        "name": "Kana Extended-B"
     },
     {
         "characters_total": 256,
@@ -1058,6 +1090,10 @@
     {
         "characters_total": 16,
         "name": "Shorthand Format Controls"
+    },
+    {
+        "characters_total": 208,
+        "name": "Znamenny Musical Notation"
     },
     {
         "characters_total": 256,
@@ -1092,6 +1128,10 @@
         "name": "Sutton SignWriting"
     },
     {
+        "characters_total": 256,
+        "name": "Latin Extended-G"
+    },
+    {
         "characters_total": 48,
         "name": "Glagolitic Supplement"
     },
@@ -1100,8 +1140,16 @@
         "name": "Nyiakeng Puachue Hmong"
     },
     {
+        "characters_total": 48,
+        "name": "Toto"
+    },
+    {
         "characters_total": 64,
         "name": "Wancho"
+    },
+    {
+        "characters_total": 32,
+        "name": "Ethiopic Extended-B"
     },
     {
         "characters_total": 224,

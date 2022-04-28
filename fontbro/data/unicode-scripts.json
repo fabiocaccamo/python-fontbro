@@ -1,11 +1,11 @@
 [
     {
-        "characters_total": 8087,
+        "characters_total": 8252,
         "name": "Common",
         "tag": "Zyyy"
     },
     {
-        "characters_total": 1374,
+        "characters_total": 1475,
         "name": "Latin",
         "tag": "Latn"
     },
@@ -15,7 +15,7 @@
         "tag": "Bopo"
     },
     {
-        "characters_total": 573,
+        "characters_total": 657,
         "name": "Inherited",
         "tag": "Zinh"
     },
@@ -25,7 +25,7 @@
         "tag": "Grek"
     },
     {
-        "characters_total": 143548,
+        "characters_total": 143750,
         "name": "Unknown",
         "tag": "Zzzz"
     },
@@ -50,7 +50,7 @@
         "tag": "Hebr"
     },
     {
-        "characters_total": 1291,
+        "characters_total": 1365,
         "name": "Arabic",
         "tag": "Arab"
     },
@@ -110,12 +110,12 @@
         "tag": "Taml"
     },
     {
-        "characters_total": 98,
+        "characters_total": 100,
         "name": "Telugu",
         "tag": "Telu"
     },
     {
-        "characters_total": 89,
+        "characters_total": 90,
         "name": "Kannada",
         "tag": "Knda"
     },
@@ -160,7 +160,7 @@
         "tag": "Hang"
     },
     {
-        "characters_total": 495,
+        "characters_total": 523,
         "name": "Ethiopic",
         "tag": "Ethi"
     },
@@ -170,7 +170,7 @@
         "tag": "Cher"
     },
     {
-        "characters_total": 710,
+        "characters_total": 726,
         "name": "Canadian Aboriginal",
         "tag": "Cans"
     },
@@ -185,7 +185,7 @@
         "tag": "Runr"
     },
     {
-        "characters_total": 20,
+        "characters_total": 23,
         "name": "Tagalog",
         "tag": "Tglg"
     },
@@ -210,7 +210,7 @@
         "tag": "Khmr"
     },
     {
-        "characters_total": 167,
+        "characters_total": 168,
         "name": "Mongolian",
         "tag": "Mong"
     },
@@ -240,7 +240,7 @@
         "tag": "Lana"
     },
     {
-        "characters_total": 121,
+        "characters_total": 124,
         "name": "Balinese",
         "tag": "Bali"
     },
@@ -270,7 +270,7 @@
         "tag": "Brai"
     },
     {
-        "characters_total": 132,
+        "characters_total": 134,
         "name": "Glagolitic",
         "tag": "Glag"
     },
@@ -280,17 +280,17 @@
         "tag": "Tfng"
     },
     {
-        "characters_total": 94204,
+        "characters_total": 94215,
         "name": "Han",
         "tag": "Hani"
     },
     {
-        "characters_total": 379,
+        "characters_total": 380,
         "name": "Hiragana",
         "tag": "Hira"
     },
     {
-        "characters_total": 304,
+        "characters_total": 320,
         "name": "Katakana",
         "tag": "Kana"
     },
@@ -430,6 +430,11 @@
         "tag": "Aghb"
     },
     {
+        "characters_total": 70,
+        "name": "Vithkuqi",
+        "tag": "Vith"
+    },
+    {
         "characters_total": 341,
         "name": "Linear A",
         "tag": "Lina"
@@ -550,6 +555,11 @@
         "tag": "Sogd"
     },
     {
+        "characters_total": 26,
+        "name": "Old Uyghur",
+        "tag": "Ougr"
+    },
+    {
         "characters_total": 28,
         "name": "Chorasmian",
         "tag": "Chrs"
@@ -560,12 +570,12 @@
         "tag": "Elym"
     },
     {
-        "characters_total": 109,
+        "characters_total": 115,
         "name": "Brahmi",
         "tag": "Brah"
     },
     {
-        "characters_total": 67,
+        "characters_total": 68,
         "name": "Kaithi",
         "tag": "Kthi"
     },
@@ -630,12 +640,12 @@
         "tag": "Modi"
     },
     {
-        "characters_total": 67,
+        "characters_total": 68,
         "name": "Takri",
         "tag": "Takr"
     },
     {
-        "characters_total": 58,
+        "characters_total": 65,
         "name": "Ahom",
         "tag": "Ahom"
     },
@@ -705,6 +715,11 @@
         "tag": "Xsux"
     },
     {
+        "characters_total": 99,
+        "name": "Cypro Minoan",
+        "tag": "Cpmn"
+    },
+    {
         "characters_total": 1080,
         "name": "Egyptian Hieroglyphs",
         "tag": "Egyp"
@@ -718,6 +733,11 @@
         "characters_total": 43,
         "name": "Mro",
         "tag": "Mroo"
+    },
+    {
+        "characters_total": 89,
+        "name": "Tangsa",
+        "tag": "Tnsa"
     },
     {
         "characters_total": 36,
@@ -768,6 +788,11 @@
         "characters_total": 71,
         "name": "Nyiakeng Puachue Hmong",
         "tag": "Hmnp"
+    },
+    {
+        "characters_total": 31,
+        "name": "Toto",
+        "tag": "Toto"
     },
     {
         "characters_total": 59,
