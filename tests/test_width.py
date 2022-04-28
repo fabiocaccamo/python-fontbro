@@ -14,7 +14,7 @@ class WidthTestCase(AbstractTestCase):
         font = Font(filepath=font_path)
         width = font.get_width()
         # print(filepath, width)
-        expected_width = {"value": expected_value, "name": expected_name}
+        expected_width = {"value": expected_value, "perc": 100.0, "name": expected_name}
         self.assertEqual(width, expected_width)
 
     def test_get_width(self):

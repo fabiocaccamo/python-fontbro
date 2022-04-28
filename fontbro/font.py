@@ -161,20 +161,21 @@ class Font(object):
     WEIGHT_EXTRA_BOLD = "Extra-bold"  # (Ultra-bold)
     WEIGHT_BLACK = "Black"  # (Heavy)
     WEIGHT_EXTRA_BLACK = "Extra-black"  # (Nord)
-    _WEIGHTS_BY_VALUE = {
-        50: WEIGHT_EXTRA_THIN,
-        100: WEIGHT_THIN,
-        200: WEIGHT_EXTRA_LIGHT,
-        300: WEIGHT_LIGHT,
-        400: WEIGHT_REGULAR,
-        450: WEIGHT_BOOK,
-        500: WEIGHT_MEDIUM,
-        600: WEIGHT_SEMI_BOLD,
-        700: WEIGHT_BOLD,
-        800: WEIGHT_EXTRA_BOLD,
-        900: WEIGHT_BLACK,
-        950: WEIGHT_EXTRA_BLACK,
-    }
+    _WEIGHTS = [
+        {"value": 50, "name": WEIGHT_EXTRA_THIN},
+        {"value": 100, "name": WEIGHT_THIN},
+        {"value": 200, "name": WEIGHT_EXTRA_LIGHT},
+        {"value": 300, "name": WEIGHT_LIGHT},
+        {"value": 400, "name": WEIGHT_REGULAR},
+        {"value": 450, "name": WEIGHT_BOOK},
+        {"value": 500, "name": WEIGHT_MEDIUM},
+        {"value": 600, "name": WEIGHT_SEMI_BOLD},
+        {"value": 700, "name": WEIGHT_BOLD},
+        {"value": 800, "name": WEIGHT_EXTRA_BOLD},
+        {"value": 900, "name": WEIGHT_BLACK},
+        {"value": 950, "name": WEIGHT_EXTRA_BLACK},
+    ]
+    _WEIGHTS_BY_VALUE = {weight["value"]: weight for weight in _WEIGHTS}
 
     # Widths:
     # https://docs.microsoft.com/en-us/typography/opentype/otspec170/os2#uswidthclass
@@ -187,17 +188,18 @@ class Font(object):
     WIDTH_EXPANDED = "Expanded"
     WIDTH_EXTRA_EXPANDED = "Extra-expanded"
     WIDTH_ULTRA_EXPANDED = "Ultra-expanded"
-    _WIDTHS_BY_VALUE = {
-        1: WIDTH_ULTRA_CONDENSED,
-        2: WIDTH_EXTRA_CONDENSED,
-        3: WIDTH_CONDENSED,
-        4: WIDTH_SEMI_CONDENSED,
-        5: WIDTH_MEDIUM,
-        6: WIDTH_SEMI_EXPANDED,
-        7: WIDTH_EXPANDED,
-        8: WIDTH_EXTRA_EXPANDED,
-        9: WIDTH_ULTRA_EXPANDED,
-    }
+    _WIDTHS = [
+        {"value": 1, "perc": 50.0, "name": WIDTH_ULTRA_CONDENSED},
+        {"value": 2, "perc": 62.5, "name": WIDTH_EXTRA_CONDENSED},
+        {"value": 3, "perc": 75.0, "name": WIDTH_CONDENSED},
+        {"value": 4, "perc": 87.5, "name": WIDTH_SEMI_CONDENSED},
+        {"value": 5, "perc": 100.0, "name": WIDTH_MEDIUM},
+        {"value": 6, "perc": 112.5, "name": WIDTH_SEMI_EXPANDED},
+        {"value": 7, "perc": 125.0, "name": WIDTH_EXPANDED},
+        {"value": 8, "perc": 150.0, "name": WIDTH_EXTRA_EXPANDED},
+        {"value": 9, "perc": 200.0, "name": WIDTH_ULTRA_CONDENSED},
+    ]
+    _WIDTHS_BY_VALUE = {width["value"]: width for width in _WIDTHS}
 
     def __init__(self, filepath):
         """
@@ -663,12 +665,16 @@ class Font(object):
         os2 = font.get("OS/2")
         if not os2:
             return None
-        weight = os2.usWeightClass
-        weight = min(max(0, weight), 1000)
-        weights = sorted(self._WEIGHTS_BY_VALUE.keys())
-        closest_weight = min(weights, key=lambda weight_item: abs(weight_item - weight))
-        weight_name = self._WEIGHTS_BY_VALUE.get(closest_weight)
-        return {"name": weight_name, "value": weight}
+        weight_value = os2.usWeightClass
+        weight_value = min(max(1, weight_value), 1000)
+        weight_option_values = sorted(self._WEIGHTS_BY_VALUE.keys())
+        closest_weight_option_value = min(
+            weight_option_values,
+            key=lambda weight_option_value: abs(weight_option_value - weight_value),
+        )
+        weight = self._WEIGHTS_BY_VALUE.get(closest_weight_option_value, {}).copy()
+        weight["value"] = weight_value
+        return weight
 
     def get_width(self):
         """
@@ -681,10 +687,11 @@ class Font(object):
         os2 = font.get("OS/2")
         if not os2:
             return None
-        width = os2.usWidthClass
-        width = min(max(0, width), 9)
-        width_name = self._WIDTHS_BY_VALUE.get(width)
-        return {"name": width_name, "value": width}
+        width_value = os2.usWidthClass
+        width_value = min(max(1, width_value), 9)
+        width = self._WIDTHS_BY_VALUE.get(width_value, {}).copy()
+        width["value"] = width_value
+        return width
 
     def is_static(self):
         """
