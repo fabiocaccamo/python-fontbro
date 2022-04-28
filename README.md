@@ -33,7 +33,7 @@ Just import the font class:
 ```python
 from fontbro import Font
 
-font = Font('fonts/MyFont.ttf')
+font = Font("fonts/MyFont.ttf")
 ```
 
 ### Methods
@@ -183,7 +183,7 @@ img = font.get_image(text, size, color=(0, 0, 0, 255), background_color=(255, 25
 """
 Gets the name by its identifier from the font name table.
 
-:param key: The name id or key (eg. 'family_name')
+:param key: The name id or key (eg. "family_name")
 :type key: int or str
 
 :returns: The name.
@@ -332,7 +332,7 @@ Gets a variable axis by tag.
 :returns: The variable axis by tag.
 :rtype: dict or None
 """
-axis = font.get_variable_axis_by_tag(tag='wght')
+axis = font.get_variable_axis_by_tag(tag="wght")
 ```
 
 -   #### get_variable_instances
@@ -350,7 +350,7 @@ instances = font.get_variable_instances()
 ```python
 """
 Gets the variable instance closest to coordinates.
-eg. coordinates = {'wght': 1000, 'slnt': 815, 'wdth': 775}
+eg. coordinates = {"wght": 1000, "slnt": 815, "wdth": 775}
 
 :param coordinates: The coordinates
 :type coordinates: dict
@@ -358,7 +358,7 @@ eg. coordinates = {'wght': 1000, 'slnt': 815, 'wdth': 775}
 :returns: The variable instance closest to coordinates.
 :rtype: dict or None
 """
-instance = font.get_variable_instance_closest_to_coordinates(coordinates={'wght': 1000, 'slnt': 815, 'wdth': 775})
+instance = font.get_variable_instance_closest_to_coordinates(coordinates={"wght": 1000, "slnt": 815, "wdth": 775})
 ```
 
 -   #### get_weight
@@ -438,7 +438,7 @@ If style_name is not defined it will be auto-detected.
 
 :raises ValueError: if the computed PostScript-name is longer than 63 characters.
 """
-font.rename(family_name='My Font New', style_name='Bold Italic')
+font.rename(family_name="My Font New", style_name="Bold Italic")
 ```
 
 -   #### save
@@ -496,12 +496,12 @@ saved_font_path = font.save_as_woff2(filepath=None, overwrite=True)
 """
 Sets the name by its identifier in the font name table.
 
-:param key: The name id or key (eg. 'family_name')
+:param key: The name id or key (eg. "family_name")
 :type key: int or str
 :param value: The value
 :type value: str
 """
-font.set_name(Font.NAME_FAMILY_NAME, 'Family Name Renamed')
+font.set_name(Font.NAME_FAMILY_NAME, "Family Name Renamed")
 ```
 
 -   #### set_names
@@ -513,8 +513,8 @@ Sets the names by their identifier in the name table.
 :type names: dict
 """
 font.set_names(names={
-    Font.NAME_FAMILY_NAME: 'Family Name Renamed',
-    Font.NAME_SUBFAMILY_NAME: 'Regular Renamed',
+    Font.NAME_FAMILY_NAME: "Family Name Renamed",
+    Font.NAME_SUBFAMILY_NAME: "Regular Renamed",
 })
 ```
 
@@ -564,7 +564,7 @@ https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/subset/__init__.p
 :param options: The subsetter options
 :type options: dict
 """
-font.subset(unicodes='', glyphs=[], text='', **options)
+font.subset(unicodes="", glyphs=[], text="", **options)
 ```
 
 -   #### to_sliced_variable
@@ -575,9 +575,9 @@ If an axis value is not specified, the axis will be left untouched.
 If an axis min and max values are equal, the axis will be pinned.
 
 :param coordinates: The coordinates dictionary, each item value must be tuple/list/dict (with min and max keys) for slicing or float/int for pinning, eg.
-    {'wdth':100, 'wght':(100,600), 'ital':(30,70)} or
-    {'wdth':100, 'wght':[100,600], 'ital':[30,70]} or
-    {'wdth':100, 'wght':{'min':100,'max':600}, 'ital':{'min':30,'max':70}}
+    {"wdth":100, "wght":(100,600), "ital":(30,70)} or
+    {"wdth":100, "wght":[100,600], "ital":[30,70]} or
+    {"wdth":100, "wght":{"min":100,"max":600}, "ital":{"min":30,"max":70}}
 :type coordinates: dict
 :param options: The options for the fontTools.varLib.instancer
 :type options: dictionary
@@ -596,7 +596,7 @@ Converts the variable font to a static one pinning the variable axes at the give
 If an axis value is not specified, the axis will be pinned at its default value.
 If coordinates are not specified each axis will be pinned at its default value.
 
-:param coordinates: The coordinates, eg. {'wght':500, 'ital':50}
+:param coordinates: The coordinates, eg. {"wght":500, "ital":50}
 :type coordinates: dict or None
 :param options: The options for the fontTools.varLib.instancer
 :type options: dictionary
