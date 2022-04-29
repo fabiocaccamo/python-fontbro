@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.7.0) - 2022-04-29
+-   Added `get_fingerprint` method.
+-   Added `get_image` method.
+-   Added `get_italic_angle` method.
+-   Added `match` method.
+-   Refactored `get_weight` and `get_width` methods.
+-   Updated unicode blocks and scripts data.
+-   Updated requirements.
+
 ## [0.6.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.6.0) - 2022-02-21
 -   Added `close` method.
 -   Added possibility to use `Font` class as context manager.
