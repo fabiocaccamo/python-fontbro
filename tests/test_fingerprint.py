@@ -23,13 +23,6 @@ class FingerprintTestCase(AbstractTestCase):
         self.assertTrue(font.is_variable())
         return font
 
-    def test_get_fingerprint(self):
-        font = self._get_variable_font()
-        hash = font.get_fingerprint()
-        hash_hex = "0000000000000000000010000002000000011800ac3318012d335ac1554f58c4554f58c6acb368017968d4dc512c852b512e4b21b1275aaa916870ced8c9252a90c94cabb524276a5565a764d0e946b2c1ed4eba6d09ab622a38c8c48b250611cb6506396da8898d2d6899c4004031102048391c004019180000191800003918"
-        diff = hash - hex_to_hash(hash_hex)
-        self.assertEqual(diff, 0)
-
     def test_get_fingerprint_diff_between_variable_instances(self):
         fonts = [
             self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf"),
