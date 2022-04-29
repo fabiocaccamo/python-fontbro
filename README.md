@@ -176,7 +176,7 @@ some text using the given options.
 :param background_color: The background color
 :type background_color: tuple
 """
-img = font.get_image(text, size, color=(0, 0, 0, 255), background_color=(255, 255, 255, 255))
+img = font.get_image(text="Hello!", size=48, color=(0, 0, 0, 255), background_color=(255, 255, 255, 255))
 ```
 
 -   #### get_italic_angle
