@@ -390,6 +390,26 @@ class Font(object):
             draw.text((0, 0), text, font=img_font, fill=color)
             return img
 
+    def get_italic_angle(self):
+        """
+        Gets the font italic angle.
+
+        :returns: The angle value including backslant, italic and roman flags.
+        :rtype: dict or None
+        """
+        font = self.get_ttfont()
+        post = font.get("post")
+        if not post:
+            return None
+        italic_angle_value = post.italicAngle
+        italic_angle = {
+            "backslant": italic_angle_value > 0,
+            "italic": italic_angle_value < 0,
+            "roman": italic_angle_value == 0,
+            "value": italic_angle_value,
+        }
+        return italic_angle
+
     @classmethod
     def _get_name_id(cls, key):
         if isinstance(key, int):

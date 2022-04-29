@@ -46,6 +46,7 @@ font = Font("fonts/MyFont.ttf")
 -   [`get_format`](#get_format)
 -   [`get_fingerprint`](#get_fingerprint)
 -   [`get_image`](#get_image)
+-   [`get_italic_angle`](#get_italic_angle)
 -   [`get_name`](#get_name)
 -   [`get_names`](#get_names)
 -   [`get_style_flag`](#get_style_flag)
@@ -176,6 +177,17 @@ some text using the given options.
 :type background_color: tuple
 """
 img = font.get_image(text, size, color=(0, 0, 0, 255), background_color=(255, 255, 255, 255))
+```
+
+-   #### get_italic_angle
+```python
+"""
+Gets the font italic angle.
+
+:returns: The angle value including backslant, italic and roman flags.
+:rtype: dict or None
+"""
+italic_angle = font.get_italic_angle()
 ```
 
 -   #### get_name
