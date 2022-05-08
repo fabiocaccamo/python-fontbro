@@ -14,4 +14,4 @@ class CloneTestCase(AbstractTestCase):
         font = Font(filepath=filepath)
         font_clone = font.clone()
         self.assertFalse(font == font_clone)
-        self.assertTrue(font._filename == font_clone._filename)
+        self.assertEqual(f"{font}", f"{font_clone}")
