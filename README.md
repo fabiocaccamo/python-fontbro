@@ -46,6 +46,7 @@ font = Font("fonts/MyFont.ttf")
 -   [`get_features_tags`](#get_features_tags)
 -   [`get_format`](#get_format)
 -   [`get_fingerprint`](#get_fingerprint)
+-   [`get_fingerprint_match`](#get_fingerprint_match)
 -   [`get_image`](#get_image)
 -   [`get_italic_angle`](#get_italic_angle)
 -   [`get_name`](#get_name)
@@ -147,13 +148,31 @@ features_tags = font.get_features_tags()
 Gets the font fingerprint: an hash calculated from an image representation of the font.
 Changing the text option affects the returned fingerprint.
 
-:param text: The text used for generating the fingerprint, default value: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+:param text: The text used for generating the fingerprint, default value: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".
 :type text: str
-
 :returns: The fingerprint hash.
 :rtype: imagehash.ImageHash
 """
-hash = font.get_fingerprint(text="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
+hash = font.get_fingerprint(text="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", text_size=72, hash_algorithm="dhash", hash_size=32)
+```
+
+-   #### get_fingerprint_match
+```python
+"""
+Gets the fingerprint match between this font and another one.
+by checking if their fingerprints are equal (difference <= tolerance).
+
+:param other: The other font, can be either a filepath or a Font instance.
+:type other: str or Font
+:param tolerance: The diff tolerance, default 3.
+:type tolerance: int
+:param text: The text used for generating the fingerprint, default value: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".
+:type text: str
+
+:returns: A tuple containing the match info (match, diff, hash, other_hash).
+:rtype: tuple
+"""
+match, diff, hash, other_hash = font.get_fingerprint_match(other="other_font.ttf", tolerance=10, text="", text_size=72, hash_algorithm="dhash", hash_size=32)
 ```
 
 -   #### get_format

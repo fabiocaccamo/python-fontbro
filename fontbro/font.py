@@ -16,7 +16,6 @@ from PIL import Image, ImageDraw, ImageFont
 
 import copy
 import fsutil
-import imagehash
 import itertools
 import math
 import os
@@ -331,17 +330,56 @@ class Font(object):
         Gets the font fingerprint: an hash calculated from an image representation of the font.
         Changing the text option affects the returned fingerprint.
 
-        :param text: The text used for generating the fingerprint, default value: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        :param text: The text used for generating the fingerprint, default value: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".
         :type text: str
-
         :returns: The fingerprint hash.
         :rtype: imagehash.ImageHash
         """
+        import imagehash
+
         text = text or "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-        img = self.get_image(text=text, size=72)
+
+        img = self.get_image(text=text[0], size=72)
+        img_size = img.size
+        img = img.resize((img_size[0] // 2, img_size[1] // 2))
+        img = img.resize((img_size[0], img_size[1]), Image.NEAREST)
+        img = img.quantize(colors=2)
         # img.show()
-        hash = imagehash.dhash(img, hash_size=32)
+
+        hash = imagehash.average_hash(img, hash_size=64)
         return hash
+
+    def get_fingerprint_match(self, other, tolerance=10, text=""):
+        """
+        Gets the fingerprint match between this font and another one.
+        by checking if their fingerprints are equal (difference <= tolerance).
+
+        :param other: The other font, can be either a filepath or a Font instance.
+        :type other: str or Font
+        :param tolerance: The diff tolerance, default 3.
+        :type tolerance: int
+        :param text: The text used for generating the fingerprint, default value: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".
+        :type text: str
+
+        :returns: A tuple containing the match info (match, diff, hash, other_hash).
+        :rtype: tuple
+        """
+        other_font = None
+        if isinstance(other, str):
+            other_font = Font(other)
+        elif isinstance(other, Font):
+            other_font = other
+        else:
+            other_type = type(other).__name__
+            raise ValueError(
+                f"Invalid other filepath/font: expected str or Font instance, found '{other_type}'."
+            )
+        hash = self.get_fingerprint(text=text)
+        other_hash = other_font.get_fingerprint(text=text)
+        diff = hash - other_hash
+        match = diff <= tolerance
+        match = match and self.is_variable() == other_font.is_variable()
+        return (match, diff, hash, other_hash)
 
     def get_format(self, ignore_flavor=False):
         """
