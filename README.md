@@ -38,6 +38,7 @@ font = Font("fonts/MyFont.ttf")
 
 ### Methods
 
+-   [`clone`](#clone)
 -   [`close`](#close)
 -   [`get_characters`](#get_characters)
 -   [`get_characters_count`](#get_characters_count)
@@ -80,6 +81,14 @@ font = Font("fonts/MyFont.ttf")
 -   [`to_static`](#to_static)
 
 ---
+
+-   #### clone
+```python
+"""
+Creates a new Font instance reading the same binary file.
+"""
+font_clone = font.clone()
+```
 
 -   #### close
 ```python

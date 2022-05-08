@@ -240,6 +240,12 @@ class Font(object):
     def __exit__(self, e_type, e_value, e_traceback):
         self.close()
 
+    def clone(self):
+        """
+        Creates a new Font instance reading the same binary file.
+        """
+        return Font(self._filepath)
+
     def close(self):
         """
         Close the wrapped TTFont instance.
