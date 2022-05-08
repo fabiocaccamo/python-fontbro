@@ -61,6 +61,7 @@ font = Font("fonts/MyFont.ttf")
 -   [`get_variable_axis_by_tag`](#get_variable_axis_by_tag)
 -   [`get_variable_instances`](#get_variable_instances)
 -   [`get_variable_instance_closest_to_coordinates`](#get_variable_instance_closest_to_coordinates)
+-   [`get_version`](#get_version)
 -   [`get_weight`](#get_weight)
 -   [`get_width`](#get_width)
 -   [`is_static`](#is_static)
@@ -371,6 +372,17 @@ eg. coordinates = {"wght": 1000, "slnt": 815, "wdth": 775}
 :rtype: dict or None
 """
 instance = font.get_variable_instance_closest_to_coordinates(coordinates={"wght": 1000, "slnt": 815, "wdth": 775})
+```
+
+-   #### get_version
+```python
+"""
+Gets the font version.
+
+:returns: The weight name and value.
+:rtype: dict or None
+"""
+version = font.get_version()
 ```
 
 -   #### get_weight

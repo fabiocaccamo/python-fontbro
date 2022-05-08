@@ -722,6 +722,15 @@ class Font(object):
                 closest_instance = instance
         return closest_instance
 
+    def get_version(self):
+        """
+        Gets the font version.
+        """
+        font = self.get_ttfont()
+        head = font.get("head")
+        version = head.fontRevision
+        return version
+
     def get_weight(self):
         """
         Gets the font weight value and name.
