@@ -795,36 +795,6 @@ class Font(object):
         font = self.get_ttfont()
         return "fvar" in font
 
-    def match(self, other, tolerance=5):
-        """
-        Check if the font has the same "identity" of another font
-        by checking if the fingerprints difference is <= tolerance.
-
-        :param other: The other font, can be either a filepath or a Font instance.
-        :type other: str or Font
-        :param tolerance: The diff tolerance, default 3.
-        :type tolerance: int
-
-        :returns: True if match other font, False otherwise.
-        :rtype: bool
-        """
-        other_font = None
-        if isinstance(other, str):
-            other_font = Font(other)
-        elif isinstance(other, Font):
-            other_font = other
-        else:
-            other_type = type(other).__name__
-            raise ValueError(
-                f"Invalid other filepath/font: expected str or Font instance, found '{other_type}'."
-            )
-        if self.is_variable() != other_font.is_variable():
-            return False
-        hash = self.get_fingerprint()
-        other_hash = other_font.get_fingerprint()
-        hash_diff = hash - other_hash
-        return hash_diff <= tolerance
-
     def rename(self, family_name="", style_name=""):
         """
         Renames the font names records (1, 2, 4, 6, 16, 17) according to

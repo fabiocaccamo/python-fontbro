@@ -67,7 +67,6 @@ font = Font("fonts/MyFont.ttf")
 -   [`get_width`](#get_width)
 -   [`is_static`](#is_static)
 -   [`is_variable`](#is_variable)
--   [`match`](#match)
 -   [`rename`](#rename)
 -   [`save`](#save)
 -   [`save_as_woff`](#save_as_woff)
@@ -436,23 +435,6 @@ Determines if the font is a variable font.
 :rtype: bool
 """
 variable = font.is_variable()
-```
-
--   #### match
-```python
-"""
-Check if the font has the same "identity" of another font
-by checking if the fingerprints difference is <= tolerance.
-
-:param other: The other font, can be either a filepath or a Font instance.
-:type other: str or Font
-:param tolerance: The diff tolerance, default 3.
-:type tolerance: int
-
-:returns: True if match other font, False otherwise.
-:rtype: bool
-"""
-same_style = font.match(other="other_font.ttf", tolerance=3)
 ```
 
 -   #### rename
