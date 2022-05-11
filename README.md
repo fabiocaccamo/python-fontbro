@@ -405,8 +405,8 @@ instance = font.get_variable_instance_closest_to_coordinates(coordinates={"wght"
 """
 Gets the font version.
 
-:returns: The weight name and value.
-:rtype: dict or None
+:returns: The font version value.
+:rtype: float
 """
 version = font.get_version()
 ```

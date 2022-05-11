@@ -773,6 +773,9 @@ class Font(object):
     def get_version(self):
         """
         Gets the font version.
+
+        :returns: The font version value.
+        :rtype: float
         """
         font = self.get_ttfont()
         head = font.get("head")
