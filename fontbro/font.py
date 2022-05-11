@@ -332,6 +332,7 @@ class Font(object):
 
         :param text: The text used for generating the fingerprint, default value: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".
         :type text: str
+
         :returns: The fingerprint hash.
         :rtype: imagehash.ImageHash
         """
@@ -422,6 +423,9 @@ class Font(object):
         :type color: tuple
         :param background_color: The background color
         :type background_color: tuple
+
+        :returns: The image.
+        :rtype: PIL.Image
         """
         with tempfile.TemporaryDirectory() as dest:
             filepath = self.save(dest)
