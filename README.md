@@ -153,7 +153,7 @@ Changing the text option affects the returned fingerprint.
 :returns: The fingerprint hash.
 :rtype: imagehash.ImageHash
 """
-hash = font.get_fingerprint(text="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", text_size=72, hash_algorithm="dhash", hash_size=32)
+hash = font.get_fingerprint()
 ```
 
 -   #### get_fingerprint_match
@@ -168,11 +168,10 @@ by checking if their fingerprints are equal (difference <= tolerance).
 :type tolerance: int
 :param text: The text used for generating the fingerprint, default value: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".
 :type text: str
-
 :returns: A tuple containing the match info (match, diff, hash, other_hash).
 :rtype: tuple
 """
-match, diff, hash, other_hash = font.get_fingerprint_match(other="other_font.ttf", tolerance=10, text="", text_size=72, hash_algorithm="dhash", hash_size=32)
+match, diff, hash, other_hash = font.get_fingerprint_match(other="other_font.ttf", tolerance=10)
 ```
 
 -   #### get_format
