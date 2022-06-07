@@ -26,7 +26,7 @@ import tempfile
 
 class Font(object):
     """
-    friendly font operations.
+    friendly font operations on top of fontTools.
     """
 
     # Features:
