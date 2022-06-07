@@ -1082,6 +1082,9 @@ class Font(object):
                 " glyphs, text."
             )
         unicodes = parse_unicodes(unicodes)
+        options.setdefault("glyph_names", True)
+        options.setdefault("ignore_missing_glyphs", True)
+        options.setdefault("ignore_missing_unicodes", True)
         options.setdefault("layout_features", ["*"])
         options.setdefault("name_IDs", "*")
         options.setdefault("notdef_outline", True)
