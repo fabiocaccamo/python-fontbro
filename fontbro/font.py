@@ -7,7 +7,7 @@ from fontbro.subset import parse_unicodes
 from fontbro.utils import read_json, slugify
 
 from fontTools import unicodedata
-from fontTools.subset import Subsetter
+from fontTools.subset import Subsetter, Options as SubsetterOptions
 from fontTools.ttLib import TTFont, TTLibError
 from fontTools.varLib import instancer
 from fontTools.varLib.instancer import OverlapMode
@@ -1082,9 +1082,13 @@ class Font(object):
                 " glyphs, text."
             )
         unicodes = parse_unicodes(unicodes)
+        options.setdefault("layout_features", ["*"])
+        options.setdefault("name_IDs", "*")
+        options.setdefault("notdef_outline", True)
         subs_args = {"unicodes": unicodes, "glyphs": glyphs, "text": text}
         # https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/subset/__init__.py
-        subs = Subsetter(**options)
+        subs_options = SubsetterOptions(**options)
+        subs = Subsetter(options=subs_options)
         subs.populate(**subs_args)
         subs.subset(font)
 
