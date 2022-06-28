@@ -642,19 +642,17 @@ font.to_static(coordinates=None, **options)
 
 ## Testing
 ```bash
-# create python virtual environment
-virtualenv testing_fontbro
+# clone repository
+git clone https://github.com/fabiocaccamo/python-fontbro.git && cd python-fontbro
 
-# activate virtualenv
-cd testing_fontbro && . bin/activate
+# create virtualenv and activate it
+python -m venv venv && . venv/bin/activate
 
-# clone repo
-git clone https://github.com/fabiocaccamo/python-fontbro.git src && cd src
+# upgrade pip
+python -m pip install --upgrade pip
 
 # install requirements
-pip install --upgrade pip
-pip install -r requirements.txt
-pip install -r requirements-test.txt
+pip install -r requirements.txt -r requirements-test.txt
 
 # run tests using tox
 tox
@@ -673,6 +671,13 @@ Released under [MIT License](LICENSE.txt).
 Special thanks to [Jérémie Hornus](https://github.com/JeremieHornus) and [Just Van Rossum](https://github.com/justvanrossum).
 
 ---
+
+## Supporting
+
+- :star: Star this project on [GitHub](https://github.com/fabiocaccamo/python-fontbro)
+- :octocat: Follow me on [GitHub](https://github.com/fabiocaccamo)
+- :blue_heart: Follow me on [Twitter](https://twitter.com/fabiocaccamo)
+- :moneybag: Sponsor me on [Github](https://github.com/sponsors/fabiocaccamo)
 
 ## See also
 
