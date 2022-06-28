@@ -859,12 +859,14 @@ class Font(object):
         family_name = (
             family_name.strip()
             or self.get_name(self.NAME_TYPOGRAPHIC_FAMILY_NAME)
+            or self.get_name(self.NAME_WWS_FAMILY_NAME)
             or self.get_name(self.NAME_FAMILY_NAME)
         )
         style_name = style_name or ""
         style_name = (
             style_name.strip()
             or self.get_name(self.NAME_TYPOGRAPHIC_SUBFAMILY_NAME)
+            or self.get_name(self.NAME_WWS_SUBFAMILY_NAME)
             or self.get_name(self.NAME_SUBFAMILY_NAME)
         )
         typographic_family_name = family_name
