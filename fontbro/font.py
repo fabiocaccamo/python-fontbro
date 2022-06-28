@@ -900,7 +900,7 @@ class Font(object):
 
         names = {
             self.NAME_FAMILY_NAME: family_name,
-            self.NAME_SUBFAMILY_NAME: style_name,  # .lower(),
+            self.NAME_SUBFAMILY_NAME: subfamily_name,
             self.NAME_FULL_NAME: full_name,
             self.NAME_POSTSCRIPT_NAME: postscript_name,
             self.NAME_TYPOGRAPHIC_FAMILY_NAME: typographic_family_name,
