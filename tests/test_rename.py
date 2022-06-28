@@ -68,7 +68,7 @@ class RenameTestCase(AbstractTestCase):
         font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
         font.rename(" Tourney Custom ", " [wdth-wght] ")
         names = font.get_names()
-        self.assertEqual(names[Font.NAME_FAMILY_NAME], "Tourney Custom")
+        self.assertEqual(names[Font.NAME_FAMILY_NAME], "Tourney Custom [wdth-wght]")
         self.assertEqual(names[Font.NAME_SUBFAMILY_NAME], "[wdth-wght]")
         self.assertEqual(names[Font.NAME_FULL_NAME], "Tourney Custom [wdth-wght]")
         self.assertEqual(names[Font.NAME_POSTSCRIPT_NAME], "TourneyCustom-wdth-wght")

@@ -865,25 +865,44 @@ class Font(object):
             or self.get_name(self.NAME_TYPOGRAPHIC_SUBFAMILY_NAME)
             or self.get_name(self.NAME_SUBFAMILY_NAME)
         )
-        full_name = f"{family_name} {style_name}"
+        typographic_family_name = family_name
+        typographic_subfamily_name = style_name
+        wws_family_name = family_name
+        wws_subfamily_name = style_name
+
+        family_name_parts = [family_name]
+        style_name_parts = style_name.split(" ")
+        subfamily_name_parts = style_name_parts.copy()
+        for name_part in style_name_parts:
+            if name_part.lower() not in ["regular", "italic", "bold"]:
+                family_name_parts.append(name_part)
+                subfamily_name_parts.remove(name_part)
+        subfamily_name_parts = subfamily_name_parts or ["Regular"]
+        family_name = " ".join(family_name_parts)
+        subfamily_name = " ".join(subfamily_name_parts)
+        concat_names = lambda a, b: f"{a} {b}" if not a.endswith(b) else a
+        full_name = concat_names(family_name, style_name)
         postscript_family_name = family_name.replace(" ", "")
         postscript_style_name = style_name.replace(" ", "")
-        postscript_style_name = re.sub(r"[^a-zA-Z0-9\-]", "-", postscript_style_name)
-        postscript_style_name = re.sub(r"[\-]+", "-", postscript_style_name).strip("-")
-        postscript_name = f"{postscript_family_name}-{postscript_style_name}"
+        postscript_name = concat_names(postscript_family_name, postscript_style_name)
+        postscript_name = re.sub(r"[^a-zA-Z0-9\-]", "-", postscript_name)
+        postscript_name = re.sub(r"[\-]+", "-", postscript_name).strip("-")
         postscript_name_length = len(postscript_name)
         if postscript_name_length > 63:
             raise ValueError(
                 "PostScript name max-length (63 characters) exceeded"
                 f" ({postscript_name_length} characters)."
             )
+
         names = {
             self.NAME_FAMILY_NAME: family_name,
-            self.NAME_SUBFAMILY_NAME: style_name,
+            self.NAME_SUBFAMILY_NAME: style_name,  # .lower(),
             self.NAME_FULL_NAME: full_name,
             self.NAME_POSTSCRIPT_NAME: postscript_name,
-            self.NAME_TYPOGRAPHIC_FAMILY_NAME: family_name,
-            self.NAME_TYPOGRAPHIC_SUBFAMILY_NAME: style_name,
+            self.NAME_TYPOGRAPHIC_FAMILY_NAME: typographic_family_name,
+            self.NAME_TYPOGRAPHIC_SUBFAMILY_NAME: typographic_subfamily_name,
+            self.NAME_WWS_FAMILY_NAME: wws_family_name,
+            self.NAME_WWS_SUBFAMILY_NAME: wws_subfamily_name,
         }
         self.set_names(names=names)
 
