@@ -946,6 +946,17 @@ class Font(object):
             )
         fsutil.make_dirs_for_file(filepath)
 
+        # automatically set the right flags according to subfamily name record
+        subfamily_name = self.get_name(Font.NAME_SUBFAMILY_NAME)  # .lower()
+        if subfamily_name == "Regular":
+            self.set_style_flags(bold=False, italic=False, regular=True)
+        elif subfamily_name == "Italic":
+            self.set_style_flags(bold=False, italic=True, regular=False)
+        elif subfamily_name == "Bold":
+            self.set_style_flags(bold=True, italic=False, regular=False)
+        elif subfamily_name == "Bold Italic":
+            self.set_style_flags(bold=True, italic=True, regular=False)
+
         font = self.get_ttfont()
         font.save(filepath)
         return filepath
