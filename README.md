@@ -669,6 +669,9 @@ python setup.py test
 ## License
 Released under [MIT License](LICENSE.txt).
 
+## Credits
+Special thanks to [Jérémie Hornus](https://github.com/JeremieHornus) and [Just Van Rossum](https://github.com/justvanrossum).
+
 ---
 
 ## See also
