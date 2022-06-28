@@ -855,11 +855,13 @@ class Font(object):
 
         :raises ValueError: if the computed PostScript-name is longer than 63 characters.
         """
+        family_name = family_name or ""
         family_name = (
             family_name.strip()
             or self.get_name(self.NAME_TYPOGRAPHIC_FAMILY_NAME)
             or self.get_name(self.NAME_FAMILY_NAME)
         )
+        style_name = style_name or ""
         style_name = (
             style_name.strip()
             or self.get_name(self.NAME_TYPOGRAPHIC_SUBFAMILY_NAME)
