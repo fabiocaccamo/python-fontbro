@@ -888,6 +888,9 @@ class Font(object):
                 family_name_parts.append(name_part)
                 subfamily_name_parts.remove(name_part)
         subfamily_name_parts = subfamily_name_parts or [subfamily_name_default]
+        if subfamily_name_default in subfamily_name_parts:
+            if len(subfamily_name_parts) > 1:
+                subfamily_name_parts.remove(subfamily_name_default)
         family_name = " ".join(family_name_parts)
         subfamily_name = " ".join(subfamily_name_parts).lower()
         if subfamily_name not in subfamily_names:
