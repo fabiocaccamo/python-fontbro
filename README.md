@@ -14,17 +14,15 @@
 # python-fontbro
 friendly font operations on top of `fontTools`. :billed_cap:
 
-## Index
--   [Installation](#installation)
--   [Usage](#usage)
--   [Testing](#testing)
--   [License](#license)
+---
 
 ## Installation
 
 ```bash
 pip install python-fontbro
 ```
+
+---
 
 ## Usage
 
@@ -640,6 +638,8 @@ If coordinates are not specified each axis will be pinned at its default value.
 font.to_static(coordinates=None, **options)
 ```
 
+---
+
 ## Testing
 ```bash
 # clone repository
@@ -664,8 +664,12 @@ python -m unittest
 python setup.py test
 ```
 
+---
+
 ## License
 Released under [MIT License](LICENSE.txt).
+
+---
 
 ## Credits
 Special thanks to [Jérémie Hornus](https://github.com/JeremieHornus) and [Just Van Rossum](https://github.com/justvanrossum).
@@ -678,6 +682,8 @@ Special thanks to [Jérémie Hornus](https://github.com/JeremieHornus) and [Just
 - :octocat: Follow me on [GitHub](https://github.com/fabiocaccamo)
 - :blue_heart: Follow me on [Twitter](https://twitter.com/fabiocaccamo)
 - :moneybag: Sponsor me on [Github](https://github.com/sponsors/fabiocaccamo)
+
+---
 
 ## See also
 
