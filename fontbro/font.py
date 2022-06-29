@@ -879,28 +879,31 @@ class Font(object):
 
         # family name, subfamily name and full name
         family_name_parts = [family_name]
-        style_name_parts = style_name.split(" ")
-        subfamily_name_parts = style_name_parts.copy()
+        style_name_parts = style_name.split()
+        subfamily_name_parts = style_name.lower().split()
         subfamily_names = ["regular", "italic", "bold", "bold italic"]
         subfamily_name_default = subfamily_names[0]
         for name_part in style_name_parts:
             if name_part.lower() not in subfamily_names:
                 family_name_parts.append(name_part)
-                subfamily_name_parts.remove(name_part)
-        subfamily_name_parts = subfamily_name_parts or [subfamily_name_default]
+                subfamily_name_parts.remove(name_part.lower())
         if subfamily_name_default in subfamily_name_parts:
             if len(subfamily_name_parts) > 1:
                 subfamily_name_parts.remove(subfamily_name_default)
+        subfamily_name_parts = subfamily_name_parts or [subfamily_name_default]
         family_name = " ".join(family_name_parts)
         subfamily_name = " ".join(subfamily_name_parts).lower()
         if subfamily_name not in subfamily_names:
             subfamily_name = subfamily_name_default
-        full_name = concat_names(family_name, style_name)
+
+        # full name
+        full_name = concat_names(typographic_family_name, typographic_subfamily_name)
 
         # postscript name
-        postscript_family_name = typographic_family_name.replace(" ", "")
-        postscript_style_name = typographic_subfamily_name.replace(" ", "")
-        postscript_name = concat_names(postscript_family_name, postscript_style_name)
+        postscript_name = concat_names(
+            typographic_family_name.replace(" ", ""),
+            typographic_subfamily_name.replace(" ", ""),
+        )
         postscript_name = re.sub(r"[^a-zA-Z0-9\-]", "-", postscript_name)
         postscript_name = re.sub(r"[\-]+", "-", postscript_name).strip("-")
         postscript_name_length = len(postscript_name)
