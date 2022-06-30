@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.11.0) - 2022-06-30
+-   Added `set_style_flags_by_subfamily_name` method.
+-   Added `style_flags=True` option to `rename` method.
+-   Updated `get_features_tags` method for checking also the `GPOS` table.
+
 ## [0.10.4](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.10.4) - 2022-06-29
 -   Improved renaming according to RIBBI.
 
