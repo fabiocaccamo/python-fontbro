@@ -318,12 +318,14 @@ class Font(object):
         :rtype: list of str
         """
         font = self.get_ttfont()
-        gsub = font.get("GSUB")
-        if gsub:
-            feature_record = gsub.table.FeatureList.FeatureRecord or []
-            features_tags = [feature.FeatureTag for feature in feature_record]
-            return features_tags
-        return []
+        features_tags = set()
+        for table_tag in ["GPOS", "GSUB"]:
+            if table_tag in font:
+                table = font[table_tag].table
+                feature_record = table.FeatureList.FeatureRecord or []
+                for feature in feature_record:
+                    features_tags.add(feature.FeatureTag)
+        return sorted(features_tags)
 
     def get_fingerprint(self, text=""):
         """
