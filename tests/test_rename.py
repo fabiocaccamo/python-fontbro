@@ -74,3 +74,21 @@ class RenameTestCase(AbstractTestCase):
         self.assertEqual(names[Font.NAME_POSTSCRIPT_NAME], "TourneyCustom-wdth-wght")
         self.assertEqual(names[Font.NAME_TYPOGRAPHIC_FAMILY_NAME], "Tourney Custom")
         self.assertEqual(names[Font.NAME_TYPOGRAPHIC_SUBFAMILY_NAME], "[wdth-wght]")
+
+    def test_rename_with_style_flags_disabled(self):
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        font.set_style_flags(regular=False, bold=False, italic=False)
+        font.rename("Roboto Mono New", "Bold Italic", style_flags=False)
+        style_flags = font.get_style_flags()
+        self.assertFalse(style_flags["regular"])
+        self.assertFalse(style_flags["bold"])
+        self.assertFalse(style_flags["italic"])
+
+    def test_rename_with_style_flags_enabled(self):
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        font.set_style_flags(regular=False, bold=False, italic=False)
+        font.rename("Roboto Mono New", "Bold Italic", style_flags=True)
+        style_flags = font.get_style_flags()
+        self.assertFalse(style_flags["regular"])
+        self.assertTrue(style_flags["bold"])
+        self.assertTrue(style_flags["italic"])

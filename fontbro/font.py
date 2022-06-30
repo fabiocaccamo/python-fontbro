@@ -842,7 +842,7 @@ class Font(object):
         font = self.get_ttfont()
         return "fvar" in font
 
-    def rename(self, family_name="", style_name=""):
+    def rename(self, family_name="", style_name="", style_flags=True):
         """
         Renames the font names records (1, 2, 4, 6, 16, 17) according to
         the given family_name and style_name (subfamily_name).
@@ -854,6 +854,8 @@ class Font(object):
         :type family_name: str
         :param style_name: The style name
         :type style_name: str
+        :param style_flags: if True the style flags will be updated by subfamily name
+        :type style_flags: bool
 
         :raises ValueError: if the computed PostScript-name is longer than 63 characters.
         """
@@ -928,6 +930,9 @@ class Font(object):
         }
         self.set_names(names=names)
 
+        if style_flags:
+            self.set_style_flags_by_subfamily_name()
+
     def save(self, filepath=None, overwrite=False):
         """
         Saves the font at filepath.
@@ -967,17 +972,6 @@ class Font(object):
                 " to prevent accidental font files overwrites."
             )
         fsutil.make_dirs_for_file(filepath)
-
-        # automatically set the right flags according to subfamily name record
-        subfamily_name = (self.get_name(Font.NAME_SUBFAMILY_NAME) or "").lower()
-        if subfamily_name == "regular":
-            self.set_style_flags(bold=False, italic=False, regular=True)
-        elif subfamily_name == "italic":
-            self.set_style_flags(bold=False, italic=True, regular=False)
-        elif subfamily_name == "bold":
-            self.set_style_flags(bold=True, italic=False, regular=False)
-        elif subfamily_name == "bold italic":
-            self.set_style_flags(bold=True, italic=True, regular=False)
 
         font = self.get_ttfont()
         font.save(filepath)
@@ -1111,6 +1105,25 @@ class Font(object):
             if value is not None:
                 assert isinstance(value, bool)
                 self.set_style_flag(key, value)
+
+    def set_style_flags_by_subfamily_name(self):
+        """
+        Sets the style flags by the subfamily name value.
+        The subfamily values should be "regular", "italic", "bold" or "bold italic"
+        to allow this method to work properly.
+
+        :param strict: If strict (default=False) and the subfamily name is not an expected value, an error is raised.
+        :type strict: bool
+        """
+        subfamily_name = (self.get_name(Font.NAME_SUBFAMILY_NAME) or "").lower()
+        if subfamily_name == Font.STYLE_FLAG_REGULAR:
+            self.set_style_flags(regular=True, bold=False, italic=False)
+        elif subfamily_name == Font.STYLE_FLAG_BOLD:
+            self.set_style_flags(regular=False, bold=True, italic=False)
+        elif subfamily_name == Font.STYLE_FLAG_ITALIC:
+            self.set_style_flags(regular=False, bold=False, italic=True)
+        elif subfamily_name == f"{Font.STYLE_FLAG_BOLD} {Font.STYLE_FLAG_ITALIC}":
+            self.set_style_flags(regular=False, bold=True, italic=True)
 
     def subset(self, unicodes="", glyphs=[], text="", **options):
         """

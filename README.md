@@ -74,6 +74,7 @@ font = Font("fonts/MyFont.ttf")
 -   [`set_names`](#set_names)
 -   [`set_style_flag`](#set_style_flag)
 -   [`set_style_flags`](#set_style_flags)
+-   [`set_style_flags_by_subfamily_name`](#set_style_flags_by_subfamily_name)
 -   [`subset`](#subset)
 -   [`to_sliced_variable`](#to_sliced_variable)
 -   [`to_static`](#to_static)
@@ -466,6 +467,8 @@ If style_name is not defined it will be auto-detected.
 :type family_name: str
 :param style_name: The style name
 :type style_name: str
+:param style_flags: if True the style flags will be updated by subfamily name
+:type style_flags: bool
 
 :raises ValueError: if the computed PostScript-name is longer than 63 characters.
 """
@@ -577,6 +580,16 @@ Sets the style flags, flags set to None will be ignored.
 :type outline: bool or None
 """
 font.set_style_flags(regular=None, bold=None, italic=None, outline=None, underline=None)
+```
+
+-   #### set_style_flags_by_subfamily_name
+```python
+"""
+Sets the style flags by the subfamily name value.
+The subfamily values should be "regular", "italic", "bold" or "bold italic"
+to allow this method to work properly.
+"""
+font.set_style_flags_by_subfamily_name()
 ```
 
 -   #### subset

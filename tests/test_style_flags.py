@@ -118,3 +118,17 @@ class StyleFlagsTestCase(AbstractTestCase):
 
         font.set_style_flags(regular=True)
         self.assertTrue(font.get_style_flags()["regular"])
+
+    def test_set_style_flags_by_subfamily_name(self):
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        font.set_style_flags(regular=False, bold=False, italic=False)
+        style_flags = font.get_style_flags()
+        self.assertFalse(style_flags["regular"])
+        self.assertFalse(style_flags["bold"])
+        self.assertFalse(style_flags["italic"])
+        font.rename("Roboto Mono New", "Bold Italic", style_flags=False)
+        font.set_style_flags_by_subfamily_name()
+        style_flags = font.get_style_flags()
+        self.assertFalse(style_flags["regular"])
+        self.assertTrue(style_flags["bold"])
+        self.assertTrue(style_flags["italic"])
