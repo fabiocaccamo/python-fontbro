@@ -901,7 +901,7 @@ class Font(object):
             subfamily_name = subfamily_name_default
 
         # full name
-        full_name = concat_names(typographic_family_name, typographic_subfamily_name)
+        full_name = concat_names(family_name, subfamily_name.title())
 
         # postscript name
         postscript_name = concat_names(
