@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.1](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.11.1) - 2022-07-05
+-   Updated `rename` for generating the `full_name` combining `family_name` and `subfamily_name`.
+
 ## [0.11.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.11.0) - 2022-06-30
 -   Added `set_style_flags_by_subfamily_name` method.
 -   Added `style_flags=True` option to `rename` method.

@@ -14,18 +14,12 @@
 # python-fontbro
 friendly font operations on top of `fontTools`. :billed_cap:
 
----
-
 ## Installation
-
 ```bash
 pip install python-fontbro
 ```
 
----
-
 ## Usage
-
 Just import the font class:
 
 ```python
@@ -35,7 +29,6 @@ font = Font("fonts/MyFont.ttf")
 ```
 
 ### Methods
-
 -   [`clone`](#clone)
 -   [`close`](#close)
 -   [`get_characters`](#get_characters)
@@ -78,8 +71,6 @@ font = Font("fonts/MyFont.ttf")
 -   [`subset`](#subset)
 -   [`to_sliced_variable`](#to_sliced_variable)
 -   [`to_static`](#to_static)
-
----
 
 -   #### clone
 ```python
@@ -651,8 +642,6 @@ If coordinates are not specified each axis will be pinned at its default value.
 font.to_static(coordinates=None, **options)
 ```
 
----
-
 ## Testing
 ```bash
 # clone repository
@@ -677,28 +666,18 @@ python -m unittest
 python setup.py test
 ```
 
----
-
 ## License
 Released under [MIT License](LICENSE.txt).
-
----
 
 ## Credits
 Special thanks to [Jérémie Hornus](https://github.com/JeremieHornus) and [Just Van Rossum](https://github.com/justvanrossum).
 
----
-
 ## Supporting
-
 - :star: Star this project on [GitHub](https://github.com/fabiocaccamo/python-fontbro)
 - :octocat: Follow me on [GitHub](https://github.com/fabiocaccamo)
 - :blue_heart: Follow me on [Twitter](https://twitter.com/fabiocaccamo)
 - :moneybag: Sponsor me on [Github](https://github.com/sponsors/fabiocaccamo)
 
----
-
 ## See also
-
 - [`python-benedict`](https://github.com/fabiocaccamo/python-benedict) - dict subclass with keylist/keypath support, I/O shortcuts (base64, csv, json, pickle, plist, query-string, toml, xml, yaml) and many utilities. 📘
 - [`python-fsutil`](https://github.com/fabiocaccamo/python-fsutil) - file-system utilities for lazy devs. 🧟‍♂️
