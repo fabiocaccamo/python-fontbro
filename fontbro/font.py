@@ -900,8 +900,10 @@ class Font(object):
         if subfamily_name not in subfamily_names:
             subfamily_name = subfamily_name_default
 
+        subfamily_name = subfamily_name.title()
+
         # full name
-        full_name = concat_names(family_name, subfamily_name.title())
+        full_name = concat_names(family_name, subfamily_name)
 
         # postscript name
         postscript_name = concat_names(
