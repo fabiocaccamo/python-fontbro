@@ -345,7 +345,7 @@ class Font(object):
         img = self.get_image(text=text[0], size=72)
         img_size = img.size
         img = img.resize((img_size[0] // 2, img_size[1] // 2))
-        img = img.resize((img_size[0], img_size[1]), Image.NEAREST)
+        img = img.resize((img_size[0], img_size[1]), Image.Resampling.NEAREST)
         img = img.quantize(colors=2)
         # img.show()
 
