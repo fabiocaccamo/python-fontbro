@@ -971,10 +971,10 @@ class Font(object):
         extension = format
         filename = fsutil.join_filename(basename, extension)
         filepath = fsutil.join_filepath(dirpath, filename)
-        if filepath == self._filepath and not overwrite:
+        if fsutil.is_file(filepath) and not overwrite:
             raise ValueError(
-                "Invalid filepath, value cannot be the same of the initial filepath"
-                " to prevent accidental font files overwrites."
+                f"Invalid filepath, a file already exists at '{filepath}' "
+                "and 'overwrite' option is 'False' (consider using 'overwrite=True')."
             )
         fsutil.make_dirs_for_file(filepath)
 
