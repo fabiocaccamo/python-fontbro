@@ -2,7 +2,6 @@
 [![](https://img.shields.io/pypi/v/python-fontbro.svg?color=blue&logo=pypi&logoColor=white)](https://pypi.org/project/python-fontbro/)
 [![](https://pepy.tech/badge/python-fontbro/month)](https://pepy.tech/project/python-fontbro)
 [![](https://img.shields.io/github/stars/fabiocaccamo/python-fontbro?logo=github)](https://github.com/fabiocaccamo/python-fontbro/)
-[![](https://badges.pufler.dev/visits/fabiocaccamo/python-fontbro?label=visitors&color=blue)](https://badges.pufler.dev)
 [![](https://img.shields.io/pypi/l/python-fontbro?color=blue)](https://github.com/fabiocaccamo/python-fontbro/blob/master/LICENSE.txt)
 
 [![](https://img.shields.io/github/workflow/status/fabiocaccamo/python-fontbro/Test%20package?label=build&logo=github)](https://github.com/fabiocaccamo/python-fontbro)
