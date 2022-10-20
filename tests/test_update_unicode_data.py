@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from fontbro import Font
-from fontTools import unicodedata
-
-from tests import AbstractTestCase
+import json
 
 import fsutil
-import json
+from fontTools import unicodedata
+
+from fontbro import Font
+from tests import AbstractTestCase
 
 
 class UpdateUnicodeDataTestCase(AbstractTestCase):

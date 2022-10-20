@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from fontbro import Font
-
-import fsutil
 import json
 import unittest
+
+import fsutil
+
+from fontbro import Font
 
 
 class AbstractTestCase(unittest.TestCase):

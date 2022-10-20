@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from fontbro import Font
 from imagehash import hex_to_hash
 
+from fontbro import Font
 from tests import AbstractTestCase
 
 

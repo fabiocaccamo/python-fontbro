@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from fontTools.subset import parse_unicodes as _parse_unicodes
-
 import re
+
+from fontTools.subset import parse_unicodes as _parse_unicodes
 
 
 def parse_unicodes(unicodes):

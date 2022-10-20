@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from fontbro import Font
 from fontTools.ttLib import TTFont
+
+from fontbro import Font
 from tests import AbstractTestCase
 
 

@@ -1,27 +1,26 @@
 # -*- coding: utf-8 -*-
 
-from curses import ascii
-
-from fontbro.flags import get_flag, set_flag
-from fontbro.subset import parse_unicodes
-from fontbro.utils import read_json, slugify
-
-from fontTools import unicodedata
-from fontTools.subset import Subsetter, Options as SubsetterOptions
-from fontTools.ttLib import TTFont, TTLibError
-from fontTools.varLib import instancer
-from fontTools.varLib.instancer import OverlapMode
-
-from PIL import Image, ImageDraw, ImageFont
-
 import copy
-import fsutil
 import itertools
 import math
 import os
 import re
 import sys
 import tempfile
+from curses import ascii
+
+import fsutil
+from fontTools import unicodedata
+from fontTools.subset import Options as SubsetterOptions
+from fontTools.subset import Subsetter
+from fontTools.ttLib import TTFont, TTLibError
+from fontTools.varLib import instancer
+from fontTools.varLib.instancer import OverlapMode
+from PIL import Image, ImageDraw, ImageFont
+
+from fontbro.flags import get_flag, set_flag
+from fontbro.subset import parse_unicodes
+from fontbro.utils import concat_names, read_json, slugify
 
 
 class Font(object):
@@ -876,7 +875,6 @@ class Font(object):
             or self.get_name(self.NAME_WWS_SUBFAMILY_NAME)
             or self.get_name(self.NAME_SUBFAMILY_NAME)
         )
-        concat_names = lambda a, b: f"{a} {b}" if not a.endswith(f" {b}") else a
 
         # typographic and wws names
         typographic_family_name = family_name
