@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.3](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.11.3) - 2022-10-21
+-   Add `pre-commit`.
+-   Add `get_glyphs` and `get_glyphs_count` methods.
+-   Fix PostScript name allowed characters (keep only printable ASCII subset).
+
 ## [0.11.2](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.11.2) - 2022-09-19
 -   Add `lazy` option support to constructor.
 -   Fix subfamily name (name ID 2) renaming (lower case -> title case).
