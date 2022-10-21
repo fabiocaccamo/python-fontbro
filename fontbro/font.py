@@ -412,6 +412,34 @@ class Font(object):
             format = self.FORMAT_WOFF2
         return format
 
+    def get_glyphs(self):
+        """
+        Gets the font glyphs and their own composition.
+
+        :returns: The glyphs.
+        :rtype: generator of dicts
+        """
+        font = self.get_ttfont()
+        glyf = font["glyf"]
+        glyphset = font.getGlyphSet()
+        for name in glyphset.keys():
+            yield {
+                "name": name,
+                "components_names": glyf[name].getComponentNames(glyf),
+            }
+
+    def get_glyphs_count(self):
+        """
+        Gets the font glyphs count.
+
+        :returns: The glyphs count.
+        :rtype: int
+        """
+        font = self.get_ttfont()
+        glyphset = font.getGlyphSet()
+        count = len(glyphset)
+        return count
+
     def get_image(
         self, text, size, color=(0, 0, 0, 255), background_color=(255, 255, 255, 255)
     ):

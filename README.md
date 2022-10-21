@@ -38,6 +38,8 @@ font = Font("fonts/MyFont.ttf")
 -   [`get_format`](#get_format)
 -   [`get_fingerprint`](#get_fingerprint)
 -   [`get_fingerprint_match`](#get_fingerprint_match)
+-   [`get_glyphs`](#get_glyphs)
+-   [`get_glyphs_count`](#get_glyphs_count)
 -   [`get_image`](#get_image)
 -   [`get_italic_angle`](#get_italic_angle)
 -   [`get_name`](#get_name)
@@ -176,6 +178,28 @@ Gets the font format: otf, ttf, woff, woff2.
 :rtype: str or None
 """
 format = font.get_format(ignore_flavor=False)
+```
+
+-   #### get_glyphs
+```python
+"""
+Gets the font glyphs and their own composition.
+
+:returns: The glyphs.
+:rtype: generator of dicts
+"""
+glyphs = font.get_glyphs()
+```
+
+-   #### get_glyphs_count
+```python
+"""
+Gets the font glyphs count.
+
+:returns: The glyphs count.
+:rtype: int
+"""
+glyphs_count = font.get_glyphs_count()
 ```
 
 -   #### get_image
