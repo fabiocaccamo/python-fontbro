@@ -911,7 +911,14 @@ class Font(object):
             typographic_family_name.replace(" ", ""),
             typographic_subfamily_name.replace(" ", ""),
         )
-        postscript_name = re.sub(r"[^a-zA-Z0-9\-]", "-", postscript_name)
+
+        # keep only printable ASCII subset: https://learn.microsoft.com/en-us/typography/opentype/spec/name#name-ids
+        # postscript_name_allowed_chars = {chr(code) for code in range(33, 127)} - {"[", "]", "(", ")", "{", "}", "<", ">", "/", "%"}
+        # !"#$&'*+,-.0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\^_`abcdefghijklmnopqrstuvwxyz|~
+        postscript_name_pattern = (
+            r"[^0-9A-Za-z\!\"\#\$\&\'\*\+\,\-\.\:\;\=\?\@\\\^\_\`\|\~]"
+        )
+        postscript_name = re.sub(postscript_name_pattern, "-", postscript_name)
         postscript_name = re.sub(r"[\-]+", "-", postscript_name).strip("-")
         postscript_name_length = len(postscript_name)
         if postscript_name_length > 63:
