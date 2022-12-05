@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from fontbro import Font
 from tests import AbstractTestCase
 

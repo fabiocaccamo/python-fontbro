@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import re
 
 from fontTools.subset import parse_unicodes as _parse_unicodes

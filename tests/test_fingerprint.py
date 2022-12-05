@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from imagehash import hex_to_hash
 
 from fontbro import Font

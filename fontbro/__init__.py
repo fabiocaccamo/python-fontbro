@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from fontbro.font import Font
 from fontbro.metadata import (
     __author__,

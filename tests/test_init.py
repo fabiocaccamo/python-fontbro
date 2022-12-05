@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from fontTools.ttLib import TTFont
 
 from fontbro import Font
