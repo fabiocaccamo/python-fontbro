@@ -20,11 +20,11 @@ class AbstractTestCase(unittest.TestCase):
 
     @classmethod
     def _get_font_temp_path(cls, filepath=""):
-        return fsutil.join_path(__file__, "temp/{}".format(filepath))
+        return fsutil.join_path(__file__, f"temp/{filepath}")
 
     @classmethod
     def _get_font_path(cls, filepath):
-        return fsutil.join_path(__file__, "fonts/{}".format(filepath))
+        return fsutil.join_path(__file__, f"fonts/{filepath}")
 
     @classmethod
     def _get_font(cls, filepath):
