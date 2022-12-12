@@ -91,6 +91,5 @@ setup(
         "Topic :: Multimedia :: Graphics",
         "Topic :: Multimedia :: Graphics :: Graphics Conversion",
     ],
-    license=__license__,
     test_suite="tests",
 )
