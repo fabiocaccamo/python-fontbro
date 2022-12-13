@@ -91,5 +91,4 @@ setup(
         "Topic :: Multimedia :: Graphics",
         "Topic :: Multimedia :: Graphics :: Graphics Conversion",
     ],
-    test_suite="tests",
 )
