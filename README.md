@@ -5,7 +5,7 @@
 [![](https://img.shields.io/pypi/l/python-fontbro?color=blue)](https://github.com/fabiocaccamo/python-fontbro/blob/master/LICENSE.txt)
 
 [![](https://results.pre-commit.ci/badge/github/fabiocaccamo/python-fontbro/main.svg)](https://results.pre-commit.ci/latest/github/fabiocaccamo/python-fontbro/main)
-[![](https://img.shields.io/github/workflow/status/fabiocaccamo/python-fontbro/Test%20package?label=build&logo=github)](https://github.com/fabiocaccamo/python-fontbro)
+[![](https://img.shields.io/github/actions/workflow/status/fabiocaccamo/python-fontbro/test-package.yml?branch=main&label=build&logo=github)](https://github.com/fabiocaccamo/python-fontbro)
 [![](https://img.shields.io/codecov/c/gh/fabiocaccamo/python-fontbro?logo=codecov)](https://codecov.io/gh/fabiocaccamo/python-fontbro)
 [![](https://img.shields.io/codacy/grade/dd3a046db4b14b988a2f1fcfbfaa51eb?logo=codacy)](https://www.codacy.com/app/fabiocaccamo/python-fontbro)
 [![](https://img.shields.io/codeclimate/maintainability/fabiocaccamo/python-fontbro?logo=code-climate)](https://codeclimate.com/github/fabiocaccamo/python-fontbro/)
