@@ -21,7 +21,7 @@ from fontbro.subset import parse_unicodes
 from fontbro.utils import concat_names, read_json, slugify
 
 
-class Font(object):
+class Font:
     """
     friendly font operations on top of fontTools.
     """
@@ -210,7 +210,7 @@ class Font(object):
 
         :raises ValueError: if the filepath is not a valid font path
         """
-        super(Font, self).__init__()
+        super().__init__()
 
         self._filepath = None
         self._lazy = None

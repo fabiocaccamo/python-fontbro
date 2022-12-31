@@ -86,7 +86,7 @@ class SubsetTestCase(AbstractTestCase):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
         chars_count = font.get_characters_count()
         self.assertEqual(chars_count, 875)
-        unicodes = set([*range(65, 91)])
+        unicodes = {*range(65, 91)}
         font.subset(unicodes=unicodes)
         chars_count = font.get_characters_count()
         self.assertEqual(chars_count, len(unicodes))
