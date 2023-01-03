@@ -836,6 +836,10 @@
         "name": "Yezidi"
     },
     {
+        "characters_total": 64,
+        "name": "Arabic Extended-C"
+    },
+    {
         "characters_total": 48,
         "name": "Old Sogdian"
     },
@@ -960,6 +964,10 @@
         "name": "Pau Cin Hau"
     },
     {
+        "characters_total": 96,
+        "name": "Devanagari Extended-A"
+    },
+    {
         "characters_total": 112,
         "name": "Bhaiksuki"
     },
@@ -978,6 +986,10 @@
     {
         "characters_total": 32,
         "name": "Makasar"
+    },
+    {
+        "characters_total": 96,
+        "name": "Kawi"
     },
     {
         "characters_total": 16,
@@ -1008,7 +1020,7 @@
         "name": "Egyptian Hieroglyphs"
     },
     {
-        "characters_total": 16,
+        "characters_total": 48,
         "name": "Egyptian Hieroglyph Format Controls"
     },
     {
@@ -1109,6 +1121,10 @@
     },
     {
         "characters_total": 32,
+        "name": "Kaktovik Numerals"
+    },
+    {
+        "characters_total": 32,
         "name": "Mayan Numerals"
     },
     {
@@ -1136,6 +1152,10 @@
         "name": "Glagolitic Supplement"
     },
     {
+        "characters_total": 96,
+        "name": "Cyrillic Extended-D"
+    },
+    {
         "characters_total": 80,
         "name": "Nyiakeng Puachue Hmong"
     },
@@ -1146,6 +1166,10 @@
     {
         "characters_total": 64,
         "name": "Wancho"
+    },
+    {
+        "characters_total": 48,
+        "name": "Nag Mundari"
     },
     {
         "characters_total": 32,
@@ -1262,6 +1286,10 @@
     {
         "characters_total": 4944,
         "name": "CJK Unified Ideographs Extension G"
+    },
+    {
+        "characters_total": 4192,
+        "name": "CJK Unified Ideographs Extension H"
     },
     {
         "characters_total": 128,

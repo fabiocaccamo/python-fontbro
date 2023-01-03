@@ -1,11 +1,11 @@
 [
     {
-        "characters_total": 8252,
+        "characters_total": 8301,
         "name": "Common",
         "tag": "Zyyy"
     },
     {
-        "characters_total": 1475,
+        "characters_total": 1481,
         "name": "Latin",
         "tag": "Latn"
     },
@@ -25,7 +25,7 @@
         "tag": "Grek"
     },
     {
-        "characters_total": 143750,
+        "characters_total": 143917,
         "name": "Unknown",
         "tag": "Zzzz"
     },
@@ -35,7 +35,7 @@
         "tag": "Copt"
     },
     {
-        "characters_total": 443,
+        "characters_total": 506,
         "name": "Cyrillic",
         "tag": "Cyrl"
     },
@@ -50,7 +50,7 @@
         "tag": "Hebr"
     },
     {
-        "characters_total": 1365,
+        "characters_total": 1368,
         "name": "Arabic",
         "tag": "Arab"
     },
@@ -80,7 +80,7 @@
         "tag": "Mand"
     },
     {
-        "characters_total": 154,
+        "characters_total": 164,
         "name": "Devanagari",
         "tag": "Deva"
     },
@@ -115,7 +115,7 @@
         "tag": "Telu"
     },
     {
-        "characters_total": 90,
+        "characters_total": 91,
         "name": "Kannada",
         "tag": "Knda"
     },
@@ -135,7 +135,7 @@
         "tag": "Thai"
     },
     {
-        "characters_total": 82,
+        "characters_total": 83,
         "name": "Lao",
         "tag": "Laoo"
     },
@@ -280,17 +280,17 @@
         "tag": "Tfng"
     },
     {
-        "characters_total": 94215,
+        "characters_total": 98408,
         "name": "Han",
         "tag": "Hani"
     },
     {
-        "characters_total": 380,
+        "characters_total": 381,
         "name": "Hiragana",
         "tag": "Hira"
     },
     {
-        "characters_total": 320,
+        "characters_total": 321,
         "name": "Katakana",
         "tag": "Kana"
     },
@@ -600,7 +600,7 @@
         "tag": "Shrd"
     },
     {
-        "characters_total": 62,
+        "characters_total": 65,
         "name": "Khojki",
         "tag": "Khoj"
     },
@@ -710,6 +710,11 @@
         "tag": "Maka"
     },
     {
+        "characters_total": 86,
+        "name": "Kawi",
+        "tag": "Kawi"
+    },
+    {
         "characters_total": 1234,
         "name": "Cuneiform",
         "tag": "Xsux"
@@ -720,7 +725,7 @@
         "tag": "Cpmn"
     },
     {
-        "characters_total": 1080,
+        "characters_total": 1110,
         "name": "Egyptian Hieroglyphs",
         "tag": "Egyp"
     },
@@ -798,6 +803,11 @@
         "characters_total": 59,
         "name": "Wancho",
         "tag": "Wcho"
+    },
+    {
+        "characters_total": 42,
+        "name": "Nag Mundari",
+        "tag": "Nagm"
     },
     {
         "characters_total": 213,
