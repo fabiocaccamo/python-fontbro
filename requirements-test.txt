@@ -1,5 +1,5 @@
-codecov
-coverage
-flake8
-pre-commit
-tox
+codecov == 2.1.12
+coverage == 7.0.1
+flake8 == 6.0.0
+pre-commit == 2.21.0
+tox == 4.1.2
