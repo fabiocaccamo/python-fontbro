@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.14.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.14.0) - 2023-01-03
+-   Drop `Python 3.7` support.
+-   Add `setup.cfg` (`setuptools` declarative syntax) generated using `setuptools-py2cfg`.
+-   Add `pyupgrade` to `pre-commit` config.
+-   Bump requirements and actions.
+-   Pin test requirements.
+
 ## [0.13.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.13.0) - 2022-12-14
 -   Add `Python 3.11` support.
 -   Replace `str.format` with `f-strings`.
