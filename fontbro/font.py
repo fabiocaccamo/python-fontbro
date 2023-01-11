@@ -432,9 +432,10 @@ class Font:
         glyfs = font["glyf"]
         glyphset = font.getGlyphSet()
         for name in glyphset.keys():
+            glyf = glyfs[name]
             yield {
                 "name": name,
-                "components_names": glyfs[name].getComponentNames(glyfs),
+                "components_names": glyf.getComponentNames(glyfs),
             }
 
     def get_glyphs_count(self):
