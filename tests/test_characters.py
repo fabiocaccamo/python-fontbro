@@ -34,3 +34,8 @@ class CharactersTestCase(AbstractTestCase):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
         chars_count = font.get_characters_count()
         self.assertEqual(chars_count, 875)
+
+    def test_get_characters_count_with_ignore_blank(self):
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        chars_count = font.get_characters_count(ignore_blank=True)
+        self.assertEqual(chars_count, 861)

@@ -95,10 +95,13 @@ font.close()
 """
 Gets the font characters.
 
+:param ignore_blank: If True, characters without contours will not be returned.
+:type ignore_blank: bool
+
 :returns: The characters.
 :rtype: generator of dicts
 """
-chars = font.get_characters()
+chars = font.get_characters(ignore_blank=False)
 ```
 
 -   #### get_characters_count
@@ -106,10 +109,13 @@ chars = font.get_characters()
 """
 Gets the font characters count.
 
+:param ignore_blank: If True, characters without contours will not be counted.
+:type ignore_blank: bool
+
 :returns: The characters count.
 :rtype: int
 """
-chars_count = font.get_characters_count()
+chars_count = font.get_characters_count(ignore_blank=False)
 ```
 
 -   #### get_features

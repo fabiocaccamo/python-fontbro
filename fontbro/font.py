@@ -252,20 +252,28 @@ class Font:
         font = self.get_ttfont()
         font.close()
 
-    def get_characters(self):
+    def get_characters(self, ignore_blank=False):
         """
         Gets the font characters.
+
+        :param ignore_blank: If True, characters without contours will not be returned.
+        :type ignore_blank: bool
 
         :returns: The characters.
         :rtype: generator of dicts
         """
         font = self.get_ttfont()
         cmap = font.getBestCmap()
+        glyfs = font.get("glyf")
         for code, char_name in cmap.items():
             code_hex = f"{code:04X}"
             char = chr(code)
             if ascii.iscntrl(char):
                 continue
+            if glyfs and ignore_blank:
+                glyf = glyfs.get(char_name)
+                if glyf and glyf.numberOfContours == 0:
+                    continue
             try:
                 unicode_name = unicodedata.name(char)
             except ValueError:
@@ -287,14 +295,17 @@ class Font:
                 "unicode_script_tag": unicode_script_tag,
             }
 
-    def get_characters_count(self):
+    def get_characters_count(self, ignore_blank=False):
         """
         Gets the font characters count.
+
+        :param ignore_blank: If True, characters without contours will not be counted.
+        :type ignore_blank: bool
 
         :returns: The characters count.
         :rtype: int
         """
-        return len(list(self.get_characters()))
+        return len(list(self.get_characters(ignore_blank=ignore_blank)))
 
     def get_features(self):
         """
@@ -418,12 +429,12 @@ class Font:
         :rtype: generator of dicts
         """
         font = self.get_ttfont()
-        glyf = font["glyf"]
+        glyfs = font["glyf"]
         glyphset = font.getGlyphSet()
         for name in glyphset.keys():
             yield {
                 "name": name,
-                "components_names": glyf[name].getComponentNames(glyf),
+                "components_names": glyfs[name].getComponentNames(glyfs),
             }
 
     def get_glyphs_count(self):
@@ -1232,7 +1243,7 @@ class Font:
         :type options: dictionary
 
         :raises TypeError: If the font is not a variable font
-        :raises ValueError: If the coordinates are not defined (empty)
+        :raises ValueError: If the coordinates are not defined (blank)
         :raises ValueError: If the coordinates axes are all pinned
         """
         if not self.is_variable():
