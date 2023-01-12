@@ -1,0 +1,37 @@
+name: Update data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 1 * *" # run once a month
+
+jobs:
+  resources:
+    name: Update resources
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-data.txt
+
+      - name: Update data
+        run: python scripts/update_data.py
+
+      - name: Commit data
+        uses: test-room-7/action-update-file@v1
+        with:
+          file-path: |
+            fontbro/data/unicode-blocks.json
+            fontbro/data/unicode-scripts.json
+          commit-msg: "Update `unicode-blocks.json` and `unicode-scripts.json` data."
+          committer-name: "Fabio Caccamo [bot]"
+          committer-email: "fabio.caccamo@gmail.com"
+          github-token: ${{ secrets.WORKFLOWS_UPDATE_DATA_TOKEN }}
