@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.14.4](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.14.4) - 2023-01-12
+-   Automatically update unicode data once a month.
+-   Update `unicode-blocks.json` and `unicode-scripts.json` data.
+-   Fix unformatted string in `get_characters` method.
+
 ## [0.14.3](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.14.3) - 2023-01-12
 -   Bump `python-fsutil` requirement.
 
