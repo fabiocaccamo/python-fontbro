@@ -286,7 +286,7 @@ class Font:
                 "character_name": char_name,
                 "code": code,
                 "escape_sequence": f"\\u{code_hex}",
-                "html_code": "&#{code};",
+                "html_code": f"&#{code};",
                 "unicode": f"U+{code_hex}",
                 "unicode_code": code,
                 "unicode_name": unicode_name,
