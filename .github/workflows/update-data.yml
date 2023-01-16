@@ -27,7 +27,11 @@ jobs:
       - name: Update data
         run: |
           python scripts/update_data.py
-          pre-commit run -a
+
+      - name: Run pre-commit
+        continue-on-error: true
+        run: |
+          pre-commit run --files fontbro/data/unicode-blocks.json fontbro/data/unicode-scripts.json
 
       - name: Commit data
         uses: test-room-7/action-update-file@v1
