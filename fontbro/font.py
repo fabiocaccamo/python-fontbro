@@ -484,7 +484,7 @@ class Font:
             img_size = (img_width, img_height)
             img = img.resize(img_size)
             draw = ImageDraw.Draw(img)
-            draw.text((0, 0), text, font=img_font, fill=color)
+            draw.text((-img_bbox[0], -img_bbox[1]), text, font=img_font, fill=color)
             del img_font
             return img
 
