@@ -485,6 +485,7 @@ class Font:
             img = img.resize(img_size)
             draw = ImageDraw.Draw(img)
             draw.text((0, 0), text, font=img_font, fill=color)
+            del img_font
             return img
 
     def get_italic_angle(self):
