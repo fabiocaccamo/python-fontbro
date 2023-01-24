@@ -100,6 +100,8 @@ Gets the font characters.
 
 :returns: The characters.
 :rtype: generator of dicts
+
+:raises TypeError: If it's not possible to find the 'best' unicode cmap dict in the font.
 """
 chars = font.get_characters(ignore_blank=False)
 ```

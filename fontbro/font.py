@@ -261,9 +261,13 @@ class Font:
 
         :returns: The characters.
         :rtype: generator of dicts
+
+        :raises TypeError: If it's not possible to find the 'best' unicode cmap dict in the font.
         """
         font = self.get_ttfont()
         cmap = font.getBestCmap()
+        if cmap is None:
+            raise TypeError("Unable to find the 'best' unicode cmap dict.")
         glyfs = font.get("glyf")
         for code, char_name in cmap.items():
             code_hex = f"{code:04X}"
