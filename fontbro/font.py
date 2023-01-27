@@ -201,7 +201,7 @@ class Font:
     ]
     _WIDTHS_BY_VALUE = {width["value"]: width for width in _WIDTHS}
 
-    def __init__(self, filepath, lazy=False):
+    def __init__(self, filepath, **kwargs):
         """
         Constructs a new Font instance loading a font file from the given filepath.
 
@@ -213,22 +213,22 @@ class Font:
         super().__init__()
 
         self._filepath = None
-        self._lazy = None
+        self._kwargs = None
         self._ttfont = None
 
         if isinstance(filepath, str):
-            self._init_with_filepath(filepath, lazy=lazy)
+            self._init_with_filepath(filepath, **kwargs)
         else:
             filepath_type = type(filepath).__name__
             raise ValueError(
                 f"Invalid filepath type: expected str, found '{filepath_type}'."
             )
 
-    def _init_with_filepath(self, filepath, lazy=False):
+    def _init_with_filepath(self, filepath, **kwargs):
         try:
             self._filepath = filepath
-            self._lazy = lazy
-            self._ttfont = TTFont(self._filepath, lazy=self._lazy)
+            self._kwargs = kwargs
+            self._ttfont = TTFont(self._filepath, **kwargs)
 
         except TTLibError:
             raise ValueError(f"Invalid font at filepath: '{filepath}'.")
@@ -243,7 +243,7 @@ class Font:
         """
         Creates a new Font instance reading the same binary file.
         """
-        return Font(self._filepath, lazy=self._lazy)
+        return Font(self._filepath, **self._kwargs)
 
     def close(self):
         """
