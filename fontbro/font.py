@@ -278,10 +278,7 @@ class Font:
                 glyf = glyfs.get(char_name)
                 if glyf and glyf.numberOfContours == 0:
                     continue
-            try:
-                unicode_name = unicodedata.name(char)
-            except ValueError:
-                pass
+            unicode_name = unicodedata.name(char, None)
             unicode_block_name = unicodedata.block(code)
             unicode_script_tag = unicodedata.script(code)
             unicode_script_name = unicodedata.script_name(unicode_script_tag)
