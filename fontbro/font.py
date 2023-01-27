@@ -337,7 +337,10 @@ class Font:
         for table_tag in ["GPOS", "GSUB"]:
             if table_tag in font:
                 table = font[table_tag].table
-                feature_record = table.FeatureList.FeatureRecord or []
+                try:
+                    feature_record = table.FeatureList.FeatureRecord or []
+                except AttributeError:
+                    feature_record = []
                 for feature in feature_record:
                     features_tags.add(feature.FeatureTag)
         return sorted(features_tags)
