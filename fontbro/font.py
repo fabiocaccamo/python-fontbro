@@ -271,7 +271,10 @@ class Font:
         glyfs = font.get("glyf")
         for code, char_name in cmap.items():
             code_hex = f"{code:04X}"
-            char = chr(code)
+            if 0 <= code < 0x110000:
+                char = chr(code)
+            else:
+                continue
             if ascii.iscntrl(char):
                 continue
             if glyfs and ignore_blank:
