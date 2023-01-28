@@ -360,11 +360,11 @@ class Font:
 
         text = text or "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
-        img = self.get_image(text=text[0], size=72)
+        img = self.get_image(text=text, size=72)
         img_size = img.size
         img = img.resize((img_size[0] // 2, img_size[1] // 2))
         img = img.resize((img_size[0], img_size[1]), Image.Resampling.NEAREST)
-        img = img.quantize(colors=2)
+        img = img.quantize(colors=8)
         # img.show()
 
         hash = imagehash.average_hash(img, hash_size=64)
