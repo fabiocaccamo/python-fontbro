@@ -201,7 +201,7 @@ class Font:
     ]
     _WIDTHS_BY_VALUE = {width["value"]: width for width in _WIDTHS}
 
-    def __init__(self, filepath, lazy=False):
+    def __init__(self, filepath, **kwargs):
         """
         Constructs a new Font instance loading a font file from the given filepath.
 
@@ -213,22 +213,22 @@ class Font:
         super().__init__()
 
         self._filepath = None
-        self._lazy = None
+        self._kwargs = None
         self._ttfont = None
 
         if isinstance(filepath, str):
-            self._init_with_filepath(filepath, lazy=lazy)
+            self._init_with_filepath(filepath, **kwargs)
         else:
             filepath_type = type(filepath).__name__
             raise ValueError(
                 f"Invalid filepath type: expected str, found '{filepath_type}'."
             )
 
-    def _init_with_filepath(self, filepath, lazy=False):
+    def _init_with_filepath(self, filepath, **kwargs):
         try:
             self._filepath = filepath
-            self._lazy = lazy
-            self._ttfont = TTFont(self._filepath, lazy=self._lazy)
+            self._kwargs = kwargs
+            self._ttfont = TTFont(self._filepath, **kwargs)
 
         except TTLibError:
             raise ValueError(f"Invalid font at filepath: '{filepath}'.")
@@ -243,7 +243,7 @@ class Font:
         """
         Creates a new Font instance reading the same binary file.
         """
-        return Font(self._filepath, lazy=self._lazy)
+        return Font(self._filepath, **self._kwargs)
 
     def close(self):
         """
@@ -271,17 +271,17 @@ class Font:
         glyfs = font.get("glyf")
         for code, char_name in cmap.items():
             code_hex = f"{code:04X}"
-            char = chr(code)
+            if 0 <= code < 0x110000:
+                char = chr(code)
+            else:
+                continue
             if ascii.iscntrl(char):
                 continue
             if glyfs and ignore_blank:
                 glyf = glyfs.get(char_name)
                 if glyf and glyf.numberOfContours == 0:
                     continue
-            try:
-                unicode_name = unicodedata.name(char)
-            except ValueError:
-                pass
+            unicode_name = unicodedata.name(char, None)
             unicode_block_name = unicodedata.block(code)
             unicode_script_tag = unicodedata.script(code)
             unicode_script_name = unicodedata.script_name(unicode_script_tag)
@@ -337,7 +337,10 @@ class Font:
         for table_tag in ["GPOS", "GSUB"]:
             if table_tag in font:
                 table = font[table_tag].table
-                feature_record = table.FeatureList.FeatureRecord or []
+                try:
+                    feature_record = table.FeatureList.FeatureRecord or []
+                except AttributeError:
+                    feature_record = []
                 for feature in feature_record:
                     features_tags.add(feature.FeatureTag)
         return sorted(features_tags)
@@ -357,11 +360,11 @@ class Font:
 
         text = text or "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
-        img = self.get_image(text=text[0], size=72)
+        img = self.get_image(text=text, size=72)
         img_size = img.size
         img = img.resize((img_size[0] // 2, img_size[1] // 2))
         img = img.resize((img_size[0], img_size[1]), Image.Resampling.NEAREST)
-        img = img.quantize(colors=2)
+        img = img.quantize(colors=8)
         # img.show()
 
         hash = imagehash.average_hash(img, hash_size=64)
@@ -484,7 +487,8 @@ class Font:
             img_size = (img_width, img_height)
             img = img.resize(img_size)
             draw = ImageDraw.Draw(img)
-            draw.text((0, 0), text, font=img_font, fill=color)
+            draw.text((-img_bbox[0], -img_bbox[1]), text, font=img_font, fill=color)
+            del img_font
             return img
 
     def get_italic_angle(self):
