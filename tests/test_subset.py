@@ -8,7 +8,6 @@ class SubsetTestCase(AbstractTestCase):
 
     def test_subset_without_args(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
-        chars_count = font.get_characters_count()
         with self.assertRaises(ValueError):
             font.subset()
 

@@ -35,7 +35,3 @@ class AbstractTestCase(unittest.TestCase):
     @staticmethod
     def _print(obj):
         print(json.dumps(obj, indent=4, sort_keys=True))
-
-
-if __name__ == "__main__":
-    unittest.main()

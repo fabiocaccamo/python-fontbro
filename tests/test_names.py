@@ -20,13 +20,12 @@ class NamesTestCase(AbstractTestCase):
     def test_get_name_by_invalid_type(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
         with self.assertRaises(TypeError):
-            family_name = font.get_name(font)
+            font.get_name(font)
 
     def test_get_name_by_invalid_key(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
         with self.assertRaises(KeyError):
-            name = font.get_name("invalid_key")
-        # self.assertEqual(name, None)
+            font.get_name("invalid_key")
 
     def test_get_name_by_invalid_id(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")

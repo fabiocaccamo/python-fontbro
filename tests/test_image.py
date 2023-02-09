@@ -1,4 +1,3 @@
-from fontbro import Font
 from tests import AbstractTestCase
 
 

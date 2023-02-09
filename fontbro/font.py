@@ -1010,9 +1010,7 @@ class Font:
             filepath = self._filepath
 
         filepath_is_dir = fsutil.is_dir(filepath) or filepath.endswith(os.sep)
-        filepath_is_font_file = (
-            fsutil.get_file_extension(filepath) in self._FORMATS_LIST
-        )
+        filepath_is_font_file = fsutil.get_file_extension(filepath) in self._FORMATS_LIST
         if filepath_is_dir or not filepath_is_font_file:
             dirpath = filepath
             basename = fsutil.get_file_basename(self._filepath)

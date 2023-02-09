@@ -1,6 +1,3 @@
-from imagehash import hex_to_hash
-
-from fontbro import Font
 from tests import AbstractTestCase
 
 
@@ -65,7 +62,7 @@ class FingerprintTestCase(AbstractTestCase):
                     instance_hash = instance_font.get_fingerprint()
                     diff = instance_hash - static_font_hash
                     # print(f"{font} -> {diff}")
-                    diffs.append(instance_hash - static_font_hash)
+                    diffs.append(diff)
                 diffs = [diff for diff in diffs if diff <= 10]
                 self.assertEqual(len(diffs), 1)
 
