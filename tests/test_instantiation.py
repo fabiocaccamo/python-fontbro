@@ -184,7 +184,9 @@ class InstantiationTestCase(AbstractTestCase):
         self,
     ):
         font = self._get_variable_font()
-        font.to_sliced_variable(coordinates={"wght": {"min": 100}, "wdth": {"min": 100}})
+        font.to_sliced_variable(
+            coordinates={"wght": {"min": 100}, "wdth": {"min": 100}}
+        )
         expected_axes = [
             {
                 "default_value": 100.0,
