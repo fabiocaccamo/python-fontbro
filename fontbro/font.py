@@ -221,7 +221,7 @@ class Font:
         else:
             filepath_type = type(filepath).__name__
             raise ValueError(
-                f"Invalid filepath type: expected str, found '{filepath_type}'."
+                f"Invalid filepath type: expected str, found {filepath_type!r}."
             )
 
     def _init_with_filepath(self, filepath, **kwargs):
@@ -230,8 +230,8 @@ class Font:
             self._kwargs = kwargs
             self._ttfont = TTFont(self._filepath, **kwargs)
 
-        except TTLibError:
-            raise ValueError(f"Invalid font at filepath: '{filepath}'.")
+        except TTLibError as error:
+            raise ValueError(f"Invalid font at filepath: {filepath!r}.") from error
 
     def __enter__(self):
         return self
@@ -262,7 +262,7 @@ class Font:
         :returns: The characters.
         :rtype: generator of dicts
 
-        :raises TypeError: If it's not possible to find the 'best' unicode cmap dict in the font.
+        :raises TypeError: If it's not possible to find the 'best' unicode cmap dict.
         """
         font = self.get_ttfont()
         cmap = font.getBestCmap()
@@ -350,7 +350,8 @@ class Font:
         Gets the font fingerprint: an hash calculated from an image representation of the font.
         Changing the text option affects the returned fingerprint.
 
-        :param text: The text used for generating the fingerprint, default value: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".
+        :param text: The text used for generating the fingerprint,
+        default value: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".
         :type text: str
 
         :returns: The fingerprint hash.
@@ -379,7 +380,8 @@ class Font:
         :type other: str or Font
         :param tolerance: The diff tolerance, default 3.
         :type tolerance: int
-        :param text: The text used for generating the fingerprint, default value: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".
+        :param text: The text used for generating the fingerprint,
+        default value: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".
         :type text: str
 
         :returns: A tuple containing the match info (match, diff, hash, other_hash).
@@ -393,7 +395,8 @@ class Font:
         else:
             other_type = type(other).__name__
             raise ValueError(
-                f"Invalid other filepath/font: expected str or Font instance, found '{other_type}'."
+                "Invalid other filepath/font: expected str or Font instance, "
+                f"found {other_type!r}."
             )
         hash = self.get_fingerprint(text=text)
         other_hash = other_font.get_fingerprint(text=text)
@@ -519,7 +522,7 @@ class Font:
             return cls._NAMES_BY_KEY[key]["id"]
         else:
             raise TypeError(
-                f"Invalid key type, expected int or str, found '{type(key).__name__}'."
+                f"Invalid key type, expected int or str, found {type(key).__name__!r}."
             )
 
     def get_name(self, key):
@@ -653,7 +656,8 @@ class Font:
     def get_unicode_blocks(self, coverage_threshold=0.00001):
         """
         Gets the unicode blocks and their coverage.
-        Only blocks with coverage >= coverage_threshold (0.0 <= coverage_threshold <= 1.0) will be returned.
+        Only blocks with coverage >= coverage_threshold
+        (0.0 <= coverage_threshold <= 1.0) will be returned.
 
         :param coverage_threshold: The minumum required coverage for a block to be returned.
         :type coverage_threshold: float
@@ -693,7 +697,8 @@ class Font:
     def get_unicode_scripts(self, coverage_threshold=0.00001):
         """
         Gets the unicode scripts and their coverage.
-        Only scripts with coverage >= coverage_threshold (0.0 <= coverage_threshold <= 1.0) will be returned.
+        Only scripts with coverage >= coverage_threshold
+        (0.0 <= coverage_threshold <= 1.0) will be returned.
 
         :param coverage_threshold: The minumum required coverage for a script to be returned.
         :type coverage_threshold: float
@@ -961,8 +966,9 @@ class Font:
             typographic_subfamily_name.replace(" ", ""),
         )
 
-        # keep only printable ASCII subset: https://learn.microsoft.com/en-us/typography/opentype/spec/name#name-ids
-        # postscript_name_allowed_chars = {chr(code) for code in range(33, 127)} - {"[", "]", "(", ")", "{", "}", "<", ">", "/", "%"}
+        # keep only printable ASCII subset:
+        # https://learn.microsoft.com/en-us/typography/opentype/spec/name#name-ids
+        # postscript_name_allowed_chars = {chr(code) for code in range(33, 127)}
         # !"#$&'*+,-.0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\^_`abcdefghijklmnopqrstuvwxyz|~
         postscript_name_pattern = (
             r"[^0-9A-Za-z\!\"\#\$\&\'\*\+\,\-\.\:\;\=\?\@\\\^\_\`\|\~]"
@@ -1004,7 +1010,8 @@ class Font:
         :returns: The filepath where the font has been saved to.
         :rtype: str
 
-        :raises ValueError: If the filepath is the same of the source font and overwrite is not allowed.
+        :raises ValueError: If the filepath is the same of the source font
+        and overwrite is not allowed.
         """
         if filepath is None:
             filepath = self._filepath
@@ -1027,7 +1034,7 @@ class Font:
         filepath = fsutil.join_filepath(dirpath, filename)
         if fsutil.is_file(filepath) and not overwrite:
             raise ValueError(
-                f"Invalid filepath, a file already exists at '{filepath}' "
+                f"Invalid filepath, a file already exists at {filepath!r} "
                 "and 'overwrite' option is 'False' (consider using 'overwrite=True')."
             )
         fsutil.make_dirs_for_file(filepath)
@@ -1170,9 +1177,6 @@ class Font:
         Sets the style flags by the subfamily name value.
         The subfamily values should be "regular", "italic", "bold" or "bold italic"
         to allow this method to work properly.
-
-        :param strict: If strict (default=False) and the subfamily name is not an expected value, an error is raised.
-        :type strict: bool
         """
         subfamily_name = (self.get_name(Font.NAME_SUBFAMILY_NAME) or "").lower()
         if subfamily_name == Font.STYLE_FLAG_REGULAR:
@@ -1184,7 +1188,7 @@ class Font:
         elif subfamily_name == f"{Font.STYLE_FLAG_BOLD} {Font.STYLE_FLAG_ITALIC}":
             self.set_style_flags(regular=False, bold=True, italic=True)
 
-    def subset(self, unicodes="", glyphs=[], text="", **options):
+    def subset(self, unicodes="", glyphs=None, text="", **options):
         """
         Subsets the font using the given options (unicodes or glyphs or text),
         it is possible to pass also subsetter options, more info here:
@@ -1212,7 +1216,7 @@ class Font:
         options.setdefault("layout_features", ["*"])
         options.setdefault("name_IDs", "*")
         options.setdefault("notdef_outline", True)
-        subs_args = {"unicodes": unicodes, "glyphs": glyphs, "text": text}
+        subs_args = {"unicodes": unicodes, "glyphs": glyphs or [], "text": text}
         # https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/subset/__init__.py
         subs_options = SubsetterOptions(**options)
         subs = Subsetter(options=subs_options)
@@ -1238,7 +1242,8 @@ class Font:
 
     def to_sliced_variable(self, coordinates, **options):
         """
-        Converts the variable font to a partial one slicing the variable axes at the given coordinates.
+        Converts the variable font to a partial one slicing
+        the variable axes at the given coordinates.
         If an axis value is not specified, the axis will be left untouched.
         If an axis min and max values are equal, the axis will be pinned.
 
@@ -1293,7 +1298,8 @@ class Font:
 
     def to_static(self, coordinates=None, **options):
         """
-        Converts the variable font to a static one pinning the variable axes at the given coordinates.
+        Converts the variable font to a static one pinning
+        the variable axes at the given coordinates.
         If an axis value is not specified, the axis will be pinned at its default value.
         If coordinates are not specified each axis will be pinned at its default value.
 
@@ -1338,4 +1344,4 @@ class Font:
         :returns: String representation of the object.
         :rtype: str
         """
-        return f"{type(self).__name__}('{self._filepath}')"
+        return f"{type(self).__name__}({self._filepath!r})"
