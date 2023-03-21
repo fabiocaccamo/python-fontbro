@@ -5,19 +5,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.14.6](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.14.6) - 2023-03-21
--  Accept axis coordinates `dict` with `default` in `to_sliced_variable` method. #63
--  Update unique identifier name record when renaming font. #62
--  Upgrade syntax for `Python >= 3.8`.
--  Set max line length to `88`.
--  Add `flake8-bugbear` to `pre-commit`.
--  Run `flake8` also on tests files.
--  Bump requirements.
+-   Accept axis coordinates `dict` with `default` in `to_sliced_variable` method. #63
+-   Update unique identifier name record when renaming font. #62
+-   Upgrade syntax for `Python >= 3.8`.
+-   Set max line length to `88`.
+-   Add `flake8-bugbear` to `pre-commit`.
+-   Run `flake8` also on tests files.
+-   Bump requirements.
 
 ## [0.14.5](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.14.5) - 2023-01-29
--  Fix `get_image()` crash on Windows. (by [@seproDev](https://github.com/seproDev) in #53)
--  Correctly center text in `get_image()`. (by [@seproDev](https://github.com/seproDev) in #53)
--  Fix `AttributeError` in `get_features()`. #50 (by [@seproDev](https://github.com/seproDev) in #53)
--  Set `unicode_name` default to `None`. #51 (by [@seproDev](https://github.com/seproDev) in #53)
+-   Fix `get_image()` crash on Windows. (by [@seproDev](https://github.com/seproDev) in #53)
+-   Correctly center text in `get_image()`. (by [@seproDev](https://github.com/seproDev) in #53)
+-   Fix `AttributeError` in `get_features()`. #50 (by [@seproDev](https://github.com/seproDev) in #53)
+-   Set `unicode_name` default to `None`. #51 (by [@seproDev](https://github.com/seproDev) in #53)
 
 ## [0.14.4](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.14.4) - 2023-01-12
 -   Automatically update unicode data once a month.
