@@ -982,10 +982,18 @@ class Font:
                 f" ({postscript_name_length} characters)."
             )
 
+        # update unique identifier
+        postscript_name_old = self.get_name(self.NAME_POSTSCRIPT_NAME)
+        unique_identifier = self.get_name(self.NAME_UNIQUE_IDENTIFIER)
+        unique_identifier = unique_identifier.replace(
+            postscript_name_old, postscript_name
+        )
+
         # update name records
         names = {
             self.NAME_FAMILY_NAME: family_name,
             self.NAME_SUBFAMILY_NAME: subfamily_name,
+            self.NAME_UNIQUE_IDENTIFIER: unique_identifier,
             self.NAME_FULL_NAME: full_name,
             self.NAME_POSTSCRIPT_NAME: postscript_name,
             self.NAME_TYPOGRAPHIC_FAMILY_NAME: typographic_family_name,
