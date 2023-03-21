@@ -1255,11 +1255,11 @@ class Font:
         If an axis value is not specified, the axis will be left untouched.
         If an axis min and max values are equal, the axis will be pinned.
 
-        :param coordinates: The coordinates dictionary, each item value must be
-            tuple/list/dict (with min and max keys) for slicing or float/int for pinning, eg.
-            {'wdth':100, 'wght':(100,600), 'ital':(30,70)} or
-            {'wdth':100, 'wght':[100,600], 'ital':[30,70]} or
-            {'wdth':100, 'wght':{'min':100,'max':600}, 'ital':{'min':30,'max':70}}
+        :param coordinates: The coordinates dictionary, each item value must be tuple/list/dict
+            (with 'min', 'default' and 'max' keys) for slicing or float/int for pinning, eg.
+            {'wdth':100, 'wght':(100,600), 'ital':(30,65,70)} or
+            {'wdth':100, 'wght':[100,600], 'ital':[30,65,70]} or
+            {'wdth':100, 'wght':{'min':100,'max':600}, 'ital':{'min':30,'default':65,'max':70}}
         :type coordinates: dict
         :param options: The options for the fontTools.varLib.instancer
         :type options: dictionary
@@ -1283,8 +1283,9 @@ class Font:
             elif isinstance(axis_value, dict):
                 axis = self.get_variable_axis_by_tag(axis_tag)
                 axis_min = axis_value.get("min", axis.get("min_value"))
+                axis_default = axis_value.get("default", axis.get("default_value"))
                 axis_max = axis_value.get("max", axis.get("max_value"))
-                axis_value = (axis_min, axis_max)
+                axis_value = (axis_min, axis_default, axis_max)
             coordinates[axis_tag] = axis_value
 
         # ensure that coordinates axes are defined and that are not all pinned
