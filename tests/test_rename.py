@@ -30,13 +30,23 @@ class RenameTestCase(AbstractTestCase):
         self.assertEqual(names[Font.NAME_TYPOGRAPHIC_SUBFAMILY_NAME], "Regular")
 
     def test_rename_update_unique_identifier(self):
-        # https://github.com/fabiocaccamo/python-fontbro/issues/62
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
         family_name = font.get_name(key=Font.NAME_FAMILY_NAME)
         family_name = family_name.replace("Mono", "Multi")
         font.rename(family_name=family_name)
         font_uid = font.get_name(Font.NAME_UNIQUE_IDENTIFIER)
         self.assertEqual(font_uid, "3.000;GOOG;RobotoMulti-Regular")
+
+    # def test_rename_with_family_name_only_issue_0062(self):
+    #     # https://github.com/fabiocaccamo/python-fontbro/issues/62
+    #     font = self._get_font("/issues/issue-0062/ABCTest-Thin.otf")
+    #     self._print(font.get_names())
+    #     family_name = font.get_name(key=Font.NAME_FAMILY_NAME)
+    #     family_name = family_name.replace("ABC", "Hugo")
+    #     family_name = family_name.rstrip("Thin").strip()
+    #     font.set_name(Font.NAME_FAMILY_NAME, family_name)
+    #     font.rename(family_name=family_name, style_name="Thin")
+    #     self._print(font.get_names())
 
     def test_rename_with_style_name_only(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
