@@ -37,16 +37,44 @@ class RenameTestCase(AbstractTestCase):
         font_uid = font.get_name(Font.NAME_UNIQUE_IDENTIFIER)
         self.assertEqual(font_uid, "3.000;GOOG;RobotoMulti-Regular")
 
-    # def test_rename_with_family_name_only_issue_0062(self):
-    #     # https://github.com/fabiocaccamo/python-fontbro/issues/62
-    #     font = self._get_font("/issues/issue-0062/ABCTest-Thin.otf")
-    #     self._print(font.get_names())
-    #     family_name = font.get_name(key=Font.NAME_FAMILY_NAME)
-    #     family_name = family_name.replace("ABC", "Hugo")
-    #     family_name = family_name.rstrip("Thin").strip()
-    #     font.set_name(Font.NAME_FAMILY_NAME, family_name)
-    #     font.rename(family_name=family_name, style_name="Thin")
-    #     self._print(font.get_names())
+    def test_rename_with_family_name_only_issue_0062(self):
+        # https://github.com/fabiocaccamo/python-fontbro/issues/62
+        font = self._get_font("/issues/issue-0062/ABCTest-Thin.otf")
+        # self._print(font.get_names())
+        self.assertEqual(
+            font.get_names(),
+            {
+                "family_name": "ABC Test Thin",
+                "full_name": "ABC Test Thin",
+                "postscript_name": "ABCTest-Thin",
+                "subfamily_name": "Regular",
+                "typographic_family_name": "ABC Test",
+                "typographic_subfamily_name": "Thin",
+                "unique_identifier": "1.000;UKWN;ABCTest-Thin",
+                "version": "Version 1.000;Glyphs 3.1.2 (3151)",
+            },
+        )
+        family_name = font.get_name(key=Font.NAME_TYPOGRAPHIC_FAMILY_NAME)
+        family_name = family_name.replace("ABC", "Hugo")
+        font.rename(family_name=family_name)
+        # self._print(font.get_names())
+        self.assertEqual(
+            font.get_names(),
+            {
+                "family_name": "Hugo Test Thin",
+                "full_name": "Hugo Test Thin",
+                "postscript_name": "HugoTest-Thin",
+                "subfamily_name": "Regular",
+                "typographic_family_name": "Hugo Test",
+                "typographic_subfamily_name": "Thin",
+                "unique_identifier": "1.000;UKWN;HugoTest-Thin",
+                "version": "Version 1.000;Glyphs 3.1.2 (3151)",
+                "wws_family_name": "Hugo Test",
+                "wws_subfamily_name": "Thin",
+            },
+        )
+        full_name = font.get_name(key=Font.NAME_FULL_NAME)
+        self.assertEqual(full_name, "Hugo Test Thin")
 
     def test_rename_with_style_name_only(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
@@ -86,9 +114,7 @@ class RenameTestCase(AbstractTestCase):
         names = font.get_names()
         self.assertEqual(names[Font.NAME_FAMILY_NAME], "Tourney Custom [wdth-wght]")
         self.assertEqual(names[Font.NAME_SUBFAMILY_NAME], "Regular")
-        self.assertEqual(
-            names[Font.NAME_FULL_NAME], "Tourney Custom [wdth-wght] Regular"
-        )
+        self.assertEqual(names[Font.NAME_FULL_NAME], "Tourney Custom [wdth-wght]")
         self.assertEqual(names[Font.NAME_POSTSCRIPT_NAME], "TourneyCustom-wdth-wght")
         self.assertEqual(names[Font.NAME_TYPOGRAPHIC_FAMILY_NAME], "Tourney Custom")
         self.assertEqual(names[Font.NAME_TYPOGRAPHIC_SUBFAMILY_NAME], "[wdth-wght]")
