@@ -809,10 +809,8 @@ class Font:
             # https://en.wikipedia.org/wiki/Euclidean_distance#Higher_dimensions
             return math.sqrt(
                 sum(
-                    map(
-                        lambda ab: math.pow(abs(ab[0] - ab[1]), 2),
-                        list(itertools.zip_longest(a, b, fillvalue=0)),
-                    )
+                    math.pow(abs(ab[0] - ab[1]), 2)
+                    for ab in list(itertools.zip_longest(a, b, fillvalue=0))
                 )
             )
 
