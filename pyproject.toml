@@ -2,6 +2,80 @@
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "python-fontbro"
+description = "friendly font operations on top of fontTools."
+authors = [
+    { name = "Fabio Caccamo", email = "fabio.caccamo@gmail.com" },
+]
+keywords = [
+    "font",
+    "fonttools",
+    "languages",
+    "opentype",
+    "otf",
+    "python",
+    "scripts",
+    "slicing",
+    "subset",
+    "subsetting",
+    "ttf",
+    "unicode",
+    "utility",
+    "variable",
+    "variations",
+    "woff",
+    "woff2",
+    "wrapper",
+    "writing-systems",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Environment :: Other Environment",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Topic :: Text Processing :: Fonts",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Multimedia :: Graphics :: Graphics Conversion",
+]
+dependencies = [
+    "fonttools[woff,unicode,pathops] >= 4.27.0, < 5.0",
+    "imagehash >= 4.2.1, < 5.0.0",
+    "pillow >= 8.4.0, < 10.0.0",
+    "python-fsutil >= 0.9.3, < 1.0.0",
+]
+dynamic = ["version"]
+maintainers = [
+    { name = "Fabio Caccamo", email = "fabio.caccamo@gmail.com" },
+]
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
+
+[project.license]
+file = "LICENSE.txt"
+content-type = "text/plain"
+
+[project.urls]
+Homepage = "https://github.com/fabiocaccamo/python-fontbro"
+Download = "https://github.com/fabiocaccamo/python-fontbro/releases"
+Documentation = "https://github.com/fabiocaccamo/python-fontbro#readme"
+Issues = "https://github.com/fabiocaccamo/python-fontbro/issues"
+Funding = "https://github.com/sponsors/fabiocaccamo/"
+Twitter = "https://twitter.com/fabiocaccamo"
+
 [tool.black]
 line-length = 88
 include = '\.pyi?$'
@@ -23,14 +97,13 @@ exclude = '''
 [tool.ruff]
 ignore = ["E501"]
 line-length = 88
-select = [
-    "B",
-    "B9",
-    "C",
-    "E",
-    "F",
-    "W",
-]
+select = ["B", "B9", "C", "E", "F", "W"]
 
 [tool.ruff.mccabe]
 max-complexity = 10
+
+[tool.setuptools.packages.find]
+include = ["fontbro*"]
+
+[tool.setuptools.dynamic.version]
+attr = "fontbro.metadata.__version__"
