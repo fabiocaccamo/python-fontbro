@@ -74,7 +74,7 @@ font = Font("fonts/MyFont.ttf")
 -   [`to_sliced_variable`](#to_sliced_variable)
 -   [`to_static`](#to_static)
 
--   #### clone
+#### `clone`
 ```python
 """
 Creates a new Font instance reading the same binary file.
@@ -82,7 +82,7 @@ Creates a new Font instance reading the same binary file.
 font_clone = font.clone()
 ```
 
--   #### close
+#### `close`
 ```python
 """
 Close the wrapped TTFont instance.
@@ -90,7 +90,7 @@ Close the wrapped TTFont instance.
 font.close()
 ```
 
--   #### get_characters
+#### `get_characters`
 ```python
 """
 Gets the font characters.
@@ -106,7 +106,7 @@ Gets the font characters.
 chars = font.get_characters(ignore_blank=False)
 ```
 
--   #### get_characters_count
+#### `get_characters_count`
 ```python
 """
 Gets the font characters count.
@@ -120,7 +120,7 @@ Gets the font characters count.
 chars_count = font.get_characters_count(ignore_blank=False)
 ```
 
--   #### get_features
+#### `get_features`
 ```python
 """
 Gets the font opentype features.
@@ -131,7 +131,7 @@ Gets the font opentype features.
 features = font.get_features()
 ```
 
--   #### get_features_tags
+#### `get_features_tags`
 ```python
 """
 Gets the font opentype features tags.
@@ -142,7 +142,7 @@ Gets the font opentype features tags.
 features_tags = font.get_features_tags()
 ```
 
--   #### get_fingerprint
+#### `get_fingerprint`
 ```python
 """
 Gets the font fingerprint: an hash calculated from an image representation of the font.
@@ -156,7 +156,7 @@ Changing the text option affects the returned fingerprint.
 hash = font.get_fingerprint()
 ```
 
--   #### get_fingerprint_match
+#### `get_fingerprint_match`
 ```python
 """
 Gets the fingerprint match between this font and another one.
@@ -174,7 +174,7 @@ by checking if their fingerprints are equal (difference <= tolerance).
 match, diff, hash, other_hash = font.get_fingerprint_match(other="other_font.ttf", tolerance=10)
 ```
 
--   #### get_format
+#### `get_format`
 ```python
 """
 Gets the font format: otf, ttf, woff, woff2.
@@ -188,7 +188,7 @@ Gets the font format: otf, ttf, woff, woff2.
 format = font.get_format(ignore_flavor=False)
 ```
 
--   #### get_glyphs
+#### `get_glyphs`
 ```python
 """
 Gets the font glyphs and their own composition.
@@ -199,7 +199,7 @@ Gets the font glyphs and their own composition.
 glyphs = font.get_glyphs()
 ```
 
--   #### get_glyphs_count
+#### `get_glyphs_count`
 ```python
 """
 Gets the font glyphs count.
@@ -210,7 +210,7 @@ Gets the font glyphs count.
 glyphs_count = font.get_glyphs_count()
 ```
 
--   #### get_image
+#### `get_image`
 ```python
 """
 Gets an image representation of the font rendering
@@ -228,7 +228,7 @@ some text using the given options.
 img = font.get_image(text="Hello!", size=48, color=(0, 0, 0, 255), background_color=(255, 255, 255, 255))
 ```
 
--   #### get_italic_angle
+#### `get_italic_angle`
 ```python
 """
 Gets the font italic angle.
@@ -239,7 +239,7 @@ Gets the font italic angle.
 italic_angle = font.get_italic_angle()
 ```
 
--   #### get_name
+#### `get_name`
 ```python
 """
 Gets the name by its identifier from the font name table.
@@ -255,7 +255,7 @@ Gets the name by its identifier from the font name table.
 family_name = font.get_name(key=Font.NAME_FAMILY_NAME)
 ```
 
--   #### get_names
+#### `get_names`
 ```python
 """
 Gets the names records mapped by their property name.
@@ -266,7 +266,7 @@ Gets the names records mapped by their property name.
 names = font.get_names()
 ```
 
--   #### get_style_flag
+#### `get_style_flag`
 ```python
 """
 Gets the style flag reading OS/2 and macStyle tables.
@@ -280,7 +280,7 @@ Gets the style flag reading OS/2 and macStyle tables.
 flag = font.get_style_flag(Font.STYLE_FLAG_BOLD)
 ```
 
--   #### get_style_flags
+#### `get_style_flags`
 ```python
 """
 Gets the style flags reading OS/2 and macStyle tables.
@@ -291,7 +291,7 @@ Gets the style flags reading OS/2 and macStyle tables.
 flags = font.get_style_flags()
 ```
 
--   #### get_ttfont
+#### `get_ttfont`
 ```python
 """
 Gets the wrapped TTFont instance.
@@ -302,7 +302,7 @@ Gets the wrapped TTFont instance.
 ttfont = font.get_ttfont()
 ```
 
--   #### get_unicode_block_by_name
+#### `get_unicode_block_by_name`
 ```python
 """
 Gets the unicode block by name (name is case-insensitive and ignores "-").
@@ -316,7 +316,7 @@ Gets the unicode block by name (name is case-insensitive and ignores "-").
 block = font.get_unicode_block_by_name(name="Basic Latin")
 ```
 
--   #### get_unicode_blocks
+#### `get_unicode_blocks`
 ```python
 """
 Gets the unicode blocks and their coverage.
@@ -331,7 +331,7 @@ Only blocks with coverage >= coverage_threshold (0.0 <= coverage_threshold <= 1.
 blocks = font.get_unicode_blocks(coverage_threshold=0.00001)
 ```
 
--   #### get_unicode_script_by_name
+#### `get_unicode_script_by_name`
 ```python
 """
 Gets the unicode script by name/tag (name/tag is case-insensitive and ignores "-").
@@ -345,7 +345,7 @@ Gets the unicode script by name/tag (name/tag is case-insensitive and ignores "-
 script = font.get_unicode_script_by_name(name="Latn")
 ```
 
--   #### get_unicode_scripts
+#### `get_unicode_scripts`
 ```python
 """
 Gets the unicode scripts and their coverage.
@@ -360,7 +360,7 @@ Only scripts with coverage >= coverage_threshold (0.0 <= coverage_threshold <= 1
 scripts = font.get_unicode_scripts(coverage_threshold=0.00001)
 ```
 
--   #### get_variable_axes
+#### `get_variable_axes`
 ```python
 """
 Gets the font variable axes.
@@ -371,7 +371,7 @@ Gets the font variable axes.
 axes = font.get_variable_axes()
 ```
 
--   #### get_variable_axes_tags
+#### `get_variable_axes_tags`
 ```python
 """
 Gets the variable axes tags.
@@ -382,7 +382,7 @@ Gets the variable axes tags.
 axes_tags = font.get_variable_axes_tags()
 ```
 
--   #### get_variable_axis_by_tag
+#### `get_variable_axis_by_tag`
 ```python
 """
 Gets a variable axis by tag.
@@ -396,7 +396,7 @@ Gets a variable axis by tag.
 axis = font.get_variable_axis_by_tag(tag="wght")
 ```
 
--   #### get_variable_instances
+#### `get_variable_instances`
 ```python
 """
 Gets the variable instances.
@@ -407,7 +407,7 @@ Gets the variable instances.
 instances = font.get_variable_instances()
 ```
 
--   #### get_variable_instance_closest_to_coordinates
+#### `get_variable_instance_closest_to_coordinates`
 ```python
 """
 Gets the variable instance closest to coordinates.
@@ -422,7 +422,7 @@ eg. coordinates = {"wght": 1000, "slnt": 815, "wdth": 775}
 instance = font.get_variable_instance_closest_to_coordinates(coordinates={"wght": 1000, "slnt": 815, "wdth": 775})
 ```
 
--   #### get_version
+#### `get_version`
 ```python
 """
 Gets the font version.
@@ -433,7 +433,7 @@ Gets the font version.
 version = font.get_version()
 ```
 
--   #### get_weight
+#### `get_weight`
 ```python
 """
 Gets the font weight value and name.
@@ -444,7 +444,7 @@ Gets the font weight value and name.
 weight = font.get_weight()
 ```
 
--   #### get_width
+#### `get_width`
 ```python
 """
 Gets the font width value and name.
@@ -455,7 +455,7 @@ Gets the font width value and name.
 width = font.get_width()
 ```
 
--   #### is_static
+#### `is_static`
 ```python
 """
 Determines if the font is a static font.
@@ -466,7 +466,7 @@ Determines if the font is a static font.
 static = font.is_static()
 ```
 
--   #### is_variable
+#### `is_variable`
 ```python
 """
 Determines if the font is a variable font.
@@ -477,7 +477,7 @@ Determines if the font is a variable font.
 variable = font.is_variable()
 ```
 
--   #### rename
+#### `rename`
 ```python
 """
 Renames the font names records (1, 2, 4, 6, 16, 17) according to
@@ -498,7 +498,7 @@ If style_name is not defined it will be auto-detected.
 font.rename(family_name="My Font New", style_name="Bold Italic")
 ```
 
--   #### save
+#### `save`
 ```python
 """
 Saves the font at filepath.
@@ -516,7 +516,7 @@ Saves the font at filepath.
 saved_font_path = font.save(filepath=None, overwrite=False)
 ```
 
--   #### save_as_woff
+#### `save_as_woff`
 ```python
 """
 Saves font as woff.
@@ -532,7 +532,7 @@ Saves font as woff.
 saved_font_path = font.save_as_woff(filepath=None, overwrite=True)
 ```
 
--   #### save_as_woff2
+#### `save_as_woff2`
 ```python
 """
 Saves font as woff2.
@@ -548,7 +548,7 @@ Saves font as woff2.
 saved_font_path = font.save_as_woff2(filepath=None, overwrite=True)
 ```
 
--   #### set_name
+#### `set_name`
 ```python
 """
 Sets the name by its identifier in the font name table.
@@ -561,7 +561,7 @@ Sets the name by its identifier in the font name table.
 font.set_name(Font.NAME_FAMILY_NAME, "Family Name Renamed")
 ```
 
--   #### set_names
+#### `set_names`
 ```python
 """
 Sets the names by their identifier in the name table.
@@ -575,7 +575,7 @@ font.set_names(names={
 })
 ```
 
--   #### set_style_flag
+#### `set_style_flag`
 ```python
 """
 Sets the style flag.
@@ -588,7 +588,7 @@ Sets the style flag.
 font.set_style_flag(Font.STYLE_FLAG_BOLD, True)
 ```
 
--   #### set_style_flags
+#### `set_style_flags`
 ```python
 """
 Sets the style flags, flags set to None will be ignored.
@@ -605,7 +605,7 @@ Sets the style flags, flags set to None will be ignored.
 font.set_style_flags(regular=None, bold=None, italic=None, outline=None, underline=None)
 ```
 
--   #### set_style_flags_by_subfamily_name
+#### `set_style_flags_by_subfamily_name`
 ```python
 """
 Sets the style flags by the subfamily name value.
@@ -615,7 +615,7 @@ to allow this method to work properly.
 font.set_style_flags_by_subfamily_name()
 ```
 
--   #### subset
+#### `subset`
 ```python
 """
 Subsets the font using the given options (unicodes or glyphs or text),
@@ -634,7 +634,7 @@ https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/subset/__init__.p
 font.subset(unicodes="", glyphs=[], text="", **options)
 ```
 
--   #### to_sliced_variable
+#### `to_sliced_variable`
 ```python
 """
 Converts the variable font to a partial one slicing the variable axes at the given coordinates.
@@ -657,7 +657,7 @@ If an axis min and max values are equal, the axis will be pinned.
 font.to_sliced_variable(coordinates, **options)
 ```
 
--   #### to_static
+#### `to_static`
 ```python
 """
 Converts the variable font to a static one pinning the variable axes at the given coordinates.
