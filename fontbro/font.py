@@ -935,20 +935,17 @@ class Font:
         wws_subfamily_name = style_name
 
         # family name, subfamily name and full name
-        family_name_parts = [family_name]
         style_name_parts = style_name.split()
         subfamily_name_parts = style_name.lower().split()
         subfamily_names = ["regular", "italic", "bold", "bold italic"]
         subfamily_name_default = subfamily_names[0]
         for name_part in style_name_parts:
             if name_part.lower() not in subfamily_names:
-                family_name_parts.append(name_part)
                 subfamily_name_parts.remove(name_part.lower())
         if subfamily_name_default in subfamily_name_parts:
             if len(subfamily_name_parts) > 1:
                 subfamily_name_parts.remove(subfamily_name_default)
         subfamily_name_parts = subfamily_name_parts or [subfamily_name_default]
-        family_name = " ".join(family_name_parts)
         subfamily_name = " ".join(subfamily_name_parts).lower()
         if subfamily_name not in subfamily_names:
             subfamily_name = subfamily_name_default

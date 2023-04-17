@@ -61,7 +61,7 @@ class RenameTestCase(AbstractTestCase):
         self.assertEqual(
             font.get_names(),
             {
-                "family_name": "Hugo Test Thin",
+                "family_name": "Hugo Test",
                 "full_name": "Hugo Test Thin",
                 "postscript_name": "HugoTest-Thin",
                 "subfamily_name": "Regular",
@@ -112,7 +112,7 @@ class RenameTestCase(AbstractTestCase):
         font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
         font.rename(" Tourney Custom ", " [wdth-wght] ")
         names = font.get_names()
-        self.assertEqual(names[Font.NAME_FAMILY_NAME], "Tourney Custom [wdth-wght]")
+        self.assertEqual(names[Font.NAME_FAMILY_NAME], "Tourney Custom")
         self.assertEqual(names[Font.NAME_SUBFAMILY_NAME], "Regular")
         self.assertEqual(names[Font.NAME_FULL_NAME], "Tourney Custom [wdth-wght]")
         self.assertEqual(names[Font.NAME_POSTSCRIPT_NAME], "TourneyCustom-wdth-wght")
