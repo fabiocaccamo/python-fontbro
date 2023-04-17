@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.14.8](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.14.8) - 2023-04-17
+-   Fix `family_name` renaming.
+-   Fix `tox` test command.
+-   Replace `flake8` with `Ruff`.
+-   Switch from `setup.cfg` to `pyproject.toml`.
+-   Bump `fonttools[pathops,unicode,woff]` from `4.39.2` to `4.39.3`. (#68)
+-   Bump `pillow` from `9.4.0` to `9.5.0`. (#71)
+
 ## [0.14.7](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.14.7) - 2023-03-24
 -   Improve `full_name` renaming using name records IDs 16 and 17. #62 (#66)
 
