@@ -1,5 +1,4 @@
 import copy
-import itertools
 import math
 import os
 import re
@@ -807,20 +806,18 @@ class Font:
 
         def get_euclidean_distance(a, b):
             # https://en.wikipedia.org/wiki/Euclidean_distance#Higher_dimensions
+            keys = set(list(a.keys()) + list(b.keys()))
             return math.sqrt(
-                sum(
-                    math.pow(abs(ab[0] - ab[1]), 2)
-                    for ab in list(itertools.zip_longest(a, b, fillvalue=0))
-                )
+                sum([math.pow(a.get(key, 0) - b.get(key, 0), 2) for key in keys])
             )
 
-        lookup_values = coordinates.values()
+        lookup_values = coordinates
         instances = self.get_variable_instances()
         closest_instance_distance = sys.maxsize
         closest_instance = None
         for instance in instances:
-            instance_values = instance["coordinates"].values()
-            instance_distance = get_euclidean_distance(lookup_values, instance_values)
+            instance_values = instance["coordinates"]
+            instance_distance = get_euclidean_distance(instance_values, lookup_values)
             if instance_distance < closest_instance_distance:
                 closest_instance_distance = instance_distance
                 closest_instance = instance
