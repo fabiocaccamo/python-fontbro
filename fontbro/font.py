@@ -1234,10 +1234,8 @@ class Font:
         :rtype: bool
         """
         return all(
-            [
-                isinstance(axis_value, (type(None), int, float))
-                for axis_value in axes.values()
-            ]
+            isinstance(axis_value, (type(None), int, float))
+            for axis_value in axes.values()
         )
 
     def to_sliced_variable(self, coordinates, **options):
