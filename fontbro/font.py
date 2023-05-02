@@ -931,21 +931,37 @@ class Font:
         wws_family_name = family_name
         wws_subfamily_name = style_name
 
+        # family name, subfamily name and full name
+        family_name_parts = [family_name]
+        style_name_lower = style_name.lower()
+        style_name_parts = style_name.split()
+        subfamily_name_parts = style_name_lower.split()
         # family name, subfamily name and full name - fix legacy name records 1 and 2
         subfamily_names = ["regular", "italic", "bold", "bold italic"]
-        subfamily_name = style_name
-        style_name_lower = style_name.lower()
+        subfamily_name_default = subfamily_names[0]
+        for name_part in style_name_parts:
+            if name_part.lower() not in subfamily_names:
+                family_name_parts.append(name_part)
+                subfamily_name_parts.remove(name_part.lower())
+        if subfamily_name_default in subfamily_name_parts:
+            if len(subfamily_name_parts) > 1:
+                subfamily_name_parts.remove(subfamily_name_default)
+        subfamily_name_parts = subfamily_name_parts or [subfamily_name_default]
+        family_name = " ".join(family_name_parts)
+        subfamily_name = " ".join(subfamily_name_parts).lower()
+        if subfamily_name not in subfamily_names:
+            subfamily_name = subfamily_name_default
+        subfamily_name = subfamily_name.title()
+
+        # fix legacy name records 1 and 2
         if style_name_lower not in subfamily_names:
-            subfamily_name = (
-                "Italic" if style_name_lower.endswith(" italic") else "Regular"
-            )
+            subfamily_name = subfamily_names[style_name_lower.endswith(" italic")]
+            subfamily_name = subfamily_name.title()
             family_name_suffix = re.sub(
                 r"\ italic$", "", subfamily_name, flags=re.IGNORECASE
             )
             assert family_name_suffix
             family_name = f"{typographic_family_name} {family_name_suffix}"
-
-        subfamily_name = subfamily_name.title()
 
         # full name
         full_name = concat_names(typographic_family_name, typographic_subfamily_name)
