@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.14.12](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.14.12) - 2023-05-02
+-   Fix `Font Bakery` error: "font name does not begin with the font family name".
+
 ## [0.14.11](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.14.11) - 2023-05-02
 -   Fix renaming legacy name records 1 and 2.
 
