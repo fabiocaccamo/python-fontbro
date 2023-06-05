@@ -1,5 +1,4 @@
 import copy
-import math
 import os
 import re
 import sys
@@ -17,6 +16,7 @@ from fontTools.varLib.instancer import OverlapMode
 from PIL import Image, ImageDraw, ImageFont
 
 from fontbro.flags import get_flag, set_flag
+from fontbro.math import get_euclidean_distance
 from fontbro.subset import parse_unicodes
 from fontbro.utils import concat_names, read_json, slugify
 
@@ -804,13 +804,6 @@ class Font:
         """
         if not self.is_variable():
             return None
-
-        def get_euclidean_distance(a, b):
-            # https://en.wikipedia.org/wiki/Euclidean_distance#Higher_dimensions
-            keys = set(list(a.keys()) + list(b.keys()))
-            return math.sqrt(
-                sum([math.pow(a.get(key, 0) - b.get(key, 0), 2) for key in keys])
-            )
 
         lookup_values = coordinates
         instances = self.get_variable_instances()
