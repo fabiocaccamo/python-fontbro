@@ -10,4 +10,4 @@ def read_json(filepath):
 
 
 def slugify(s):
-    return s.lower().replace(" ", "-")
+    return s.lower().strip().replace(" ", "-")
