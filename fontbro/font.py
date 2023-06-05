@@ -1291,7 +1291,7 @@ class Font:
         # instantiate the sliced variable font
         instancer.instantiateVariableFont(font, coordinates, inplace=True, **options)
 
-    def to_static(self, coordinates=None, **options):
+    def to_static(self, coordinates=None, style_name=None, **options):
         """
         Converts the variable font to a static one pinning
         the variable axes at the given coordinates.
@@ -1300,6 +1300,8 @@ class Font:
 
         :param coordinates: The coordinates, eg. {'wght':500, 'ital':50}
         :type coordinates: dict or None
+        :param style_name: The existing instance style name, eg. 'Black'
+        :type style_name: str or None
         :param options: The options for the fontTools.varLib.instancer
         :type options: dictionary
 
@@ -1310,6 +1312,22 @@ class Font:
             raise TypeError("Only a variable font can be made static.")
 
         font = self.get_ttfont()
+
+        # take coordinates from instance with specified style name
+        if style_name:
+            if coordinates:
+                raise ValueError(
+                    "Invalid arguments: 'coordinates' and 'style_name' are mutually exclusive."
+                )
+            instances = self.get_variable_instances()
+            for instance in instances:
+                if slugify(instance["style_name"]) == slugify(style_name):
+                    coordinates = instance["coordinates"].copy()
+                    break
+            if not coordinates:
+                raise ValueError(
+                    f"Invalid style name: instance with style name {style_name!r} not found."
+                )
 
         # make coordinates more friendly by using default axis values by default
         coordinates = coordinates or {}
