@@ -5,6 +5,7 @@ import re
 import sys
 import tempfile
 from curses import ascii
+from pathlib import Path
 
 import fsutil
 from fontTools import unicodedata
@@ -215,12 +216,12 @@ class Font:
         self._kwargs = None
         self._ttfont = None
 
-        if isinstance(filepath, str):
-            self._init_with_filepath(filepath, **kwargs)
+        if isinstance(filepath, (Path, str)):
+            self._init_with_filepath(str(filepath), **kwargs)
         else:
             filepath_type = type(filepath).__name__
             raise ValueError(
-                f"Invalid filepath type: expected str, found {filepath_type!r}."
+                f"Invalid filepath type: expected pathlib.Path or str, found {filepath_type!r}."
             )
 
     def _init_with_filepath(self, filepath, **kwargs):

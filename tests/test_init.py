@@ -1,7 +1,9 @@
-# from fontTools.ttLib import TTFont
+from pathlib import Path
 
 from fontbro import Font
 from tests import AbstractTestCase
+
+# from fontTools.ttLib import TTFont
 
 
 class InitTestCase(AbstractTestCase):
@@ -11,6 +13,11 @@ class InitTestCase(AbstractTestCase):
 
     def test_init_with_filepath(self):
         filepath = self._get_font_path("/Noto_Sans_TC/NotoSansTC-Regular.otf")
+        Font(filepath=filepath)
+
+    def test_init_with_filepath_using_pathlib_path(self):
+        dirpath = Path(__file__).parent / Path("fonts")
+        filepath = dirpath / Path("Noto_Sans_TC/NotoSansTC-Regular.otf")
         Font(filepath=filepath)
 
     def test_init_with_filepath_but_invalid_font_file(self):
