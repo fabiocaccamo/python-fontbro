@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.14.14](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.14.14) - 2023-06-05
+-   Allow `filepath` of type `pathib.Path` in constructor. #83 (#84)
+-   Add possibility to create static instance by using `style_name` instead of `coordinates`. #82 (#85)
+-   Strip whitespace when `slugify` string.
+-   Move `get_euclidean_distance` function to `fontbro.math` module.
+-   Bump `fonttools[pathops,unicode,woff]` from `4.39.3` to `4.39.4`. (#79)
+-   Update `pre-commit` hooks. (#80)
+
 ## [0.14.13](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.14.13) - 2023-05-02
 -   Fix `Font Bakery` error: "Verify that each group of fonts with the same nameID 1 has maximum of 4 fonts".
 
