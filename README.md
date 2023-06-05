@@ -666,6 +666,8 @@ If coordinates are not specified each axis will be pinned at its default value.
 
 :param coordinates: The coordinates, eg. {"wght":500, "ital":50}
 :type coordinates: dict or None
+:param style_name: The existing instance style name, eg. 'Black'
+:type style_name: str or None
 :param options: The options for the fontTools.varLib.instancer
 :type options: dictionary
 
