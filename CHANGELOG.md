@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.14.15](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.14.15) - 2023-07-31
+-   Bump requirements (`fonttools`, `pillow` and `tox`).
+
 ## [0.14.14](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.14.14) - 2023-06-05
 -   Allow `filepath` of type `pathib.Path` in constructor. #83 (#84)
 -   Add possibility to create static instance by using `style_name` instead of `coordinates`. #82 (#85)
