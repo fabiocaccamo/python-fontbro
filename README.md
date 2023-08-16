@@ -26,6 +26,10 @@ Just import the font class:
 from fontbro import Font
 
 font = Font("fonts/MyFont.ttf")
+
+# or you can use any file-like object:
+with open("fonts/MyFont.ttf") as fh:
+    font = Font(fh)
 ```
 
 ### Methods

@@ -213,11 +213,14 @@ class Font:
         super().__init__()
 
         self._filepath = None
+        self._fileobject = None
         self._kwargs = None
         self._ttfont = None
 
         if isinstance(filepath, (Path, str)):
             self._init_with_filepath(str(filepath), **kwargs)
+        elif hasattr(filepath, "read"):
+            self._init_with_fileobject(filepath, **kwargs)
         else:
             filepath_type = type(filepath).__name__
             raise ValueError(
@@ -232,6 +235,15 @@ class Font:
 
         except TTLibError as error:
             raise ValueError(f"Invalid font at filepath: {filepath!r}.") from error
+
+    def _init_with_fileobject(self, fileobject, **kwargs):
+        try:
+            self._fileobject = fileobject
+            self._kwargs = kwargs
+            self._ttfont = TTFont(self._fileobject, **kwargs)
+
+        except TTLibError as error:
+            raise ValueError(f"Invalid font at fileobject: {fileobject!r}.") from error
 
     def __enter__(self):
         return self
