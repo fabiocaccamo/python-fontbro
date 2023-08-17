@@ -1020,7 +1020,7 @@ class Font:
         """
         if filepath is None and self._filepath is None:
             raise ValueError(
-                "Font doesn't have a file path. Please specify a filepath to save to."
+                "Font doesn't have a filepath. Please specify a filepath to save to."
             )
 
         if filepath is None:
