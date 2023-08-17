@@ -37,6 +37,13 @@ class SaveTestCase(AbstractTestCase):
             with self.assertRaises(ValueError):
                 font.save()
 
+    def test_as_bytes(self):
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+
+        content = font.as_bytes()
+        # 00 01 00 00 00 is the file signature for TrueType fonts
+        self.assertEqual(content[:5], b"\x00\x01\x00\x00\x00")
+
     def test_save_as_woff(self):
         # font = self._get_font('/Noto_Sans_TC/NotoSansTC-Regular.otf')
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")

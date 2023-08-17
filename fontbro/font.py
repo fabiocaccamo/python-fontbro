@@ -4,6 +4,7 @@ import re
 import sys
 import tempfile
 from curses import ascii
+from io import BytesIO
 from pathlib import Path
 
 import fsutil
@@ -1094,6 +1095,15 @@ class Font:
         return self._save_with_flavor(
             flavor=self.FORMAT_WOFF2, filepath=filepath, overwrite=overwrite
         )
+
+    def as_bytes(self):
+        tmp = BytesIO()
+        font = self.get_ttfont()
+        font.save(tmp)
+        tmp.seek(0)
+        content = tmp.read()
+        tmp.close()
+        return content
 
     def set_name(self, key, value):
         """
