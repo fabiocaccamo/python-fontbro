@@ -1097,6 +1097,12 @@ class Font:
         )
 
     def as_bytes(self):
+        """
+        Exports the font as a bytes object.
+
+        :returns: The font as bytes that can be written to any file object.
+        :rtype: bytes
+        """
         tmp = BytesIO()
         font = self.get_ttfont()
         font.save(tmp)

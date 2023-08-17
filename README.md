@@ -33,6 +33,7 @@ with open("fonts/MyFont.ttf") as fh:
 ```
 
 ### Methods
+-   [`as_bytes`](#as_bytes)
 -   [`clone`](#clone)
 -   [`close`](#close)
 -   [`get_characters`](#get_characters)
@@ -78,6 +79,16 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`to_sliced_variable`](#to_sliced_variable)
 -   [`to_static`](#to_static)
 
+#### `as_bytes`
+```python
+"""
+Exports the font as a bytes object.
+
+:returns: The font as bytes that can be written to any file object.
+:rtype: bytes
+"""
+data = font.as_bytes()
+```
 #### `clone`
 ```python
 """
