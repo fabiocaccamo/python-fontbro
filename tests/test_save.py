@@ -23,6 +23,20 @@ class SaveTestCase(AbstractTestCase):
         with self.assertRaises(ValueError):
             font.save(font_filepath)
 
+    def test_save_fileobject(self):
+        font_filepath = self._get_font_path("/Noto_Sans_TC/NotoSansTC-Regular.otf")
+        with open(font_filepath, "rb") as fh:
+            font = Font(fh)
+            font_saved_path = font.save(font_filepath, overwrite=True)
+            self.assertEqual(font_saved_path, font_filepath)
+
+    def test_save_fileobject_error(self):
+        filepath = self._get_font_path("/Noto_Sans_TC/NotoSansTC-Regular.otf")
+        with open(filepath, "rb") as fh:
+            font = Font(fh)
+            with self.assertRaises(ValueError):
+                font.save()
+
     def test_save_as_woff(self):
         # font = self._get_font('/Noto_Sans_TC/NotoSansTC-Regular.otf')
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
