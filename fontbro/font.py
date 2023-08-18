@@ -1017,7 +1017,7 @@ class Font:
         :raises ValueError: If the font was created from a file object, and filepath is
         not specififed.
         """
-        if filepath is None and self._filepath is None:
+        if not filepath and not self._filepath:
             raise ValueError(
                 "Font doesn't have a filepath. Please specify a filepath to save to."
             )
