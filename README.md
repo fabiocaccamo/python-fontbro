@@ -33,7 +33,6 @@ with open("fonts/MyFont.ttf") as fh:
 ```
 
 ### Methods
--   [`as_bytes`](#as_bytes)
 -   [`clone`](#clone)
 -   [`close`](#close)
 -   [`get_characters`](#get_characters)
@@ -78,17 +77,8 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`subset`](#subset)
 -   [`to_sliced_variable`](#to_sliced_variable)
 -   [`to_static`](#to_static)
+-   [`write_to`](#write_to)
 
-#### `as_bytes`
-```python
-"""
-Exports the font as a bytes object.
-
-:returns: The font as bytes that can be written to any file object.
-:rtype: bytes
-"""
-data = font.as_bytes()
-```
 #### `clone`
 ```python
 """
@@ -690,6 +680,15 @@ If coordinates are not specified each axis will be pinned at its default value.
 :raises ValueError: If the coordinates axes are not all pinned
 """
 font.to_static(coordinates=None, **options)
+```
+#### `write_to`
+```python
+"""
+Writes the font to a file-like object.
+
+:param fileobject: A file-like object to write to.
+"""
+font.write_to(fh)
 ```
 
 ## Testing

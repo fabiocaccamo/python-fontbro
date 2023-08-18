@@ -1,3 +1,5 @@
+from io import BytesIO
+
 from fontbro import Font
 from tests import AbstractTestCase
 
@@ -37,10 +39,12 @@ class SaveTestCase(AbstractTestCase):
             with self.assertRaises(ValueError):
                 font.save()
 
-    def test_as_bytes(self):
+    def test_write_to(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
-
-        content = font.as_bytes()
+        buf = BytesIO()
+        font.write_to(buf)
+        buf.seek(0)
+        content = buf.read()
         # 00 01 00 00 00 is the file signature for TrueType fonts
         self.assertEqual(content[:5], b"\x00\x01\x00\x00\x00")
 

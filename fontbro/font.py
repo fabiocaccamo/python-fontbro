@@ -4,7 +4,6 @@ import re
 import sys
 import tempfile
 from curses import ascii
-from io import BytesIO
 from pathlib import Path
 
 import fsutil
@@ -1096,20 +1095,14 @@ class Font:
             flavor=self.FORMAT_WOFF2, filepath=filepath, overwrite=overwrite
         )
 
-    def as_bytes(self):
+    def write_to(self, fileobject):
         """
-        Exports the font as a bytes object.
+        Writes the font to a file-like object.
 
-        :returns: The font as bytes that can be written to any file object.
-        :rtype: bytes
+        :param fileobject: A file-like object to write to.
         """
-        tmp = BytesIO()
         font = self.get_ttfont()
-        font.save(tmp)
-        tmp.seek(0)
-        content = tmp.read()
-        tmp.close()
-        return content
+        font.save(fileobject)
 
     def set_name(self, key, value):
         """
