@@ -1,3 +1,4 @@
+from io import BytesIO
 from pathlib import Path
 
 from fontbro import Font
@@ -24,6 +25,11 @@ class InitTestCase(AbstractTestCase):
         filepath = self._get_font_path("/Noto_Sans_TC/NotoSansTC-Regular.otf")
         with open(filepath, "rb") as fh:
             Font(fh)
+
+    def test_init_with_file_object_but_invalid_font_file(self):
+        empty = BytesIO()
+        with self.assertRaises(ValueError):
+            Font(empty)
 
     def test_init_with_filepath_but_invalid_font_file(self):
         with self.assertRaises(ValueError):
