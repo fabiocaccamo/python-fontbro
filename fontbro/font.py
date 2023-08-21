@@ -1096,15 +1096,6 @@ class Font:
             flavor=self.FORMAT_WOFF2, filepath=filepath, overwrite=overwrite
         )
 
-    def write_to(self, fileobject):
-        """
-        Writes the font to a file-like object.
-
-        :param fileobject: A file-like object to write to.
-        """
-        font = self.get_ttfont()
-        font.save(fileobject)
-
     def save_to_fileobject(self, fileobject=None):
         """
         Writes the font to a file-like object. If no file-object is passed, an
@@ -1115,9 +1106,10 @@ class Font:
         instance.
         :rtype: typing.io.IO
         """
+        font = self.get_ttfont()
         if fileobject is None:
             fileobject = BytesIO()
-        self.write_to(fileobject)
+        font.save(fileobject)
         return fileobject
 
     def set_name(self, key, value):
