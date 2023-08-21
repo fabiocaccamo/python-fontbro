@@ -4,6 +4,7 @@ import re
 import sys
 import tempfile
 from curses import ascii
+from io import BytesIO
 from pathlib import Path
 
 import fsutil
@@ -1103,6 +1104,21 @@ class Font:
         """
         font = self.get_ttfont()
         font.save(fileobject)
+
+    def save_to_fileobject(self, fileobject=None):
+        """
+        Writes the font to a file-like object. If no file-object is passed, an
+        instance of `BytesIO` is created for the user.
+        :param fileobject: A file-like object to write to.
+
+        :returns: The file object that was originally pass, or a new BytesIO
+        instance.
+        :rtype: typing.io.IO
+        """
+        if fileobject is None:
+            fileobject = BytesIO()
+        self.write_to(fileobject)
+        return fileobject
 
     def set_name(self, key, value):
         """

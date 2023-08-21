@@ -48,6 +48,24 @@ class SaveTestCase(AbstractTestCase):
         # 00 01 00 00 00 is the file signature for TrueType fonts
         self.assertEqual(content[:5], b"\x00\x01\x00\x00\x00")
 
+    def test_save_to_fileobject(self):
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        buf = BytesIO()
+        returned = font.save_to_fileobject(buf)
+        returned.seek(0)
+        content = returned.read()
+        # 00 01 00 00 00 is the file signature for TrueType fonts
+        self.assertEqual(content[:5], b"\x00\x01\x00\x00\x00")
+        self.assertIs(buf, returned)
+
+    def test_save_to_fileobject_new(self):
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        returned = font.save_to_fileobject()
+        returned.seek(0)
+        content = returned.read()
+        # 00 01 00 00 00 is the file signature for TrueType fonts
+        self.assertEqual(content[:5], b"\x00\x01\x00\x00\x00")
+
     def test_save_as_woff(self):
         # font = self._get_font('/Noto_Sans_TC/NotoSansTC-Regular.otf')
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
