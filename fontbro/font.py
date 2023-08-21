@@ -4,6 +4,7 @@ import re
 import sys
 import tempfile
 from curses import ascii
+from io import BytesIO
 from pathlib import Path
 
 import fsutil
@@ -213,11 +214,14 @@ class Font:
         super().__init__()
 
         self._filepath = None
+        self._fileobject = None
         self._kwargs = None
         self._ttfont = None
 
         if isinstance(filepath, (Path, str)):
             self._init_with_filepath(str(filepath), **kwargs)
+        elif hasattr(filepath, "read"):
+            self._init_with_fileobject(filepath, **kwargs)
         else:
             filepath_type = type(filepath).__name__
             raise ValueError(
@@ -232,6 +236,15 @@ class Font:
 
         except TTLibError as error:
             raise ValueError(f"Invalid font at filepath: {filepath!r}.") from error
+
+    def _init_with_fileobject(self, fileobject, **kwargs):
+        try:
+            self._fileobject = fileobject
+            self._kwargs = kwargs
+            self._ttfont = TTFont(self._fileobject, **kwargs)
+
+        except TTLibError as error:
+            raise ValueError(f"Invalid font at fileobject: {fileobject!r}.") from error
 
     def __enter__(self):
         return self
@@ -1001,7 +1014,15 @@ class Font:
 
         :raises ValueError: If the filepath is the same of the source font
         and overwrite is not allowed.
+
+        :raises ValueError: If the font was created from a file object, and filepath is
+        not specififed.
         """
+        if not filepath and not self._filepath:
+            raise ValueError(
+                "Font doesn't have a filepath. Please specify a filepath to save to."
+            )
+
         if filepath is None:
             filepath = self._filepath
 
@@ -1074,6 +1095,22 @@ class Font:
         return self._save_with_flavor(
             flavor=self.FORMAT_WOFF2, filepath=filepath, overwrite=overwrite
         )
+
+    def save_to_fileobject(self, fileobject=None):
+        """
+        Writes the font to a file-like object. If no file-object is passed, an
+        instance of `BytesIO` is created for the user.
+        :param fileobject: A file-like object to write to.
+
+        :returns: The file object that was originally pass, or a new BytesIO
+        instance.
+        :rtype: typing.io.IO
+        """
+        font = self.get_ttfont()
+        if fileobject is None:
+            fileobject = BytesIO()
+        font.save(fileobject)
+        return fileobject
 
     def set_name(self, key, value):
         """

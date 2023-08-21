@@ -26,6 +26,10 @@ Just import the font class:
 from fontbro import Font
 
 font = Font("fonts/MyFont.ttf")
+
+# or you can use any file-like object:
+with open("fonts/MyFont.ttf") as fh:
+    font = Font(fh)
 ```
 
 ### Methods
@@ -65,6 +69,7 @@ font = Font("fonts/MyFont.ttf")
 -   [`save`](#save)
 -   [`save_as_woff`](#save_as_woff)
 -   [`save_as_woff2`](#save_as_woff2)
+-   [`save_to_file_object`](#save_to_file_object)
 -   [`set_name`](#set_name)
 -   [`set_names`](#set_names)
 -   [`set_style_flag`](#set_style_flag)
@@ -546,6 +551,21 @@ Saves font as woff2.
 :rtype: str
 """
 saved_font_path = font.save_as_woff2(filepath=None, overwrite=True)
+```
+
+#### `save_to_fileobject`
+```python
+"""
+Writes the font to a file-like object. If no file-object is passed, an
+instance of `BytesIO` is created for the user.
+:param fileobject: A file-like object to write to.
+
+:returns: The file object that was originally pass, or a new BytesIO
+instance.
+:rtype: typing.io.IO
+"""
+
+fileobject = font.save_to_fileobject(fileobject=None)
 ```
 
 #### `set_name`
