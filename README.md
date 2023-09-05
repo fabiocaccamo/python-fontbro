@@ -1,6 +1,6 @@
 [![](https://img.shields.io/pypi/pyversions/python-fontbro.svg?color=blue&logo=python&logoColor=white)](https://www.python.org/)
 [![](https://img.shields.io/pypi/v/python-fontbro.svg?color=blue&logo=pypi&logoColor=white)](https://pypi.org/project/python-fontbro/)
-[![](https://pepy.tech/badge/python-fontbro/month)](https://pepy.tech/project/python-fontbro)
+[![](https://static.pepy.tech/badge/python-fontbro/month)](https://pepy.tech/project/python-fontbro)
 [![](https://img.shields.io/github/stars/fabiocaccamo/python-fontbro?logo=github)](https://github.com/fabiocaccamo/python-fontbro/stargazers)
 [![](https://img.shields.io/pypi/l/python-fontbro?color=blue)](https://github.com/fabiocaccamo/python-fontbro/blob/main/LICENSE.txt)
 
