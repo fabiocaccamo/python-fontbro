@@ -11,7 +11,7 @@ import fsutil
 from fontTools import unicodedata
 from fontTools.subset import Options as SubsetterOptions
 from fontTools.subset import Subsetter
-from fontTools.ttLib import TTFont, TTLibError
+from fontTools.ttLib import TTCollection, TTFont, TTLibError
 from fontTools.varLib import instancer
 from fontTools.varLib.instancer import OverlapMode
 from PIL import Image, ImageDraw, ImageFont
@@ -277,6 +277,23 @@ class Font:
         """
         font = self.get_ttfont()
         font.close()
+
+    @classmethod
+    def from_collection(cls, filepath, **kwargs):
+        """
+        Gets a list of Font objects from a font collection file (.ttc / .otc)
+
+        :param filepath: The filepath
+        :type filepath: str or pathlib.Path
+
+        :returns: A list of Font objects.
+        :rtype: list
+        """
+        filepath = str(filepath)
+        fonts = []
+        with TTCollection(filepath) as font_collection:
+            fonts = [cls(font, **kwargs) for font in font_collection]
+        return fonts
 
     def get_characters(self, ignore_blank=False):
         """

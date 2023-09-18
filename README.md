@@ -35,6 +35,7 @@ with open("fonts/MyFont.ttf") as fh:
 ### Methods
 -   [`clone`](#clone)
 -   [`close`](#close)
+-   [`from_collection`](#from_collection)
 -   [`get_characters`](#get_characters)
 -   [`get_characters_count`](#get_characters_count)
 -   [`get_features`](#get_features)
@@ -93,6 +94,20 @@ font_clone = font.clone()
 Close the wrapped TTFont instance.
 """
 font.close()
+```
+
+#### `from_collection`
+```python
+"""
+Gets a list of Font objects from a font collection file (.ttc / .otc)
+
+:param filepath: The filepath
+:type filepath: str or pathlib.Path
+
+:returns: A list of Font objects.
+:rtype: list
+"""
+fonts = Font.from_collection(filepath="my-font-collection.ttc")
 ```
 
 #### `get_characters`
