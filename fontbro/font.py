@@ -207,9 +207,9 @@ class Font:
         Constructs a new Font instance loading a font file from the given filepath.
 
         :param filepath: The filepath from which to load the font
-        :type filepath: string or None
+        :type filepath: string or file object or TTFont or Font
 
-        :raises ValueError: if the filepath is not a valid font path
+        :raises ValueError: if the filepath is not a valid font
         """
         super().__init__()
 
@@ -222,6 +222,10 @@ class Font:
             self._init_with_filepath(str(filepath), **kwargs)
         elif hasattr(filepath, "read"):
             self._init_with_fileobject(filepath, **kwargs)
+        elif isinstance(filepath, Font):
+            self._init_with_font(filepath, **kwargs)
+        elif isinstance(filepath, TTFont):
+            self._init_with_ttfont(filepath, **kwargs)
         else:
             filepath_type = type(filepath).__name__
             raise ValueError(
@@ -245,6 +249,15 @@ class Font:
 
         except TTLibError as error:
             raise ValueError(f"Invalid font at fileobject: {fileobject!r}.") from error
+
+    def _init_with_font(self, font, **kwargs):
+        self._init_with_ttfont(font.get_ttfont())
+
+    def _init_with_ttfont(self, ttfont, **kwargs):
+        self._fileobject = BytesIO()
+        ttfont.save(self._fileobject)
+        self._ttfont = TTFont(self._fileobject, **kwargs)
+        self._kwargs = kwargs
 
     def __enter__(self):
         return self
