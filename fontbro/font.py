@@ -256,7 +256,7 @@ class Font:
         """
         Creates a new Font instance reading the same binary file.
         """
-        return Font(self._filepath, **self._kwargs)
+        return Font(self._filepath or self._fileobject, **self._kwargs)
 
     def close(self):
         """
