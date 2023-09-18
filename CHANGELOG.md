@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.16.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.16.0) - 2023-09-19
+-   Add `Font.from_collection` class method. #49
+-   Allow initialisation from `fontbro.Font` / `fontTools.ttLib.TTFont` objects.
+-   Fix error when calling `clone` method on a `Font` object created using a fileobject. #118
+-   Bump requirements.
+
 ## [0.15.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.15.0) - 2023-08-28
 -   Allow instantiation with file objects. (by [@fcurella](https://github.com/fcurella) in #103)
 -   Add `save_to_file_object` method. (by [@fcurella](https://github.com/fcurella) in #103)
