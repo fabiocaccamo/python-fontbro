@@ -94,9 +94,6 @@ exclude = '''
 )/
 '''
 
-[tool.isort]
-profile = "black"
-
 [tool.ruff]
 ignore = ["E501"]
 line-length = 88
