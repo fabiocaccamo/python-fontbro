@@ -354,6 +354,19 @@ class Font:
         """
         return len(list(self.get_characters(ignore_blank=ignore_blank)))
 
+    def get_family_name(self):
+        """
+        Gets the family name reading the name records with priority order (16, 21, 1).
+
+        :returns: The font family name.
+        :rtype: str
+        """
+        return (
+            self.get_name(self.NAME_TYPOGRAPHIC_FAMILY_NAME)
+            or self.get_name(self.NAME_WWS_FAMILY_NAME)
+            or self.get_name(self.NAME_FAMILY_NAME)
+        )
+
     def get_features(self):
         """
         Gets the font opentype features.
@@ -640,6 +653,19 @@ class Font:
         :rtype: dict
         """
         return {key: self.get_style_flag(key) for key in self._STYLE_FLAGS_KEYS}
+
+    def get_style_name(self):
+        """
+        Gets the family name reading the name records with priority order (17, 22, 2).
+
+        :returns: The font style name.
+        :rtype: str
+        """
+        return (
+            self.get_name(self.NAME_TYPOGRAPHIC_SUBFAMILY_NAME)
+            or self.get_name(self.NAME_WWS_SUBFAMILY_NAME)
+            or self.get_name(self.NAME_SUBFAMILY_NAME)
+        )
 
     def get_ttfont(self):
         """
@@ -947,20 +973,8 @@ class Font:
 
         :raises ValueError: if the computed PostScript-name is longer than 63 characters.
         """
-        family_name = family_name or ""
-        family_name = (
-            family_name.strip()
-            or self.get_name(self.NAME_TYPOGRAPHIC_FAMILY_NAME)
-            or self.get_name(self.NAME_WWS_FAMILY_NAME)
-            or self.get_name(self.NAME_FAMILY_NAME)
-        )
-        style_name = style_name or ""
-        style_name = (
-            style_name.strip()
-            or self.get_name(self.NAME_TYPOGRAPHIC_SUBFAMILY_NAME)
-            or self.get_name(self.NAME_WWS_SUBFAMILY_NAME)
-            or self.get_name(self.NAME_SUBFAMILY_NAME)
-        )
+        family_name = (family_name or "").strip() or self.get_family_name()
+        style_name = (style_name or "").strip() or self.get_style_name()
 
         # typographic and wws names
         typographic_family_name = family_name
@@ -1142,6 +1156,18 @@ class Font:
         font.save(fileobject)
         return fileobject
 
+    def set_family_name(self, name):
+        """
+        Sets the family name updating the related font names records.
+
+        :param name: The name
+        :type name: The new family name.
+        """
+        self.rename(
+            family_name=name,
+            style_name=self.get_style_name(),
+        )
+
     def set_name(self, key, value):
         """
         Sets the name by its identifier in the font name table.
@@ -1243,6 +1269,18 @@ class Font:
             self.set_style_flags(regular=False, bold=False, italic=True)
         elif subfamily_name == f"{Font.STYLE_FLAG_BOLD} {Font.STYLE_FLAG_ITALIC}":
             self.set_style_flags(regular=False, bold=True, italic=True)
+
+    def set_style_name(self, name):
+        """
+        Sets the style name updating the related font names records.
+
+        :param name: The name
+        :type name: The new style name.
+        """
+        self.rename(
+            family_name=self.get_family_name(),
+            style_name=name,
+        )
 
     def subset(self, unicodes="", glyphs=None, text="", **options):
         """

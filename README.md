@@ -38,6 +38,7 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`from_collection`](#from_collection)
 -   [`get_characters`](#get_characters)
 -   [`get_characters_count`](#get_characters_count)
+-   [`get_family_name`](#get_family_name)
 -   [`get_features`](#get_features)
 -   [`get_features_tags`](#get_features_tags)
 -   [`get_format`](#get_format)
@@ -51,6 +52,7 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`get_names`](#get_names)
 -   [`get_style_flag`](#get_style_flag)
 -   [`get_style_flags`](#get_style_flags)
+-   [`get_style_name`](#get_style_name)
 -   [`get_ttfont`](#get_ttfont)
 -   [`get_unicode_block_by_name`](#get_unicode_block_by_name)
 -   [`get_unicode_blocks`](#get_unicode_blocks)
@@ -71,11 +73,13 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`save_as_woff`](#save_as_woff)
 -   [`save_as_woff2`](#save_as_woff2)
 -   [`save_to_file_object`](#save_to_file_object)
+-   [`set_family_name`](#set_family_name)
 -   [`set_name`](#set_name)
 -   [`set_names`](#set_names)
 -   [`set_style_flag`](#set_style_flag)
 -   [`set_style_flags`](#set_style_flags)
 -   [`set_style_flags_by_subfamily_name`](#set_style_flags_by_subfamily_name)
+-   [`set_style_name`](#set_style_name)
 -   [`subset`](#subset)
 -   [`to_sliced_variable`](#to_sliced_variable)
 -   [`to_static`](#to_static)
@@ -138,6 +142,17 @@ Gets the font characters count.
 :rtype: int
 """
 chars_count = font.get_characters_count(ignore_blank=False)
+```
+
+#### `get_family_name`
+```python
+"""
+Gets the family name reading the name records with priority order (16, 21, 1).
+
+:returns: The font family name.
+:rtype: str
+"""
+family_name = font.get_family_name()
 ```
 
 #### `get_features`
@@ -309,6 +324,17 @@ Gets the style flags reading OS/2 and macStyle tables.
 :rtype: dict
 """
 flags = font.get_style_flags()
+```
+
+#### `get_style_name`
+```python
+"""
+Gets the family name reading the name records with priority order (17, 22, 2).
+
+:returns: The font style name.
+:rtype: str
+"""
+style_name = font.get_style_name()
 ```
 
 #### `get_ttfont`
@@ -583,6 +609,17 @@ instance.
 fileobject = font.save_to_fileobject(fileobject=None)
 ```
 
+#### `set_family_name`
+```python
+"""
+Sets the family name updating the related font names records.
+
+:param name: The name
+:type name: The new family name.
+"""
+font.set_family_name(name="My Font New")
+```
+
 #### `set_name`
 ```python
 """
@@ -648,6 +685,17 @@ The subfamily values should be "regular", "italic", "bold" or "bold italic"
 to allow this method to work properly.
 """
 font.set_style_flags_by_subfamily_name()
+```
+
+#### `set_style_name`
+```python
+"""
+Sets the style name updating the related font names records.
+
+:param name: The name
+:type name: The new style name.
+"""
+font.set_style_name(name="Bold Italic")
 ```
 
 #### `subset`
