@@ -74,6 +74,7 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`save_as_woff`](#save_as_woff)
 -   [`save_as_woff2`](#save_as_woff2)
 -   [`save_to_file_object`](#save_to_file_object)
+-   [`save_variable_instances`](#save_variable_instances)
 -   [`set_family_name`](#set_family_name)
 -   [`set_name`](#set_name)
 -   [`set_names`](#set_names)
@@ -628,6 +629,32 @@ instance.
 """
 
 fileobject = font.save_to_fileobject(fileobject=None)
+```
+
+#### `save_variable_instances`
+```python
+"""
+Save all instances of a variable font to specified directory in one or more format(s).
+
+:param dirpath: The dirpath
+:type dirpath: The directory path where the instances will be saved.
+:param woff2: Whether to save instances also in WOFF2 format. Default is True.
+:type woff2: bool
+:param woff: Whether to save instances also in WOFF format. Default is True.
+:type woff: bool
+:param overwrite: Whether to overwrite existing files in the directory. Default is True.
+:type overwrite: bool
+:param options: Additional options to be passed to the instancer when generating static instances.
+:type options: dictionary
+
+:returns: A list containing dictionaries for each saved instance. Each dictionary
+    includes 'instance' (containing instance metadata) and 'files' (a dictionary
+    with file formats as keys and file-paths as values).
+
+:raises TypeError: If the font is not a variable font.
+"""
+
+saved_fonts = font.save_variable_instances(dirpath, woff2=True, woff=True, overwrite=True, **options)
 ```
 
 #### `set_family_name`

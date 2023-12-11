@@ -1208,6 +1208,74 @@ class Font:
         font.save(fileobject)
         return fileobject
 
+    def save_variable_instances(
+        self, dirpath, woff2=True, woff=True, overwrite=True, **options
+    ):
+        """
+        Save all instances of a variable font to specified directory in one or more format(s).
+
+        :param dirpath: The dirpath
+        :type dirpath: The directory path where the instances will be saved.
+        :param woff2: Whether to save instances also in WOFF2 format. Default is True.
+        :type woff2: bool
+        :param woff: Whether to save instances also in WOFF format. Default is True.
+        :type woff: bool
+        :param overwrite: Whether to overwrite existing files in the directory. Default is True.
+        :type overwrite: bool
+        :param options: Additional options to be passed to the instancer when generating static instances.
+        :type options: dictionary
+
+        :returns: A list containing dictionaries for each saved instance. Each dictionary
+            includes 'instance' (containing instance metadata) and 'files' (a dictionary
+            with file formats as keys and file-paths as values).
+
+        :raises TypeError: If the font is not a variable font.
+        """
+        if not self.is_variable():
+            raise TypeError("Only a variable font can be instantiated.")
+
+        fsutil.assert_not_file(dirpath)
+        fsutil.make_dirs(dirpath)
+
+        instances_format = self.get_format()
+        instances_saved = []
+        instances = self.get_variable_instances()
+        for instance in instances:
+            # make instance
+            instance_font = self.clone()
+            instance_font.to_static(
+                coordinates=instance["coordinates"],
+                **options,
+            )
+            instance_font.rename(
+                style_name=instance["style_name"],
+            )
+            instance_files = {
+                Font.FORMAT_OTF: None,
+                Font.FORMAT_TTF: None,
+                Font.FORMAT_WOFF2: None,
+                Font.FORMAT_WOFF: None,
+            }
+            instance_files[instances_format] = instance_font.save(
+                dirpath,
+                overwrite=overwrite,
+            )
+            if woff2 and not instance_files[Font.FORMAT_WOFF2]:
+                instance_files[Font.FORMAT_WOFF2] = instance_font.save_as_woff2(
+                    dirpath,
+                    overwrite=overwrite,
+                )
+            if woff and not instance_files[Font.FORMAT_WOFF]:
+                instance_files[Font.FORMAT_WOFF] = instance_font.save_as_woff(
+                    dirpath,
+                    overwrite=overwrite,
+                )
+            instance_saved = {}
+            instance_saved["files"] = instance_files.copy()
+            instance_saved["instance"] = instance.copy()
+            instances_saved.append(instance_saved)
+        return instances_saved
+
     def set_family_name(self, name):
         """
         Sets the family name updating the related font names records.

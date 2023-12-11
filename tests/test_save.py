@@ -1,5 +1,5 @@
 from io import BytesIO
-
+import fsutil
 from fontbro import Font
 from tests import AbstractTestCase
 
@@ -80,3 +80,99 @@ class SaveTestCase(AbstractTestCase):
         self.assertEqual(font.get_format(), Font.FORMAT_TTF)
         font_saved = Font(font_saved_filepath)
         self.assertEqual(font_saved.get_format(), Font.FORMAT_WOFF2)
+
+    def test_save_variable_instances(self):
+        font = self._get_font("/Roboto_Mono/RobotoMono-VariableFont_wght.ttf")
+        output_dirpath = self._get_font_temp_path("test_save_variable_instances")
+        saved_fonts = font.save_variable_instances(
+            output_dirpath,
+            woff2=False,
+            woff=False,
+            overwrite=True,
+        )
+        self.assertEqual(len(saved_fonts), len(font.get_variable_instances()))
+
+        saved_instances = [saved_font["instance"] for saved_font in saved_fonts]
+        self.assertEqual(saved_instances, font.get_variable_instances())
+
+        saved_files_ttf = [
+            fsutil.get_filename(saved_font["files"]["ttf"])
+            for saved_font in saved_fonts
+        ]
+        self.assertEqual(
+            saved_files_ttf,
+            [
+                "RobotoMono-Thin.ttf",
+                "RobotoMono-Light.ttf",
+                "RobotoMono-Regular.ttf",
+                "RobotoMono-Medium.ttf",
+                "RobotoMono-Bold.ttf",
+            ],
+        )
+
+        saved_files_woff2 = [saved_font["files"]["woff2"] for saved_font in saved_fonts]
+        self.assertEqual(saved_files_woff2, [None, None, None, None, None])
+
+        saved_files_woff = [saved_font["files"]["woff"] for saved_font in saved_fonts]
+        self.assertEqual(saved_files_woff, [None, None, None, None, None])
+
+    def test_save_variable_instances_including_woff2_and_woff(self):
+        font = self._get_font("/Roboto_Mono/RobotoMono-VariableFont_wght.ttf")
+        output_dirpath = self._get_font_temp_path("test_save_variable_instances")
+        saved_fonts = font.save_variable_instances(
+            output_dirpath,
+            woff2=True,
+            woff=True,
+            overwrite=True,
+        )
+
+        saved_files_ttf = [
+            fsutil.get_filename(saved_font["files"]["ttf"])
+            for saved_font in saved_fonts
+        ]
+        self.assertEqual(
+            saved_files_ttf,
+            [
+                "RobotoMono-Thin.ttf",
+                "RobotoMono-Light.ttf",
+                "RobotoMono-Regular.ttf",
+                "RobotoMono-Medium.ttf",
+                "RobotoMono-Bold.ttf",
+            ],
+        )
+
+        saved_files_woff2 = [
+            fsutil.get_filename(saved_font["files"]["woff2"])
+            for saved_font in saved_fonts
+        ]
+        self.assertEqual(
+            saved_files_woff2,
+            [
+                "RobotoMono-Thin.woff2",
+                "RobotoMono-Light.woff2",
+                "RobotoMono-Regular.woff2",
+                "RobotoMono-Medium.woff2",
+                "RobotoMono-Bold.woff2",
+            ],
+        )
+
+        saved_files_woff = [
+            fsutil.get_filename(saved_font["files"]["woff"])
+            for saved_font in saved_fonts
+        ]
+        self.assertEqual(
+            saved_files_woff,
+            [
+                "RobotoMono-Thin.woff",
+                "RobotoMono-Light.woff",
+                "RobotoMono-Regular.woff",
+                "RobotoMono-Medium.woff",
+                "RobotoMono-Bold.woff",
+            ],
+        )
+
+    def test_save_variable_instances_with_static_font(self):
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        output_dirpath = self._get_font_temp_path("")
+        with self.assertRaises(TypeError):
+            font.save_variable_instances(output_dirpath)
