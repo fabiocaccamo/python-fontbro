@@ -401,6 +401,58 @@ class Font:
                     features_tags.add(feature.FeatureTag)
         return sorted(features_tags)
 
+    def get_filename(
+        self,
+        variable_suffix="Variable",
+        variable_axes_tags=True,
+        variable_axes_values=False,
+    ):
+        """
+        Gets the filename to use for saving the font to file-system.
+
+        :param variable_suffix: The variable suffix, default "Variable"
+        :type variable_suffix: str
+        :param variable_axes_tags: The variable axes tags flag,
+            if True, the axes tags will be appended, eg '[wght,wdth,slnt]'
+        :type variable_axes_tags: bool
+        :param variable_axes_values: The variable axes values flag
+            if True, each axis values will be appended, eg '[wght(0,800),wdth(-200,200),slnt(1,-1)]'
+        :type variable_axes_values: bool
+
+        :returns: The filename.
+        :rtype: str
+        """
+        if self.is_variable():
+            family_name = self.get_family_name()
+            family_name = remove_spaces(family_name)
+            subfamily_name = self.get_name(Font.NAME_SUBFAMILY_NAME) or ""
+            basename = family_name
+            # append subfamily name
+            if subfamily_name.lower() in ("bold", "bold italic", "italic"):
+                subfamily_name = remove_spaces(subfamily_name.lower().title())
+                basename = f"{basename}-{subfamily_name}"
+            # append variable suffix
+            variable_suffix = (variable_suffix or "").strip()
+            if variable_suffix:
+                if variable_suffix.lower() not in basename.lower():
+                    basename = f"{basename}-{variable_suffix}"
+            # append axis tags stringified suffix, eg. [wdth,wght,slnt]
+            if variable_axes_tags:
+                axes_tags = self.get_variable_axes_tags()
+                if axes_tags:
+                    # TODO: add support variable_axes_values option
+                    axes_tags_str = ",".join(axes_tags)
+                    basename = f"{basename}_[{axes_tags_str}]"
+        else:
+            family_name = self.get_family_name()
+            family_name = remove_spaces(family_name)
+            style_name = self.get_style_name()
+            style_name = remove_spaces(style_name)
+            basename = f"{family_name}-{style_name}"
+        extension = self.get_format()
+        filename = f"{basename}.{extension}"
+        return filename
+
     def get_fingerprint(self, text=""):
         """
         Gets the font fingerprint: an hash calculated from an image representation of the font.

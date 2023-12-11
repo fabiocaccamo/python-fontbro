@@ -41,9 +41,10 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`get_family_name`](#get_family_name)
 -   [`get_features`](#get_features)
 -   [`get_features_tags`](#get_features_tags)
--   [`get_format`](#get_format)
+-   [`get_filename`](#get_filename)
 -   [`get_fingerprint`](#get_fingerprint)
 -   [`get_fingerprint_match`](#get_fingerprint_match)
+-   [`get_format`](#get_format)
 -   [`get_glyphs`](#get_glyphs)
 -   [`get_glyphs_count`](#get_glyphs_count)
 -   [`get_image`](#get_image)
@@ -175,6 +176,26 @@ Gets the font opentype features tags.
 :rtype: list of str
 """
 features_tags = font.get_features_tags()
+```
+
+#### `get_filename`
+```python
+"""
+Gets the filename to use for saving the font to file-system.
+
+:param variable_suffix: The variable suffix, default "Variable"
+:type variable_suffix: str
+:param variable_axes_tags: The variable axes tags flag,
+    if True, the axes tags will be appended, eg '[wght,wdth,slnt]'
+:type variable_axes_tags: bool
+:param variable_axes_values: The variable axes values flag
+    if True, each axis values will be appended, eg '[wght(0,800),wdth(-200,200),slnt(1,-1)]'
+:type variable_axes_values: bool
+
+:returns: The filename.
+:rtype: str
+"""
+filename = font.get_filename(variable_suffix="Variable", variable_axes_tags=True, variable_axes_values=False)
 ```
 
 #### `get_fingerprint`
