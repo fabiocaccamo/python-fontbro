@@ -1128,7 +1128,7 @@ class Font:
         )
         if filepath_is_dir or not filepath_is_font_file:
             dirpath = filepath
-            basename = fsutil.get_file_basename(self._filepath)
+            basename = fsutil.get_file_basename(self.get_filename())
             extension = None
         else:
             dirpath, filename = fsutil.split_filepath(filepath)
