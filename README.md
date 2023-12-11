@@ -536,12 +536,12 @@ If style_name is not defined it will be auto-detected.
 :type family_name: str
 :param style_name: The style name
 :type style_name: str
-:param style_flags: if True the style flags will be updated by subfamily name
-:type style_flags: bool
+:param update_style_flags: if True the style flags will be updated by subfamily name
+:type update_style_flags: bool
 
 :raises ValueError: if the computed PostScript-name is longer than 63 characters.
 """
-font.rename(family_name="My Font New", style_name="Bold Italic")
+font.rename(family_name="My Font New", style_name="Bold Italic", update_style_flags=True)
 ```
 
 #### `save`

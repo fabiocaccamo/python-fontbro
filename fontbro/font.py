@@ -956,7 +956,7 @@ class Font:
         font = self.get_ttfont()
         return "fvar" in font
 
-    def rename(self, family_name="", style_name="", style_flags=True):
+    def rename(self, family_name="", style_name="", update_style_flags=True):
         """
         Renames the font names records (1, 2, 4, 6, 16, 17) according to
         the given family_name and style_name (subfamily_name).
@@ -968,8 +968,8 @@ class Font:
         :type family_name: str
         :param style_name: The style name
         :type style_name: str
-        :param style_flags: if True the style flags will be updated by subfamily name
-        :type style_flags: bool
+        :param update_style_flags: if True the style flags will be updated by subfamily name
+        :type update_style_flags: bool
 
         :raises ValueError: if the computed PostScript-name is longer than 63 characters.
         """
@@ -1041,7 +1041,7 @@ class Font:
         }
         self.set_names(names=names)
 
-        if style_flags:
+        if update_style_flags:
             self.set_style_flags_by_subfamily_name()
 
     def save(self, filepath=None, overwrite=False):

@@ -124,7 +124,7 @@ class StyleFlagsTestCase(AbstractTestCase):
         self.assertFalse(style_flags["regular"])
         self.assertFalse(style_flags["bold"])
         self.assertFalse(style_flags["italic"])
-        font.rename("Roboto Mono New", "Bold Italic", style_flags=False)
+        font.rename("Roboto Mono New", "Bold Italic", update_style_flags=False)
         font.set_style_flags_by_subfamily_name()
         style_flags = font.get_style_flags()
         self.assertFalse(style_flags["regular"])

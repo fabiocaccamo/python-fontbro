@@ -122,7 +122,7 @@ class RenameTestCase(AbstractTestCase):
     def test_rename_with_style_flags_disabled(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
         font.set_style_flags(regular=False, bold=False, italic=False)
-        font.rename("Roboto Mono New", "Bold Italic", style_flags=False)
+        font.rename("Roboto Mono New", "Bold Italic", update_style_flags=False)
         style_flags = font.get_style_flags()
         self.assertFalse(style_flags["regular"])
         self.assertFalse(style_flags["bold"])
@@ -131,7 +131,7 @@ class RenameTestCase(AbstractTestCase):
     def test_rename_with_style_flags_enabled(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
         font.set_style_flags(regular=False, bold=False, italic=False)
-        font.rename("Roboto Mono New", "Bold Italic", style_flags=True)
+        font.rename("Roboto Mono New", "Bold Italic", update_style_flags=True)
         style_flags = font.get_style_flags()
         self.assertFalse(style_flags["regular"])
         self.assertTrue(style_flags["bold"])
