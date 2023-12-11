@@ -19,7 +19,7 @@ from PIL import Image, ImageDraw, ImageFont
 from fontbro.flags import get_flag, set_flag
 from fontbro.math import get_euclidean_distance
 from fontbro.subset import parse_unicodes
-from fontbro.utils import concat_names, read_json, slugify
+from fontbro.utils import concat_names, read_json, remove_spaces, slugify
 
 
 class Font:
@@ -1000,8 +1000,8 @@ class Font:
 
         # postscript name
         postscript_name = concat_names(
-            typographic_family_name.replace(" ", ""),
-            typographic_subfamily_name.replace(" ", ""),
+            remove_spaces(typographic_family_name),
+            remove_spaces(typographic_subfamily_name),
         )
 
         # keep only printable ASCII subset:
