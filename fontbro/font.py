@@ -656,7 +656,7 @@ class Font:
 
     def get_style_name(self):
         """
-        Gets the family name reading the name records with priority order (17, 22, 2).
+        Gets the style name reading the name records with priority order (17, 22, 2).
 
         :returns: The font style name.
         :rtype: str

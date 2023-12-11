@@ -329,7 +329,7 @@ flags = font.get_style_flags()
 #### `get_style_name`
 ```python
 """
-Gets the family name reading the name records with priority order (17, 22, 2).
+Gets the style name reading the name records with priority order (17, 22, 2).
 
 :returns: The font style name.
 :rtype: str
