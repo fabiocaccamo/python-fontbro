@@ -9,7 +9,8 @@
 [![](https://img.shields.io/codecov/c/gh/fabiocaccamo/python-fontbro?logo=codecov)](https://codecov.io/gh/fabiocaccamo/python-fontbro)
 [![](https://img.shields.io/codacy/grade/dd3a046db4b14b988a2f1fcfbfaa51eb?logo=codacy)](https://www.codacy.com/app/fabiocaccamo/python-fontbro)
 [![](https://img.shields.io/codeclimate/maintainability/fabiocaccamo/python-fontbro?logo=code-climate)](https://codeclimate.com/github/fabiocaccamo/python-fontbro/)
-[![](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![](https://img.shields.io/badge/code%20style-black-000000.svg?logo=python&logoColor=black)](https://github.com/psf/black)
+[![](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 # python-fontbro
 friendly font operations on top of `fontTools`. :billed_cap:
@@ -38,11 +39,13 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`from_collection`](#from_collection)
 -   [`get_characters`](#get_characters)
 -   [`get_characters_count`](#get_characters_count)
+-   [`get_family_name`](#get_family_name)
 -   [`get_features`](#get_features)
 -   [`get_features_tags`](#get_features_tags)
--   [`get_format`](#get_format)
+-   [`get_filename`](#get_filename)
 -   [`get_fingerprint`](#get_fingerprint)
 -   [`get_fingerprint_match`](#get_fingerprint_match)
+-   [`get_format`](#get_format)
 -   [`get_glyphs`](#get_glyphs)
 -   [`get_glyphs_count`](#get_glyphs_count)
 -   [`get_image`](#get_image)
@@ -51,6 +54,7 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`get_names`](#get_names)
 -   [`get_style_flag`](#get_style_flag)
 -   [`get_style_flags`](#get_style_flags)
+-   [`get_style_name`](#get_style_name)
 -   [`get_ttfont`](#get_ttfont)
 -   [`get_unicode_block_by_name`](#get_unicode_block_by_name)
 -   [`get_unicode_blocks`](#get_unicode_blocks)
@@ -71,11 +75,14 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`save_as_woff`](#save_as_woff)
 -   [`save_as_woff2`](#save_as_woff2)
 -   [`save_to_file_object`](#save_to_file_object)
+-   [`save_variable_instances`](#save_variable_instances)
+-   [`set_family_name`](#set_family_name)
 -   [`set_name`](#set_name)
 -   [`set_names`](#set_names)
 -   [`set_style_flag`](#set_style_flag)
 -   [`set_style_flags`](#set_style_flags)
 -   [`set_style_flags_by_subfamily_name`](#set_style_flags_by_subfamily_name)
+-   [`set_style_name`](#set_style_name)
 -   [`subset`](#subset)
 -   [`to_sliced_variable`](#to_sliced_variable)
 -   [`to_static`](#to_static)
@@ -140,6 +147,17 @@ Gets the font characters count.
 chars_count = font.get_characters_count(ignore_blank=False)
 ```
 
+#### `get_family_name`
+```python
+"""
+Gets the family name reading the name records with priority order (16, 21, 1).
+
+:returns: The font family name.
+:rtype: str
+"""
+family_name = font.get_family_name()
+```
+
 #### `get_features`
 ```python
 """
@@ -160,6 +178,26 @@ Gets the font opentype features tags.
 :rtype: list of str
 """
 features_tags = font.get_features_tags()
+```
+
+#### `get_filename`
+```python
+"""
+Gets the filename to use for saving the font to file-system.
+
+:param variable_suffix: The variable suffix, default "Variable"
+:type variable_suffix: str
+:param variable_axes_tags: The variable axes tags flag,
+    if True, the axes tags will be appended, eg '[wght,wdth,slnt]'
+:type variable_axes_tags: bool
+:param variable_axes_values: The variable axes values flag
+    if True, each axis values will be appended, eg '[wght(0,800),wdth(-200,200),slnt(1,-1)]'
+:type variable_axes_values: bool
+
+:returns: The filename.
+:rtype: str
+"""
+filename = font.get_filename(variable_suffix="Variable", variable_axes_tags=True, variable_axes_values=False)
 ```
 
 #### `get_fingerprint`
@@ -309,6 +347,17 @@ Gets the style flags reading OS/2 and macStyle tables.
 :rtype: dict
 """
 flags = font.get_style_flags()
+```
+
+#### `get_style_name`
+```python
+"""
+Gets the style name reading the name records with priority order (17, 22, 2).
+
+:returns: The font style name.
+:rtype: str
+"""
+style_name = font.get_style_name()
 ```
 
 #### `get_ttfont`
@@ -510,12 +559,12 @@ If style_name is not defined it will be auto-detected.
 :type family_name: str
 :param style_name: The style name
 :type style_name: str
-:param style_flags: if True the style flags will be updated by subfamily name
-:type style_flags: bool
+:param update_style_flags: if True the style flags will be updated by subfamily name
+:type update_style_flags: bool
 
 :raises ValueError: if the computed PostScript-name is longer than 63 characters.
 """
-font.rename(family_name="My Font New", style_name="Bold Italic")
+font.rename(family_name="My Font New", style_name="Bold Italic", update_style_flags=True)
 ```
 
 #### `save`
@@ -583,6 +632,43 @@ instance.
 fileobject = font.save_to_fileobject(fileobject=None)
 ```
 
+#### `save_variable_instances`
+```python
+"""
+Save all instances of a variable font to specified directory in one or more format(s).
+
+:param dirpath: The dirpath
+:type dirpath: The directory path where the instances will be saved.
+:param woff2: Whether to save instances also in WOFF2 format. Default is True.
+:type woff2: bool
+:param woff: Whether to save instances also in WOFF format. Default is True.
+:type woff: bool
+:param overwrite: Whether to overwrite existing files in the directory. Default is True.
+:type overwrite: bool
+:param options: Additional options to be passed to the instancer when generating static instances.
+:type options: dictionary
+
+:returns: A list containing dictionaries for each saved instance. Each dictionary
+    includes 'instance' (containing instance metadata) and 'files' (a dictionary
+    with file formats as keys and file-paths as values).
+
+:raises TypeError: If the font is not a variable font.
+"""
+
+saved_fonts = font.save_variable_instances(dirpath, woff2=True, woff=True, overwrite=True, **options)
+```
+
+#### `set_family_name`
+```python
+"""
+Sets the family name updating the related font names records.
+
+:param name: The name
+:type name: The new family name.
+"""
+font.set_family_name(name="My Font New")
+```
+
 #### `set_name`
 ```python
 """
@@ -648,6 +734,17 @@ The subfamily values should be "regular", "italic", "bold" or "bold italic"
 to allow this method to work properly.
 """
 font.set_style_flags_by_subfamily_name()
+```
+
+#### `set_style_name`
+```python
+"""
+Sets the style name updating the related font names records.
+
+:param name: The name
+:type name: The new style name.
+"""
+font.set_style_name(name="Bold Italic")
 ```
 
 #### `subset`

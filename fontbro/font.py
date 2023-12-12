@@ -19,7 +19,7 @@ from PIL import Image, ImageDraw, ImageFont
 from fontbro.flags import get_flag, set_flag
 from fontbro.math import get_euclidean_distance
 from fontbro.subset import parse_unicodes
-from fontbro.utils import concat_names, read_json, slugify
+from fontbro.utils import concat_names, read_json, remove_spaces, slugify
 
 
 class Font:
@@ -354,6 +354,19 @@ class Font:
         """
         return len(list(self.get_characters(ignore_blank=ignore_blank)))
 
+    def get_family_name(self):
+        """
+        Gets the family name reading the name records with priority order (16, 21, 1).
+
+        :returns: The font family name.
+        :rtype: str
+        """
+        return (
+            self.get_name(self.NAME_TYPOGRAPHIC_FAMILY_NAME)
+            or self.get_name(self.NAME_WWS_FAMILY_NAME)
+            or self.get_name(self.NAME_FAMILY_NAME)
+        )
+
     def get_features(self):
         """
         Gets the font opentype features.
@@ -387,6 +400,58 @@ class Font:
                 for feature in feature_record:
                     features_tags.add(feature.FeatureTag)
         return sorted(features_tags)
+
+    def get_filename(
+        self,
+        variable_suffix="Variable",
+        variable_axes_tags=True,
+        variable_axes_values=False,
+    ):
+        """
+        Gets the filename to use for saving the font to file-system.
+
+        :param variable_suffix: The variable suffix, default "Variable"
+        :type variable_suffix: str
+        :param variable_axes_tags: The variable axes tags flag,
+            if True, the axes tags will be appended, eg '[wght,wdth,slnt]'
+        :type variable_axes_tags: bool
+        :param variable_axes_values: The variable axes values flag
+            if True, each axis values will be appended, eg '[wght(0,800),wdth(-200,200),slnt(1,-1)]'
+        :type variable_axes_values: bool
+
+        :returns: The filename.
+        :rtype: str
+        """
+        if self.is_variable():
+            family_name = self.get_family_name()
+            family_name = remove_spaces(family_name)
+            subfamily_name = self.get_name(Font.NAME_SUBFAMILY_NAME) or ""
+            basename = family_name
+            # append subfamily name
+            if subfamily_name.lower() in ("bold", "bold italic", "italic"):
+                subfamily_name = remove_spaces(subfamily_name.lower().title())
+                basename = f"{basename}-{subfamily_name}"
+            # append variable suffix
+            variable_suffix = (variable_suffix or "").strip()
+            if variable_suffix:
+                if variable_suffix.lower() not in basename.lower():
+                    basename = f"{basename}-{variable_suffix}"
+            # append axis tags stringified suffix, eg. [wdth,wght,slnt]
+            if variable_axes_tags:
+                axes_tags = self.get_variable_axes_tags()
+                if axes_tags:
+                    # TODO: add support variable_axes_values option
+                    axes_tags_str = ",".join(axes_tags)
+                    basename = f"{basename}[{axes_tags_str}]"
+        else:
+            family_name = self.get_family_name()
+            family_name = remove_spaces(family_name)
+            style_name = self.get_style_name()
+            style_name = remove_spaces(style_name)
+            basename = f"{family_name}-{style_name}"
+        extension = self.get_format()
+        filename = f"{basename}.{extension}"
+        return filename
 
     def get_fingerprint(self, text=""):
         """
@@ -640,6 +705,19 @@ class Font:
         :rtype: dict
         """
         return {key: self.get_style_flag(key) for key in self._STYLE_FLAGS_KEYS}
+
+    def get_style_name(self):
+        """
+        Gets the style name reading the name records with priority order (17, 22, 2).
+
+        :returns: The font style name.
+        :rtype: str
+        """
+        return (
+            self.get_name(self.NAME_TYPOGRAPHIC_SUBFAMILY_NAME)
+            or self.get_name(self.NAME_WWS_SUBFAMILY_NAME)
+            or self.get_name(self.NAME_SUBFAMILY_NAME)
+        )
 
     def get_ttfont(self):
         """
@@ -930,7 +1008,7 @@ class Font:
         font = self.get_ttfont()
         return "fvar" in font
 
-    def rename(self, family_name="", style_name="", style_flags=True):
+    def rename(self, family_name="", style_name="", update_style_flags=True):
         """
         Renames the font names records (1, 2, 4, 6, 16, 17) according to
         the given family_name and style_name (subfamily_name).
@@ -942,25 +1020,13 @@ class Font:
         :type family_name: str
         :param style_name: The style name
         :type style_name: str
-        :param style_flags: if True the style flags will be updated by subfamily name
-        :type style_flags: bool
+        :param update_style_flags: if True the style flags will be updated by subfamily name
+        :type update_style_flags: bool
 
         :raises ValueError: if the computed PostScript-name is longer than 63 characters.
         """
-        family_name = family_name or ""
-        family_name = (
-            family_name.strip()
-            or self.get_name(self.NAME_TYPOGRAPHIC_FAMILY_NAME)
-            or self.get_name(self.NAME_WWS_FAMILY_NAME)
-            or self.get_name(self.NAME_FAMILY_NAME)
-        )
-        style_name = style_name or ""
-        style_name = (
-            style_name.strip()
-            or self.get_name(self.NAME_TYPOGRAPHIC_SUBFAMILY_NAME)
-            or self.get_name(self.NAME_WWS_SUBFAMILY_NAME)
-            or self.get_name(self.NAME_SUBFAMILY_NAME)
-        )
+        family_name = (family_name or "").strip() or self.get_family_name()
+        style_name = (style_name or "").strip() or self.get_style_name()
 
         # typographic and wws names
         typographic_family_name = family_name
@@ -986,8 +1052,8 @@ class Font:
 
         # postscript name
         postscript_name = concat_names(
-            typographic_family_name.replace(" ", ""),
-            typographic_subfamily_name.replace(" ", ""),
+            remove_spaces(typographic_family_name),
+            remove_spaces(typographic_subfamily_name),
         )
 
         # keep only printable ASCII subset:
@@ -1027,7 +1093,7 @@ class Font:
         }
         self.set_names(names=names)
 
-        if style_flags:
+        if update_style_flags:
             self.set_style_flags_by_subfamily_name()
 
     def save(self, filepath=None, overwrite=False):
@@ -1062,7 +1128,7 @@ class Font:
         )
         if filepath_is_dir or not filepath_is_font_file:
             dirpath = filepath
-            basename = fsutil.get_file_basename(self._filepath)
+            basename = fsutil.get_file_basename(self.get_filename())
             extension = None
         else:
             dirpath, filename = fsutil.split_filepath(filepath)
@@ -1141,6 +1207,86 @@ class Font:
             fileobject = BytesIO()
         font.save(fileobject)
         return fileobject
+
+    def save_variable_instances(
+        self, dirpath, woff2=True, woff=True, overwrite=True, **options
+    ):
+        """
+        Save all instances of a variable font to specified directory in one or more format(s).
+
+        :param dirpath: The dirpath
+        :type dirpath: The directory path where the instances will be saved.
+        :param woff2: Whether to save instances also in WOFF2 format. Default is True.
+        :type woff2: bool
+        :param woff: Whether to save instances also in WOFF format. Default is True.
+        :type woff: bool
+        :param overwrite: Whether to overwrite existing files in the directory. Default is True.
+        :type overwrite: bool
+        :param options: Additional options to be passed to the instancer when generating static instances.
+        :type options: dictionary
+
+        :returns: A list containing dictionaries for each saved instance. Each dictionary
+            includes 'instance' (containing instance metadata) and 'files' (a dictionary
+            with file formats as keys and file-paths as values).
+
+        :raises TypeError: If the font is not a variable font.
+        """
+        if not self.is_variable():
+            raise TypeError("Only a variable font can be instantiated.")
+
+        fsutil.assert_not_file(dirpath)
+        fsutil.make_dirs(dirpath)
+
+        instances_format = self.get_format()
+        instances_saved = []
+        instances = self.get_variable_instances()
+        for instance in instances:
+            # make instance
+            instance_font = self.clone()
+            instance_font.to_static(
+                coordinates=instance["coordinates"],
+                **options,
+            )
+            instance_font.rename(
+                style_name=instance["style_name"],
+            )
+            instance_files = {
+                Font.FORMAT_OTF: None,
+                Font.FORMAT_TTF: None,
+                Font.FORMAT_WOFF2: None,
+                Font.FORMAT_WOFF: None,
+            }
+            instance_files[instances_format] = instance_font.save(
+                dirpath,
+                overwrite=overwrite,
+            )
+            if woff2 and not instance_files[Font.FORMAT_WOFF2]:
+                instance_files[Font.FORMAT_WOFF2] = instance_font.save_as_woff2(
+                    dirpath,
+                    overwrite=overwrite,
+                )
+            if woff and not instance_files[Font.FORMAT_WOFF]:
+                instance_files[Font.FORMAT_WOFF] = instance_font.save_as_woff(
+                    dirpath,
+                    overwrite=overwrite,
+                )
+            instance_saved = {}
+            instance_saved["files"] = instance_files.copy()
+            instance_saved["instance"] = instance.copy()
+            instances_saved.append(instance_saved)
+        return instances_saved
+
+    def set_family_name(self, name):
+        """
+        Sets the family name updating the related font names records.
+
+        :param name: The name
+        :type name: The new family name.
+        """
+        self.rename(
+            family_name=name,
+            style_name=self.get_style_name(),
+        )
 
     def set_name(self, key, value):
         """
@@ -1243,6 +1389,18 @@ class Font:
             self.set_style_flags(regular=False, bold=False, italic=True)
         elif subfamily_name == f"{Font.STYLE_FLAG_BOLD} {Font.STYLE_FLAG_ITALIC}":
             self.set_style_flags(regular=False, bold=True, italic=True)
+
+    def set_style_name(self, name):
+        """
+        Sets the style name updating the related font names records.
+
+        :param name: The name
+        :type name: The new style name.
+        """
+        self.rename(
+            family_name=self.get_family_name(),
+            style_name=name,
+        )
 
     def subset(self, unicodes="", glyphs=None, text="", **options):
         """
