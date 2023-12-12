@@ -188,10 +188,10 @@ Gets the filename to use for saving the font to file-system.
 :param variable_suffix: The variable suffix, default "Variable"
 :type variable_suffix: str
 :param variable_axes_tags: The variable axes tags flag,
-    if True, the axes tags will be appended, eg '[wght,wdth,slnt]'
+    if True, the axes tags will be appended, eg '[wght,wdth]'
 :type variable_axes_tags: bool
 :param variable_axes_values: The variable axes values flag
-    if True, each axis values will be appended, eg '[wght(0,800),wdth(-200,200),slnt(1,-1)]'
+    if True, each axis values will be appended, eg '[wght(100,100,900),wdth(75,100,125)]'
 :type variable_axes_values: bool
 
 :returns: The filename.

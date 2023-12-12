@@ -47,24 +47,77 @@ class FilenameTestCase(AbstractTestCase):
     def test_get_filename_with_variable_font_and_custom_suffixes(self):
         font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
         self.assertEqual(
-            font.get_filename(variable_suffix="VF", variable_axes_tags=False),
+            font.get_filename(
+                variable_suffix="VF",
+                variable_axes_tags=False,
+                variable_axes_values=False,
+            ),
             "Tourney-VF.ttf",
         )
 
         font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
         self.assertEqual(
-            font.get_filename(variable_suffix="VF", variable_axes_tags=True),
+            font.get_filename(
+                variable_suffix="VF",
+                variable_axes_tags=False,
+                variable_axes_values=True,
+            ),
+            "Tourney-VF.ttf",
+        )
+
+        font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
+        self.assertEqual(
+            font.get_filename(
+                variable_suffix="VF",
+                variable_axes_tags=True,
+            ),
             "Tourney-VF[wght,wdth].ttf",
         )
 
         font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
         self.assertEqual(
-            font.get_filename(variable_suffix="", variable_axes_tags=True),
+            font.get_filename(
+                variable_suffix="VF",
+                variable_axes_tags=True,
+                variable_axes_values=True,
+            ),
+            "Tourney-VF[wght(100,100,900),wdth(75,100,125)].ttf",
+        )
+
+        font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
+        self.assertEqual(
+            font.get_filename(
+                variable_suffix="",
+                variable_axes_tags=True,
+            ),
             "Tourney[wght,wdth].ttf",
         )
 
         font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
         self.assertEqual(
-            font.get_filename(variable_suffix="", variable_axes_tags=False),
+            font.get_filename(
+                variable_suffix="",
+                variable_axes_tags=True,
+                variable_axes_values=True,
+            ),
+            "Tourney[wght(100,100,900),wdth(75,100,125)].ttf",
+        )
+
+        font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
+        self.assertEqual(
+            font.get_filename(
+                variable_suffix="",
+                variable_axes_tags=False,
+            ),
+            "Tourney.ttf",
+        )
+
+        font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
+        self.assertEqual(
+            font.get_filename(
+                variable_suffix="",
+                variable_axes_tags=False,
+                variable_axes_values=True,
+            ),
             "Tourney.ttf",
         )

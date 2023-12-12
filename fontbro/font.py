@@ -413,10 +413,10 @@ class Font:
         :param variable_suffix: The variable suffix, default "Variable"
         :type variable_suffix: str
         :param variable_axes_tags: The variable axes tags flag,
-            if True, the axes tags will be appended, eg '[wght,wdth,slnt]'
+            if True, the axes tags will be appended, eg '[wght,wdth]'
         :type variable_axes_tags: bool
         :param variable_axes_values: The variable axes values flag
-            if True, each axis values will be appended, eg '[wght(0,800),wdth(-200,200),slnt(1,-1)]'
+            if True, each axis values will be appended, eg '[wght(100,100,900),wdth(75,100,125)]'
         :type variable_axes_values: bool
 
         :returns: The filename.
@@ -438,11 +438,22 @@ class Font:
                     basename = f"{basename}-{variable_suffix}"
             # append axis tags stringified suffix, eg. [wdth,wght,slnt]
             if variable_axes_tags:
-                axes_tags = self.get_variable_axes_tags()
-                if axes_tags:
-                    # TODO: add support variable_axes_values option
-                    axes_tags_str = ",".join(axes_tags)
-                    basename = f"{basename}[{axes_tags_str}]"
+                axes = self.get_variable_axes()
+                axes_str_parts = []
+                for axis in axes:
+                    axis_tag = axis["tag"]
+                    axis_str = f"{axis_tag}"
+                    if variable_axes_values:
+                        axis_min_value = int(axis["min_value"])
+                        axis_default_value = int(axis["default_value"])
+                        axis_max_value = int(axis["max_value"])
+                        axis_str += (
+                            f"({axis_min_value},{axis_default_value},{axis_max_value})"
+                        )
+                    axes_str_parts.append(axis_str)
+                axes_str = ",".join(axes_str_parts)
+                axes_str = f"[{axes_str}]"
+                basename = f"{basename}{axes_str}"
         else:
             family_name = self.get_family_name()
             family_name = remove_spaces(family_name)
