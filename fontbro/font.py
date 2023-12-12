@@ -1579,12 +1579,13 @@ class Font:
             raise ValueError("Invalid coordinates: all axes must be pinned.")
 
         # set default instancer options
+        options["inplace"] = True
         options.setdefault("optimize", True)
         options.setdefault("overlap", OverlapMode.REMOVE)
         options.setdefault("updateFontNames", False)
 
         # instantiate the static font
-        instancer.instantiateVariableFont(font, coordinates, inplace=True, **options)
+        instancer.instantiateVariableFont(font, coordinates, **options)
 
     def __str__(self):
         """
