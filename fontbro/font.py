@@ -442,7 +442,7 @@ class Font:
                 if axes_tags:
                     # TODO: add support variable_axes_values option
                     axes_tags_str = ",".join(axes_tags)
-                    basename = f"{basename}_[{axes_tags_str}]"
+                    basename = f"{basename}[{axes_tags_str}]"
         else:
             family_name = self.get_family_name()
             family_name = remove_spaces(family_name)
