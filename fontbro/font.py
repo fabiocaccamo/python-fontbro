@@ -927,6 +927,7 @@ class Font:
         """
         Gets the variable instance closest to coordinates.
         eg. coordinates = {'wght': 1000, 'slnt': 815, 'wdth': 775}
+        If coordinates do not specify some axes, axes default value is used for lookup.
 
         :param coordinates: The coordinates
         :type coordinates: dict
@@ -937,7 +938,13 @@ class Font:
         if not self.is_variable():
             return None
 
-        lookup_values = coordinates
+        # set default axes values for axes not present in coordinates
+        lookup_values = coordinates.copy()
+        for axis in self.get_variable_axes():
+            # don't use setdefault to override possible None values
+            if lookup_values.get(axis["tag"]) is None:
+                lookup_values[axis["tag"]] = axis["default_value"]
+
         instances = self.get_variable_instances()
         closest_instance_distance = sys.maxsize
         closest_instance = None

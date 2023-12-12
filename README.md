@@ -481,6 +481,7 @@ instances = font.get_variable_instances()
 """
 Gets the variable instance closest to coordinates.
 eg. coordinates = {"wght": 1000, "slnt": 815, "wdth": 775}
+If coordinates do not specify some axes, axes default value is used for lookup.
 
 :param coordinates: The coordinates
 :type coordinates: dict

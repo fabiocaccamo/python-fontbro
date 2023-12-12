@@ -98,6 +98,19 @@ class VariableTestCase(AbstractTestCase):
             },
         )
 
+    def test_get_variable_instance_closest_to_coordinates_without_all_axes(self):
+        font = self._get_font("/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf")
+        closest_instance = font.get_variable_instance_closest_to_coordinates(
+            {"wdth": 80.0}
+        )
+        self.assertEqual(
+            closest_instance,
+            {
+                "coordinates": {"wdth": 75.0, "wght": 400.0},
+                "style_name": "Condensed Regular",
+            },
+        )
+
     def test_get_variable_instance_closest_to_coordinates_with_static_font(self):
         font = self._get_font("/Noto_Sans_TC/NotoSansTC-Regular.otf")
         closest_instance = font.get_variable_instance_closest_to_coordinates(
