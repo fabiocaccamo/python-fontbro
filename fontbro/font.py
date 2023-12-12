@@ -1527,7 +1527,14 @@ class Font:
         # instantiate the sliced variable font
         instancer.instantiateVariableFont(font, coordinates, inplace=True, **options)
 
-    def to_static(self, coordinates=None, style_name=None, **options):
+    def to_static(
+        self,
+        coordinates=None,
+        style_name=None,
+        update_names=True,
+        update_style_flags=True,
+        **options,
+    ):
         """
         Converts the variable font to a static one pinning
         the variable axes at the given coordinates.
@@ -1538,6 +1545,11 @@ class Font:
         :type coordinates: dict or None
         :param style_name: The existing instance style name, eg. 'Black'
         :type style_name: str or None
+        :param update_names: if True the name records will be updated based on closest instance
+        :type update_names: bool
+        :param update_style_flags: if True the style flags will be updated based on closest instance
+        :type update_style_flags: bool
+
         :param options: The options for the fontTools.varLib.instancer
         :type options: dictionary
 
@@ -1578,6 +1590,9 @@ class Font:
         if not self._all_axes_pinned(coordinates):
             raise ValueError("Invalid coordinates: all axes must be pinned.")
 
+        # get instance closest to coordinates
+        instance = self.get_variable_instance_closest_to_coordinates(coordinates)
+
         # set default instancer options
         options["inplace"] = True
         options.setdefault("optimize", True)
@@ -1586,6 +1601,13 @@ class Font:
 
         # instantiate the static font
         instancer.instantiateVariableFont(font, coordinates, **options)
+
+        # update name records and style flags based on instance style name
+        if update_names:
+            self.rename(
+                style_name=instance["style_name"],
+                update_style_flags=update_style_flags,
+            )
 
     def __str__(self):
         """

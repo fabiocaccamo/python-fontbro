@@ -60,6 +60,26 @@ class InstantiationTestCase(AbstractTestCase):
         with self.assertRaises(ValueError):
             font.to_static(style_name="ExtraBlack")
 
+    def test_to_static_with_update_names_and_exact_coordinates(self):
+        font = self._get_variable_font()
+        font.to_static(coordinates={"wdth": 100.0, "wght": 900.0}, update_names=True)
+        self.assertEqual(font.get_style_name(), "Black")
+
+    def test_to_static_with_update_names_and_approx_coordinates(self):
+        font = self._get_variable_font()
+        font.to_static(coordinates={"wdth": 95.0, "wght": 860.0}, update_names=True)
+        self.assertEqual(font.get_style_name(), "Black")
+
+    def test_to_static_without_update_names(self):
+        font = self._get_variable_font()
+        font.to_static(coordinates={"wdth": 100.0, "wght": 900.0}, update_names=False)
+        self.assertEqual(font.get_style_name(), "Thin")
+
+    def test_to_static_with_update_names_default(self):
+        font = self._get_variable_font()
+        font.to_static(coordinates={"wdth": 100.0, "wght": 900.0})
+        self.assertEqual(font.get_style_name(), "Black")
+
     def test_to_sliced_variable_with_static_font(self):
         font = self._get_static_font()
         with self.assertRaises(TypeError):

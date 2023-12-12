@@ -793,21 +793,27 @@ font.to_sliced_variable(coordinates, **options)
 #### `to_static`
 ```python
 """
-Converts the variable font to a static one pinning the variable axes at the given coordinates.
+Converts the variable font to a static one pinning
+the variable axes at the given coordinates.
 If an axis value is not specified, the axis will be pinned at its default value.
 If coordinates are not specified each axis will be pinned at its default value.
 
-:param coordinates: The coordinates, eg. {"wght":500, "ital":50}
+:param coordinates: The coordinates, eg. {'wght':500, 'ital':50}
 :type coordinates: dict or None
 :param style_name: The existing instance style name, eg. 'Black'
 :type style_name: str or None
+:param update_names: if True the name records will be updated based on closest instance
+:type update_names: bool
+:param update_style_flags: if True the style flags will be updated based on closest instance
+:type update_style_flags: bool
+
 :param options: The options for the fontTools.varLib.instancer
 :type options: dictionary
 
 :raises TypeError: If the font is not a variable font
 :raises ValueError: If the coordinates axes are not all pinned
 """
-font.to_static(coordinates=None, **options)
+font.to_static(coordinates=None, style_name=None, update_names=True, update_style_flags=True, **options)
 ```
 
 ## Testing
