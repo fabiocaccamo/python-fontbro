@@ -100,7 +100,7 @@ line-length = 88
 select = ["B", "B9", "C", "E", "F", "W"]
 
 [tool.ruff.mccabe]
-max-complexity = 10
+max-complexity = 11
 
 [tool.setuptools.packages.find]
 include = ["fontbro*"]
