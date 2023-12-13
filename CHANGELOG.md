@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.17.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.17.0) - 2023-12-13
+-   Add `get_family_name` / `set_family_name` methods.
+-   Add `get_filename` method.
+-   Add `get_style_name` / `set_style_name` methods.
+-   Add `save_variable_instances` method. #116
+-   Update `rename` method: rename `style_flags` argument to `update_style_flags`.
+-   Update `save` method: output font filename is generated using `get_filename` method when target path is a directory.
+-   Update `to_static` method: add support to `update_names` (default True) and `update_style_flags` (default True) arguments.
+-   Update `to_static` method: set `italic` style flag based on `ital` / `slnt` coordinates values.
+-   Fix `get_variable_instance_closest_to_coordinates`: if coordinates do not specify some axes, axes default value is used for lookup.
+-   Fix `to_static` method: prevent `inplace` option override.
+-   Use `Ruff` formatter instead of `Black` and `isort`.
+-   Bump requirements (`fonttools`, `pillow` and `python-fsutil`).
+
 ## [0.16.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.16.0) - 2023-09-19
 -   Add `Font.from_collection` class method. #49
 -   Allow initialisation from `fontbro.Font` / `fontTools.ttLib.TTFont` objects.
