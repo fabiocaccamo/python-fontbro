@@ -60,6 +60,11 @@ class InstantiationTestCase(AbstractTestCase):
         with self.assertRaises(ValueError):
             font.to_static(style_name="ExtraBlack")
 
+    def test_to_static_with_update_names_default(self):
+        font = self._get_variable_font()
+        font.to_static(coordinates={"wdth": 100.0, "wght": 900.0})
+        self.assertEqual(font.get_style_name(), "Black")
+
     def test_to_static_with_update_names_and_exact_coordinates(self):
         font = self._get_variable_font()
         font.to_static(coordinates={"wdth": 100.0, "wght": 900.0}, update_names=True)
@@ -75,10 +80,56 @@ class InstantiationTestCase(AbstractTestCase):
         font.to_static(coordinates={"wdth": 100.0, "wght": 900.0}, update_names=False)
         self.assertEqual(font.get_style_name(), "Thin")
 
-    def test_to_static_with_update_names_default(self):
-        font = self._get_variable_font()
-        font.to_static(coordinates={"wdth": 100.0, "wght": 900.0})
-        self.assertEqual(font.get_style_name(), "Black")
+    def test_to_static_with_update_names_default_with_update_style_flags_default_and_italic_instance(
+        self,
+    ):
+        font = self._get_font("/Inter/Inter-VariableFont_slnt,wght.ttf")
+        font.to_static(coordinates={"slnt": -10.0, "wght": 900.0})
+        self.assertTrue(font.get_style_flag("italic"))
+
+    def test_to_static_with_update_names_with_update_style_flags_and_italic_instance(
+        self,
+    ):
+        font = self._get_font("/Inter/Inter-VariableFont_slnt,wght.ttf")
+        font.to_static(
+            coordinates={"slnt": -10.0, "wght": 900.0},
+            update_names=True,
+            update_style_flags=True,
+        )
+        self.assertTrue(font.get_style_flag("italic"))
+
+    def test_to_static_with_update_names_without_update_style_flags_and_italic_instance(
+        self,
+    ):
+        font = self._get_font("/Inter/Inter-VariableFont_slnt,wght.ttf")
+        font.to_static(
+            coordinates={"slnt": -10.0, "wght": 900.0},
+            update_names=True,
+            update_style_flags=False,
+        )
+        self.assertFalse(font.get_style_flag("italic"))
+
+    def test_to_static_without_update_names_with_update_style_flags_and_italic_instance(
+        self,
+    ):
+        font = self._get_font("/Inter/Inter-VariableFont_slnt,wght.ttf")
+        font.to_static(
+            coordinates={"slnt": -10.0, "wght": 900.0},
+            update_names=False,
+            update_style_flags=True,
+        )
+        self.assertTrue(font.get_style_flag("italic"))
+
+    def test_to_static_without_update_names_without_update_style_flags_and_italic_instance(
+        self,
+    ):
+        font = self._get_font("/Inter/Inter-VariableFont_slnt,wght.ttf")
+        font.to_static(
+            coordinates={"slnt": -10.0, "wght": 900.0},
+            update_names=False,
+            update_style_flags=False,
+        )
+        self.assertFalse(font.get_style_flag("italic"))
 
     def test_to_sliced_variable_with_static_font(self):
         font = self._get_static_font()
