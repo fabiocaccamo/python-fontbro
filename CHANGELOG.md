@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.17.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.17.0) - 2023-12-13
+-   Add `Python 3.12` support.
 -   Add `get_family_name` / `set_family_name` methods.
 -   Add `get_filename` method.
 -   Add `get_style_name` / `set_style_name` methods.
