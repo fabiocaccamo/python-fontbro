@@ -923,6 +923,22 @@ class Font:
             for instance in font["fvar"].instances
         ]
 
+    def get_variable_instance_by_style_name(self, style_name):
+        """
+        Gets the variable instance by style name, eg. style_name = 'Bold'
+
+        :param style_name: The style name
+        :type style_name: str
+
+        :returns: The variable instance matching the given style name.
+        :rtype: str or None
+        """
+        instances = self.get_variable_instances()
+        for instance in instances:
+            if slugify(instance["style_name"]) == slugify(style_name):
+                return instance
+        return None
+
     def get_variable_instance_closest_to_coordinates(self, coordinates):
         """
         Gets the variable instance closest to coordinates.
@@ -1567,15 +1583,12 @@ class Font:
                 raise ValueError(
                     "Invalid arguments: 'coordinates' and 'style_name' are mutually exclusive."
                 )
-            instances = self.get_variable_instances()
-            for instance in instances:
-                if slugify(instance["style_name"]) == slugify(style_name):
-                    coordinates = instance["coordinates"].copy()
-                    break
-            if not coordinates:
+            instance = self.get_variable_instance_by_style_name(style_name=style_name)
+            if not instance:
                 raise ValueError(
                     f"Invalid style name: instance with style name {style_name!r} not found."
                 )
+            coordinates = instance["coordinates"].copy()
 
         # make coordinates more friendly by using default axis values by default
         coordinates = coordinates or {}
