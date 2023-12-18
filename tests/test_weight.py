@@ -45,3 +45,9 @@ class WeightTestCase(AbstractTestCase):
             expected_value=900,
             expected_name=Font.WEIGHT_BLACK,
         )
+
+    def test_get_weight_without_os2_table(self):
+        font = self._get_font("/Noto_Sans_TC/NotoSansTC-Regular.otf")
+        del font.get_ttfont()["OS/2"]
+        weight = font.get_weight()
+        self.assertEqual(weight, None)

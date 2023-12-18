@@ -134,7 +134,7 @@ class InstantiationTestCase(AbstractTestCase):
     def test_to_sliced_variable_with_static_font(self):
         font = self._get_static_font()
         with self.assertRaises(TypeError):
-            font.to_sliced_variable()
+            font.to_sliced_variable(coordinates={"wght": 200, "wdth": 110})
 
     def test_to_sliced_variable_without_coordinates(self):
         # nothing changes without coordinates

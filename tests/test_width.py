@@ -46,3 +46,9 @@ class WidthTestCase(AbstractTestCase):
             expected_value=5,
             expected_name=Font.WIDTH_MEDIUM,
         )
+
+    def test_get_width_without_os2_table(self):
+        font = self._get_font("/Noto_Sans_TC/NotoSansTC-Regular.otf")
+        del font.get_ttfont()["OS/2"]
+        width = font.get_width()
+        self.assertEqual(width, None)

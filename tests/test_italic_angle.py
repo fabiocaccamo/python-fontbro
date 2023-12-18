@@ -32,3 +32,9 @@ class ItalicAngleTestCase(AbstractTestCase):
             value=-10,
             italic=True,
         )
+
+    def test_get_italic_angle_without_post_table(self):
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        del font.get_ttfont()["post"]
+        italic_angle = font.get_italic_angle()
+        self.assertEqual(italic_angle, None)
