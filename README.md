@@ -486,7 +486,7 @@ Gets the variable instance by style name, eg. style_name = 'Bold'
 :type style_name: str
 
 :returns: The variable instance matching the given style name.
-:rtype: str or None
+:rtype: dict or None
 """
 instance = font.get_variable_instance_by_style_name(style_name="Bold")
 ```

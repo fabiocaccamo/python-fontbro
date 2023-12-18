@@ -931,7 +931,7 @@ class Font:
         :type style_name: str
 
         :returns: The variable instance matching the given style name.
-        :rtype: str or None
+        :rtype: dict or None
         """
         instances = self.get_variable_instances()
         for instance in instances:
