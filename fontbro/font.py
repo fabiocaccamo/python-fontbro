@@ -1624,8 +1624,8 @@ class Font:
 
         # update style flags based on coordinates values
         if update_style_flags:
-            has_italic = coordinates.get("ital", 0) == 1
-            has_slant = coordinates.get("slnt", 0) < 0
+            has_italic = (coordinates.get("ital", 0) or 0) == 1
+            has_slant = (coordinates.get("slnt", 0) or 0) < 0
             if has_italic or has_slant:
                 self.set_style_flags(regular=False, italic=True)
 
