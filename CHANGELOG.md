@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+get_variable_instance_by_style_name
+
+## [0.17.1](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.17.1) - 2023-12-18
+-   Add `get_variable_instance_by_style_name` method.
+-   Increase tests coverage.
+
 ## [0.17.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.17.0) - 2023-12-13
 -   Add `Python 3.12` support.
 -   Add `get_family_name` / `set_family_name` methods.

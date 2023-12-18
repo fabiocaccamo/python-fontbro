@@ -64,6 +64,7 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`get_variable_axes_tags`](#get_variable_axes_tags)
 -   [`get_variable_axis_by_tag`](#get_variable_axis_by_tag)
 -   [`get_variable_instances`](#get_variable_instances)
+-   [`get_variable_instance_by_style_name`](#get_variable_instance_by_style_name)
 -   [`get_variable_instance_closest_to_coordinates`](#get_variable_instance_closest_to_coordinates)
 -   [`get_version`](#get_version)
 -   [`get_weight`](#get_weight)
@@ -474,6 +475,20 @@ Gets the variable instances.
 :rtype: list of dict or None
 """
 instances = font.get_variable_instances()
+```
+
+#### `get_variable_instance_by_style_name`
+```python
+"""
+Gets the variable instance by style name, eg. style_name = 'Bold'
+
+:param style_name: The style name
+:type style_name: str
+
+:returns: The variable instance matching the given style name.
+:rtype: str or None
+"""
+instance = font.get_variable_instance_by_style_name(style_name="Bold")
 ```
 
 #### `get_variable_instance_closest_to_coordinates`
