@@ -9,7 +9,10 @@ class RenameTestCase(AbstractTestCase):
 
     def test_rename_with_family_name_and_style_name(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
-        font.rename("Roboto Mono New", "Bold Italic")
+        font.rename(
+            family_name="Roboto Mono New",
+            style_name="Bold Italic",
+        )
         names = font.get_names()
         self.assertEqual(names[Font.NAME_FAMILY_NAME], "Roboto Mono New")
         self.assertEqual(names[Font.NAME_SUBFAMILY_NAME], "Bold Italic")
@@ -20,7 +23,9 @@ class RenameTestCase(AbstractTestCase):
 
     def test_rename_with_family_name_only(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
-        font.rename("Roboto Mono New", "")
+        font.rename(
+            family_name="Roboto Mono New",
+        )
         names = font.get_names()
         self.assertEqual(names[Font.NAME_FAMILY_NAME], "Roboto Mono New")
         self.assertEqual(names[Font.NAME_SUBFAMILY_NAME], "Regular")
@@ -33,7 +38,9 @@ class RenameTestCase(AbstractTestCase):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
         family_name = font.get_name(key=Font.NAME_FAMILY_NAME)
         family_name = family_name.replace("Mono", "Multi")
-        font.rename(family_name=family_name)
+        font.rename(
+            family_name=family_name,
+        )
         font_uid = font.get_name(Font.NAME_UNIQUE_IDENTIFIER)
         self.assertEqual(font_uid, "3.000;GOOG;RobotoMulti-Regular")
 
@@ -56,7 +63,9 @@ class RenameTestCase(AbstractTestCase):
         )
         family_name = font.get_name(key=Font.NAME_TYPOGRAPHIC_FAMILY_NAME)
         family_name = family_name.replace("ABC", "Hugo")
-        font.rename(family_name=family_name)
+        font.rename(
+            family_name=family_name,
+        )
         # self._print(font.get_names())
         self.assertEqual(
             font.get_names(),
@@ -78,7 +87,9 @@ class RenameTestCase(AbstractTestCase):
 
     def test_rename_with_style_name_only(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
-        font.rename("", "Bold Italic")
+        font.rename(
+            style_name="Bold Italic",
+        )
         names = font.get_names()
         self.assertEqual(names[Font.NAME_FAMILY_NAME], "Roboto Mono")
         self.assertEqual(names[Font.NAME_SUBFAMILY_NAME], "Bold Italic")
@@ -89,7 +100,10 @@ class RenameTestCase(AbstractTestCase):
 
     def test_rename_without_family_name_and_style_name(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
-        font.rename("", "")
+        font.rename(
+            family_name="",
+            style_name="",
+        )
         names = font.get_names()
         self.assertEqual(names[Font.NAME_FAMILY_NAME], "Roboto Mono")
         self.assertEqual(names[Font.NAME_SUBFAMILY_NAME], "Regular")
@@ -102,15 +116,18 @@ class RenameTestCase(AbstractTestCase):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
         with self.assertRaises(ValueError):
             font.rename(
-                "Roboto Mono New Name Too Long For PostScript Name So Expect Exception",
-                "Bold Italic",
+                family_name="Roboto Mono New Name Too Long For PostScript Name So Expect Exception",
+                style_name="Bold Italic",
             )
 
     def test_rename_with_style_name_containing_characters_not_allowed_in_postscript_name(
         self,
     ):
         font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
-        font.rename(" Tourney Custom ", " [wdth-wght] ")
+        font.rename(
+            family_name=" Tourney Custom ",
+            style_name=" [wdth-wght] ",
+        )
         names = font.get_names()
         self.assertEqual(names[Font.NAME_FAMILY_NAME], "Tourney Custom [wdth-wght]")
         self.assertEqual(names[Font.NAME_SUBFAMILY_NAME], "Regular")
@@ -122,7 +139,11 @@ class RenameTestCase(AbstractTestCase):
     def test_rename_with_style_flags_disabled(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
         font.set_style_flags(regular=False, bold=False, italic=False)
-        font.rename("Roboto Mono New", "Bold Italic", update_style_flags=False)
+        font.rename(
+            family_name="Roboto Mono New",
+            style_name="Bold Italic",
+            update_style_flags=False,
+        )
         style_flags = font.get_style_flags()
         self.assertFalse(style_flags["regular"])
         self.assertFalse(style_flags["bold"])
@@ -131,7 +152,11 @@ class RenameTestCase(AbstractTestCase):
     def test_rename_with_style_flags_enabled(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
         font.set_style_flags(regular=False, bold=False, italic=False)
-        font.rename("Roboto Mono New", "Bold Italic", update_style_flags=True)
+        font.rename(
+            family_name="Roboto Mono New",
+            style_name="Bold Italic",
+            update_style_flags=True,
+        )
         style_flags = font.get_style_flags()
         self.assertFalse(style_flags["regular"])
         self.assertTrue(style_flags["bold"])
