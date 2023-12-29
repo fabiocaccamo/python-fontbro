@@ -295,7 +295,7 @@ class Font:
             fonts = [cls(font, **kwargs) for font in font_collection]
         return fonts
 
-    def get_characters(self, ignore_blank=False):
+    def get_characters(self, *, ignore_blank=False):
         """
         Gets the font characters.
 
@@ -342,7 +342,7 @@ class Font:
                 "unicode_script_tag": unicode_script_tag,
             }
 
-    def get_characters_count(self, ignore_blank=False):
+    def get_characters_count(self, *, ignore_blank=False):
         """
         Gets the font characters count.
 
@@ -403,6 +403,7 @@ class Font:
 
     def get_filename(
         self,
+        *,
         variable_suffix="Variable",
         variable_axes_tags=True,
         variable_axes_values=False,
@@ -464,7 +465,7 @@ class Font:
         filename = f"{basename}.{extension}"
         return filename
 
-    def get_fingerprint(self, text=""):
+    def get_fingerprint(self, *, text=""):
         """
         Gets the font fingerprint: an hash calculated from an image representation of the font.
         Changing the text option affects the returned fingerprint.
@@ -490,7 +491,7 @@ class Font:
         hash = imagehash.average_hash(img, hash_size=64)
         return hash
 
-    def get_fingerprint_match(self, other, tolerance=10, text=""):
+    def get_fingerprint_match(self, other, *, tolerance=10, text=""):
         """
         Gets the fingerprint match between this font and another one.
         by checking if their fingerprints are equal (difference <= tolerance).
@@ -524,7 +525,7 @@ class Font:
         match = match and self.is_variable() == other_font.is_variable()
         return (match, diff, hash, other_hash)
 
-    def get_format(self, ignore_flavor=False):
+    def get_format(self, *, ignore_flavor=False):
         """
         Gets the font format: otf, ttf, woff, woff2.
 
@@ -580,7 +581,7 @@ class Font:
         return count
 
     def get_image(
-        self, text, size, color=(0, 0, 0, 255), background_color=(255, 255, 255, 255)
+        self, *, text, size, color=(0, 0, 0, 255), background_color=(255, 255, 255, 255)
     ):
         """
         Gets an image representation of the font rendering
@@ -751,7 +752,9 @@ class Font:
         item["characters_count"] += 1
 
     @staticmethod
-    def _get_unicode_items_set_with_coverage(all_items, items, coverage_threshold=0.0):
+    def _get_unicode_items_set_with_coverage(
+        all_items, items, *, coverage_threshold=0.0
+    ):
         all_items = copy.deepcopy(all_items)
         items_indexed = {item["name"]: item.copy() for item in items}
         for item in all_items:
@@ -785,7 +788,7 @@ class Font:
         # raise KeyError("Invalid unicode block name: '{name}'")
         return None
 
-    def get_unicode_blocks(self, coverage_threshold=0.00001):
+    def get_unicode_blocks(self, *, coverage_threshold=0.00001):
         """
         Gets the unicode blocks and their coverage.
         Only blocks with coverage >= coverage_threshold
@@ -826,7 +829,7 @@ class Font:
         # raise KeyError("Invalid unicode script name/tag: '{name}'")
         return None
 
-    def get_unicode_scripts(self, coverage_threshold=0.00001):
+    def get_unicode_scripts(self, *, coverage_threshold=0.00001):
         """
         Gets the unicode scripts and their coverage.
         Only scripts with coverage >= coverage_threshold
@@ -1042,7 +1045,7 @@ class Font:
         font = self.get_ttfont()
         return "fvar" in font
 
-    def rename(self, family_name="", style_name="", update_style_flags=True):
+    def rename(self, *, family_name="", style_name="", update_style_flags=True):
         """
         Renames the font names records (1, 2, 4, 6, 16, 17) according to
         the given family_name and style_name (subfamily_name).
@@ -1130,7 +1133,7 @@ class Font:
         if update_style_flags:
             self.set_style_flags_by_subfamily_name()
 
-    def save(self, filepath=None, overwrite=False):
+    def save(self, filepath=None, *, overwrite=False):
         """
         Saves the font at filepath.
 
@@ -1183,7 +1186,7 @@ class Font:
         font.save(filepath)
         return filepath
 
-    def _save_with_flavor(self, flavor, filepath=None, overwrite=True):
+    def _save_with_flavor(self, *, flavor, filepath=None, overwrite=True):
         font = self.get_ttfont()
         presave_flavor = font.flavor
         font.flavor = flavor
@@ -1194,7 +1197,7 @@ class Font:
         # return file path
         return saved_font_filepath
 
-    def save_as_woff(self, filepath=None, overwrite=True):
+    def save_as_woff(self, filepath=None, *, overwrite=True):
         """
         Saves font as woff.
 
@@ -1210,7 +1213,7 @@ class Font:
             flavor=self.FORMAT_WOFF, filepath=filepath, overwrite=overwrite
         )
 
-    def save_as_woff2(self, filepath=None, overwrite=True):
+    def save_as_woff2(self, filepath=None, *, overwrite=True):
         """
         Saves font as woff2.
 
@@ -1243,7 +1246,7 @@ class Font:
         return fileobject
 
     def save_variable_instances(
-        self, dirpath, woff2=True, woff=True, overwrite=True, **options
+        self, dirpath, *, woff2=True, woff=True, overwrite=True, **options
     ):
         """
         Save all instances of a variable font to specified directory in one or more format(s).
@@ -1372,6 +1375,7 @@ class Font:
 
     def set_style_flags(
         self,
+        *,
         regular=None,
         bold=None,
         italic=None,
@@ -1436,7 +1440,7 @@ class Font:
             style_name=name,
         )
 
-    def subset(self, unicodes="", glyphs=None, text="", **options):
+    def subset(self, *, unicodes="", glyphs=None, text="", **options):
         """
         Subsets the font using the given options (unicodes or glyphs or text),
         it is possible to pass also subsetter options, more info here:
@@ -1486,7 +1490,7 @@ class Font:
             for axis_value in axes.values()
         )
 
-    def to_sliced_variable(self, coordinates, **options):
+    def to_sliced_variable(self, *, coordinates, **options):
         """
         Converts the variable font to a partial one slicing
         the variable axes at the given coordinates.
@@ -1545,6 +1549,7 @@ class Font:
 
     def to_static(
         self,
+        *,
         coordinates=None,
         style_name=None,
         update_names=True,
