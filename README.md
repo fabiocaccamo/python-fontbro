@@ -72,6 +72,7 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`is_static`](#is_static)
 -   [`is_variable`](#is_variable)
 -   [`rename`](#rename)
+-   [`sanitize`](#sanitize)
 -   [`save`](#save)
 -   [`save_as_woff`](#save_as_woff)
 -   [`save_as_woff2`](#save_as_woff2)
@@ -581,6 +582,27 @@ If style_name is not defined it will be auto-detected.
 :raises ValueError: if the computed PostScript-name is longer than 63 characters.
 """
 font.rename(family_name="My Font New", style_name="Bold Italic", update_style_flags=True)
+```
+
+#### `sanitize`
+```python
+"""
+Sanitize the font file using OpenType Sanitizer.
+https://github.com/googlefonts/ots-python
+
+:param strict: If True (default), raises an exception even on sanitizer warnings.
+    If False, only raises an exception on sanitizer failure (non-zero exit code).
+:type strict: bool
+
+:raises Exception: If the OpenType Sanitizer reports an error during the sanitization process.
+:return: None
+
+:note: Uses OpenType Sanitizer (ots) to sanitize the font file.
+    Saves the font to a temporary directory and invokes the sanitizer on the saved file.
+    If `strict` is True (default), treats sanitizer warnings as errors.
+    If `strict` is False, only checks for sanitizer errors.
+"""
+font.sanitize(strict=True)
 ```
 
 #### `save`

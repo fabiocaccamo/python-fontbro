@@ -8,6 +8,7 @@ from io import BytesIO
 from pathlib import Path
 
 import fsutil
+import ots
 from fontTools import unicodedata
 from fontTools.subset import Options as SubsetterOptions
 from fontTools.subset import Subsetter
@@ -549,6 +550,8 @@ class Font:
             format = self.FORMAT_WOFF
         elif version == "wOF2":
             format = self.FORMAT_WOFF2
+        if format is None:
+            raise TypeError("Unable to get the font format.")
         return format
 
     def get_glyphs(self):
@@ -1132,6 +1135,47 @@ class Font:
 
         if update_style_flags:
             self.set_style_flags_by_subfamily_name()
+
+    def sanitize(self, *, strict=True):
+        """
+        Sanitize the font file using OpenType Sanitizer.
+        https://github.com/googlefonts/ots-python
+
+        :param strict: If True (default), raises an exception even on sanitizer warnings.
+            If False, only raises an exception on sanitizer failure (non-zero exit code).
+        :type strict: bool
+
+        :raises Exception: If the OpenType Sanitizer reports an error during the sanitization process.
+        :return: None
+
+        :note: Uses OpenType Sanitizer (ots) to sanitize the font file.
+            Saves the font to a temporary directory and invokes the sanitizer on the saved file.
+            If `strict` is True (default), treats sanitizer warnings as errors.
+            If `strict` is False, only checks for sanitizer errors.
+        """
+        with tempfile.TemporaryDirectory() as dest:
+            filename = self.get_filename()
+            filepath = fsutil.join_path(dest, filename)
+            filepath = self.save(filepath)
+            result = ots.sanitize(
+                filepath,
+                capture_output=True,
+                encoding="utf-8",
+            )
+            error_code = result.returncode
+            errors = result.stderr
+            if error_code:
+                exc = Exception(
+                    f"OpenType Sanitizer returned non-zero exit code ({error_code}): \n{errors}"
+                )
+                print(exc)
+                raise exc
+            elif strict:
+                warnings = result.stdout
+                success_message = "File sanitized successfully!\n"
+                if warnings != success_message:
+                    warnings = warnings.rstrip(success_message)
+                    raise Exception(f"OpenType Sanitizer warnings: \n{warnings}")
 
     def save(self, filepath=None, *, overwrite=False):
         """
