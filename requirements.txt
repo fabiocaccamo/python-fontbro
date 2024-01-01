@@ -1,4 +1,4 @@
-fonttools[lxml,woff,unicode,pathops] == 4.46.0
+fonttools[lxml,woff,unicode,pathops] == 4.47.0
 imagehash == 4.3.1
 pillow == 10.1.0
 python-fsutil == 0.12.0
