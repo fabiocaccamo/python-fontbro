@@ -8,7 +8,7 @@ class IssuesTestCase(AbstractTestCase):
 
     def test_issue_0048_get_characters_count(self):
         font = self._get_font("/issues/issue-0048/test.ttf")
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             font.get_characters_count()
 
     def test_issue_0050_get_features(self):

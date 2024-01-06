@@ -17,6 +17,12 @@ from fontTools.varLib import instancer
 from fontTools.varLib.instancer import OverlapMode
 from PIL import Image, ImageDraw, ImageFont
 
+from fontbro.exceptions import (
+    ArgumentError,
+    DataError,
+    OperationError,
+    SanitizationError,
+)
 from fontbro.flags import get_flag, set_flag
 from fontbro.math import get_euclidean_distance
 from fontbro.subset import parse_unicodes
@@ -229,7 +235,7 @@ class Font:
             self._init_with_ttfont(filepath, **kwargs)
         else:
             filepath_type = type(filepath).__name__
-            raise ValueError(
+            raise ArgumentError(
                 f"Invalid filepath type: expected pathlib.Path or str, found {filepath_type!r}."
             )
 
@@ -240,7 +246,7 @@ class Font:
             self._ttfont = TTFont(self._filepath, **kwargs)
 
         except TTLibError as error:
-            raise ValueError(f"Invalid font at filepath: {filepath!r}.") from error
+            raise ArgumentError(f"Invalid font at filepath: {filepath!r}.") from error
 
     def _init_with_fileobject(self, fileobject, **kwargs):
         try:
@@ -249,7 +255,9 @@ class Font:
             self._ttfont = TTFont(self._fileobject, **kwargs)
 
         except TTLibError as error:
-            raise ValueError(f"Invalid font at fileobject: {fileobject!r}.") from error
+            raise ArgumentError(
+                f"Invalid font at fileobject: {fileobject!r}."
+            ) from error
 
     def _init_with_font(self, font, **kwargs):
         self._init_with_ttfont(font.get_ttfont())
@@ -311,7 +319,7 @@ class Font:
         font = self.get_ttfont()
         cmap = font.getBestCmap()
         if cmap is None:
-            raise TypeError("Unable to find the 'best' unicode cmap dict.")
+            raise DataError("Unable to find the 'best' unicode cmap dict.")
         glyfs = font.get("glyf")
         for code, char_name in cmap.items():
             code_hex = f"{code:04X}"
@@ -515,7 +523,7 @@ class Font:
             other_font = other
         else:
             other_type = type(other).__name__
-            raise ValueError(
+            raise ArgumentError(
                 "Invalid other filepath/font: expected str or Font instance, "
                 f"found {other_type!r}."
             )
@@ -551,7 +559,7 @@ class Font:
         elif version == "wOF2":
             format = self.FORMAT_WOFF2
         if format is None:
-            raise TypeError("Unable to get the font format.")
+            raise DataError("Unable to get the font format.")
         return format
 
     def get_glyphs(self):
@@ -644,8 +652,9 @@ class Font:
         elif isinstance(key, str):
             return cls._NAMES_BY_KEY[key]["id"]
         else:
-            raise TypeError(
-                f"Invalid key type, expected int or str, found {type(key).__name__!r}."
+            key_type = type(key).__name__
+            raise ArgumentError(
+                f"Invalid key type, expected int or str, found {key_type!r}."
             )
 
     def get_name(self, key):
@@ -1107,8 +1116,8 @@ class Font:
         postscript_name = re.sub(r"[\-]+", "-", postscript_name).strip("-")
         postscript_name_length = len(postscript_name)
         if postscript_name_length > 63:
-            raise ValueError(
-                "PostScript name max-length (63 characters) exceeded"
+            raise ArgumentError(
+                "Computed PostScript name exceeded 63 characters max-length"
                 f" ({postscript_name_length} characters)."
             )
 
@@ -1165,17 +1174,18 @@ class Font:
             error_code = result.returncode
             errors = result.stderr
             if error_code:
-                exc = Exception(
+                raise SanitizationError(
                     f"OpenType Sanitizer returned non-zero exit code ({error_code}): \n{errors}"
                 )
-                print(exc)
-                raise exc
+
             elif strict:
                 warnings = result.stdout
                 success_message = "File sanitized successfully!\n"
                 if warnings != success_message:
                     warnings = warnings.rstrip(success_message)
-                    raise Exception(f"OpenType Sanitizer warnings: \n{warnings}")
+                    raise SanitizationError(
+                        f"OpenType Sanitizer warnings: \n{warnings}"
+                    )
 
     def save(self, filepath=None, *, overwrite=False):
         """
@@ -1196,7 +1206,7 @@ class Font:
         not specififed.
         """
         if not filepath and not self._filepath:
-            raise ValueError(
+            raise ArgumentError(
                 "Font doesn't have a filepath. Please specify a filepath to save to."
             )
 
@@ -1220,7 +1230,7 @@ class Font:
         filename = fsutil.join_filename(basename, extension)
         filepath = fsutil.join_filepath(dirpath, filename)
         if fsutil.is_file(filepath) and not overwrite:
-            raise ValueError(
+            raise ArgumentError(
                 f"Invalid filepath, a file already exists at {filepath!r} "
                 "and 'overwrite' option is 'False' (consider using 'overwrite=True')."
             )
@@ -1313,7 +1323,7 @@ class Font:
         :raises TypeError: If the font is not a variable font.
         """
         if not self.is_variable():
-            raise TypeError("Only a variable font can be instantiated.")
+            raise OperationError("Only a variable font can be instantiated.")
 
         fsutil.assert_not_file(dirpath)
         fsutil.make_dirs(dirpath)
@@ -1501,7 +1511,7 @@ class Font:
         """
         font = self.get_ttfont()
         if not any([unicodes, glyphs, text]):
-            raise ValueError(
+            raise ArgumentError(
                 "Subsetting requires at least one of the following args: unicode,"
                 " glyphs, text."
             )
@@ -1555,7 +1565,7 @@ class Font:
         :raises ValueError: If the coordinates axes are all pinned
         """
         if not self.is_variable():
-            raise TypeError("Only a variable font can be sliced.")
+            raise OperationError("Only a variable font can be sliced.")
 
         font = self.get_ttfont()
         coordinates = coordinates or {}
@@ -1576,10 +1586,10 @@ class Font:
 
         # ensure that coordinates axes are defined and that are not all pinned
         if len(coordinates_axes_tags) == 0:
-            raise ValueError("Invalid coordinates: axes not defined.")
+            raise ArgumentError("Invalid coordinates: axes not defined.")
         elif set(coordinates_axes_tags) == set(self.get_variable_axes_tags()):
             if self._all_axes_pinned(coordinates):
-                raise ValueError(
+                raise ArgumentError(
                     "Invalid coordinates: all axes are pinned (use to_static method)."
                 )
 
@@ -1622,19 +1632,19 @@ class Font:
         :raises ValueError: If the coordinates axes are not all pinned
         """
         if not self.is_variable():
-            raise TypeError("Only a variable font can be made static.")
+            raise OperationError("Only a variable font can be made static.")
 
         font = self.get_ttfont()
 
         # take coordinates from instance with specified style name
         if style_name:
             if coordinates:
-                raise ValueError(
+                raise ArgumentError(
                     "Invalid arguments: 'coordinates' and 'style_name' are mutually exclusive."
                 )
             instance = self.get_variable_instance_by_style_name(style_name=style_name)
             if not instance:
-                raise ValueError(
+                raise ArgumentError(
                     f"Invalid style name: instance with style name {style_name!r} not found."
                 )
             coordinates = instance["coordinates"].copy()
@@ -1650,7 +1660,7 @@ class Font:
 
         # ensure that coordinates axes are all pinned
         if not self._all_axes_pinned(coordinates):
-            raise ValueError("Invalid coordinates: all axes must be pinned.")
+            raise ArgumentError("Invalid coordinates: all axes must be pinned.")
 
         # get instance closest to coordinates
         instance = self.get_variable_instance_closest_to_coordinates(coordinates)
