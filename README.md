@@ -67,6 +67,7 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`get_variable_instance_by_style_name`](#get_variable_instance_by_style_name)
 -   [`get_variable_instance_closest_to_coordinates`](#get_variable_instance_closest_to_coordinates)
 -   [`get_version`](#get_version)
+-   [`get_vertical_metrics`](#get_vertical_metrics)
 -   [`get_weight`](#get_weight)
 -   [`get_width`](#get_width)
 -   [`is_static`](#is_static)
@@ -85,6 +86,7 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`set_style_flags`](#set_style_flags)
 -   [`set_style_flags_by_subfamily_name`](#set_style_flags_by_subfamily_name)
 -   [`set_style_name`](#set_style_name)
+-   [`set_vertical_metrics`](#set_vertical_metrics)
 -   [`subset`](#subset)
 -   [`to_sliced_variable`](#to_sliced_variable)
 -   [`to_static`](#to_static)
@@ -519,6 +521,18 @@ Gets the font version.
 version = font.get_version()
 ```
 
+#### `get_vertical_metrics`
+```python
+"""
+Gets the font vertical metrics.
+
+:returns: A dictionary containing the following vertical metrics:
+    "ascent", "cap_height", "x_height", "descent", "descender"
+:rtype: dict
+"""
+metrics = font.get_vertical_metrics()
+```
+
 #### `get_weight`
 ```python
 """
@@ -783,6 +797,17 @@ Sets the style name updating the related font names records.
 :type name: The new style name.
 """
 font.set_style_name(name="Bold Italic")
+```
+
+#### `set_vertical_metrics`
+```python
+"""
+Sets the vertical metrics.
+
+:param metrics: Keyword arguments representing the vertical metrics to set,
+    valid keys: "ascent", "cap_height", "x_height", "descent", "descender"
+"""
+font.set_vertical_metrics(ascent=1000, cap_height=750, x_height=500, descent=-250, descender=-500)
 ```
 
 #### `subset`
