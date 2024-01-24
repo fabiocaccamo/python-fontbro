@@ -999,6 +999,24 @@ class Font:
         version = head.fontRevision
         return version
 
+    def get_vertical_metrics(self):
+        """
+        Gets the font vertical metrics.
+
+        :returns: A dictionary containing the following vertical metrics:
+            "ascent", "cap_height", "x_height", "descent", "descender"
+        :rtype: dict
+        """
+        font = self.get_ttfont()
+        metrics = {
+            "ascent": font.get("hhea", {}).get("ascent"),
+            "cap_height": font.get("OS/2", {}).get("sCapHeight"),
+            "x_height": font.get("OS/2", {}).get("sxHeight"),
+            "descent": font.get("hhea", {}).get("descent"),
+            "descender": font.get("OS/2", {}).get("sTypoDescender"),
+        }
+        return metrics
+
     def get_weight(self):
         """
         Gets the font weight value and name.
@@ -1493,6 +1511,30 @@ class Font:
             family_name=self.get_family_name(),
             style_name=name,
         )
+
+    def set_vertical_metrics(self, **metrics):
+        """
+        Sets the vertical metrics.
+
+        :param metrics: Keyword arguments representing the vertical metrics to set,
+            valid keys: "ascent", "cap_height", "x_height", "descent", "descender"
+        """
+        font = self.get_ttfont()
+
+        if "ascent" in metrics:
+            font["hhea"].ascent = metrics["ascent"]
+
+        if "cap_height" in metrics:
+            font["OS/2"].sCapHeight = metrics["cap_height"]
+
+        if "x_height" in metrics:
+            font["OS/2"].sxHeight = metrics["x_height"]
+
+        if "descent" in metrics:
+            font["hhea"].descent = metrics["descent"]
+
+        if "descender" in metrics:
+            font["OS/2"].sTypoDescender = metrics["descender"]
 
     def subset(self, *, unicodes="", glyphs=None, text="", **options):
         """
