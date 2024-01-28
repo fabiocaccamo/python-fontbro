@@ -1008,12 +1008,14 @@ class Font:
         :rtype: dict
         """
         font = self.get_ttfont()
+        hhea = font.get("hhea")
+        os2 = font.get("OS/2")
         metrics = {
-            "ascent": font.get("hhea", {}).get("ascent"),
-            "cap_height": font.get("OS/2", {}).get("sCapHeight"),
-            "x_height": font.get("OS/2", {}).get("sxHeight"),
-            "descent": font.get("hhea", {}).get("descent"),
-            "descender": font.get("OS/2", {}).get("sTypoDescender"),
+            "ascent": hhea.ascent if hhea else None,
+            "cap_height": os2.sCapHeight if os2 else None,
+            "x_height": os2.sxHeight if os2 else None,
+            "descent": hhea.descent if hhea else None,
+            "descender": os2.sTypoDescender if os2 else None,
         }
         return metrics
 
@@ -1520,21 +1522,23 @@ class Font:
             valid keys: "ascent", "cap_height", "x_height", "descent", "descender"
         """
         font = self.get_ttfont()
+        hhea = font.get("hhea")
+        os2 = font.get("OS/2")
 
         if "ascent" in metrics:
-            font["hhea"].ascent = metrics["ascent"]
+            hhea.ascent = metrics["ascent"]
 
         if "cap_height" in metrics:
-            font["OS/2"].sCapHeight = metrics["cap_height"]
+            os2.sCapHeight = metrics["cap_height"]
 
         if "x_height" in metrics:
-            font["OS/2"].sxHeight = metrics["x_height"]
+            os2.sxHeight = metrics["x_height"]
 
         if "descent" in metrics:
-            font["hhea"].descent = metrics["descent"]
+            hhea.descent = metrics["descent"]
 
         if "descender" in metrics:
-            font["OS/2"].sTypoDescender = metrics["descender"]
+            os2.sTypoDescender = metrics["descender"]
 
     def subset(self, *, unicodes="", glyphs=None, text="", **options):
         """
