@@ -155,6 +155,23 @@ class Font:
     ]
     _VARIABLE_AXES_BY_TAG = {axis["tag"]: axis for axis in _VARIABLE_AXES}
 
+    # Vertical Metrics:
+    _VERTICAL_METRICS = [
+        {"table": "head", "name": "unitsPerEm", "key": "units_per_em"},
+        {"table": "head", "name": "yMax", "key": "y_max"},
+        {"table": "head", "name": "yMin", "key": "y_min"},
+        {"table": "hhea", "name": "ascent", "key": "ascent"},
+        {"table": "hhea", "name": "descent", "key": "descent"},
+        {"table": "hhea", "name": "lineGap", "key": "line_gap"},
+        {"table": "OS/2", "name": "sTypoAscender", "key": "typo_ascender"},
+        {"table": "OS/2", "name": "sTypoDescender", "key": "typo_descender"},
+        {"table": "OS/2", "name": "sTypoLineGap", "key": "typo_line_gap"},
+        {"table": "OS/2", "name": "sCapHeight", "key": "cap_height"},
+        {"table": "OS/2", "name": "sxHeight", "key": "x_height"},
+        {"table": "OS/2", "name": "usWinAscent", "key": "win_ascent"},
+        {"table": "OS/2", "name": "usWinDescent", "key": "win_descent"},
+    ]
+
     # Weights:
     # https://docs.microsoft.com/en-us/typography/opentype/otspec170/os2#usweightclass
     WEIGHT_EXTRA_THIN = "Extra-thin"  # (Hairline)
@@ -1010,24 +1027,12 @@ class Font:
         :rtype: dict
         """
         font = self.get_ttfont()
-        head = font.get("head")
-        hhea = font.get("hhea")
-        os2 = font.get("OS/2")
-        metrics = {
-            "units_per_em": head.unitsPerEm if head else None,
-            "y_max": head.yMax if head else None,
-            "y_min": head.yMin if head else None,
-            "ascent": hhea.ascent if hhea else None,
-            "descent": hhea.descent if hhea else None,
-            "line_gap": hhea.lineGap if hhea else None,
-            "typo_ascender": os2.sTypoAscender if os2 else None,
-            "typo_descender": os2.sTypoDescender if os2 else None,
-            "typo_line_gap": os2.sTypoLineGap if os2 else None,
-            "cap_height": os2.sCapHeight if os2 else None,
-            "x_height": os2.sxHeight if os2 else None,
-            "win_ascent": os2.usWinAscent if os2 else None,
-            "win_descent": os2.usWinDescent if os2 else None,
-        }
+        metrics = {}
+        for metric in self._VERTICAL_METRICS:
+            table = font.get(metric["table"])
+            metrics[metric["key"]] = (
+                getattr(table, metric["name"], None) if table else None
+            )
         return metrics
 
     def get_weight(self):
@@ -1525,7 +1530,7 @@ class Font:
             style_name=name,
         )
 
-    def set_vertical_metrics(self, **metrics):  # noqa: C901
+    def set_vertical_metrics(self, **metrics):
         """
         Sets the vertical metrics.
 
@@ -1535,48 +1540,11 @@ class Font:
             "win_ascent", "win_descent"
         """
         font = self.get_ttfont()
-        head = font.get("head")
-        hhea = font.get("hhea")
-        os2 = font.get("OS/2")
-
-        if "typo_ascender" in metrics:
-            os2.sTypoAscender = metrics["typo_ascender"]
-
-        if "ascent" in metrics:
-            hhea.ascent = metrics["ascent"]
-
-        if "cap_height" in metrics:
-            os2.sCapHeight = metrics["cap_height"]
-
-        if "x_height" in metrics:
-            os2.sxHeight = metrics["x_height"]
-
-        if "descent" in metrics:
-            hhea.descent = metrics["descent"]
-
-        if "typo_descender" in metrics:
-            os2.sTypoDescender = metrics["typo_descender"]
-
-        if "win_ascent" in metrics:
-            os2.usWinAscent = metrics["win_ascent"]
-
-        if "win_descent" in metrics:
-            os2.usWinDescent = metrics["win_descent"]
-
-        if "typo_line_gap" in metrics:
-            os2.sTypoLineGap = metrics["typo_line_gap"]
-
-        if "line_gap" in metrics:
-            hhea.lineGap = metrics["line_gap"]
-
-        if "y_max" in metrics:
-            head.yMax = metrics["y_max"]
-
-        if "y_min" in metrics:
-            head.yMin = metrics["y_min"]
-
-        if "units_per_em" in metrics:
-            head.unitsPerEm = metrics["units_per_em"]
+        for metric in self._VERTICAL_METRICS:
+            if metric["key"] in metrics:
+                table = font.get(metric["table"])
+                if table:
+                    setattr(table, metric["name"], metrics[metric["key"]])
 
     def subset(self, *, unicodes="", glyphs=None, text="", **options):
         """
