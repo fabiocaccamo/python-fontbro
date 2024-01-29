@@ -1004,18 +1004,29 @@ class Font:
         Gets the font vertical metrics.
 
         :returns: A dictionary containing the following vertical metrics:
-            "ascent", "cap_height", "x_height", "descent", "descender"
+            "units_per_em", "y_max", "y_min", "ascent", "descent", "line_gap",
+            "typo_ascender", "typo_descender", "typo_line_gap", "cap_height", "x_height",
+            "win_ascent", "win_descent"
         :rtype: dict
         """
         font = self.get_ttfont()
+        head = font.get("head")
         hhea = font.get("hhea")
         os2 = font.get("OS/2")
         metrics = {
+            "units_per_em": head.unitsPerEm if head else None,
+            "y_max": head.yMax if head else None,
+            "y_min": head.yMin if head else None,
             "ascent": hhea.ascent if hhea else None,
+            "descent": hhea.descent if hhea else None,
+            "line_gap": hhea.lineGap if hhea else None,
+            "typo_ascender": os2.sTypoAscender if os2 else None,
+            "typo_descender": os2.sTypoDescender if os2 else None,
+            "typo_line_gap": os2.sTypoLineGap if os2 else None,
             "cap_height": os2.sCapHeight if os2 else None,
             "x_height": os2.sxHeight if os2 else None,
-            "descent": hhea.descent if hhea else None,
-            "descender": os2.sTypoDescender if os2 else None,
+            "win_ascent": os2.usWinAscent if os2 else None,
+            "win_descent": os2.usWinDescent if os2 else None,
         }
         return metrics
 
@@ -1514,16 +1525,22 @@ class Font:
             style_name=name,
         )
 
-    def set_vertical_metrics(self, **metrics):
+    def set_vertical_metrics(self, **metrics):  # noqa: C901
         """
         Sets the vertical metrics.
 
-        :param metrics: Keyword arguments representing the vertical metrics to set,
-            valid keys: "ascent", "cap_height", "x_height", "descent", "descender"
+        :param metrics: Keyword arguments representing the vertical metrics that can be set:
+            "units_per_em", "y_max", "y_min", "ascent", "descent", "line_gap",
+            "typo_ascender", "typo_descender", "typo_line_gap", "cap_height", "x_height",
+            "win_ascent", "win_descent"
         """
         font = self.get_ttfont()
+        head = font.get("head")
         hhea = font.get("hhea")
         os2 = font.get("OS/2")
+
+        if "typo_ascender" in metrics:
+            os2.sTypoAscender = metrics["typo_ascender"]
 
         if "ascent" in metrics:
             hhea.ascent = metrics["ascent"]
@@ -1537,8 +1554,29 @@ class Font:
         if "descent" in metrics:
             hhea.descent = metrics["descent"]
 
-        if "descender" in metrics:
-            os2.sTypoDescender = metrics["descender"]
+        if "typo_descender" in metrics:
+            os2.sTypoDescender = metrics["typo_descender"]
+
+        if "win_ascent" in metrics:
+            os2.usWinAscent = metrics["win_ascent"]
+
+        if "win_descent" in metrics:
+            os2.usWinDescent = metrics["win_descent"]
+
+        if "typo_line_gap" in metrics:
+            os2.sTypoLineGap = metrics["typo_line_gap"]
+
+        if "line_gap" in metrics:
+            hhea.lineGap = metrics["line_gap"]
+
+        if "y_max" in metrics:
+            head.yMax = metrics["y_max"]
+
+        if "y_min" in metrics:
+            head.yMin = metrics["y_min"]
+
+        if "units_per_em" in metrics:
+            head.unitsPerEm = metrics["units_per_em"]
 
     def subset(self, *, unicodes="", glyphs=None, text="", **options):
         """

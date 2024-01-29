@@ -527,7 +527,9 @@ version = font.get_version()
 Gets the font vertical metrics.
 
 :returns: A dictionary containing the following vertical metrics:
-    "ascent", "cap_height", "x_height", "descent", "descender"
+    "units_per_em", "y_max", "y_min", "ascent", "descent", "line_gap",
+    "typo_ascender", "typo_descender", "typo_line_gap", "cap_height", "x_height",
+    "win_ascent", "win_descent"
 :rtype: dict
 """
 metrics = font.get_vertical_metrics()
@@ -804,8 +806,10 @@ font.set_style_name(name="Bold Italic")
 """
 Sets the vertical metrics.
 
-:param metrics: Keyword arguments representing the vertical metrics to set,
-    valid keys: "ascent", "cap_height", "x_height", "descent", "descender"
+:param metrics: Keyword arguments representing the vertical metrics that can be set:
+    "units_per_em", "y_max", "y_min", "ascent", "descent", "line_gap",
+    "typo_ascender", "typo_descender", "typo_line_gap", "cap_height", "x_height",
+    "win_ascent", "win_descent"
 """
 font.set_vertical_metrics(ascent=1000, cap_height=750, x_height=500, descent=-250, descender=-500)
 ```
