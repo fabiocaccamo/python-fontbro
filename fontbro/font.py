@@ -156,21 +156,36 @@ class Font:
     _VARIABLE_AXES_BY_TAG = {axis["tag"]: axis for axis in _VARIABLE_AXES}
 
     # Vertical Metrics:
+    VERTICAL_METRIC_UNITS_PER_EM = "units_per_em"
+    VERTICAL_METRIC_Y_MAX = "y_max"
+    VERTICAL_METRIC_Y_MIN = "y_min"
+    VERTICAL_METRIC_ASCENT = "ascent"
+    VERTICAL_METRIC_DESCENT = "descent"
+    VERTICAL_METRIC_LINE_GAP = "line_gap"
+    VERTICAL_METRIC_TYPO_ASCENDER = "typo_ascender"
+    VERTICAL_METRIC_TYPO_DESCENDER = "typo_descender"
+    VERTICAL_METRIC_TYPO_LINE_GAP = "typo_line_gap"
+    VERTICAL_METRIC_CAP_HEIGHT = "cap_height"
+    VERTICAL_METRIC_X_HEIGHT = "x_height"
+    VERTICAL_METRIC_WIN_ASCENT = "win_ascent"
+    VERTICAL_METRIC_WIN_DESCENT = "win_descent"
+    # fmt: off
     _VERTICAL_METRICS = [
-        {"table": "head", "name": "unitsPerEm", "key": "units_per_em"},
-        {"table": "head", "name": "yMax", "key": "y_max"},
-        {"table": "head", "name": "yMin", "key": "y_min"},
-        {"table": "hhea", "name": "ascent", "key": "ascent"},
-        {"table": "hhea", "name": "descent", "key": "descent"},
-        {"table": "hhea", "name": "lineGap", "key": "line_gap"},
-        {"table": "OS/2", "name": "sTypoAscender", "key": "typo_ascender"},
-        {"table": "OS/2", "name": "sTypoDescender", "key": "typo_descender"},
-        {"table": "OS/2", "name": "sTypoLineGap", "key": "typo_line_gap"},
-        {"table": "OS/2", "name": "sCapHeight", "key": "cap_height"},
-        {"table": "OS/2", "name": "sxHeight", "key": "x_height"},
-        {"table": "OS/2", "name": "usWinAscent", "key": "win_ascent"},
-        {"table": "OS/2", "name": "usWinDescent", "key": "win_descent"},
+        {"table": "head", "attr": "unitsPerEm", "key": VERTICAL_METRIC_UNITS_PER_EM},
+        {"table": "head", "attr": "yMax", "key": VERTICAL_METRIC_Y_MAX},
+        {"table": "head", "attr": "yMin", "key": VERTICAL_METRIC_Y_MIN},
+        {"table": "hhea", "attr": "ascent", "key": VERTICAL_METRIC_ASCENT},
+        {"table": "hhea", "attr": "descent", "key": VERTICAL_METRIC_DESCENT},
+        {"table": "hhea", "attr": "lineGap", "key": VERTICAL_METRIC_LINE_GAP},
+        {"table": "OS/2", "attr": "sTypoAscender", "key": VERTICAL_METRIC_TYPO_ASCENDER},
+        {"table": "OS/2", "attr": "sTypoDescender", "key": VERTICAL_METRIC_TYPO_DESCENDER},
+        {"table": "OS/2", "attr": "sTypoLineGap", "key": VERTICAL_METRIC_TYPO_LINE_GAP},
+        {"table": "OS/2", "attr": "sCapHeight", "key": VERTICAL_METRIC_CAP_HEIGHT},
+        {"table": "OS/2", "attr": "sxHeight", "key": VERTICAL_METRIC_X_HEIGHT},
+        {"table": "OS/2", "attr": "usWinAscent", "key": VERTICAL_METRIC_WIN_ASCENT},
+        {"table": "OS/2", "attr": "usWinDescent", "key": VERTICAL_METRIC_WIN_DESCENT},
     ]
+    # fmt: on
 
     # Weights:
     # https://docs.microsoft.com/en-us/typography/opentype/otspec170/os2#usweightclass
@@ -1031,7 +1046,7 @@ class Font:
         for metric in self._VERTICAL_METRICS:
             table = font.get(metric["table"])
             metrics[metric["key"]] = (
-                getattr(table, metric["name"], None) if table else None
+                getattr(table, metric["attr"], None) if table else None
             )
         return metrics
 
@@ -1544,7 +1559,7 @@ class Font:
             if metric["key"] in metrics:
                 table = font.get(metric["table"])
                 if table:
-                    setattr(table, metric["name"], metrics[metric["key"]])
+                    setattr(table, metric["attr"], metrics[metric["key"]])
 
     def subset(self, *, unicodes="", glyphs=None, text="", **options):
         """
