@@ -811,7 +811,7 @@ Sets the vertical metrics.
     "typo_ascender", "typo_descender", "typo_line_gap", "cap_height", "x_height",
     "win_ascent", "win_descent"
 """
-font.set_vertical_metrics(ascent=1000, cap_height=750, x_height=500, descent=-250, descender=-500)
+font.set_vertical_metrics(units_per_em=2000, y_max=2102, y_min=-533, ascent=1800, descent=-400, line_gap=0, typo_ascender=1800, typo_descender=-400, typo_line_gap=0, cap_height=1400, x_height=1080, win_ascent=2160, win_descent=540)
 ```
 
 #### `subset`
