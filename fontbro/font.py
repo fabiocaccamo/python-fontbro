@@ -656,20 +656,20 @@ class Font:
         font = self.get_ttfont()
         version = font.sfntVersion
         flavor = font.flavor
-        format = ""
+        format_ = ""
         if flavor in [self.FORMAT_WOFF, self.FORMAT_WOFF2] and not ignore_flavor:
-            format = str(flavor)
+            format_ = str(flavor)
         elif version == "OTTO" and "CFF " in font:
-            format = self.FORMAT_OTF
+            format_ = self.FORMAT_OTF
         elif version == "\0\1\0\0":
-            format = self.FORMAT_TTF
+            format_ = self.FORMAT_TTF
         elif version == "wOFF":
-            format = self.FORMAT_WOFF
+            format_ = self.FORMAT_WOFF
         elif version == "wOF2":
-            format = self.FORMAT_WOFF2
-        if not format:
+            format_ = self.FORMAT_WOFF2
+        if not format_:
             raise DataError("Unable to get the font format.")
-        return format
+        return format_
 
     def get_glyphs(
         self,
@@ -1450,8 +1450,8 @@ class Font:
             dirpath, filename = fsutil.split_filepath(filepath)
             basename, extension = fsutil.split_filename(filename)
 
-        format = self.get_format()
-        extension = format
+        format_ = self.get_format()
+        extension = format_
         filename = fsutil.join_filename(basename, extension)
         filepath = fsutil.join_filepath(dirpath, filename)
         if fsutil.is_file(filepath) and not overwrite:

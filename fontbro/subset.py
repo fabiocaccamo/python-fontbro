@@ -13,8 +13,7 @@ def parse_unicodes(
     if isinstance(unicodes, (list, set, tuple)):
         # convert possible int codepoints to hex str
         unicodes_list = list(unicodes)
-        for index in range(len(unicodes_list)):
-            code = unicodes_list[index]
+        for index, code in enumerate(unicodes_list):
             unicodes_list[index] = f"{code:04X}" if isinstance(code, int) else code
         unicodes_str = ",".join(list(set(unicodes_list)))
     elif isinstance(unicodes, str):
