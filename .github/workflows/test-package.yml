@@ -37,6 +37,10 @@ jobs:
       run: |
         pre-commit run --all-files --show-diff-on-failure --verbose
 
+    - name: Run mypy
+      run: |
+        mypy --install-types --non-interactive
+
     - name: Run tests
       run: |
         coverage run --append --source=fontbro -m unittest

@@ -96,6 +96,11 @@ exclude = '''
 )/
 '''
 
+[tool.mypy]
+files = ["fontbro"]
+ignore_missing_imports = true
+strict = true
+
 [tool.ruff]
 ignore = ["E501"]
 line-length = 88
