@@ -299,7 +299,7 @@ class Font:
             self._ttfont = TTFont(self._filepath, **kwargs)
 
         except TTLibError as error:
-            raise ArgumentError(f"Invalid font at filepath: {filepath!r}.") from error
+            raise ArgumentError(f"Invalid font at filepath: '{filepath}'.") from error
 
     def _init_with_fileobject(
         self,
@@ -313,7 +313,7 @@ class Font:
 
         except TTLibError as error:
             raise ArgumentError(
-                f"Invalid font at fileobject: {fileobject!r}."
+                f"Invalid font at fileobject: '{fileobject}'."
             ) from error
 
     def _init_with_font(
@@ -630,7 +630,7 @@ class Font:
             other_type = type(other).__name__
             raise ArgumentError(
                 "Invalid other filepath/font: expected str or Font instance, "
-                f"found {other_type!r}."
+                f"found '{other_type}'."
             )
         hash = self.get_fingerprint(text=text)
         other_hash = other_font.get_fingerprint(text=text)
@@ -777,7 +777,7 @@ class Font:
         else:
             key_type = type(key).__name__
             raise ArgumentError(
-                f"Invalid key type, expected int or str, found {key_type!r}."
+                f"Invalid key type, expected int or str, found '{key_type}'."
             )
 
     def get_name(
@@ -1456,7 +1456,7 @@ class Font:
         filepath = fsutil.join_filepath(dirpath, filename)
         if fsutil.is_file(filepath) and not overwrite:
             raise ArgumentError(
-                f"Invalid filepath, a file already exists at {filepath!r} "
+                f"Invalid filepath, a file already exists at '{filepath}' "
                 "and 'overwrite' option is 'False' (consider using 'overwrite=True')."
             )
         fsutil.make_dirs_for_file(filepath)
@@ -1959,7 +1959,7 @@ class Font:
             instance = self.get_variable_instance_by_style_name(style_name=style_name)
             if not instance:
                 raise ArgumentError(
-                    f"Invalid style name: instance with style name {style_name!r} not found."
+                    f"Invalid style name: instance with style name '{style_name}' not found."
                 )
             coordinates = instance["coordinates"].copy()
 
