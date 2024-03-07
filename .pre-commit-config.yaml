@@ -8,8 +8,13 @@ repos:
       - id: pyupgrade
         args: ["--py38-plus"]
 
+  - repo: https://github.com/frostming/fix-future-annotations
+    rev: 0.5.0
+    hooks:
+      - id: fix-future-annotations
+
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.2.2
+    rev: v0.3.0
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
