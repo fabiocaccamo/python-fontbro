@@ -1454,6 +1454,7 @@ class Font:
         extension = format_
         filename = fsutil.join_filename(basename, extension)
         filepath = fsutil.join_filepath(dirpath, filename)
+        filepath = str(filepath)
         if fsutil.is_file(filepath) and not overwrite:
             raise ArgumentError(
                 f"Invalid filepath, a file already exists at '{filepath}' "

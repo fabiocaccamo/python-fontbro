@@ -1,19 +1,23 @@
+from __future__ import annotations
+
+from typing import Any
+
 import fsutil
 from fontTools import unicodedata
 
 from fontbro import Font
 
 
-def _write_data_json(filepath, data):
+def _write_data_json(filepath: str, data: Any) -> None:
     data_filepath = fsutil.join_path(__file__, filepath)
     fsutil.write_file_json(data_filepath, data, indent=4, sort_keys=True)
 
 
-def update_unicode_data():
-    blocks = []
-    blocks_cache = {}
-    scripts = []
-    scripts_cache = {}
+def update_unicode_data() -> None:
+    blocks: list[dict[str, Any]] = []
+    blocks_cache: dict[str, Any] = {}
+    scripts: list[dict[str, Any]] = []
+    scripts_cache: dict[str, Any] = {}
     for code in range(0, 0x110000):
         block_name = unicodedata.block(code)
         if block_name == "No_Block":
@@ -42,7 +46,7 @@ def update_unicode_data():
     _write_data_json(filepath="../fontbro/data/unicode-scripts.json", data=scripts)
 
 
-def main():
+def main() -> None:
     update_unicode_data()
 
 
