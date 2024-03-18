@@ -102,11 +102,13 @@ ignore_missing_imports = true
 strict = true
 
 [tool.ruff]
-ignore = ["E501"]
 line-length = 88
+
+[tool.ruff.lint]
+ignore = ["E501"]
 select = ["B", "B9", "C", "E", "F", "W"]
 
-[tool.ruff.mccabe]
+[tool.ruff.lint.mccabe]
 max-complexity = 11
 
 [tool.setuptools.packages.find]
