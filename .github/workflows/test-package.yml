@@ -33,6 +33,14 @@ jobs:
         pip install -r requirements.txt
         pip install -r requirements-test.txt
 
+    - name: Run pre-commit
+      run: |
+        pre-commit run --all-files --show-diff-on-failure --verbose
+
+    - name: Run mypy
+      run: |
+        mypy --install-types --non-interactive
+
     - name: Run tests
       run: |
         coverage run --append --source=fontbro -m unittest
@@ -40,7 +48,7 @@ jobs:
         coverage xml -o ./coverage.xml
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         fail_ci_if_error: false
         files: ./coverage.xml

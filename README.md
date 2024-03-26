@@ -1,7 +1,7 @@
 [![](https://img.shields.io/pypi/pyversions/python-fontbro.svg?color=blue&logo=python&logoColor=white)](https://www.python.org/)
 [![](https://img.shields.io/pypi/v/python-fontbro.svg?color=blue&logo=pypi&logoColor=white)](https://pypi.org/project/python-fontbro/)
 [![](https://static.pepy.tech/badge/python-fontbro/month)](https://pepy.tech/project/python-fontbro)
-[![](https://img.shields.io/github/stars/fabiocaccamo/python-fontbro?logo=github)](https://github.com/fabiocaccamo/python-fontbro/stargazers)
+[![](https://img.shields.io/github/stars/fabiocaccamo/python-fontbro?logo=github&style=flat)](https://github.com/fabiocaccamo/python-fontbro/stargazers)
 [![](https://img.shields.io/pypi/l/python-fontbro?color=blue)](https://github.com/fabiocaccamo/python-fontbro/blob/main/LICENSE.txt)
 
 [![](https://results.pre-commit.ci/badge/github/fabiocaccamo/python-fontbro/main.svg)](https://results.pre-commit.ci/latest/github/fabiocaccamo/python-fontbro/main)
@@ -67,6 +67,7 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`get_variable_instance_by_style_name`](#get_variable_instance_by_style_name)
 -   [`get_variable_instance_closest_to_coordinates`](#get_variable_instance_closest_to_coordinates)
 -   [`get_version`](#get_version)
+-   [`get_vertical_metrics`](#get_vertical_metrics)
 -   [`get_weight`](#get_weight)
 -   [`get_width`](#get_width)
 -   [`is_static`](#is_static)
@@ -85,6 +86,7 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`set_style_flags`](#set_style_flags)
 -   [`set_style_flags_by_subfamily_name`](#set_style_flags_by_subfamily_name)
 -   [`set_style_name`](#set_style_name)
+-   [`set_vertical_metrics`](#set_vertical_metrics)
 -   [`subset`](#subset)
 -   [`to_sliced_variable`](#to_sliced_variable)
 -   [`to_static`](#to_static)
@@ -519,6 +521,20 @@ Gets the font version.
 version = font.get_version()
 ```
 
+#### `get_vertical_metrics`
+```python
+"""
+Gets the font vertical metrics.
+
+:returns: A dictionary containing the following vertical metrics:
+    "units_per_em", "y_max", "y_min", "ascent", "descent", "line_gap",
+    "typo_ascender", "typo_descender", "typo_line_gap", "cap_height", "x_height",
+    "win_ascent", "win_descent"
+:rtype: dict
+"""
+metrics = font.get_vertical_metrics()
+```
+
 #### `get_weight`
 ```python
 """
@@ -783,6 +799,19 @@ Sets the style name updating the related font names records.
 :type name: The new style name.
 """
 font.set_style_name(name="Bold Italic")
+```
+
+#### `set_vertical_metrics`
+```python
+"""
+Sets the vertical metrics.
+
+:param metrics: Keyword arguments representing the vertical metrics that can be set:
+    "units_per_em", "y_max", "y_min", "ascent", "descent", "line_gap",
+    "typo_ascender", "typo_descender", "typo_line_gap", "cap_height", "x_height",
+    "win_ascent", "win_descent"
+"""
+font.set_vertical_metrics(units_per_em=2000, y_max=2102, y_min=-533, ascent=1800, descent=-400, line_gap=0, typo_ascender=1800, typo_descender=-400, typo_line_gap=0, cap_height=1400, x_height=1080, win_ascent=2160, win_descent=540)
 ```
 
 #### `subset`

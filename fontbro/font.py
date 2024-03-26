@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import copy
 import os
 import re
@@ -6,7 +8,8 @@ import tempfile
 from curses import ascii
 from io import BytesIO
 from pathlib import Path
-
+from typing import Any, Generator
+from typing.io import IO
 import fsutil
 import ots
 from fontTools import unicodedata
@@ -37,46 +40,48 @@ class Font:
     # Features:
     # https://docs.microsoft.com/en-gb/typography/opentype/spec/featurelist
     # https://developer.mozilla.org/en-US/docs/Web/CSS/font-feature-settings
-    _FEATURES_LIST = read_json("data/features.json")
-    _FEATURES_BY_TAG = {feature["tag"]: feature for feature in _FEATURES_LIST}
+    _FEATURES_LIST: list[dict[str, Any]] = read_json("data/features.json")
+    _FEATURES_BY_TAG: dict[str, dict[str, Any]] = {
+        feature["tag"]: feature for feature in _FEATURES_LIST
+    }
 
     # Formats:
-    FORMAT_OTF = "otf"
-    FORMAT_TTF = "ttf"
-    FORMAT_WOFF = "woff"
-    FORMAT_WOFF2 = "woff2"
+    FORMAT_OTF: str = "otf"
+    FORMAT_TTF: str = "ttf"
+    FORMAT_WOFF: str = "woff"
+    FORMAT_WOFF2: str = "woff2"
 
-    _FORMATS_LIST = [FORMAT_OTF, FORMAT_TTF, FORMAT_WOFF, FORMAT_WOFF2]
+    _FORMATS_LIST: list[str] = [FORMAT_OTF, FORMAT_TTF, FORMAT_WOFF, FORMAT_WOFF2]
 
     # Names:
-    NAME_COPYRIGHT_NOTICE = "copyright_notice"
-    NAME_FAMILY_NAME = "family_name"
-    NAME_SUBFAMILY_NAME = "subfamily_name"
-    NAME_UNIQUE_IDENTIFIER = "unique_identifier"
-    NAME_FULL_NAME = "full_name"
-    NAME_VERSION = "version"
-    NAME_POSTSCRIPT_NAME = "postscript_name"
-    NAME_TRADEMARK = "trademark"
-    NAME_MANUFACTURER_NAME = "manufacturer_name"
-    NAME_DESIGNER = "designer"
-    NAME_DESCRIPTION = "description"
-    NAME_VENDOR_URL = "vendor_url"
-    NAME_DESIGNER_URL = "designer_url"
-    NAME_LICENSE_DESCRIPTION = "license_description"
-    NAME_LICENSE_INFO_URL = "license_info_url"
-    NAME_RESERVED = "reserved"
-    NAME_TYPOGRAPHIC_FAMILY_NAME = "typographic_family_name"
-    NAME_TYPOGRAPHIC_SUBFAMILY_NAME = "typographic_subfamily_name"
-    NAME_COMPATIBLE_FULL = "compatible_full"
-    NAME_SAMPLE_TEXT = "sample_text"
-    NAME_POSTSCRIPT_CID_FINDFONT_NAME = "postscript_cid_findfont_name"
-    NAME_WWS_FAMILY_NAME = "wws_family_name"
-    NAME_WWS_SUBFAMILY_NAME = "wws_subfamily_name"
-    NAME_LIGHT_BACKGROUND_PALETTE = "light_background_palette"
-    NAME_DARK_BACKGROUND_PALETTE = "dark_background_palette"
-    NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX = "variations_postscript_name_prefix"
+    NAME_COPYRIGHT_NOTICE: str = "copyright_notice"
+    NAME_FAMILY_NAME: str = "family_name"
+    NAME_SUBFAMILY_NAME: str = "subfamily_name"
+    NAME_UNIQUE_IDENTIFIER: str = "unique_identifier"
+    NAME_FULL_NAME: str = "full_name"
+    NAME_VERSION: str = "version"
+    NAME_POSTSCRIPT_NAME: str = "postscript_name"
+    NAME_TRADEMARK: str = "trademark"
+    NAME_MANUFACTURER_NAME: str = "manufacturer_name"
+    NAME_DESIGNER: str = "designer"
+    NAME_DESCRIPTION: str = "description"
+    NAME_VENDOR_URL: str = "vendor_url"
+    NAME_DESIGNER_URL: str = "designer_url"
+    NAME_LICENSE_DESCRIPTION: str = "license_description"
+    NAME_LICENSE_INFO_URL: str = "license_info_url"
+    NAME_RESERVED: str = "reserved"
+    NAME_TYPOGRAPHIC_FAMILY_NAME: str = "typographic_family_name"
+    NAME_TYPOGRAPHIC_SUBFAMILY_NAME: str = "typographic_subfamily_name"
+    NAME_COMPATIBLE_FULL: str = "compatible_full"
+    NAME_SAMPLE_TEXT: str = "sample_text"
+    NAME_POSTSCRIPT_CID_FINDFONT_NAME: str = "postscript_cid_findfont_name"
+    NAME_WWS_FAMILY_NAME: str = "wws_family_name"
+    NAME_WWS_SUBFAMILY_NAME: str = "wws_subfamily_name"
+    NAME_LIGHT_BACKGROUND_PALETTE: str = "light_background_palette"
+    NAME_DARK_BACKGROUND_PALETTE: str = "dark_background_palette"
+    NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX: str = "variations_postscript_name_prefix"
 
-    _NAMES = [
+    _NAMES: list[dict[str, Any]] = [
         {"id": 0, "key": NAME_COPYRIGHT_NOTICE},
         {"id": 1, "key": NAME_FAMILY_NAME},
         {"id": 2, "key": NAME_SUBFAMILY_NAME},
@@ -104,23 +109,23 @@ class Font:
         {"id": 24, "key": NAME_DARK_BACKGROUND_PALETTE},
         {"id": 25, "key": NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX},
     ]
-    _NAMES_BY_ID = {item["id"]: item for item in _NAMES}
-    _NAMES_BY_KEY = {item["key"]: item for item in _NAMES}
-    _NAMES_MAC_IDS = {"platformID": 3, "platEncID": 1, "langID": 0x409}
-    _NAMES_WIN_IDS = {"platformID": 1, "platEncID": 0, "langID": 0x0}
+    _NAMES_BY_ID: dict[int, dict[str, Any]] = {item["id"]: item for item in _NAMES}
+    _NAMES_BY_KEY: dict[str, dict[str, Any]] = {item["key"]: item for item in _NAMES}
+    _NAMES_MAC_IDS: dict[str, Any] = {"platformID": 3, "platEncID": 1, "langID": 0x409}
+    _NAMES_WIN_IDS: dict[str, Any] = {"platformID": 1, "platEncID": 0, "langID": 0x0}
 
     # Style Flags:
     # https://docs.microsoft.com/en-us/typography/opentype/spec/head
     # https://docs.microsoft.com/en-us/typography/opentype/spec/os2#fsselection
-    STYLE_FLAG_REGULAR = "regular"
-    STYLE_FLAG_BOLD = "bold"
-    STYLE_FLAG_ITALIC = "italic"
-    STYLE_FLAG_UNDERLINE = "underline"
-    STYLE_FLAG_OUTLINE = "outline"
-    STYLE_FLAG_SHADOW = "shadow"
-    STYLE_FLAG_CONDENSED = "condensed"
-    STYLE_FLAG_EXTENDED = "extended"
-    _STYLE_FLAGS = {
+    STYLE_FLAG_REGULAR: str = "regular"
+    STYLE_FLAG_BOLD: str = "bold"
+    STYLE_FLAG_ITALIC: str = "italic"
+    STYLE_FLAG_UNDERLINE: str = "underline"
+    STYLE_FLAG_OUTLINE: str = "outline"
+    STYLE_FLAG_SHADOW: str = "shadow"
+    STYLE_FLAG_CONDENSED: str = "condensed"
+    STYLE_FLAG_EXTENDED: str = "extended"
+    _STYLE_FLAGS: dict[str, dict[str, Any]] = {
         STYLE_FLAG_REGULAR: {"bit_head_mac": None, "bit_os2_fs": 6},
         STYLE_FLAG_BOLD: {"bit_head_mac": 0, "bit_os2_fs": 5},
         STYLE_FLAG_ITALIC: {"bit_head_mac": 1, "bit_os2_fs": 0},
@@ -130,14 +135,14 @@ class Font:
         STYLE_FLAG_CONDENSED: {"bit_head_mac": 5, "bit_os2_fs": None},
         STYLE_FLAG_EXTENDED: {"bit_head_mac": 6, "bit_os2_fs": None},
     }
-    _STYLE_FLAGS_KEYS = _STYLE_FLAGS.keys()
+    _STYLE_FLAGS_KEYS: list[str] = list(_STYLE_FLAGS.keys())
 
     # Unicode blocks/scripts data:
-    _UNICODE_BLOCKS = read_json("data/unicode-blocks.json")
-    _UNICODE_SCRIPTS = read_json("data/unicode-scripts.json")
+    _UNICODE_BLOCKS: list[dict[str, Any]] = read_json("data/unicode-blocks.json")
+    _UNICODE_SCRIPTS: list[dict[str, Any]] = read_json("data/unicode-scripts.json")
 
     # Variable Axes:
-    _VARIABLE_AXES = [
+    _VARIABLE_AXES: list[dict[str, Any]] = [
         {"tag": "ital", "name": "Italic"},
         {"tag": "opsz", "name": "Optical Size"},
         {"tag": "slnt", "name": "Slant"},
@@ -153,23 +158,57 @@ class Font:
         {"tag": "SOFT", "name": "Softness"},
         {"tag": "WONK", "name": "Wonky"},
     ]
-    _VARIABLE_AXES_BY_TAG = {axis["tag"]: axis for axis in _VARIABLE_AXES}
+    _VARIABLE_AXES_BY_TAG: dict[str, Any] = {
+        axis["tag"]: axis for axis in _VARIABLE_AXES
+    }
+
+    # Vertical Metrics:
+    VERTICAL_METRIC_UNITS_PER_EM: str = "units_per_em"
+    VERTICAL_METRIC_Y_MAX: str = "y_max"
+    VERTICAL_METRIC_Y_MIN: str = "y_min"
+    VERTICAL_METRIC_ASCENT: str = "ascent"
+    VERTICAL_METRIC_DESCENT: str = "descent"
+    VERTICAL_METRIC_LINE_GAP: str = "line_gap"
+    VERTICAL_METRIC_TYPO_ASCENDER: str = "typo_ascender"
+    VERTICAL_METRIC_TYPO_DESCENDER: str = "typo_descender"
+    VERTICAL_METRIC_TYPO_LINE_GAP: str = "typo_line_gap"
+    VERTICAL_METRIC_CAP_HEIGHT: str = "cap_height"
+    VERTICAL_METRIC_X_HEIGHT: str = "x_height"
+    VERTICAL_METRIC_WIN_ASCENT: str = "win_ascent"
+    VERTICAL_METRIC_WIN_DESCENT: str = "win_descent"
+    # fmt: off
+    _VERTICAL_METRICS: list[dict[str, Any]] = [
+        {"table": "head", "attr": "unitsPerEm", "key": VERTICAL_METRIC_UNITS_PER_EM},
+        {"table": "head", "attr": "yMax", "key": VERTICAL_METRIC_Y_MAX},
+        {"table": "head", "attr": "yMin", "key": VERTICAL_METRIC_Y_MIN},
+        {"table": "hhea", "attr": "ascent", "key": VERTICAL_METRIC_ASCENT},
+        {"table": "hhea", "attr": "descent", "key": VERTICAL_METRIC_DESCENT},
+        {"table": "hhea", "attr": "lineGap", "key": VERTICAL_METRIC_LINE_GAP},
+        {"table": "OS/2", "attr": "sTypoAscender", "key": VERTICAL_METRIC_TYPO_ASCENDER},
+        {"table": "OS/2", "attr": "sTypoDescender", "key": VERTICAL_METRIC_TYPO_DESCENDER},
+        {"table": "OS/2", "attr": "sTypoLineGap", "key": VERTICAL_METRIC_TYPO_LINE_GAP},
+        {"table": "OS/2", "attr": "sCapHeight", "key": VERTICAL_METRIC_CAP_HEIGHT},
+        {"table": "OS/2", "attr": "sxHeight", "key": VERTICAL_METRIC_X_HEIGHT},
+        {"table": "OS/2", "attr": "usWinAscent", "key": VERTICAL_METRIC_WIN_ASCENT},
+        {"table": "OS/2", "attr": "usWinDescent", "key": VERTICAL_METRIC_WIN_DESCENT},
+    ]
+    # fmt: on
 
     # Weights:
     # https://docs.microsoft.com/en-us/typography/opentype/otspec170/os2#usweightclass
-    WEIGHT_EXTRA_THIN = "Extra-thin"  # (Hairline)
-    WEIGHT_THIN = "Thin"
-    WEIGHT_EXTRA_LIGHT = "Extra-light"  # (Ultra-light)
-    WEIGHT_LIGHT = "Light"
-    WEIGHT_REGULAR = "Regular"  # (Normal)
-    WEIGHT_BOOK = "Book"
-    WEIGHT_MEDIUM = "Medium"
-    WEIGHT_SEMI_BOLD = "Semi-bold"  # (Demi-bold)
-    WEIGHT_BOLD = "Bold"
-    WEIGHT_EXTRA_BOLD = "Extra-bold"  # (Ultra-bold)
-    WEIGHT_BLACK = "Black"  # (Heavy)
-    WEIGHT_EXTRA_BLACK = "Extra-black"  # (Nord)
-    _WEIGHTS = [
+    WEIGHT_EXTRA_THIN: str = "Extra-thin"  # (Hairline)
+    WEIGHT_THIN: str = "Thin"
+    WEIGHT_EXTRA_LIGHT: str = "Extra-light"  # (Ultra-light)
+    WEIGHT_LIGHT: str = "Light"
+    WEIGHT_REGULAR: str = "Regular"  # (Normal)
+    WEIGHT_BOOK: str = "Book"
+    WEIGHT_MEDIUM: str = "Medium"
+    WEIGHT_SEMI_BOLD: str = "Semi-bold"  # (Demi-bold)
+    WEIGHT_BOLD: str = "Bold"
+    WEIGHT_EXTRA_BOLD: str = "Extra-bold"  # (Ultra-bold)
+    WEIGHT_BLACK: str = "Black"  # (Heavy)
+    WEIGHT_EXTRA_BLACK: str = "Extra-black"  # (Nord)
+    _WEIGHTS: list[dict[str, Any]] = [
         {"value": 50, "name": WEIGHT_EXTRA_THIN},
         {"value": 100, "name": WEIGHT_THIN},
         {"value": 200, "name": WEIGHT_EXTRA_LIGHT},
@@ -183,20 +222,22 @@ class Font:
         {"value": 900, "name": WEIGHT_BLACK},
         {"value": 950, "name": WEIGHT_EXTRA_BLACK},
     ]
-    _WEIGHTS_BY_VALUE = {weight["value"]: weight for weight in _WEIGHTS}
+    _WEIGHTS_BY_VALUE: dict[int, dict[str, Any]] = {
+        weight["value"]: weight for weight in _WEIGHTS
+    }
 
     # Widths:
     # https://docs.microsoft.com/en-us/typography/opentype/otspec170/os2#uswidthclass
-    WIDTH_ULTRA_CONDENSED = "Ultra-condensed"
-    WIDTH_EXTRA_CONDENSED = "Extra-condensed"
-    WIDTH_CONDENSED = "Condensed"
-    WIDTH_SEMI_CONDENSED = "Semi-condensed"
-    WIDTH_MEDIUM = "Medium"  # (Normal)
-    WIDTH_SEMI_EXPANDED = "Semi-expanded"
-    WIDTH_EXPANDED = "Expanded"
-    WIDTH_EXTRA_EXPANDED = "Extra-expanded"
-    WIDTH_ULTRA_EXPANDED = "Ultra-expanded"
-    _WIDTHS = [
+    WIDTH_ULTRA_CONDENSED: str = "Ultra-condensed"
+    WIDTH_EXTRA_CONDENSED: str = "Extra-condensed"
+    WIDTH_CONDENSED: str = "Condensed"
+    WIDTH_SEMI_CONDENSED: str = "Semi-condensed"
+    WIDTH_MEDIUM: str = "Medium"  # (Normal)
+    WIDTH_SEMI_EXPANDED: str = "Semi-expanded"
+    WIDTH_EXPANDED: str = "Expanded"
+    WIDTH_EXTRA_EXPANDED: str = "Extra-expanded"
+    WIDTH_ULTRA_EXPANDED: str = "Ultra-expanded"
+    _WIDTHS: list[dict[str, Any]] = [
         {"value": 1, "perc": 50.0, "name": WIDTH_ULTRA_CONDENSED},
         {"value": 2, "perc": 62.5, "name": WIDTH_EXTRA_CONDENSED},
         {"value": 3, "perc": 75.0, "name": WIDTH_CONDENSED},
@@ -207,9 +248,15 @@ class Font:
         {"value": 8, "perc": 150.0, "name": WIDTH_EXTRA_EXPANDED},
         {"value": 9, "perc": 200.0, "name": WIDTH_ULTRA_CONDENSED},
     ]
-    _WIDTHS_BY_VALUE = {width["value"]: width for width in _WIDTHS}
+    _WIDTHS_BY_VALUE: dict[int, dict[str, Any]] = {
+        width["value"]: width for width in _WIDTHS
+    }
 
-    def __init__(self, filepath, **kwargs):
+    def __init__(
+        self,
+        filepath: str | Path | IO | TTFont | Font,
+        **kwargs: Any,
+    ) -> None:
         """
         Constructs a new Font instance loading a font file from the given filepath.
 
@@ -220,10 +267,10 @@ class Font:
         """
         super().__init__()
 
-        self._filepath = None
-        self._fileobject = None
-        self._kwargs = None
-        self._ttfont = None
+        self._filepath: str | Path | None = None
+        self._fileobject: IO | None = None
+        self._ttfont: TTFont | None = None
+        self._kwargs: dict[str, Any] = {}
 
         if isinstance(filepath, (Path, str)):
             self._init_with_filepath(str(filepath), **kwargs)
@@ -236,19 +283,29 @@ class Font:
         else:
             filepath_type = type(filepath).__name__
             raise ArgumentError(
-                f"Invalid filepath type: expected pathlib.Path or str, found {filepath_type!r}."
+                "Invalid filepath type: "
+                "expected str or pathlib.Path or file object or TTFont or Font, "
+                f"found '{filepath_type}'."
             )
 
-    def _init_with_filepath(self, filepath, **kwargs):
+    def _init_with_filepath(
+        self,
+        filepath: str | Path,
+        **kwargs: Any,
+    ) -> None:
         try:
             self._filepath = filepath
             self._kwargs = kwargs
             self._ttfont = TTFont(self._filepath, **kwargs)
 
         except TTLibError as error:
-            raise ArgumentError(f"Invalid font at filepath: {filepath!r}.") from error
+            raise ArgumentError(f"Invalid font at filepath: '{filepath}'.") from error
 
-    def _init_with_fileobject(self, fileobject, **kwargs):
+    def _init_with_fileobject(
+        self,
+        fileobject: IO,
+        **kwargs: Any,
+    ) -> None:
         try:
             self._fileobject = fileobject
             self._kwargs = kwargs
@@ -256,31 +313,50 @@ class Font:
 
         except TTLibError as error:
             raise ArgumentError(
-                f"Invalid font at fileobject: {fileobject!r}."
+                f"Invalid font at fileobject: '{fileobject}'."
             ) from error
 
-    def _init_with_font(self, font, **kwargs):
+    def _init_with_font(
+        self,
+        font: Font,
+        **kwargs: Any,
+    ) -> None:
         self._init_with_ttfont(font.get_ttfont())
 
-    def _init_with_ttfont(self, ttfont, **kwargs):
+    def _init_with_ttfont(
+        self,
+        ttfont: TTFont,
+        **kwargs: Any,
+    ) -> None:
         self._fileobject = BytesIO()
         ttfont.save(self._fileobject)
         self._ttfont = TTFont(self._fileobject, **kwargs)
         self._kwargs = kwargs
 
-    def __enter__(self):
+    def __enter__(
+        self,
+    ) -> Font:
         return self
 
-    def __exit__(self, e_type, e_value, e_traceback):
+    def __exit__(  # type: ignore
+        self,
+        e_type,
+        e_value,
+        e_traceback,
+    ) -> None:
         self.close()
 
-    def clone(self):
+    def clone(
+        self,
+    ) -> Font:
         """
         Creates a new Font instance reading the same binary file.
         """
         return Font(self._filepath or self._fileobject, **self._kwargs)
 
-    def close(self):
+    def close(
+        self,
+    ) -> None:
         """
         Close the wrapped TTFont instance.
         """
@@ -288,7 +364,11 @@ class Font:
         font.close()
 
     @classmethod
-    def from_collection(cls, filepath, **kwargs):
+    def from_collection(
+        cls,
+        filepath: str | Path,
+        **kwargs: Any,
+    ) -> list[Font]:
         """
         Gets a list of Font objects from a font collection file (.ttc / .otc)
 
@@ -304,7 +384,11 @@ class Font:
             fonts = [cls(font, **kwargs) for font in font_collection]
         return fonts
 
-    def get_characters(self, *, ignore_blank=False):
+    def get_characters(
+        self,
+        *,
+        ignore_blank: bool = False,
+    ) -> Generator[dict[str, Any], None, None]:
         """
         Gets the font characters.
 
@@ -351,7 +435,11 @@ class Font:
                 "unicode_script_tag": unicode_script_tag,
             }
 
-    def get_characters_count(self, *, ignore_blank=False):
+    def get_characters_count(
+        self,
+        *,
+        ignore_blank: bool = False,
+    ) -> int:
         """
         Gets the font characters count.
 
@@ -363,7 +451,9 @@ class Font:
         """
         return len(list(self.get_characters(ignore_blank=ignore_blank)))
 
-    def get_family_name(self):
+    def get_family_name(
+        self,
+    ) -> str:
         """
         Gets the family name reading the name records with priority order (16, 21, 1).
 
@@ -374,9 +464,12 @@ class Font:
             self.get_name(self.NAME_TYPOGRAPHIC_FAMILY_NAME)
             or self.get_name(self.NAME_WWS_FAMILY_NAME)
             or self.get_name(self.NAME_FAMILY_NAME)
+            or ""
         )
 
-    def get_features(self):
+    def get_features(
+        self,
+    ) -> list[dict[str, Any]]:
         """
         Gets the font opentype features.
 
@@ -385,12 +478,14 @@ class Font:
         """
         features_tags = self.get_features_tags()
         return [
-            self._FEATURES_BY_TAG.get(features_tag).copy()
+            self._FEATURES_BY_TAG.get(features_tag, {}).copy()
             for features_tag in features_tags
             if features_tag in self._FEATURES_BY_TAG
         ]
 
-    def get_features_tags(self):
+    def get_features_tags(
+        self,
+    ) -> list[str]:
         """
         Gets the font opentype features tags.
 
@@ -413,10 +508,10 @@ class Font:
     def get_filename(
         self,
         *,
-        variable_suffix="Variable",
-        variable_axes_tags=True,
-        variable_axes_values=False,
-    ):
+        variable_suffix: str = "Variable",
+        variable_axes_tags: bool = True,
+        variable_axes_values: bool = False,
+    ) -> str:
         """
         Gets the filename to use for saving the font to file-system.
 
@@ -448,7 +543,7 @@ class Font:
                     basename = f"{basename}-{variable_suffix}"
             # append axis tags stringified suffix, eg. [wdth,wght,slnt]
             if variable_axes_tags:
-                axes = self.get_variable_axes()
+                axes = self.get_variable_axes() or []
                 axes_str_parts = []
                 for axis in axes:
                     axis_tag = axis["tag"]
@@ -474,7 +569,11 @@ class Font:
         filename = f"{basename}.{extension}"
         return filename
 
-    def get_fingerprint(self, *, text=""):
+    def get_fingerprint(  # type: ignore
+        self,
+        *,
+        text: str = "",
+    ):
         """
         Gets the font fingerprint: an hash calculated from an image representation of the font.
         Changing the text option affects the returned fingerprint.
@@ -500,7 +599,13 @@ class Font:
         hash = imagehash.average_hash(img, hash_size=64)
         return hash
 
-    def get_fingerprint_match(self, other, *, tolerance=10, text=""):
+    def get_fingerprint_match(  # type: ignore
+        self,
+        other: Font | str,
+        *,
+        tolerance: int = 10,
+        text: str = "",
+    ):
         """
         Gets the fingerprint match between this font and another one.
         by checking if their fingerprints are equal (difference <= tolerance).
@@ -525,7 +630,7 @@ class Font:
             other_type = type(other).__name__
             raise ArgumentError(
                 "Invalid other filepath/font: expected str or Font instance, "
-                f"found {other_type!r}."
+                f"found '{other_type}'."
             )
         hash = self.get_fingerprint(text=text)
         other_hash = other_font.get_fingerprint(text=text)
@@ -534,7 +639,11 @@ class Font:
         match = match and self.is_variable() == other_font.is_variable()
         return (match, diff, hash, other_hash)
 
-    def get_format(self, *, ignore_flavor=False):
+    def get_format(
+        self,
+        *,
+        ignore_flavor: bool = False,
+    ) -> str:
         """
         Gets the font format: otf, ttf, woff, woff2.
 
@@ -542,27 +651,29 @@ class Font:
         :type ignore_flavor: bool
 
         :returns: The format.
-        :rtype: str or None
+        :rtype: str
         """
         font = self.get_ttfont()
         version = font.sfntVersion
         flavor = font.flavor
-        format = None
+        format_ = ""
         if flavor in [self.FORMAT_WOFF, self.FORMAT_WOFF2] and not ignore_flavor:
-            format = flavor
+            format_ = str(flavor)
         elif version == "OTTO" and "CFF " in font:
-            format = self.FORMAT_OTF
+            format_ = self.FORMAT_OTF
         elif version == "\0\1\0\0":
-            format = self.FORMAT_TTF
+            format_ = self.FORMAT_TTF
         elif version == "wOFF":
-            format = self.FORMAT_WOFF
+            format_ = self.FORMAT_WOFF
         elif version == "wOF2":
-            format = self.FORMAT_WOFF2
-        if format is None:
+            format_ = self.FORMAT_WOFF2
+        if not format_:
             raise DataError("Unable to get the font format.")
-        return format
+        return format_
 
-    def get_glyphs(self):
+    def get_glyphs(
+        self,
+    ) -> Generator[dict[str, Any], None, None]:
         """
         Gets the font glyphs and their own composition.
 
@@ -579,7 +690,9 @@ class Font:
                 "components_names": glyf.getComponentNames(glyfs),
             }
 
-    def get_glyphs_count(self):
+    def get_glyphs_count(
+        self,
+    ) -> int:
         """
         Gets the font glyphs count.
 
@@ -591,8 +704,13 @@ class Font:
         count = len(glyphset)
         return count
 
-    def get_image(
-        self, *, text, size, color=(0, 0, 0, 255), background_color=(255, 255, 255, 255)
+    def get_image(  # type: ignore
+        self,
+        *,
+        text: str,
+        size: int,
+        color: tuple[int, int, int, int] = (0, 0, 0, 255),
+        background_color: tuple[int, int, int, int] = (255, 255, 255, 255),
     ):
         """
         Gets an image representation of the font rendering
@@ -625,7 +743,9 @@ class Font:
             del img_font
             return img
 
-    def get_italic_angle(self):
+    def get_italic_angle(
+        self,
+    ) -> dict[str, Any] | None:
         """
         Gets the font italic angle.
 
@@ -646,18 +766,24 @@ class Font:
         return italic_angle
 
     @classmethod
-    def _get_name_id(cls, key):
+    def _get_name_id(
+        cls,
+        key: int | str,
+    ) -> int:
         if isinstance(key, int):
             return key
         elif isinstance(key, str):
-            return cls._NAMES_BY_KEY[key]["id"]
+            return int(cls._NAMES_BY_KEY[key]["id"])
         else:
             key_type = type(key).__name__
             raise ArgumentError(
-                f"Invalid key type, expected int or str, found {key_type!r}."
+                f"Invalid key type, expected int or str, found '{key_type}'."
             )
 
-    def get_name(self, key):
+    def get_name(
+        self,
+        key: str,
+    ) -> str | None:
         """
         Gets the name by its identifier from the font name table.
 
@@ -675,9 +801,11 @@ class Font:
         name = name_table.getName(name_id, **self._NAMES_MAC_IDS)
         if not name:
             name = name_table.getName(name_id, **self._NAMES_WIN_IDS)
-        return name.toUnicode() if name else None
+        return str(name.toUnicode()) if name else None
 
-    def get_names(self):
+    def get_names(
+        self,
+    ) -> dict[str, Any]:
         """
         Gets the names records mapped by their property name.
 
@@ -693,7 +821,10 @@ class Font:
         }
         return names
 
-    def get_style_flag(self, key):
+    def get_style_flag(
+        self,
+        key: str,
+    ) -> bool:
         """
         Gets the style flag reading OS/2 and macStyle tables.
 
@@ -721,7 +852,9 @@ class Font:
                 flag_head_mac = get_flag(head.macStyle, bit_head_mac)
         return flag_os2_fs or flag_head_mac
 
-    def get_style_flags(self):
+    def get_style_flags(
+        self,
+    ) -> dict[str, bool]:
         """
         Gets the style flags reading OS/2 and macStyle tables.
 
@@ -730,7 +863,9 @@ class Font:
         """
         return {key: self.get_style_flag(key) for key in self._STYLE_FLAGS_KEYS}
 
-    def get_style_name(self):
+    def get_style_name(
+        self,
+    ) -> str:
         """
         Gets the style name reading the name records with priority order (17, 22, 2).
 
@@ -741,9 +876,12 @@ class Font:
             self.get_name(self.NAME_TYPOGRAPHIC_SUBFAMILY_NAME)
             or self.get_name(self.NAME_WWS_SUBFAMILY_NAME)
             or self.get_name(self.NAME_SUBFAMILY_NAME)
+            or ""
         )
 
-    def get_ttfont(self):
+    def get_ttfont(
+        self,
+    ) -> TTFont:
         """
         Gets the wrapped TTFont instance.
 
@@ -753,7 +891,12 @@ class Font:
         return self._ttfont
 
     @classmethod
-    def _populate_unicode_items_set(cls, items, items_cache, item):
+    def _populate_unicode_items_set(
+        cls,
+        items: list[dict[str, Any]],
+        items_cache: dict[str, Any],
+        item: dict[str, Any],
+    ) -> None:
         item_key = item["name"]
         if item_key not in items_cache:
             item = item.copy()
@@ -765,8 +908,11 @@ class Font:
 
     @staticmethod
     def _get_unicode_items_set_with_coverage(
-        all_items, items, *, coverage_threshold=0.0
-    ):
+        all_items: list[dict[str, Any]],
+        items: list[dict[str, Any]],
+        *,
+        coverage_threshold: float = 0.0,
+    ) -> list[dict[str, Any]]:
         all_items = copy.deepcopy(all_items)
         items_indexed = {item["name"]: item.copy() for item in items}
         for item in all_items:
@@ -783,7 +929,10 @@ class Font:
         # items_filtered.sort(key=lambda item: item['name'])
         return items_filtered
 
-    def get_unicode_block_by_name(self, name):
+    def get_unicode_block_by_name(
+        self,
+        name: str,
+    ) -> dict[str, Any] | None:
         """
         Gets the unicode block by name (name is case-insensitive and ignores "-").
 
@@ -800,7 +949,11 @@ class Font:
         # raise KeyError("Invalid unicode block name: '{name}'")
         return None
 
-    def get_unicode_blocks(self, *, coverage_threshold=0.00001):
+    def get_unicode_blocks(
+        self,
+        *,
+        coverage_threshold: float = 0.00001,
+    ) -> list[dict[str, Any]]:
         """
         Gets the unicode blocks and their coverage.
         Only blocks with coverage >= coverage_threshold
@@ -812,8 +965,8 @@ class Font:
         :returns: The list of unicode blocks.
         :rtype: list of dicts
         """
-        items = []
-        items_cache = {}
+        items: list[dict[str, Any]] = []
+        items_cache: dict[str, Any] = {}
         for char in self.get_characters():
             item = {
                 "name": char["unicode_block_name"],
@@ -824,7 +977,10 @@ class Font:
         )
         return blocks
 
-    def get_unicode_script_by_name(self, name):
+    def get_unicode_script_by_name(
+        self,
+        name: str,
+    ) -> dict[str, Any] | None:
         """
         Gets the unicode script by name/tag (name/tag is case-insensitive and ignores "-").
 
@@ -841,7 +997,11 @@ class Font:
         # raise KeyError("Invalid unicode script name/tag: '{name}'")
         return None
 
-    def get_unicode_scripts(self, *, coverage_threshold=0.00001):
+    def get_unicode_scripts(
+        self,
+        *,
+        coverage_threshold: float = 0.00001,
+    ) -> list[dict[str, Any]]:
         """
         Gets the unicode scripts and their coverage.
         Only scripts with coverage >= coverage_threshold
@@ -853,8 +1013,8 @@ class Font:
         :returns: The list of unicode scripts.
         :rtype: list of dicts
         """
-        items = []
-        items_cache = {}
+        items: list[dict[str, Any]] = []
+        items_cache: dict[str, Any] = {}
         for char in self.get_characters():
             item = {
                 "name": char["unicode_script_name"],
@@ -866,7 +1026,9 @@ class Font:
         )
         return scripts
 
-    def get_variable_axes(self):
+    def get_variable_axes(
+        self,
+    ) -> list[dict[str, Any]] | None:
         """
         Gets the font variable axes.
 
@@ -889,7 +1051,10 @@ class Font:
             for axis in font["fvar"].axes
         ]
 
-    def get_variable_axis_by_tag(self, tag):
+    def get_variable_axis_by_tag(
+        self,
+        tag: str,
+    ) -> dict[str, Any] | None:
         """
         Gets a variable axis by tag.
 
@@ -907,7 +1072,9 @@ class Font:
         # raise KeyError("Invalid axis tag: '{tag}'")
         return None
 
-    def get_variable_axes_tags(self):
+    def get_variable_axes_tags(
+        self,
+    ) -> list[str] | None:
         """
         Gets the variable axes tags.
 
@@ -919,7 +1086,9 @@ class Font:
         font = self.get_ttfont()
         return [axis.axisTag for axis in font["fvar"].axes]
 
-    def get_variable_instances(self):
+    def get_variable_instances(
+        self,
+    ) -> list[dict[str, Any]] | None:
         """
         Gets the variable instances.
 
@@ -938,7 +1107,10 @@ class Font:
             for instance in font["fvar"].instances
         ]
 
-    def get_variable_instance_by_style_name(self, style_name):
+    def get_variable_instance_by_style_name(
+        self,
+        style_name: str,
+    ) -> dict[str, Any] | None:
         """
         Gets the variable instance by style name, eg. style_name = 'Bold'
 
@@ -948,13 +1120,16 @@ class Font:
         :returns: The variable instance matching the given style name.
         :rtype: dict or None
         """
-        instances = self.get_variable_instances()
+        instances = self.get_variable_instances() or []
         for instance in instances:
             if slugify(instance["style_name"]) == slugify(style_name):
                 return instance
         return None
 
-    def get_variable_instance_closest_to_coordinates(self, coordinates):
+    def get_variable_instance_closest_to_coordinates(
+        self,
+        coordinates: dict[str, Any],
+    ) -> dict[str, Any] | None:
         """
         Gets the variable instance closest to coordinates.
         eg. coordinates = {'wght': 1000, 'slnt': 815, 'wdth': 775}
@@ -971,13 +1146,14 @@ class Font:
 
         # set default axes values for axes not present in coordinates
         lookup_values = coordinates.copy()
-        for axis in self.get_variable_axes():
+        axes = self.get_variable_axes() or []
+        for axis in axes:
             # don't use setdefault to override possible None values
             if lookup_values.get(axis["tag"]) is None:
                 lookup_values[axis["tag"]] = axis["default_value"]
 
-        instances = self.get_variable_instances()
-        closest_instance_distance = sys.maxsize
+        instances = self.get_variable_instances() or []
+        closest_instance_distance = float(sys.maxsize)
         closest_instance = None
         for instance in instances:
             instance_values = instance["coordinates"]
@@ -987,7 +1163,9 @@ class Font:
                 closest_instance = instance
         return closest_instance
 
-    def get_version(self):
+    def get_version(
+        self,
+    ) -> float:
         """
         Gets the font version.
 
@@ -996,10 +1174,33 @@ class Font:
         """
         font = self.get_ttfont()
         head = font.get("head")
-        version = head.fontRevision
+        version = float(head.fontRevision)
         return version
 
-    def get_weight(self):
+    def get_vertical_metrics(
+        self,
+    ) -> dict[str, Any]:
+        """
+        Gets the font vertical metrics.
+
+        :returns: A dictionary containing the following vertical metrics:
+            "units_per_em", "y_max", "y_min", "ascent", "descent", "line_gap",
+            "typo_ascender", "typo_descender", "typo_line_gap", "cap_height", "x_height",
+            "win_ascent", "win_descent"
+        :rtype: dict
+        """
+        font = self.get_ttfont()
+        metrics = {}
+        for metric in self._VERTICAL_METRICS:
+            table = font.get(metric["table"])
+            metrics[metric["key"]] = (
+                getattr(table, metric["attr"], None) if table else None
+            )
+        return metrics
+
+    def get_weight(
+        self,
+    ) -> dict[str, Any] | None:
         """
         Gets the font weight value and name.
 
@@ -1021,7 +1222,9 @@ class Font:
         weight["value"] = weight_value
         return weight
 
-    def get_width(self):
+    def get_width(
+        self,
+    ) -> dict[str, Any] | None:
         """
         Gets the font width value and name.
 
@@ -1038,7 +1241,9 @@ class Font:
         width["value"] = width_value
         return width
 
-    def is_static(self):
+    def is_static(
+        self,
+    ) -> bool:
         """
         Determines if the font is a static font.
 
@@ -1047,7 +1252,9 @@ class Font:
         """
         return not self.is_variable()
 
-    def is_variable(self):
+    def is_variable(
+        self,
+    ) -> bool:
         """
         Determines if the font is a variable font.
 
@@ -1057,7 +1264,13 @@ class Font:
         font = self.get_ttfont()
         return "fvar" in font
 
-    def rename(self, *, family_name="", style_name="", update_style_flags=True):
+    def rename(
+        self,
+        *,
+        family_name: str = "",
+        style_name: str = "",
+        update_style_flags: bool = True,
+    ) -> None:
         """
         Renames the font names records (1, 2, 4, 6, 16, 17) according to
         the given family_name and style_name (subfamily_name).
@@ -1073,6 +1286,7 @@ class Font:
         :type update_style_flags: bool
 
         :raises ValueError: if the computed PostScript-name is longer than 63 characters.
+        :return: None
         """
         family_name = (family_name or "").strip() or self.get_family_name()
         style_name = (style_name or "").strip() or self.get_style_name()
@@ -1122,10 +1336,11 @@ class Font:
             )
 
         # update unique identifier
-        postscript_name_old = self.get_name(self.NAME_POSTSCRIPT_NAME)
-        unique_identifier = self.get_name(self.NAME_UNIQUE_IDENTIFIER)
+        postscript_name_old = self.get_name(self.NAME_POSTSCRIPT_NAME) or ""
+        unique_identifier = self.get_name(self.NAME_UNIQUE_IDENTIFIER) or ""
         unique_identifier = unique_identifier.replace(
-            postscript_name_old, postscript_name
+            postscript_name_old,
+            postscript_name,
         )
 
         # update name records
@@ -1145,7 +1360,11 @@ class Font:
         if update_style_flags:
             self.set_style_flags_by_subfamily_name()
 
-    def sanitize(self, *, strict=True):
+    def sanitize(
+        self,
+        *,
+        strict: bool = True,
+    ) -> None:
         """
         Sanitize the font file using OpenType Sanitizer.
         https://github.com/googlefonts/ots-python
@@ -1187,7 +1406,12 @@ class Font:
                         f"OpenType Sanitizer warnings: \n{warnings}"
                     )
 
-    def save(self, filepath=None, *, overwrite=False):
+    def save(
+        self,
+        filepath: str | Path | None = None,
+        *,
+        overwrite: bool = False,
+    ) -> str:
         """
         Saves the font at filepath.
 
@@ -1213,6 +1437,7 @@ class Font:
         if filepath is None:
             filepath = self._filepath
 
+        filepath = str(filepath)
         filepath_is_dir = fsutil.is_dir(filepath) or filepath.endswith(os.sep)
         filepath_is_font_file = (
             fsutil.get_file_extension(filepath) in self._FORMATS_LIST
@@ -1220,18 +1445,19 @@ class Font:
         if filepath_is_dir or not filepath_is_font_file:
             dirpath = filepath
             basename = fsutil.get_file_basename(self.get_filename())
-            extension = None
+            extension = ""
         else:
             dirpath, filename = fsutil.split_filepath(filepath)
             basename, extension = fsutil.split_filename(filename)
 
-        format = self.get_format()
-        extension = format
+        format_ = self.get_format()
+        extension = format_
         filename = fsutil.join_filename(basename, extension)
         filepath = fsutil.join_filepath(dirpath, filename)
+        filepath = str(filepath)
         if fsutil.is_file(filepath) and not overwrite:
             raise ArgumentError(
-                f"Invalid filepath, a file already exists at {filepath!r} "
+                f"Invalid filepath, a file already exists at '{filepath}' "
                 "and 'overwrite' option is 'False' (consider using 'overwrite=True')."
             )
         fsutil.make_dirs_for_file(filepath)
@@ -1240,18 +1466,32 @@ class Font:
         font.save(filepath)
         return filepath
 
-    def _save_with_flavor(self, *, flavor, filepath=None, overwrite=True):
+    def _save_with_flavor(
+        self,
+        *,
+        flavor: str,
+        filepath: str | Path | None = None,
+        overwrite: bool = True,
+    ) -> str:
         font = self.get_ttfont()
         presave_flavor = font.flavor
         font.flavor = flavor
         # save
-        saved_font_filepath = self.save(filepath=filepath, overwrite=overwrite)
+        saved_font_filepath = self.save(
+            filepath=filepath,
+            overwrite=overwrite,
+        )
         # revert changes
         font.flavor = presave_flavor
         # return file path
         return saved_font_filepath
 
-    def save_as_woff(self, filepath=None, *, overwrite=True):
+    def save_as_woff(
+        self,
+        filepath: str | Path | None = None,
+        *,
+        overwrite: bool = True,
+    ) -> str:
         """
         Saves font as woff.
 
@@ -1264,10 +1504,17 @@ class Font:
         :rtype: str
         """
         return self._save_with_flavor(
-            flavor=self.FORMAT_WOFF, filepath=filepath, overwrite=overwrite
+            flavor=self.FORMAT_WOFF,
+            filepath=filepath,
+            overwrite=overwrite,
         )
 
-    def save_as_woff2(self, filepath=None, *, overwrite=True):
+    def save_as_woff2(
+        self,
+        filepath: str | Path | None = None,
+        *,
+        overwrite: bool = True,
+    ) -> str:
         """
         Saves font as woff2.
 
@@ -1280,10 +1527,15 @@ class Font:
         :rtype: str
         """
         return self._save_with_flavor(
-            flavor=self.FORMAT_WOFF2, filepath=filepath, overwrite=overwrite
+            flavor=self.FORMAT_WOFF2,
+            filepath=filepath,
+            overwrite=overwrite,
         )
 
-    def save_to_fileobject(self, fileobject=None):
+    def save_to_fileobject(
+        self,
+        fileobject: IO | None = None,
+    ) -> IO:
         """
         Writes the font to a file-like object. If no file-object is passed, an
         instance of `BytesIO` is created for the user.
@@ -1300,8 +1552,14 @@ class Font:
         return fileobject
 
     def save_variable_instances(
-        self, dirpath, *, woff2=True, woff=True, overwrite=True, **options
-    ):
+        self,
+        dirpath: str | Path,
+        *,
+        woff2: bool = True,
+        woff: bool = True,
+        overwrite: bool = True,
+        **options: Any,
+    ) -> list[dict[str, Any]]:
         """
         Save all instances of a variable font to specified directory in one or more format(s).
 
@@ -1330,7 +1588,7 @@ class Font:
 
         instances_format = self.get_format()
         instances_saved = []
-        instances = self.get_variable_instances()
+        instances = self.get_variable_instances() or []
         for instance in instances:
             # make instance
             instance_font = self.clone()
@@ -1341,7 +1599,7 @@ class Font:
             instance_font.rename(
                 style_name=instance["style_name"],
             )
-            instance_files = {
+            instance_files: dict[str, Any] = {
                 Font.FORMAT_OTF: None,
                 Font.FORMAT_TTF: None,
                 Font.FORMAT_WOFF2: None,
@@ -1367,7 +1625,10 @@ class Font:
             instances_saved.append(instance_saved)
         return instances_saved
 
-    def set_family_name(self, name):
+    def set_family_name(
+        self,
+        name: str,
+    ) -> None:
         """
         Sets the family name updating the related font names records.
 
@@ -1379,7 +1640,11 @@ class Font:
             style_name=self.get_style_name(),
         )
 
-    def set_name(self, key, value):
+    def set_name(
+        self,
+        key: int | str,
+        value: str,
+    ) -> None:
         """
         Sets the name by its identifier in the font name table.
 
@@ -1395,7 +1660,10 @@ class Font:
         name_table.setName(value, name_id, **self._NAMES_MAC_IDS)
         name_table.setName(value, name_id, **self._NAMES_WIN_IDS)
 
-    def set_names(self, names):
+    def set_names(
+        self,
+        names: dict[str, str],
+    ) -> None:
         """
         Sets the names by their identifier in the name table.
 
@@ -1405,7 +1673,11 @@ class Font:
         for key, value in names.items():
             self.set_name(key, value)
 
-    def set_style_flag(self, key, value):
+    def set_style_flag(
+        self,
+        key: str,
+        value: bool,
+    ) -> None:
         """
         Sets the style flag.
 
@@ -1430,15 +1702,15 @@ class Font:
     def set_style_flags(
         self,
         *,
-        regular=None,
-        bold=None,
-        italic=None,
-        underline=None,
-        outline=None,
-        shadow=None,
-        condensed=None,
-        extended=None,
-    ):
+        regular: bool | None = None,
+        bold: bool | None = None,
+        italic: bool | None = None,
+        underline: bool | None = None,
+        outline: bool | None = None,
+        shadow: bool | None = None,
+        condensed: bool | None = None,
+        extended: bool | None = None,
+    ) -> None:
         """
         Sets the style flags, keys set to None will be ignored.
 
@@ -1466,7 +1738,9 @@ class Font:
                 assert isinstance(value, bool)
                 self.set_style_flag(key, value)
 
-    def set_style_flags_by_subfamily_name(self):
+    def set_style_flags_by_subfamily_name(
+        self,
+    ) -> None:
         """
         Sets the style flags by the subfamily name value.
         The subfamily values should be "regular", "italic", "bold" or "bold italic"
@@ -1482,19 +1756,48 @@ class Font:
         elif subfamily_name == f"{Font.STYLE_FLAG_BOLD} {Font.STYLE_FLAG_ITALIC}":
             self.set_style_flags(regular=False, bold=True, italic=True)
 
-    def set_style_name(self, name):
+    def set_style_name(
+        self,
+        name: str,
+    ) -> None:
         """
         Sets the style name updating the related font names records.
 
-        :param name: The name
-        :type name: The new style name.
+        :param name: The new style name
+        :type name: str.
         """
         self.rename(
             family_name=self.get_family_name(),
             style_name=name,
         )
 
-    def subset(self, *, unicodes="", glyphs=None, text="", **options):
+    def set_vertical_metrics(
+        self,
+        **metrics: Any,
+    ) -> None:
+        """
+        Sets the vertical metrics.
+
+        :param metrics: Keyword arguments representing the vertical metrics that can be set:
+            "units_per_em", "y_max", "y_min", "ascent", "descent", "line_gap",
+            "typo_ascender", "typo_descender", "typo_line_gap", "cap_height", "x_height",
+            "win_ascent", "win_descent"
+        """
+        font = self.get_ttfont()
+        for metric in self._VERTICAL_METRICS:
+            if metric["key"] in metrics:
+                table = font.get(metric["table"])
+                if table:
+                    setattr(table, metric["attr"], metrics[metric["key"]])
+
+    def subset(
+        self,
+        *,
+        unicodes: list[str | int] | str = "",
+        glyphs: list[str] | None = None,
+        text: str = "",
+        **options: Any,
+    ) -> None:
         """
         Subsets the font using the given options (unicodes or glyphs or text),
         it is possible to pass also subsetter options, more info here:
@@ -1512,17 +1815,22 @@ class Font:
         font = self.get_ttfont()
         if not any([unicodes, glyphs, text]):
             raise ArgumentError(
-                "Subsetting requires at least one of the following args: unicode,"
-                " glyphs, text."
+                "Subsetting requires at least one of "
+                "the following args: unicode, glyphs, text."
             )
-        unicodes = parse_unicodes(unicodes)
+        unicodes_list = parse_unicodes(unicodes)
+        glyphs_list = glyphs or []
         options.setdefault("glyph_names", True)
         options.setdefault("ignore_missing_glyphs", True)
         options.setdefault("ignore_missing_unicodes", True)
         options.setdefault("layout_features", ["*"])
         options.setdefault("name_IDs", "*")
         options.setdefault("notdef_outline", True)
-        subs_args = {"unicodes": unicodes, "glyphs": glyphs or [], "text": text}
+        subs_args = {
+            "unicodes": unicodes_list,
+            "glyphs": glyphs_list,
+            "text": text,
+        }
         # https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/subset/__init__.py
         subs_options = SubsetterOptions(**options)
         subs = Subsetter(options=subs_options)
@@ -1530,7 +1838,9 @@ class Font:
         subs.subset(font)
 
     @staticmethod
-    def _all_axes_pinned(axes):
+    def _all_axes_pinned(
+        axes: dict[str, Any],
+    ) -> bool:
         """
         Check if all the axes values are pinned or not.
 
@@ -1544,7 +1854,12 @@ class Font:
             for axis_value in axes.values()
         )
 
-    def to_sliced_variable(self, *, coordinates, **options):
+    def to_sliced_variable(
+        self,
+        *,
+        coordinates: dict[str, Any],
+        **options: Any,
+    ) -> None:
         """
         Converts the variable font to a partial one slicing
         the variable axes at the given coordinates.
@@ -1577,7 +1892,7 @@ class Font:
             if isinstance(axis_value, list):
                 axis_value = tuple(axis_value)
             elif isinstance(axis_value, dict):
-                axis = self.get_variable_axis_by_tag(axis_tag)
+                axis = self.get_variable_axis_by_tag(axis_tag) or {}
                 axis_min = axis_value.get("min", axis.get("min_value"))
                 axis_default = axis_value.get("default", axis.get("default_value"))
                 axis_max = axis_value.get("max", axis.get("max_value"))
@@ -1587,7 +1902,7 @@ class Font:
         # ensure that coordinates axes are defined and that are not all pinned
         if len(coordinates_axes_tags) == 0:
             raise ArgumentError("Invalid coordinates: axes not defined.")
-        elif set(coordinates_axes_tags) == set(self.get_variable_axes_tags()):
+        elif set(coordinates_axes_tags) == set(self.get_variable_axes_tags() or []):
             if self._all_axes_pinned(coordinates):
                 raise ArgumentError(
                     "Invalid coordinates: all axes are pinned (use to_static method)."
@@ -1604,12 +1919,12 @@ class Font:
     def to_static(
         self,
         *,
-        coordinates=None,
-        style_name=None,
-        update_names=True,
-        update_style_flags=True,
-        **options,
-    ):
+        coordinates: dict[str, Any] | None = None,
+        style_name: str | None = None,
+        update_names: bool = True,
+        update_style_flags: bool = True,
+        **options: Any,
+    ) -> None:
         """
         Converts the variable font to a static one pinning
         the variable axes at the given coordinates.
@@ -1645,7 +1960,7 @@ class Font:
             instance = self.get_variable_instance_by_style_name(style_name=style_name)
             if not instance:
                 raise ArgumentError(
-                    f"Invalid style name: instance with style name {style_name!r} not found."
+                    f"Invalid style name: instance with style name '{style_name}' not found."
                 )
             coordinates = instance["coordinates"].copy()
 
@@ -1653,7 +1968,7 @@ class Font:
         coordinates = coordinates or {}
         default_coordinates = {
             axis_tag: None
-            for axis_tag in self.get_variable_axes_tags()
+            for axis_tag in (self.get_variable_axes_tags() or [])
             if axis_tag not in coordinates
         }
         coordinates.update(default_coordinates)
@@ -1675,7 +1990,7 @@ class Font:
         instancer.instantiateVariableFont(font, coordinates, **options)
 
         # update name records and style flags based on instance style name
-        if update_names:
+        if instance and update_names:
             self.rename(
                 style_name=instance["style_name"],
                 update_style_flags=update_style_flags,
@@ -1688,11 +2003,13 @@ class Font:
             if has_italic or has_slant:
                 self.set_style_flags(regular=False, italic=True)
 
-    def __str__(self):
+    def __str__(
+        self,
+    ) -> str:
         """
         Returns a string representation of the object.
 
         :returns: String representation of the object.
         :rtype: str
         """
-        return f"{type(self).__name__}({self._filepath!r})"
+        return f"{type(self).__name__}('{self._filepath}')"

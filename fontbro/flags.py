@@ -1,4 +1,10 @@
-def get_flag(bits, bit):
+from __future__ import annotations
+
+
+def get_flag(
+    bits: int,
+    bit: int,
+) -> bool:
     """
     Gets the flag value.
 
@@ -13,7 +19,11 @@ def get_flag(bits, bit):
     return bool(bits & (1 << bit))
 
 
-def set_flag(bits, bit, value):
+def set_flag(
+    bits: int,
+    bit: int,
+    value: bool,
+) -> int:
     """
     Sets the flag value.
 
