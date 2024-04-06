@@ -98,7 +98,7 @@ exclude = '''
 
 [tool.mypy]
 files = ["fontbro"]
-ignore_missing_imports = true
+follow_imports = "skip"
 install_types = true
 non_interactive = true
 strict = true
