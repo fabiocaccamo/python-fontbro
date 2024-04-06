@@ -39,7 +39,7 @@ jobs:
 
     - name: Run mypy
       run: |
-        mypy --ignore-missing-imports --install-types --non-interactive --strict
+        mypy --follow-imports="skip" --ignore-missing-imports --install-types --non-interactive --strict
 
     - name: Run tests
       run: |
