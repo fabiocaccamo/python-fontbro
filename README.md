@@ -70,6 +70,7 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`get_vertical_metrics`](#get_vertical_metrics)
 -   [`get_weight`](#get_weight)
 -   [`get_width`](#get_width)
+-   [`is_monospace`](#is_monospace)
 -   [`is_static`](#is_static)
 -   [`is_variable`](#is_variable)
 -   [`rename`](#rename)
@@ -555,6 +556,17 @@ Gets the font width value and name.
 :rtype: dict or None
 """
 width = font.get_width()
+```
+
+#### `is_monospace`
+```python
+"""
+Determines if the font is a monospace font.
+
+:returns: True if monospace font, False otherwise.
+:rtype: bool
+"""
+mono = font.is_monospace()
 ```
 
 #### `is_static`

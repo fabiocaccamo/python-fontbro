@@ -1241,6 +1241,19 @@ class Font:
         width["value"] = width_value
         return width
 
+    def is_monospace(
+        self,
+    ) -> bool:
+        """
+        Determines if the font is a monospace font.
+
+        :returns: True if monospace font, False otherwise.
+        :rtype: bool
+        """
+        font = self.get_ttfont()
+        widths = {metrics[0] for metrics in font["hmtx"].metrics.values()}
+        return len(widths) == 1
+
     def is_static(
         self,
     ) -> bool:
