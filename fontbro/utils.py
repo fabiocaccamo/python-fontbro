@@ -1,8 +1,7 @@
 from __future__ import annotations
-
-from typing import Any
 import re
 import unicodedata
+from typing import Any, Callable
 
 import fsutil
 
@@ -14,6 +13,17 @@ def concat_names(
     separator: str = " ",
 ) -> str:
     return f"{a}{separator}{b}" if not a.endswith(f"{separator}{b}") and b else a
+
+
+def find_item(
+    *,
+    items_list: list[dict[str, Any]],
+    key: Callable[[dict[str, Any]], bool],
+) -> dict[str, Any]:
+    return next(
+        (item for item in items_list if key(item)),
+        {},
+    )
 
 
 def read_json(

@@ -39,6 +39,7 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`from_collection`](#from_collection)
 -   [`get_characters`](#get_characters)
 -   [`get_characters_count`](#get_characters_count)
+-   [`get_family_classification`](#get_family_classification)
 -   [`get_family_name`](#get_family_name)
 -   [`get_features`](#get_features)
 -   [`get_features_tags`](#get_features_tags)
@@ -80,6 +81,7 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`save_as_woff2`](#save_as_woff2)
 -   [`save_to_file_object`](#save_to_file_object)
 -   [`save_variable_instances`](#save_variable_instances)
+-   [`set_family_classification`](#set_family_classification)
 -   [`set_family_name`](#set_family_name)
 -   [`set_name`](#set_name)
 -   [`set_names`](#set_names)
@@ -150,6 +152,26 @@ Gets the font characters count.
 :rtype: int
 """
 chars_count = font.get_characters_count(ignore_blank=False)
+```
+
+#### `get_family_classification`
+```python
+"""
+Gets the font family classification info reading
+the sFamilyClass field from the OS/2 table.
+If the OS/2 table is not available None is returned.
+
+:returns: A dictionary containing the font family classification info, e.g.
+    {
+        "full_name": "Sans Serif / Neo-grotesque Gothic",
+        "class_id": 8,
+        "class_name": "Sans Serif",
+        "subclass_id": 5,
+        "subclass_name": "Neo-grotesque Gothic",
+    }
+:rtype: dict
+"""
+family_classification = font.get_family_classification()
 ```
 
 #### `get_family_name`
@@ -722,6 +744,22 @@ Save all instances of a variable font to specified directory in one or more form
 """
 
 saved_fonts = font.save_variable_instances(dirpath, woff2=True, woff=True, overwrite=True, **options)
+```
+
+#### `set_family_classification`
+```python
+"""
+Sets font family classification (sFamilyClass in the OS/2 table)
+based on provided class_id and subclass_id.
+
+:param class_id: Numeric identifier of the font family class.
+:param subclass_id: Optional numeric identifier of the font family subclass (default is 0).
+:raises OperationError: If the OS/2 table is not available in the font.
+:raises ArgumentError: If class_id is invalid or subclass_id is specified but invalid.
+"""
+font.set_family_classification(**font.FAMILY_CLASSIFICATION_SCRIPTS_CALLIGRAPHIC)
+# alternatively:
+font.set_family_classification(class_id=10, subclass_id=5)
 ```
 
 #### `set_family_name`

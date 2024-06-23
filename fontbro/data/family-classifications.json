@@ -1,0 +1,825 @@
+{
+    "classes": [
+        {
+            "id": 0,
+            "name": "No Classification",
+            "subclasses": []
+        },
+        {
+            "id": 1,
+            "name": "Oldstyle Serifs",
+            "subclasses": [
+                {
+                    "id": 0,
+                    "name": "No Classification"
+                },
+                {
+                    "id": 1,
+                    "name": "IBM Rounded Legibility"
+                },
+                {
+                    "id": 2,
+                    "name": "Garalde"
+                },
+                {
+                    "id": 3,
+                    "name": "Venetian"
+                },
+                {
+                    "id": 4,
+                    "name": "Modified Venetian"
+                },
+                {
+                    "id": 5,
+                    "name": "Dutch Modern"
+                },
+                {
+                    "id": 6,
+                    "name": "Dutch Traditional"
+                },
+                {
+                    "id": 7,
+                    "name": "Contemporary"
+                },
+                {
+                    "id": 8,
+                    "name": "Calligraphic"
+                },
+                {
+                    "id": 9,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 10,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 11,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 12,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 13,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 14,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 15,
+                    "name": "Miscellaneous"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Transitional Serifs",
+            "subclasses": [
+                {
+                    "id": 0,
+                    "name": "No Classification"
+                },
+                {
+                    "id": 1,
+                    "name": "Direct Line"
+                },
+                {
+                    "id": 2,
+                    "name": "Script"
+                },
+                {
+                    "id": 3,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 4,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 5,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 6,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 7,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 8,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 9,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 10,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 11,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 12,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 13,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 14,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 15,
+                    "name": "Miscellaneous"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "Modern Serifs",
+            "subclasses": [
+                {
+                    "id": 0,
+                    "name": "No Classification"
+                },
+                {
+                    "id": 1,
+                    "name": "Italian"
+                },
+                {
+                    "id": 2,
+                    "name": "Script"
+                },
+                {
+                    "id": 3,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 4,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 5,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 6,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 7,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 8,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 9,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 10,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 11,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 12,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 13,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 14,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 15,
+                    "name": "Miscellaneous"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "Clarendon Serifs",
+            "subclasses": [
+                {
+                    "id": 0,
+                    "name": "No Classification"
+                },
+                {
+                    "id": 1,
+                    "name": "Clarendon"
+                },
+                {
+                    "id": 2,
+                    "name": "Modern"
+                },
+                {
+                    "id": 3,
+                    "name": "Traditional"
+                },
+                {
+                    "id": 4,
+                    "name": "Newspaper"
+                },
+                {
+                    "id": 5,
+                    "name": "Stub Serif"
+                },
+                {
+                    "id": 6,
+                    "name": "Monotone"
+                },
+                {
+                    "id": 7,
+                    "name": "Typewriter"
+                },
+                {
+                    "id": 8,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 9,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 10,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 11,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 12,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 13,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 14,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 15,
+                    "name": "Miscellaneous"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "Slab Serifs",
+            "subclasses": [
+                {
+                    "id": 0,
+                    "name": "No Classification"
+                },
+                {
+                    "id": 1,
+                    "name": "Monotone"
+                },
+                {
+                    "id": 2,
+                    "name": "Humanist"
+                },
+                {
+                    "id": 3,
+                    "name": "Geometric"
+                },
+                {
+                    "id": 4,
+                    "name": "Swiss"
+                },
+                {
+                    "id": 5,
+                    "name": "Typewriter"
+                },
+                {
+                    "id": 6,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 7,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 8,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 9,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 10,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 11,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 12,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 13,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 14,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 15,
+                    "name": "Miscellaneous"
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "name": "(reserved for future use)",
+            "reserved": true,
+            "subclasses": []
+        },
+        {
+            "id": 7,
+            "name": "Freeform Serifs",
+            "subclasses": [
+                {
+                    "id": 0,
+                    "name": "No Classification"
+                },
+                {
+                    "id": 1,
+                    "name": "Modern"
+                },
+                {
+                    "id": 2,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 3,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 4,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 5,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 6,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 7,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 8,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 9,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 10,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 11,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 12,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 13,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 14,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 15,
+                    "name": "Miscellaneous"
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "name": "Sans Serif",
+            "subclasses": [
+                {
+                    "id": 0,
+                    "name": "No Classification"
+                },
+                {
+                    "id": 1,
+                    "name": "IBM Neo-grotesque Gothic"
+                },
+                {
+                    "id": 2,
+                    "name": "Humanist"
+                },
+                {
+                    "id": 3,
+                    "name": "Low-x Round Geometric"
+                },
+                {
+                    "id": 4,
+                    "name": "High-x Round Geometric"
+                },
+                {
+                    "id": 5,
+                    "name": "Neo-grotesque Gothic"
+                },
+                {
+                    "id": 6,
+                    "name": "Modified Neo-grotesque Gothic"
+                },
+                {
+                    "id": 7,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 8,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 9,
+                    "name": "Typewriter Gothic"
+                },
+                {
+                    "id": 10,
+                    "name": "Matrix"
+                },
+                {
+                    "id": 11,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 12,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 13,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 14,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 15,
+                    "name": "Miscellaneous"
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "name": "Ornamentals",
+            "subclasses": [
+                {
+                    "id": 0,
+                    "name": "No Classification"
+                },
+                {
+                    "id": 1,
+                    "name": "Engraver"
+                },
+                {
+                    "id": 2,
+                    "name": "Black Letter"
+                },
+                {
+                    "id": 3,
+                    "name": "Decorative"
+                },
+                {
+                    "id": 4,
+                    "name": "Three Dimensional"
+                },
+                {
+                    "id": 5,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 6,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 7,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 8,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 9,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 10,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 11,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 12,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 13,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 14,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 15,
+                    "name": "Miscellaneous"
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "name": "Scripts",
+            "subclasses": [
+                {
+                    "id": 0,
+                    "name": "No Classification"
+                },
+                {
+                    "id": 1,
+                    "name": "Uncial"
+                },
+                {
+                    "id": 2,
+                    "name": "Brush Joined"
+                },
+                {
+                    "id": 3,
+                    "name": "Formal Joined"
+                },
+                {
+                    "id": 4,
+                    "name": "Monotone Joined"
+                },
+                {
+                    "id": 5,
+                    "name": "Calligraphic"
+                },
+                {
+                    "id": 6,
+                    "name": "Brush Unjoined"
+                },
+                {
+                    "id": 7,
+                    "name": "Formal Unjoined"
+                },
+                {
+                    "id": 8,
+                    "name": "Monotone Unjoined"
+                },
+                {
+                    "id": 9,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 10,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 11,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 12,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 13,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 14,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 15,
+                    "name": "Miscellaneous"
+                }
+            ]
+        },
+        {
+            "id": 11,
+            "name": "(reserved for future use)",
+            "reserved": true,
+            "subclasses": []
+        },
+        {
+            "id": 12,
+            "name": "Symbolic",
+            "subclasses": [
+                {
+                    "id": 0,
+                    "name": "No Classification"
+                },
+                {
+                    "id": 1,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 2,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 3,
+                    "name": "Mixed Serif"
+                },
+                {
+                    "id": 4,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 5,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 6,
+                    "name": "Oldstyle Serif"
+                },
+                {
+                    "id": 7,
+                    "name": "Neo-grotesque Sans Serif"
+                },
+                {
+                    "id": 8,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 9,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 10,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 11,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 12,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 13,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 14,
+                    "name": "(reserved for future use)",
+                    "reserved": true
+                },
+                {
+                    "id": 15,
+                    "name": "Miscellaneous"
+                }
+            ]
+        },
+        {
+            "id": 13,
+            "name": "Reserved",
+            "reserved": true,
+            "subclasses": []
+        },
+        {
+            "id": 14,
+            "name": "Reserved",
+            "reserved": true,
+            "subclasses": []
+        }
+    ]
+}
