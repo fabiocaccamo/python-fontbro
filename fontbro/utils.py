@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from typing import Any
+import re
+import unicodedata
 
 import fsutil
 
@@ -29,4 +31,10 @@ def remove_spaces(
 def slugify(
     s: str,
 ) -> str:
+    s = unicodedata.normalize("NFKD", s)
+    s = s.encode("ascii", "ignore").decode("ascii")
+    s = s.lower()
+    s = re.sub(r"[\s_]+", "-", s)
+    s = re.sub(r"[^\w\-]", "", s)
+    s = s.strip("-")
     return s.lower().strip().replace(" ", "-")
