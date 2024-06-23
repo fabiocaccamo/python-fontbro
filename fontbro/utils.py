@@ -8,8 +8,10 @@ import fsutil
 def concat_names(
     a: str,
     b: str,
+    *,
+    separator: str = " ",
 ) -> str:
-    return f"{a} {b}" if not a.endswith(f" {b}") else a
+    return f"{a}{separator}{b}" if not a.endswith(f"{separator}{b}") and b else a
 
 
 def read_json(
