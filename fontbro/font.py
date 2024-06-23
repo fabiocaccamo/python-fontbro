@@ -564,7 +564,7 @@ class Font:
             family_name = remove_spaces(family_name)
             style_name = self.get_style_name()
             style_name = remove_spaces(style_name)
-            basename = f"{family_name}-{style_name}"
+            basename = concat_names(family_name, style_name, separator="-")
         extension = self.get_format()
         filename = f"{basename}.{extension}"
         return filename
