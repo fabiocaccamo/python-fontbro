@@ -24,6 +24,7 @@ class SanitizeTestCase(AbstractTestCase):
                 try:
                     font = Font(font_file)
                 except Exception:
+                    # there are some ttc files
                     continue
                 try:
                     font.sanitize(strict=strict)
@@ -64,7 +65,7 @@ class SanitizeTestCase(AbstractTestCase):
         self._test_sanitize(
             "fonts-ots/good",
             strict=False,
-            expected_errors_count=10,
+            expected_errors_count=2,  # should reduce to 0
         )
 
     def test_sanitize_strict_with_good_fonts(self):
@@ -72,5 +73,5 @@ class SanitizeTestCase(AbstractTestCase):
         self._test_sanitize(
             "fonts-ots/good",
             strict=True,
-            expected_errors_count=10,
+            expected_errors_count=2,  # should reduce to 0
         )
