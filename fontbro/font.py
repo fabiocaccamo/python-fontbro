@@ -812,7 +812,7 @@ class Font:
         format_ = ""
         if flavor in [self.FORMAT_WOFF, self.FORMAT_WOFF2] and not ignore_flavor:
             format_ = str(flavor)
-        elif version == "OTTO" and "CFF " in font:
+        elif version == "OTTO" and ("CFF " in font or "CFF2" in font):
             format_ = self.FORMAT_OTF
         elif version == "\0\1\0\0":
             format_ = self.FORMAT_TTF
