@@ -56,6 +56,7 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`get_style_flag`](#get_style_flag)
 -   [`get_style_flags`](#get_style_flags)
 -   [`get_style_name`](#get_style_name)
+-   [`get_svg`](#get_svg)
 -   [`get_ttfont`](#get_ttfont)
 -   [`get_unicode_block_by_name`](#get_unicode_block_by_name)
 -   [`get_unicode_blocks`](#get_unicode_blocks)
@@ -386,6 +387,23 @@ Gets the style name reading the name records with priority order (17, 22, 2).
 :rtype: str
 """
 style_name = font.get_style_name()
+```
+
+#### `get_svg`
+```python
+"""
+Gets an SVG representation of the font rendering
+some text using the given options.
+
+:param text: The text to be rendered as SVG paths.
+:type text: str
+:param size: The size of the font to be used for rendering the text, in points.
+:type size: int
+
+:returns: An SVG string that represents the rendered text.
+:rtype: str
+"""
+svg_str = font.get_svg(text="Hello!", size=48)
 ```
 
 #### `get_ttfont`
