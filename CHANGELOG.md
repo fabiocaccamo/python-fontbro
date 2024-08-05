@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.24.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.24.0) - 2024-08-05
+-   Add `get_svg` method.
+-   Add `is_color` method.
+-   Improve `is_monospace` method accuracy by adding `threshold` option.
+-   Bump requirements.
+
 ## [0.23.1](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.23.1) - 2024-07-08
 -   Fix `get_format` with `.otf` fonts with `CFF2` table.
 -   Bump requirements and `pre-commit` hooks
