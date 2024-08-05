@@ -1451,6 +1451,20 @@ class Font:
         width["value"] = width_value
         return width
 
+    def is_color(self) -> bool:
+        """
+        Determines if the font is a color font.
+
+        :returns: True if color font, False otherwise.
+        :rtype: bool
+        """
+        font = self.get_ttfont()
+        tables = {"COLR", "CPAL", "CBDT", "CBLC"}
+        for table in tables:
+            if table in font:
+                return True
+        return False
+
     def is_monospace(
         self,
         threshold: float = 0.85,

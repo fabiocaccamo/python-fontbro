@@ -71,6 +71,7 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`get_vertical_metrics`](#get_vertical_metrics)
 -   [`get_weight`](#get_weight)
 -   [`get_width`](#get_width)
+-   [`is_color`](#is_color)
 -   [`is_monospace`](#is_monospace)
 -   [`is_static`](#is_static)
 -   [`is_variable`](#is_variable)
@@ -578,6 +579,17 @@ Gets the font width value and name.
 :rtype: dict or None
 """
 width = font.get_width()
+```
+
+#### `is_color`
+```python
+"""
+Determines if the font is a color font.
+
+:returns: True if color font, False otherwise.
+:rtype: bool
+"""
+color = font.is_color()
 ```
 
 #### `is_monospace`
