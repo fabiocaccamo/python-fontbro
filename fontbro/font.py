@@ -481,7 +481,7 @@ class Font:
         self,
         *,
         ignore_blank: bool = False,
-    ) -> Generator[dict[str, Any], None, None]:
+    ) -> Generator[dict[str, Any]]:
         """
         Gets the font characters.
 
@@ -826,7 +826,7 @@ class Font:
 
     def get_glyphs(
         self,
-    ) -> Generator[dict[str, Any], None, None]:
+    ) -> Generator[dict[str, Any]]:
         """
         Gets the font glyphs and their own composition.
 
