@@ -585,6 +585,9 @@ width = font.get_width()
 """
 Determines if the font is a monospace font.
 
+:param threshold: The threshold (0.0 <= n <= 1.0) of glyphs with the same width to consider the font as monospace.
+:type threshold: float
+
 :returns: True if monospace font, False otherwise.
 :rtype: bool
 """

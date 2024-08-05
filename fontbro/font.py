@@ -6,6 +6,7 @@ import os
 import re
 import sys
 import tempfile
+from collections import Counter
 from curses import ascii
 from io import BytesIO
 from pathlib import Path
@@ -1452,16 +1453,24 @@ class Font:
 
     def is_monospace(
         self,
+        threshold: float = 0.85,
     ) -> bool:
         """
         Determines if the font is a monospace font.
+
+        :param threshold: The threshold (0.0 <= n <= 1.0) of glyphs with the same width to consider the font as monospace.
+        :type threshold: float
 
         :returns: True if monospace font, False otherwise.
         :rtype: bool
         """
         font = self.get_ttfont()
-        widths = {metrics[0] for metrics in font["hmtx"].metrics.values()}
-        return len(widths) == 1
+        widths = [metrics[0] for metrics in font["hmtx"].metrics.values()]
+        widths_counter = Counter(widths)
+        same_width_count = widths_counter.most_common(1)[0][1]
+        same_width_amount = same_width_count / self.get_glyphs_count()
+        print(same_width_amount)
+        return same_width_amount >= threshold
 
     def is_static(
         self,
