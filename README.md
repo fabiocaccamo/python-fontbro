@@ -621,7 +621,7 @@ Determines if the font is a monospace font.
 :returns: True if monospace font, False otherwise.
 :rtype: bool
 """
-mono = font.is_monospace()
+mono = font.is_monospace(threshold=0.85)
 ```
 
 #### `is_static`
