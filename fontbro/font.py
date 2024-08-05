@@ -480,60 +480,6 @@ class Font:
             fonts = [cls(font, **kwargs) for font in font_collection]
         return fonts
 
-    def generate_svg(
-        self,
-        *,
-        text: str,
-        size: int,
-    ) -> str:
-        """
-        Generates an SVG string of the input text at a specified font size.
-
-        :param text: The text to be rendered as SVG paths.
-        :type text: str
-        :param size: The size of the font to be used for rendering the text, in points.
-        :type size: int
-
-        :returns: An SVG string that represents the rendered text.
-        :rtype: str
-        """
-        font = self.get_ttfont()
-
-        # get font metrics
-        units_per_em = font["head"].unitsPerEm
-        scale = size / units_per_em
-        hhea = font["hhea"]
-        ascent = hhea.ascent * scale
-        descent = hhea.descent * scale
-        width = 0
-        height = ascent - descent
-
-        # get glyph set and character map
-        glyphset = font.getGlyphSet()
-        cmap = font["cmap"].getBestCmap()
-
-        # generate svg path for each glyph in text
-        glyphs: list[str] = list(filter(None, [cmap.get(ord(char)) for char in text]))
-        paths = ""
-        for glyph_name in glyphs:
-            glyph = glyphset[glyph_name]
-            pen = SVGPathPen(glyphset)
-            glyph.draw(pen)
-            commands = pen.getCommands()
-            transform = f"translate({width:.2f} {ascent:.2f}) scale({scale} -{scale})"
-            paths += f"""<path d="{commands}" transform="{transform}" />"""
-            width += glyph.width * scale
-
-        # round width and height
-        width = int(math.ceil(width))
-        height = int(math.ceil(height))
-        viewbox = "0 0 {width} {height}"
-        xmlns = "http://www.w3.org/2000/svg"
-
-        # generate svg string
-        svg_str = f"""<svg width="{width}" height="{height}" viewBox="{viewbox}" xmlns="{xmlns}">{paths}</svg>"""
-        return svg_str
-
     def get_characters(
         self,
         *,
@@ -1089,6 +1035,61 @@ class Font:
             or ""
         )
 
+    def get_svg(
+        self,
+        *,
+        text: str,
+        size: int,
+    ) -> str:
+        """
+        Gets an SVG representation of the font rendering
+        some text using the given options.
+
+        :param text: The text to be rendered as SVG paths.
+        :type text: str
+        :param size: The size of the font to be used for rendering the text, in points.
+        :type size: int
+
+        :returns: An SVG string that represents the rendered text.
+        :rtype: str
+        """
+        font = self.get_ttfont()
+
+        # get font metrics
+        units_per_em = font["head"].unitsPerEm
+        scale = size / units_per_em
+        hhea = font["hhea"]
+        ascent = hhea.ascent * scale
+        descent = hhea.descent * scale
+        width = 0
+        height = ascent - descent
+
+        # get glyph set and character map
+        glyphset = font.getGlyphSet()
+        cmap = font["cmap"].getBestCmap()
+
+        # generate svg path for each glyph in text
+        glyphs: list[str] = list(filter(None, [cmap.get(ord(char)) for char in text]))
+        paths = ""
+        for glyph_name in glyphs:
+            glyph = glyphset[glyph_name]
+            pen = SVGPathPen(glyphset)
+            glyph.draw(pen)
+            commands = pen.getCommands()
+            transform = f"translate({width:.2f} {ascent:.2f}) scale({scale} -{scale})"
+            paths += f"""<path d="{commands}" transform="{transform}" />"""
+            width += glyph.width * scale
+
+        # round width and height
+        width = int(math.ceil(width))
+        height = int(math.ceil(height))
+        viewbox = f"0 0 {width} {height}"
+        xmlns = "http://www.w3.org/2000/svg"
+
+        # generate svg string
+        svg_str = f"""<svg width="{width}" height="{height}" viewBox="{viewbox}" xmlns="{xmlns}">{paths}</svg>"""
+        return svg_str
+
     def get_ttfont(
         self,
     ) -> TTFont:
@@ -1451,7 +1452,9 @@ class Font:
         width["value"] = width_value
         return width
 
-    def is_color(self) -> bool:
+    def is_color(
+        self,
+    ) -> bool:
         """
         Determines if the font is a color font.
 
