@@ -1469,7 +1469,6 @@ class Font:
         widths_counter = Counter(widths)
         same_width_count = widths_counter.most_common(1)[0][1]
         same_width_amount = same_width_count / self.get_glyphs_count()
-        print(same_width_amount)
         return same_width_amount >= threshold
 
     def is_static(
