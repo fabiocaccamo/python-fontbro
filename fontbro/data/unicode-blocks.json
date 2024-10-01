@@ -740,6 +740,10 @@
         "name": "Vithkuqi"
     },
     {
+        "characters_total": 64,
+        "name": "Todhri"
+    },
+    {
         "characters_total": 384,
         "name": "Linear A"
     },
@@ -828,6 +832,10 @@
         "name": "Hanifi Rohingya"
     },
     {
+        "characters_total": 80,
+        "name": "Garay"
+    },
+    {
         "characters_total": 32,
         "name": "Rumi Numeral Symbols"
     },
@@ -905,6 +913,10 @@
     },
     {
         "characters_total": 128,
+        "name": "Tulu-Tigalari"
+    },
+    {
+        "characters_total": 128,
         "name": "Newa"
     },
     {
@@ -926,6 +938,10 @@
     {
         "characters_total": 80,
         "name": "Takri"
+    },
+    {
+        "characters_total": 48,
+        "name": "Myanmar Extended-C"
     },
     {
         "characters_total": 80,
@@ -966,6 +982,10 @@
     {
         "characters_total": 96,
         "name": "Devanagari Extended-A"
+    },
+    {
+        "characters_total": 64,
+        "name": "Sunuwar"
     },
     {
         "characters_total": 112,
@@ -1024,8 +1044,16 @@
         "name": "Egyptian Hieroglyph Format Controls"
     },
     {
+        "characters_total": 4000,
+        "name": "Egyptian Hieroglyphs Extended-A"
+    },
+    {
         "characters_total": 640,
         "name": "Anatolian Hieroglyphs"
+    },
+    {
+        "characters_total": 64,
+        "name": "Gurung Khema"
     },
     {
         "characters_total": 576,
@@ -1046,6 +1074,10 @@
     {
         "characters_total": 144,
         "name": "Pahawh Hmong"
+    },
+    {
+        "characters_total": 64,
+        "name": "Kirat Rai"
     },
     {
         "characters_total": 96,
@@ -1102,6 +1134,10 @@
     {
         "characters_total": 16,
         "name": "Shorthand Format Controls"
+    },
+    {
+        "characters_total": 704,
+        "name": "Symbols for Legacy Computing Supplement"
     },
     {
         "characters_total": 208,
@@ -1170,6 +1206,10 @@
     {
         "characters_total": 48,
         "name": "Nag Mundari"
+    },
+    {
+        "characters_total": 48,
+        "name": "Ol Onal"
     },
     {
         "characters_total": 32,
@@ -1278,6 +1318,10 @@
     {
         "characters_total": 7488,
         "name": "CJK Unified Ideographs Extension F"
+    },
+    {
+        "characters_total": 624,
+        "name": "CJK Unified Ideographs Extension I"
     },
     {
         "characters_total": 544,

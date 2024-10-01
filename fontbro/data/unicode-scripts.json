@@ -1,11 +1,11 @@
 [
     {
-        "characters_total": 8301,
+        "characters_total": 9053,
         "name": "Common",
         "tag": "Zyyy"
     },
     {
-        "characters_total": 1481,
+        "characters_total": 1487,
         "name": "Latin",
         "tag": "Latn"
     },
@@ -25,7 +25,7 @@
         "tag": "Grek"
     },
     {
-        "characters_total": 143917,
+        "characters_total": 143993,
         "name": "Unknown",
         "tag": "Zzzz"
     },
@@ -35,7 +35,7 @@
         "tag": "Copt"
     },
     {
-        "characters_total": 506,
+        "characters_total": 508,
         "name": "Cyrillic",
         "tag": "Cyrl"
     },
@@ -50,7 +50,7 @@
         "tag": "Hebr"
     },
     {
-        "characters_total": 1368,
+        "characters_total": 1373,
         "name": "Arabic",
         "tag": "Arab"
     },
@@ -145,7 +145,7 @@
         "tag": "Tibt"
     },
     {
-        "characters_total": 223,
+        "characters_total": 243,
         "name": "Myanmar",
         "tag": "Mymr"
     },
@@ -240,7 +240,7 @@
         "tag": "Lana"
     },
     {
-        "characters_total": 124,
+        "characters_total": 127,
         "name": "Balinese",
         "tag": "Bali"
     },
@@ -280,7 +280,7 @@
         "tag": "Tfng"
     },
     {
-        "characters_total": 98408,
+        "characters_total": 99030,
         "name": "Han",
         "tag": "Hani"
     },
@@ -435,6 +435,11 @@
         "tag": "Vith"
     },
     {
+        "characters_total": 52,
+        "name": "Todhri",
+        "tag": "Todr"
+    },
+    {
         "characters_total": 341,
         "name": "Linear A",
         "tag": "Lina"
@@ -540,6 +545,11 @@
         "tag": "Rohg"
     },
     {
+        "characters_total": 69,
+        "name": "Garay",
+        "tag": "Gara"
+    },
+    {
         "characters_total": 47,
         "name": "Yezidi",
         "tag": "Yezi"
@@ -620,6 +630,11 @@
         "tag": "Gran"
     },
     {
+        "characters_total": 80,
+        "name": "Tulu Tigalari",
+        "tag": "Tutg"
+    },
+    {
         "characters_total": 97,
         "name": "Newa",
         "tag": "Newa"
@@ -685,6 +700,11 @@
         "tag": "Pauc"
     },
     {
+        "characters_total": 44,
+        "name": "Sunuwar",
+        "tag": "Sunu"
+    },
+    {
         "characters_total": 97,
         "name": "Bhaiksuki",
         "tag": "Bhks"
@@ -710,7 +730,7 @@
         "tag": "Maka"
     },
     {
-        "characters_total": 86,
+        "characters_total": 87,
         "name": "Kawi",
         "tag": "Kawi"
     },
@@ -725,7 +745,7 @@
         "tag": "Cpmn"
     },
     {
-        "characters_total": 1110,
+        "characters_total": 5105,
         "name": "Egyptian Hieroglyphs",
         "tag": "Egyp"
     },
@@ -733,6 +753,11 @@
         "characters_total": 583,
         "name": "Anatolian Hieroglyphs",
         "tag": "Hluw"
+    },
+    {
+        "characters_total": 58,
+        "name": "Gurung Khema",
+        "tag": "Gukh"
     },
     {
         "characters_total": 43,
@@ -755,6 +780,11 @@
         "tag": "Hmng"
     },
     {
+        "characters_total": 58,
+        "name": "Kirat Rai",
+        "tag": "Krai"
+    },
+    {
         "characters_total": 91,
         "name": "Medefaidrin",
         "tag": "Medf"
@@ -775,7 +805,7 @@
         "tag": "Nshu"
     },
     {
-        "characters_total": 471,
+        "characters_total": 472,
         "name": "Khitan Small Script",
         "tag": "Kits"
     },
@@ -808,6 +838,11 @@
         "characters_total": 42,
         "name": "Nag Mundari",
         "tag": "Nagm"
+    },
+    {
+        "characters_total": 44,
+        "name": "Ol Onal",
+        "tag": "Onao"
     },
     {
         "characters_total": 213,
