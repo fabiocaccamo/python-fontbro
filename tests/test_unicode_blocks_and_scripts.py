@@ -140,15 +140,15 @@ class UnicodeBlocksAndScriptsTestCase(AbstractTestCase):
         expected_scripts = [
             {
                 "characters_count": 1505,
-                "characters_total": 8301,
-                "coverage": 0.1813034574147693,
+                "characters_total": 9053,
+                "coverage": 0.16624323428697668,
                 "name": "Common",
                 "tag": "Zyyy",
             },
             {
                 "characters_count": 345,
-                "characters_total": 1481,
-                "coverage": 0.23295070898041864,
+                "characters_total": 1487,
+                "coverage": 0.23201075991930062,
                 "name": "Latin",
                 "tag": "Latn",
             },
@@ -175,8 +175,8 @@ class UnicodeBlocksAndScriptsTestCase(AbstractTestCase):
             },
             {
                 "characters_count": 66,
-                "characters_total": 506,
-                "coverage": 0.13043478260869565,
+                "characters_total": 508,
+                "coverage": 0.12992125984251968,
                 "name": "Cyrillic",
                 "tag": "Cyrl",
             },
@@ -189,8 +189,8 @@ class UnicodeBlocksAndScriptsTestCase(AbstractTestCase):
             },
             {
                 "characters_count": 18100,
-                "characters_total": 98408,
-                "coverage": 0.18392813592390864,
+                "characters_total": 99030,
+                "coverage": 0.18277289710188832,
                 "name": "Han",
                 "tag": "Hani",
             },
