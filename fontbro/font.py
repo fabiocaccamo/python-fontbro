@@ -426,6 +426,7 @@ class Font:
     ) -> None:
         self._fileobject = BytesIO()
         ttfont.save(self._fileobject)
+        self._fileobject.seek(0)
         self._ttfont = TTFont(self._fileobject, **kwargs)
         self._kwargs = kwargs
 
@@ -1796,6 +1797,7 @@ class Font:
         if fileobject is None:
             fileobject = BytesIO()
         font.save(fileobject)
+        fileobject.seek(0)
         return fileobject
 
     def save_variable_instances(
