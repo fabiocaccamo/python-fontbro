@@ -1,7 +1,8 @@
 from __future__ import annotations
 import re
 import unicodedata
-from typing import Any, Callable
+from typing import Any
+from collections.abc import Callable
 
 import fsutil
 
