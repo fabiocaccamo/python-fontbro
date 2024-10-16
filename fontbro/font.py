@@ -10,9 +10,8 @@ from collections import Counter
 from curses import ascii
 from io import BytesIO
 from pathlib import Path
-from typing import Any
+from typing import Any, IO, cast
 from collections.abc import Generator
-from typing.io import IO
 import fsutil
 import ots
 from fontTools import unicodedata
@@ -351,7 +350,7 @@ class Font:
 
     def __init__(
         self,
-        filepath: str | Path | IO | TTFont | Font,
+        filepath: str | Path | IO[Any] | TTFont | Font,
         **kwargs: Any,
     ) -> None:
         """
@@ -365,14 +364,14 @@ class Font:
         super().__init__()
 
         self._filepath: str | Path | None = None
-        self._fileobject: IO | None = None
+        self._fileobject: IO[Any] | None = None
         self._ttfont: TTFont | None = None
         self._kwargs: dict[str, Any] = {}
 
         if isinstance(filepath, (Path, str)):
             self._init_with_filepath(str(filepath), **kwargs)
         elif hasattr(filepath, "read"):
-            self._init_with_fileobject(filepath, **kwargs)
+            self._init_with_fileobject(cast(IO[Any], filepath), **kwargs)
         elif isinstance(filepath, Font):
             self._init_with_font(filepath, **kwargs)
         elif isinstance(filepath, TTFont):
@@ -400,7 +399,7 @@ class Font:
 
     def _init_with_fileobject(
         self,
-        fileobject: IO,
+        fileobject: IO[Any],
         **kwargs: Any,
     ) -> None:
         try:
@@ -1783,8 +1782,8 @@ class Font:
 
     def save_to_fileobject(
         self,
-        fileobject: IO | None = None,
-    ) -> IO:
+        fileobject: IO[Any] | None = None,
+    ) -> IO[Any]:
         """
         Writes the font to a file-like object. If no file-object is passed, an
         instance of `BytesIO` is created for the user.
