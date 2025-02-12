@@ -1,7 +1,6 @@
-from tests import AbstractTestCase
-
 # import fsutil
 from fontbro.exceptions import ArgumentError
+from tests import AbstractTestCase
 
 
 class FamilyClassificationTestCase(AbstractTestCase):

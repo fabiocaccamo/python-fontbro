@@ -1,5 +1,7 @@
 from io import BytesIO
+
 import fsutil
+
 from fontbro import Font
 from tests import AbstractTestCase
 

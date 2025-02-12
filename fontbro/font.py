@@ -7,11 +7,12 @@ import re
 import sys
 import tempfile
 from collections import Counter
+from collections.abc import Generator
 from curses import ascii
 from io import BytesIO
 from pathlib import Path
-from typing import Any, IO, cast
-from collections.abc import Generator
+from typing import IO, Any, cast
+
 import fsutil
 import ots
 from fontTools import unicodedata

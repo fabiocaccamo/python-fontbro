@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import re
-
 from collections.abc import Iterable
 
 from fontTools.subset import parse_unicodes as _parse_unicodes
