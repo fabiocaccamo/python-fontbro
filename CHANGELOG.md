@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.25.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.25.0) - 2025-06-11
+-   Add `Python 3.13` support.
+-   Drop `Python 3.8` and `Python 3.9` support.
+-   Reset file pointer when saving to fileobject.
+-   Fix typing issues.
+-   Update `unicode-blocks.json` and `unicode-scripts.json` data.
+-   Bump requirements and `pre-commit` hooks.
+
 ## [0.24.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.24.0) - 2024-08-05
 -   Add `get_svg` method.
 -   Add `is_color` method.
@@ -17,19 +25,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.23.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.23.0) - 2024-06-23
 -   Add `get_family_classification` and `set_family_classification` methods.
 -   Improve `slugify` utility function.
--   Bump requirements and `pre-commit` hooks
+-   Bump requirements and `pre-commit` hooks.
 
 ## [0.22.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.22.0) - 2024-05-14
 -   Add `is_monospace` method.
 -   Add `mypy` to `pre-commit`.
 -   Fix `pyproject` `Ruff` conf warnings.
--   Bump requirements and `pre-commit` hooks
+-   Bump requirements and `pre-commit` hooks.
 
 ## [0.21.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.21.0) - 2024-03-07
 -   Add type hints.
 -   Add vertical metrics keys available as class properties.
 -   Improve code quality.
--   Bump requirements and `pre-commit` hooks
+-   Bump requirements and `pre-commit` hooks.
 
 ## [0.20.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.20.0) - 2024-01-29
 -   Add more vertical metrics: `units_per_em`, `y_max`, `y_min`, `ascent`, `descent`, `line_gap`, `typo_ascender`, `typo_descender`, `typo_line_gap`, `cap_height`, `x_height`, `win_ascent`, `win_descent`.
