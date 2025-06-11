@@ -24,5 +24,5 @@ def parse_unicodes(
     unicodes_str = re.sub(r"[\—\‐\−]", "-", unicodes_str)
     # remove U+, \u, u if present
     unicodes_str = re.sub(r"(U\+)|(\\u)|(u)", "", unicodes_str, flags=re.I)
-    unicodes_list = _parse_unicodes(unicodes_str)
+    unicodes_list = list(_parse_unicodes(unicodes_str))
     return unicodes_list
