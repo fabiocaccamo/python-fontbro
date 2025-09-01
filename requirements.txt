@@ -1,4 +1,4 @@
-fonttools[lxml,woff,unicode,pathops] == 4.58.2
+fonttools[lxml,woff,unicode,pathops] == 4.59.2
 imagehash == 4.3.2
 opentype-sanitizer == 9.2.0
 pillow == 11.2.1
