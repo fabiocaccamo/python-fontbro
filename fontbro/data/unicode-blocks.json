@@ -781,6 +781,10 @@
     },
     {
         "characters_total": 32,
+        "name": "Sidetic"
+    },
+    {
+        "characters_total": 32,
         "name": "Meroitic Hieroglyphs"
     },
     {
@@ -984,6 +988,10 @@
         "name": "Devanagari Extended-A"
     },
     {
+        "characters_total": 32,
+        "name": "Sharada Supplement"
+    },
+    {
         "characters_total": 64,
         "name": "Sunuwar"
     },
@@ -1002,6 +1010,10 @@
     {
         "characters_total": 80,
         "name": "Gunjala Gondi"
+    },
+    {
+        "characters_total": 64,
+        "name": "Tolong Siki"
     },
     {
         "characters_total": 32,
@@ -1084,6 +1096,10 @@
         "name": "Medefaidrin"
     },
     {
+        "characters_total": 64,
+        "name": "Beria Erfe"
+    },
+    {
         "characters_total": 160,
         "name": "Miao"
     },
@@ -1106,6 +1122,10 @@
     {
         "characters_total": 128,
         "name": "Tangut Supplement"
+    },
+    {
+        "characters_total": 128,
+        "name": "Tangut Components Supplement"
     },
     {
         "characters_total": 16,
@@ -1138,6 +1158,10 @@
     {
         "characters_total": 704,
         "name": "Symbols for Legacy Computing Supplement"
+    },
+    {
+        "characters_total": 64,
+        "name": "Miscellaneous Symbols Supplement"
     },
     {
         "characters_total": 208,
@@ -1210,6 +1234,10 @@
     {
         "characters_total": 48,
         "name": "Ol Onal"
+    },
+    {
+        "characters_total": 64,
+        "name": "Tai Yo"
     },
     {
         "characters_total": 32,
@@ -1334,6 +1362,10 @@
     {
         "characters_total": 4192,
         "name": "CJK Unified Ideographs Extension H"
+    },
+    {
+        "characters_total": 4304,
+        "name": "CJK Unified Ideographs Extension J"
     },
     {
         "characters_total": 128,

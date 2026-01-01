@@ -1,11 +1,11 @@
 [
     {
-        "characters_total": 9053,
+        "characters_total": 9123,
         "name": "Common",
         "tag": "Zyyy"
     },
     {
-        "characters_total": 1487,
+        "characters_total": 1492,
         "name": "Latin",
         "tag": "Latn"
     },
@@ -15,7 +15,7 @@
         "tag": "Bopo"
     },
     {
-        "characters_total": 657,
+        "characters_total": 684,
         "name": "Inherited",
         "tag": "Zinh"
     },
@@ -25,7 +25,7 @@
         "tag": "Grek"
     },
     {
-        "characters_total": 143993,
+        "characters_total": 143942,
         "name": "Unknown",
         "tag": "Zzzz"
     },
@@ -50,7 +50,7 @@
         "tag": "Hebr"
     },
     {
-        "characters_total": 1373,
+        "characters_total": 1413,
         "name": "Arabic",
         "tag": "Arab"
     },
@@ -110,12 +110,12 @@
         "tag": "Taml"
     },
     {
-        "characters_total": 100,
+        "characters_total": 101,
         "name": "Telugu",
         "tag": "Telu"
     },
     {
-        "characters_total": 91,
+        "characters_total": 92,
         "name": "Kannada",
         "tag": "Knda"
     },
@@ -280,7 +280,7 @@
         "tag": "Tfng"
     },
     {
-        "characters_total": 99030,
+        "characters_total": 103351,
         "name": "Han",
         "tag": "Hani"
     },
@@ -480,6 +480,11 @@
         "tag": "Lydi"
     },
     {
+        "characters_total": 26,
+        "name": "Sidetic",
+        "tag": "Sidt"
+    },
+    {
         "characters_total": 32,
         "name": "Meroitic Hieroglyphs",
         "tag": "Mero"
@@ -605,7 +610,7 @@
         "tag": "Mahj"
     },
     {
-        "characters_total": 96,
+        "characters_total": 104,
         "name": "Sharada",
         "tag": "Shrd"
     },
@@ -725,6 +730,11 @@
         "tag": "Gong"
     },
     {
+        "characters_total": 54,
+        "name": "Tolong Siki",
+        "tag": "Tols"
+    },
+    {
         "characters_total": 25,
         "name": "Makasar",
         "tag": "Maka"
@@ -790,12 +800,17 @@
         "tag": "Medf"
     },
     {
+        "characters_total": 50,
+        "name": "Beria Erfe",
+        "tag": "Berf"
+    },
+    {
         "characters_total": 149,
         "name": "Miao",
         "tag": "Plrd"
     },
     {
-        "characters_total": 6914,
+        "characters_total": 7059,
         "name": "Tangut",
         "tag": "Tang"
     },
@@ -843,6 +858,11 @@
         "characters_total": 44,
         "name": "Ol Onal",
         "tag": "Onao"
+    },
+    {
+        "characters_total": 55,
+        "name": "Tai Yo",
+        "tag": "Tayo"
     },
     {
         "characters_total": 213,
