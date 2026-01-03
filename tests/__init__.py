@@ -12,6 +12,10 @@ class AbstractTestCase(unittest.TestCase):
     with some methods that are used by different test cases.
     """
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.maxDiff = None
+
     def setUp(self):
         fsutil.remove_dir(self._get_font_temp_path())
 
