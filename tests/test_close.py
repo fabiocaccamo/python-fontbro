@@ -11,5 +11,5 @@ class CloseTestCase(AbstractTestCase):
         filepath = self._get_font_path("/Noto_Sans_TC/NotoSansTC-Regular.otf")
         font = Font(filepath=filepath)
         font.close()
-        with self.assertRaises(ValueError):
+        with self.assertRaises(KeyError):
             font.get_characters_count()

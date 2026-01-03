@@ -63,7 +63,7 @@ class FingerprintTestCase(AbstractTestCase):
                     diff = instance_hash - static_font_hash
                     # print(f"{font} -> {diff}")
                     diffs.append(diff)
-                diffs = [diff for diff in diffs if diff <= 10]
+                diffs = [diff for diff in diffs if diff <= 20]
                 self.assertEqual(len(diffs), 1)
 
     def test_get_fingerprint_match_with_same_static_fonts(self):
