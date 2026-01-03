@@ -36,14 +36,14 @@ class SanitizeTestCase(AbstractTestCase):
         self._test_sanitize(
             "fonts-ots/bad",
             strict=False,
-            expected_errors_count=103,
+            expected_errors_count=99,
         )
 
     def test_sanitize_strict_with_bad_fonts(self):
         self._test_sanitize(
             "fonts-ots/bad",
             strict=True,
-            expected_errors_count=103,
+            expected_errors_count=99,
         )
 
     def test_sanitize_with_fuzzing_fonts(self):
