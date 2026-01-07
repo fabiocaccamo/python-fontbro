@@ -8,7 +8,6 @@ import sys
 import tempfile
 from collections import Counter
 from collections.abc import Generator
-from curses import ascii
 from io import BytesIO
 from pathlib import Path
 from typing import IO, Any, cast
@@ -36,6 +35,7 @@ from fontbro.subset import parse_unicodes
 from fontbro.utils import (
     concat_names,
     find_item,
+    is_control_character,
     read_json,
     remove_spaces,
     slugify,
@@ -509,7 +509,7 @@ class Font:
                 char = chr(code)
             else:
                 continue
-            if ascii.iscntrl(char):
+            if is_control_character(char):
                 continue
             if glyfs and ignore_blank:
                 glyf = glyfs.get(char_name)

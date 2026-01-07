@@ -50,3 +50,9 @@ def slugify(
     s = re.sub(r"[^\w\-]", "", s)
     s = s.strip("-")
     return s.lower().strip().replace(" ", "-")
+
+
+def is_control_character(
+    char: str,
+) -> bool:
+    return ord(char) < 0x20 or ord(char) == 0x7F
