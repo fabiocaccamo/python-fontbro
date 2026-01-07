@@ -13,7 +13,7 @@ jobs:
 
   test:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.platform }}
 
     strategy:
       fail-fast: false
