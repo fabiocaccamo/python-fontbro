@@ -28,8 +28,14 @@
     },
     {
         "tag": "akhn",
-        "name": "Akhands",
+        "name": "Akhand",
         "exposed": false
+    },
+    {
+        "tag": "apkn",
+        "name": "Kerning for Alternate Proportional Widths",
+        "exposed": true,
+        "exposed_active": false
     },
     {
         "tag": "blwf",
@@ -54,7 +60,7 @@
     },
     {
         "tag": "case",
-        "name": "Case-Sensitive Forms",
+        "name": "Case-sensitive Forms",
         "exposed": true,
         "exposed_active": false
     },
@@ -109,13 +115,595 @@
     },
     {
         "tag": "cv01",
-        "name": "Character Variants",
+        "name": "Character Variant 1",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv02",
+        "name": "Character Variant 2",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv03",
+        "name": "Character Variant 3",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv04",
+        "name": "Character Variant 4",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv05",
+        "name": "Character Variant 5",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv06",
+        "name": "Character Variant 6",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv07",
+        "name": "Character Variant 7",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv08",
+        "name": "Character Variant 8",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv09",
+        "name": "Character Variant 9",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv10",
+        "name": "Character Variant 10",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv11",
+        "name": "Character Variant 11",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv12",
+        "name": "Character Variant 12",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv13",
+        "name": "Character Variant 13",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv14",
+        "name": "Character Variant 14",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv15",
+        "name": "Character Variant 15",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv16",
+        "name": "Character Variant 16",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv17",
+        "name": "Character Variant 17",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv18",
+        "name": "Character Variant 18",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv19",
+        "name": "Character Variant 19",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv20",
+        "name": "Character Variant 20",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv21",
+        "name": "Character Variant 21",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv22",
+        "name": "Character Variant 22",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv23",
+        "name": "Character Variant 23",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv24",
+        "name": "Character Variant 24",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv25",
+        "name": "Character Variant 25",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv26",
+        "name": "Character Variant 26",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv27",
+        "name": "Character Variant 27",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv28",
+        "name": "Character Variant 28",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv29",
+        "name": "Character Variant 29",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv30",
+        "name": "Character Variant 30",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv31",
+        "name": "Character Variant 31",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv32",
+        "name": "Character Variant 32",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv33",
+        "name": "Character Variant 33",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv34",
+        "name": "Character Variant 34",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv35",
+        "name": "Character Variant 35",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv36",
+        "name": "Character Variant 36",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv37",
+        "name": "Character Variant 37",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv38",
+        "name": "Character Variant 38",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv39",
+        "name": "Character Variant 39",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv40",
+        "name": "Character Variant 40",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv41",
+        "name": "Character Variant 41",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv42",
+        "name": "Character Variant 42",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv43",
+        "name": "Character Variant 43",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv44",
+        "name": "Character Variant 44",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv45",
+        "name": "Character Variant 45",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv46",
+        "name": "Character Variant 46",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv47",
+        "name": "Character Variant 47",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv48",
+        "name": "Character Variant 48",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv49",
+        "name": "Character Variant 49",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv50",
+        "name": "Character Variant 50",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv51",
+        "name": "Character Variant 51",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv52",
+        "name": "Character Variant 52",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv53",
+        "name": "Character Variant 53",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv54",
+        "name": "Character Variant 54",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv55",
+        "name": "Character Variant 55",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv56",
+        "name": "Character Variant 56",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv57",
+        "name": "Character Variant 57",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv58",
+        "name": "Character Variant 58",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv59",
+        "name": "Character Variant 59",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv60",
+        "name": "Character Variant 60",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv61",
+        "name": "Character Variant 61",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv62",
+        "name": "Character Variant 62",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv63",
+        "name": "Character Variant 63",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv64",
+        "name": "Character Variant 64",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv65",
+        "name": "Character Variant 65",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv66",
+        "name": "Character Variant 66",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv67",
+        "name": "Character Variant 67",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv68",
+        "name": "Character Variant 68",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv69",
+        "name": "Character Variant 69",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv70",
+        "name": "Character Variant 70",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv71",
+        "name": "Character Variant 71",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv72",
+        "name": "Character Variant 72",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv73",
+        "name": "Character Variant 73",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv74",
+        "name": "Character Variant 74",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv75",
+        "name": "Character Variant 75",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv76",
+        "name": "Character Variant 76",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv77",
+        "name": "Character Variant 77",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv78",
+        "name": "Character Variant 78",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv79",
+        "name": "Character Variant 79",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv80",
+        "name": "Character Variant 80",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv81",
+        "name": "Character Variant 81",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv82",
+        "name": "Character Variant 82",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv83",
+        "name": "Character Variant 83",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv84",
+        "name": "Character Variant 84",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv85",
+        "name": "Character Variant 85",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv86",
+        "name": "Character Variant 86",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv87",
+        "name": "Character Variant 87",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv88",
+        "name": "Character Variant 88",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv89",
+        "name": "Character Variant 89",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv90",
+        "name": "Character Variant 90",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv91",
+        "name": "Character Variant 91",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv92",
+        "name": "Character Variant 92",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv93",
+        "name": "Character Variant 93",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv94",
+        "name": "Character Variant 94",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv95",
+        "name": "Character Variant 95",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv96",
+        "name": "Character Variant 96",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv97",
+        "name": "Character Variant 97",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
+        "tag": "cv98",
+        "name": "Character Variant 98",
         "exposed": true,
         "exposed_active": false
     },
     {
         "tag": "cv99",
-        "name": "Character Variants",
+        "name": "Character Variant 99",
         "exposed": true,
         "exposed_active": false
     },
@@ -181,7 +769,7 @@
     },
     {
         "tag": "flac",
-        "name": "Flattened accent forms",
+        "name": "Flattened Accent Forms",
         "exposed": false
     },
     {
@@ -328,12 +916,12 @@
     },
     {
         "tag": "ltra",
-        "name": "Left-to-right alternates",
+        "name": "Left-to-right Alternates",
         "exposed": false
     },
     {
         "tag": "ltrm",
-        "name": "Left-to-right mirrored forms",
+        "name": "Left-to-right Mirrored Forms",
         "exposed": false
     },
     {
@@ -440,7 +1028,7 @@
     },
     {
         "tag": "pref",
-        "name": "Pre-Base Forms",
+        "name": "Pre-base Forms",
         "exposed": false
     },
     {
@@ -493,7 +1081,7 @@
     },
     {
         "tag": "rphf",
-        "name": "Reph Forms",
+        "name": "Reph Form",
         "exposed": false
     },
     {
@@ -503,12 +1091,12 @@
     },
     {
         "tag": "rtla",
-        "name": "Right-to-left alternates",
+        "name": "Right-to-left Alternates",
         "exposed": false
     },
     {
         "tag": "rtlm",
-        "name": "Right-to-left mirrored forms",
+        "name": "Right-to-left Mirrored Forms",
         "exposed": false
     },
     {
@@ -674,7 +1262,7 @@
     },
     {
         "tag": "ssty",
-        "name": "Math script style alternates",
+        "name": "Math Script-style Alternates",
         "exposed": false
     },
     {
@@ -748,6 +1336,12 @@
         "exposed_active": false
     },
     {
+        "tag": "vapk",
+        "name": "Kerning for Alternate Proportional Vertical Metrics",
+        "exposed": true,
+        "exposed_active": false
+    },
+    {
         "tag": "vatu",
         "name": "Vattu Variants",
         "exposed": false
@@ -759,7 +1353,7 @@
     },
     {
         "tag": "vert",
-        "name": "Vertical Writing",
+        "name": "Vertical Alternates",
         "exposed": true,
         "exposed_active": false
     },
