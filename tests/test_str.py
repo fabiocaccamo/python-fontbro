@@ -1,3 +1,5 @@
+import os
+
 from tests import AbstractTestCase
 
 
@@ -11,4 +13,5 @@ class StrTestCase(AbstractTestCase):
         font = self._get_font(filepath)
         s = str(font)
         self.assertTrue(s.startswith("Font('"))
-        self.assertTrue(s.endswith(filepath + "')"))
+        expected_path = filepath.replace("/", os.sep)
+        self.assertTrue(s.endswith(expected_path + "')"))
