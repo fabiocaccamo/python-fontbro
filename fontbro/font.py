@@ -261,7 +261,8 @@ class Font:
         {"tag": "ELSH", "name": "Element Shape"},
         {"tag": "EDPT", "name": "Extrusion Depth"},
         {"tag": "YTFI", "name": "Figure Height"},
-        {"tag": "XPRN", "name": "Expression"}, # Removed: https://github.com/google/fonts/pull/2594
+        # Removed: https://github.com/google/fonts/pull/2594
+        {"tag": "XPRN", "name": "Expression"},
         {"tag": "FILL", "name": "Fill"},
         {"tag": "FLAR", "name": "Flare"},
         {"tag": "GRAD", "name": "Grade"},
