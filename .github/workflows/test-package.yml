@@ -13,7 +13,7 @@ jobs:
 
   test:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.platform }}
 
     strategy:
       fail-fast: false
@@ -46,6 +46,7 @@ jobs:
         mypy --follow-imports="skip" --ignore-missing-imports --install-types --non-interactive --strict
 
     - name: Run tests
+      shell: bash
       run: |
         coverage run --append --source=fontbro -m unittest
         coverage report --show-missing
