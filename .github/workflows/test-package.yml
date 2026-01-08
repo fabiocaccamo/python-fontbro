@@ -13,13 +13,13 @@ jobs:
 
   test:
 
-    runs-on: ${{ matrix.platform }}
-
     strategy:
       fail-fast: false
       matrix:
         platform: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+
+    runs-on: ${{ matrix.platform }}
 
     steps:
 
@@ -46,7 +46,6 @@ jobs:
         mypy --follow-imports="skip" --ignore-missing-imports --install-types --non-interactive --strict
 
     - name: Run tests
-      shell: bash
       run: |
         coverage run --append --source=fontbro -m unittest
         coverage report --show-missing
