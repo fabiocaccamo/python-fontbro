@@ -8,7 +8,6 @@ import sys
 import tempfile
 from collections import Counter
 from collections.abc import Generator
-from curses import ascii
 from io import BytesIO
 from pathlib import Path
 from typing import IO, Any, cast
@@ -550,7 +549,9 @@ class Font:
                 char = chr(code)
             else:
                 continue
-            if ascii.iscntrl(char):
+            # check if is control character
+            char_code = ord(char)
+            if char_code < 0x20 or char_code == 0x7F:
                 continue
             if glyfs and ignore_blank:
                 glyf = glyfs.get(char_name)
