@@ -42,8 +42,9 @@ jobs:
         pre-commit run --all-files --show-diff-on-failure --verbose
 
     - name: Run tests
+      shell: bash
       run: |
-        coverage run --append --source=fontbro -m unittest discover -s tests -t .
+        coverage run --append --source=fontbro -m unittest
         coverage report --show-missing
         coverage xml -o ./coverage.xml
 
