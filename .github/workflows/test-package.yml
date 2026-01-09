@@ -43,7 +43,7 @@ jobs:
 
     - name: Run tests
       run: |
-        coverage run --append --source=fontbro -m unittest
+        coverage run --append --source=fontbro -m unittest discover -s tests -t .
         coverage report --show-missing
         coverage xml -o ./coverage.xml
 
