@@ -10,5 +10,5 @@ class StrTestCase(AbstractTestCase):
         filepath = "/Roboto_Mono/static/RobotoMono-Regular.ttf"
         font = self._get_font(filepath)
         s = str(font)
-        expected = f"Font('{font.filepath}')"
+        expected = f"Font('{font._filepath}')"
         self.assertEqual(s, expected)
