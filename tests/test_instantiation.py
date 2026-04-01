@@ -1,3 +1,4 @@
+from fontbro import Font
 from tests import AbstractTestCase
 
 
@@ -130,6 +131,20 @@ class InstantiationTestCase(AbstractTestCase):
             update_style_flags=False,
         )
         self.assertFalse(font.get_style_flag("italic"))
+
+    def test_to_static_removes_stat_table(self):
+        font = self._get_variable_font()
+        self.assertIn("STAT", font.get_ttfont())
+        font.to_static(coordinates={"wght": 400, "wdth": 100})
+        self.assertNotIn("STAT", font.get_ttfont())
+
+    def test_to_static_stat_table_not_present_in_saved_file(self):
+        font = self._get_variable_font()
+        font.to_static(coordinates={"wght": 400, "wdth": 100})
+        output_filepath = self._get_font_temp_path("")
+        font_saved_filepath = font.save(output_filepath, overwrite=True)
+        font_saved = Font(font_saved_filepath)
+        self.assertNotIn("STAT", font_saved.get_ttfont())
 
     def test_to_sliced_variable_with_static_font(self):
         font = self._get_static_font()

@@ -2361,6 +2361,10 @@ class Font:
         # instantiate the static font
         instancer.instantiateVariableFont(font, coordinates, **options)
 
+        # remove STAT table
+        # not useful in static fonts and after instancing it may contain incorrect values
+        self._remove_stat_table()
+
         # update name records and style flags based on instance style name
         if instance and update_names:
             self.rename(
@@ -2374,6 +2378,19 @@ class Font:
             has_slant = (coordinates.get("slnt", 0) or 0) < 0
             if has_italic or has_slant:
                 self.set_style_flags(regular=False, italic=True)
+
+    def _remove_stat_table(self) -> bool:
+        """
+        Removes the STAT table from the font.
+
+        :returns: True if the STAT table was removed, False if it was not present.
+        :rtype: bool
+        """
+        font = self.get_ttfont()
+        if "STAT" in font:
+            del font["STAT"]
+            return True
+        return False
 
     def __str__(
         self,
