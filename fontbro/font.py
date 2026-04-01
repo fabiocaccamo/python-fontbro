@@ -712,20 +712,23 @@ class Font:
     def get_filename(
         self,
         *,
-        variable_suffix: str = "Variable",
+        variable_suffix: str = "",
         variable_axes_tags: bool = True,
         variable_axes_values: bool = False,
     ) -> str:
         """
         Gets the filename to use for saving the font to file-system.
 
-        :param variable_suffix: The variable suffix, default "Variable"
+        :param variable_suffix: The variable suffix, default empty string (no suffix).
+            Suffixes like 'Variable' or 'VF' or any other are not recommended
+            per Google Fonts naming convention. Pass a custom suffix only if needed,
+            e.g. variable_suffix='Variable' -> 'FamilyName-Variable[wght].ttf'.
         :type variable_suffix: str
         :param variable_axes_tags: The variable axes tags flag,
-            if True, the axes tags will be appended, eg '[wght,wdth]'
+            if True, the axes tags will be appended, eg '[wdth,wght]'
         :type variable_axes_tags: bool
-        :param variable_axes_values: The variable axes values flag
-            if True, each axis values will be appended, eg '[wght(100,100,900),wdth(75,100,125)]'
+        :param variable_axes_values: The variable axes values flag,
+            if True, each axis values will be appended, eg '[wdth(75,100,125),wght(100,400,900)]'
         :type variable_axes_values: bool
 
         :returns: The filename.
@@ -747,7 +750,7 @@ class Font:
                     basename = f"{basename}-{variable_suffix}"
             # append axis tags stringified suffix, eg. [wdth,wght,slnt]
             if variable_axes_tags:
-                axes = self.get_variable_axes() or []
+                axes = self.get_variable_axes(sort=True) or []
                 axes_str_parts = []
                 for axis in axes:
                     axis_tag = axis["tag"]

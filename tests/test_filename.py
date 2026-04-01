@@ -23,13 +23,13 @@ class FilenameTestCase(AbstractTestCase):
         font = self._get_font("/Tourney/Tourney-Italic-VariableFont_wdth,wght.ttf")
         self.assertEqual(
             font.get_filename(),
-            "Tourney-Italic-Variable[wght,wdth].ttf",
+            "Tourney-Italic-Variable[wdth,wght].ttf",
         )
 
         font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
         self.assertEqual(
             font.get_filename(),
-            "Tourney-Variable[wght,wdth].ttf",
+            "Tourney-Variable[wdth,wght].ttf",
         )
 
         font = self._get_font("/Roboto_Mono/RobotoMono-Italic-VariableFont_wght.ttf")
@@ -71,7 +71,7 @@ class FilenameTestCase(AbstractTestCase):
                 variable_suffix="VF",
                 variable_axes_tags=True,
             ),
-            "Tourney-VF[wght,wdth].ttf",
+            "Tourney-VF[wdth,wght].ttf",
         )
 
         font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
@@ -81,7 +81,7 @@ class FilenameTestCase(AbstractTestCase):
                 variable_axes_tags=True,
                 variable_axes_values=True,
             ),
-            "Tourney-VF[wght(100,100,900),wdth(75,100,125)].ttf",
+            "Tourney-VF[wdth(75,100,125),wght(100,100,900)].ttf",
         )
 
         font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
@@ -90,7 +90,7 @@ class FilenameTestCase(AbstractTestCase):
                 variable_suffix="",
                 variable_axes_tags=True,
             ),
-            "Tourney[wght,wdth].ttf",
+            "Tourney[wdth,wght].ttf",
         )
 
         font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
@@ -100,7 +100,7 @@ class FilenameTestCase(AbstractTestCase):
                 variable_axes_tags=True,
                 variable_axes_values=True,
             ),
-            "Tourney[wght(100,100,900),wdth(75,100,125)].ttf",
+            "Tourney[wdth(75,100,125),wght(100,100,900)].ttf",
         )
 
         font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
