@@ -191,3 +191,33 @@ class SaveTestCase(AbstractTestCase):
         output_dirpath = self._get_font_temp_path("")
         with self.assertRaises(TypeError):
             font.save_variable_instances(output_dirpath)
+
+    def test_save_as_ttf_from_woff(self):
+        # create woff2 on the fly
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        woff_filepath = self._get_font_temp_path("RobotoMono-Regular.woff")
+        font.save_as_woff(woff_filepath, overwrite=True)
+        # create font instance from woff file
+        font_woff = Font(woff_filepath)
+        output_filepath = self._get_font_temp_path("")
+        font_saved_filepath = font_woff.save_as_ttf(output_filepath)
+        self.assertTrue(font_saved_filepath.endswith(".ttf"))
+        # ensure that the original font format is not changed
+        self.assertEqual(font_woff.get_format(), Font.FORMAT_WOFF)
+        font_saved = Font(font_saved_filepath)
+        self.assertEqual(font_saved.get_format(), Font.FORMAT_TTF)
+
+    def test_save_as_ttf_from_woff2(self):
+        # create woff2 on the fly
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        woff2_filepath = self._get_font_temp_path("RobotoMono-Regular.woff2")
+        font.save_as_woff2(woff2_filepath, overwrite=True)
+        # create font instance from woff2 file
+        font_woff2 = Font(woff2_filepath)
+        output_filepath = self._get_font_temp_path("")
+        font_saved_filepath = font_woff2.save_as_ttf(output_filepath)
+        self.assertTrue(font_saved_filepath.endswith(".ttf"))
+        # ensure that the original font format is not changed
+        self.assertEqual(font_woff2.get_format(), Font.FORMAT_WOFF2)
+        font_saved = Font(font_saved_filepath)
+        self.assertEqual(font_saved.get_format(), Font.FORMAT_TTF)

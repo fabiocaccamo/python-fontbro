@@ -1779,7 +1779,7 @@ class Font:
     def _save_with_flavor(
         self,
         *,
-        flavor: str,
+        flavor: str | None,
         filepath: str | Path | None = None,
         overwrite: bool = True,
     ) -> str:
@@ -1795,6 +1795,30 @@ class Font:
         font.flavor = presave_flavor
         # return file path
         return saved_font_filepath
+
+    def save_as_ttf(
+        self,
+        filepath: str | Path | None = None,
+        *,
+        overwrite: bool = True,
+    ) -> str:
+        """
+        Saves font without web compression (woff/woff2 flavor is removed).
+        The resulting format will be ttf or otf depending on the source font.
+
+        :param filepath: The filepath
+        :type filepath: str or None
+        :param overwrite: The overwrite, if True the source font file can be overwritten
+        :type overwrite: bool
+
+        :returns: The filepath where the font has been saved to.
+        :rtype: str
+        """
+        return self._save_with_flavor(
+            flavor=None,
+            filepath=filepath,
+            overwrite=overwrite,
+        )
 
     def save_as_woff(
         self,
@@ -1897,7 +1921,7 @@ class Font:
         fsutil.assert_not_file(dirpath)
         fsutil.make_dirs(dirpath)
 
-        instances_format = self.get_format()
+        instances_format = self.get_format(ignore_flavor=True)
         instances_saved = []
         instances = self.get_variable_instances() or []
         for instance in instances:
@@ -1916,7 +1940,7 @@ class Font:
                 Font.FORMAT_WOFF2: None,
                 Font.FORMAT_WOFF: None,
             }
-            instance_files[instances_format] = instance_font.save(
+            instance_files[instances_format] = instance_font.save_as_ttf(
                 dirpath,
                 overwrite=overwrite,
             )
