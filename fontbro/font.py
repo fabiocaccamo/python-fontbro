@@ -1287,9 +1287,15 @@ class Font:
 
     def get_variable_axes(
         self,
+        *,
+        sort: bool = False,
     ) -> list[dict[str, Any]] | None:
         """
         Gets the font variable axes.
+
+        :param sort: If True, axes are sorted following the Google Fonts naming convention:
+            uppercase custom axes first, then lowercase standard axes, each group alphabetical.
+        :type sort: bool
 
         :returns: The list of axes if the font is a variable font otherwise None.
         :rtype: list of dict or None
@@ -1297,7 +1303,7 @@ class Font:
         if not self.is_variable():
             return None
         font = self.get_ttfont()
-        return [
+        axes = [
             {
                 "tag": axis.axisTag,
                 "name": self._VARIABLE_AXES_BY_TAG.get(axis.axisTag, {}).get(
@@ -1309,6 +1315,12 @@ class Font:
             }
             for axis in font["fvar"].axes
         ]
+        if sort:
+            axes = sorted(
+                axes,
+                key=lambda axis: (axis["tag"].islower(), axis["tag"]),
+            )
+        return axes
 
     def get_variable_axis_by_tag(
         self,
