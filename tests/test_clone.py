@@ -45,3 +45,18 @@ class CloneTestCase(AbstractTestCase):
         font_clone = font2.clone()
         self.assertFalse(font2 == font_clone)
         self.assertEqual(f"{font2}", f"{font_clone}")
+
+    def test_clone_preserves_in_memory_changes(self):
+        filepath = self._get_font_path("/Noto_Sans_TC/NotoSansTC-Regular.otf")
+        font = Font(filepath)
+        font.set_name(Font.NAME_FAMILY_NAME, "NotoSansTCCustom")
+        font_clone = font.clone()
+        self.assertEqual(
+            font_clone.get_name(Font.NAME_FAMILY_NAME),
+            font.get_name(Font.NAME_FAMILY_NAME),
+        )
+        self.assertEqual(
+            font_clone.get_name(Font.NAME_FAMILY_NAME),
+            "NotoSansTCCustom",
+        )
+        self.assertEqual(font_clone._filepath, filepath)

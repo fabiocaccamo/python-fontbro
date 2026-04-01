@@ -488,9 +488,13 @@ class Font:
         self,
     ) -> Font:
         """
-        Creates a new Font instance reading the same binary file.
+        Creates a new Font instance with the current in-memory state,
+        including any modifications made to the current instance.
         """
-        return Font(self._filepath or self._fileobject, **self._kwargs)
+        font = self.get_ttfont()
+        font_clone = Font(font, **self._kwargs)
+        font_clone._filepath = self._filepath
+        return font_clone
 
     def close(
         self,
