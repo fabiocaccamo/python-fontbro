@@ -23,28 +23,38 @@ class FilenameTestCase(AbstractTestCase):
         font = self._get_font("/Tourney/Tourney-Italic-VariableFont_wdth,wght.ttf")
         self.assertEqual(
             font.get_filename(),
-            "Tourney-Italic-Variable[wdth,wght].ttf",
+            "Tourney-Italic[wdth,wght].ttf",
         )
 
         font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
         self.assertEqual(
             font.get_filename(),
-            "Tourney-Variable[wdth,wght].ttf",
+            "Tourney[wdth,wght].ttf",
         )
 
         font = self._get_font("/Roboto_Mono/RobotoMono-Italic-VariableFont_wght.ttf")
         self.assertEqual(
             font.get_filename(),
-            "RobotoMono-Italic-Variable[wght].ttf",
+            "RobotoMono-Italic[wght].ttf",
         )
 
         font = self._get_font("/Roboto_Mono/RobotoMono-VariableFont_wght.ttf")
         self.assertEqual(
             font.get_filename(),
-            "RobotoMono-Variable[wght].ttf",
+            "RobotoMono[wght].ttf",
         )
 
     def test_get_filename_with_variable_font_and_custom_suffixes(self):
+        font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
+        self.assertEqual(
+            font.get_filename(
+                variable_suffix="Variable",
+                variable_axes_tags=False,
+                variable_axes_values=False,
+            ),
+            "Tourney-Variable.ttf",
+        )
+
         font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
         self.assertEqual(
             font.get_filename(
