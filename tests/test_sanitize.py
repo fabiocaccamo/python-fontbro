@@ -1,3 +1,5 @@
+import logging
+
 import fsutil
 
 from fontbro import Font
@@ -8,6 +10,21 @@ class SanitizeTestCase(AbstractTestCase):
     """
     This class describes a sanitize test case.
     """
+
+    # fontTools uses log.error()/log.warning() when parsing malformed tables
+    # (e.g. "skipping malformed name record", "timestamp out of range").
+    # NullHandler prevents Python's lastResort from printing them to stderr.
+    _fonttools_null_handler = logging.NullHandler()
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        logging.getLogger("fontTools").addHandler(cls._fonttools_null_handler)
+
+    @classmethod
+    def tearDownClass(cls):
+        logging.getLogger("fontTools").removeHandler(cls._fonttools_null_handler)
+        super().tearDownClass()
 
     def _test_sanitize(
         self,
