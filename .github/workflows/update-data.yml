@@ -13,10 +13,10 @@ jobs:
     name: Update resources
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
         with:
           python-version: '3.x'
 
@@ -37,7 +37,7 @@ jobs:
           pre-commit run --files fontbro/data/unicode-blocks.json fontbro/data/unicode-scripts.json
 
       - name: Commit data
-        uses: test-room-7/action-update-file@v2
+        uses: test-room-7/action-update-file@be6fb6d9c59d5ec4b56542f2e8ad2516a99e3402 # v2
         with:
           file-path: |
             fontbro/data/unicode-blocks.json

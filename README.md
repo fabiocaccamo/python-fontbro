@@ -10,6 +10,7 @@
 [![](https://img.shields.io/codacy/grade/dd3a046db4b14b988a2f1fcfbfaa51eb?logo=codacy)](https://www.codacy.com/app/fabiocaccamo/python-fontbro)
 [![](https://img.shields.io/badge/code%20style-black-000000.svg?logo=python&logoColor=black)](https://github.com/psf/black)
 [![](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/fabiocaccamo/python-fontbro/badge)](https://securityscorecards.dev/viewer/?uri=github.com/fabiocaccamo/python-fontbro)
 
 # python-fontbro
 friendly font operations on top of `fontTools`. :billed_cap:
