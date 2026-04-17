@@ -2103,8 +2103,16 @@ class Font:
         :param extended: The extended style flag value
         :type extended: bool or None
         """
-        flags = locals()
-        flags.pop("self")
+        flags = {
+            "regular": regular,
+            "bold": bold,
+            "italic": italic,
+            "underline": underline,
+            "outline": outline,
+            "shadow": shadow,
+            "condensed": condensed,
+            "extended": extended,
+        }
         for key, value in flags.items():
             if value is not None:
                 assert isinstance(value, bool)
