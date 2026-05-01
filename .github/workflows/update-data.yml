@@ -37,7 +37,7 @@ jobs:
           pre-commit run --files fontbro/data/unicode-blocks.json fontbro/data/unicode-scripts.json
 
       - name: Commit data
-        uses: test-room-7/action-update-file@be6fb6d9c59d5ec4b56542f2e8ad2516a99e3402 # v2
+        uses: test-room-7/action-update-file@6b8249d09d5926fbae288c0bb640757f09ec7ce0 # v2
         with:
           file-path: |
             fontbro/data/unicode-blocks.json
