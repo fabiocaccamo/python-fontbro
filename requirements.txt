@@ -1,5 +1,5 @@
-fonttools[lxml,woff,unicode,pathops] == 4.62.1
+fonttools[lxml,woff,unicode,pathops] == 4.63.0
 imagehash == 4.3.2
 opentype-sanitizer == 9.2.0
-pillow == 12.2.0
-python-fsutil == 0.16.1
+pillow == 12.3.0
+python-fsutil == 0.17.0
