@@ -39,6 +39,7 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`from_collection`](#from_collection)
 -   [`get_characters`](#get_characters)
 -   [`get_characters_count`](#get_characters_count)
+-   [`get_embedding_permissions`](#get_embedding_permissions)
 -   [`get_family_classification`](#get_family_classification)
 -   [`get_family_name`](#get_family_name)
 -   [`get_features`](#get_features)
@@ -83,6 +84,7 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`save_as_woff2`](#save_as_woff2)
 -   [`save_to_file_object`](#save_to_file_object)
 -   [`save_variable_instances`](#save_variable_instances)
+-   [`set_embedding_permissions`](#set_embedding_permissions)
 -   [`set_family_classification`](#set_family_classification)
 -   [`set_family_name`](#set_family_name)
 -   [`set_name`](#set_name)
@@ -154,6 +156,17 @@ Gets the font characters count.
 :rtype: int
 """
 chars_count = font.get_characters_count(ignore_blank=False)
+```
+
+#### `get_embedding_permissions`
+```python
+"""
+Gets the embedding permissions from the OS/2 fsType field.
+
+:returns: A dictionary representing the embedding permission flags.
+:rtype: dict
+"""
+permissions = font.get_embedding_permissions()
 ```
 
 #### `get_family_classification`
@@ -351,6 +364,17 @@ Gets the names records mapped by their property name.
 :rtype: dict
 """
 names = font.get_names()
+```
+
+#### `get_embedding_permissions`
+```python
+"""
+Gets the embedding permissions from the OS/2 fsType field.
+
+:returns: A dictionary representing the embedding permission flags.
+:rtype: dict
+"""
+permissions = font.get_embedding_permissions()
 ```
 
 #### `get_style_flag`
@@ -779,6 +803,35 @@ Save all instances of a variable font to specified directory in one or more form
 saved_fonts = font.save_variable_instances(dirpath, woff2=True, woff=True, overwrite=True, **options)
 ```
 
+#### `set_embedding_permissions`
+```python
+"""
+Sets the embedding permissions in the OS/2 fsType field.
+Keys set to None will be ignored.
+
+:param installable: The installable embedding permission flag.
+:type installable: bool or None
+:param restricted: The restricted license embedding permission flag.
+:type restricted: bool or None
+:param preview_and_print: The preview and print embedding permission flag.
+:type preview_and_print: bool or None
+:param editable: The editable embedding permission flag.
+:type editable: bool or None
+:param no_subsetting: The no subsetting embedding permission flag.
+:type no_subsetting: bool or None
+:param no_layout: The no layout embedding permission flag.
+:type no_layout: bool or None
+"""
+font.set_embedding_permissions(
+    installable=True,
+    restricted=False,
+    preview_and_print=True,
+    editable=False,
+    no_subsetting=False,
+    no_layout=False,
+)
+```
+
 #### `set_family_classification`
 ```python
 """
@@ -831,6 +884,35 @@ font.set_names(names={
     Font.NAME_FAMILY_NAME: "Family Name Renamed",
     Font.NAME_SUBFAMILY_NAME: "Regular Renamed",
 })
+```
+
+#### `set_embedding_permissions`
+```python
+"""
+Sets the embedding permissions in the OS/2 fsType field.
+Keys set to None will be ignored.
+
+:param installable: The installable embedding permission flag.
+:type installable: bool or None
+:param restricted: The restricted license embedding permission flag.
+:type restricted: bool or None
+:param preview_and_print: The preview and print embedding permission flag.
+:type preview_and_print: bool or None
+:param editable: The editable embedding permission flag.
+:type editable: bool or None
+:param no_subsetting: The no subsetting embedding permission flag.
+:type no_subsetting: bool or None
+:param no_layout: The no layout embedding permission flag.
+:type no_layout: bool or None
+"""
+font.set_embedding_permissions(
+    installable=True,
+    restricted=False,
+    preview_and_print=True,
+    editable=False,
+    no_subsetting=False,
+    no_layout=False,
+)
 ```
 
 #### `set_style_flag`

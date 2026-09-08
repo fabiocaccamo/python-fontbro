@@ -233,6 +233,18 @@ class Font:
     }
     _STYLE_FLAGS_KEYS: list[str] = list(_STYLE_FLAGS.keys())
 
+    # Embedding Permissions:
+    # https://learn.microsoft.com/en-us/typography/opentype/spec/os2#fstype
+    _EMBEDDING_PERMISSIONS: dict[str, int] = {
+        "installable": 0,
+        "restricted": 1,
+        "preview_and_print": 2,
+        "editable": 3,
+        "no_subsetting": 4,
+        "no_layout": 5,
+    }
+    _EMBEDDING_PERMISSIONS_KEYS: list[str] = list(_EMBEDDING_PERMISSIONS.keys())
+
     # Unicode blocks/scripts data:
     _UNICODE_BLOCKS: list[dict[str, Any]] = read_json("data/unicode-blocks.json")
     _UNICODE_SCRIPTS: list[dict[str, Any]] = read_json("data/unicode-scripts.json")
@@ -1069,6 +1081,24 @@ class Font:
         :rtype: dict
         """
         return {key: self.get_style_flag(key) for key in self._STYLE_FLAGS_KEYS}
+
+    def get_embedding_permissions(
+        self,
+    ) -> dict[str, bool]:
+        """
+        Gets the embedding permissions from the OS/2 fsType field.
+
+        :returns: A dictionary representing the embedding permission flags.
+        :rtype: dict
+        """
+        font = self.get_ttfont()
+        os2 = font.get("OS/2")
+        if not os2:
+            return dict.fromkeys(self._EMBEDDING_PERMISSIONS_KEYS, False)
+        return {
+            key: get_flag(os2.fsType, bit)
+            for key, bit in self._EMBEDDING_PERMISSIONS.items()
+        }
 
     def get_style_name(
         self,
@@ -2117,6 +2147,53 @@ class Font:
             if value is not None:
                 assert isinstance(value, bool)
                 self.set_style_flag(key, value)
+
+    def set_embedding_permissions(
+        self,
+        *,
+        installable: bool | None = None,
+        restricted: bool | None = None,
+        preview_and_print: bool | None = None,
+        editable: bool | None = None,
+        no_subsetting: bool | None = None,
+        no_layout: bool | None = None,
+    ) -> None:
+        """
+        Sets the embedding permissions in the OS/2 fsType field.
+        Keys set to None will be ignored.
+
+        :param installable: The installable embedding permission flag.
+        :type installable: bool or None
+        :param restricted: The restricted license embedding permission flag.
+        :type restricted: bool or None
+        :param preview_and_print: The preview and print embedding permission flag.
+        :type preview_and_print: bool or None
+        :param editable: The editable embedding permission flag.
+        :type editable: bool or None
+        :param no_subsetting: The no subsetting embedding permission flag.
+        :type no_subsetting: bool or None
+        :param no_layout: The no layout embedding permission flag.
+        :type no_layout: bool or None
+        """
+        font = self.get_ttfont()
+        os2 = font.get("OS/2")
+        if not os2:
+            return
+
+        permissions = {
+            "installable": installable,
+            "restricted": restricted,
+            "preview_and_print": preview_and_print,
+            "editable": editable,
+            "no_subsetting": no_subsetting,
+            "no_layout": no_layout,
+        }
+        for key, value in permissions.items():
+            if value is not None:
+                assert isinstance(value, bool)
+                os2.fsType = set_flag(
+                    os2.fsType, self._EMBEDDING_PERMISSIONS[key], value
+                )
 
     def set_style_flags_by_subfamily_name(
         self,

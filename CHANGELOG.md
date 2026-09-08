@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+-   Add `get_embedding_permissions` and `set_embedding_permissions` methods for OS/2 `fsType` embedding flags.
+
 ## [0.27.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.27.0) - 2026-04-12
 -   Add `save_as_ttf` method for saving fonts without web compression (woff/woff2 flavor).
 -   Add possibility to get variable axes sorted following the Google Fonts naming convention.
