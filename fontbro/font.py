@@ -245,6 +245,29 @@ class Font:
     }
     _EMBEDDING_PERMISSIONS_KEYS: list[str] = list(_EMBEDDING_PERMISSIONS.keys())
 
+    _TABLE_NAMES_BY_TAG: dict[str, str] = {
+        "cmap": "Character Map",
+        "head": "Header",
+        "hhea": "Horizontal Header",
+        "maxp": "Maximum Profile",
+        "name": "Naming",
+        "OS/2": "OS/2",
+        "post": "PostScript",
+        "GDEF": "Glyph Definition",
+        "GPOS": "Glyph Positioning",
+        "GSUB": "Glyph Substitution",
+        "cvt ": "Control Value Table",
+        "fpgm": "Font Program",
+        "glyf": "Glyph Data",
+        "loca": "Location",
+        "prep": "Prep",
+        "CFF ": "CFF",
+        "CFF2": "CFF2",
+        "VORG": "Vertical Origin",
+        "STAT": "Style Attributes",
+        "DSIG": "Digital Signature",
+    }
+
     # Unicode blocks/scripts data:
     _UNICODE_BLOCKS: list[dict[str, Any]] = read_json("data/unicode-blocks.json")
     _UNICODE_SCRIPTS: list[dict[str, Any]] = read_json("data/unicode-scripts.json")
@@ -1039,6 +1062,41 @@ class Font:
             if name_id in self._NAMES_BY_ID
         }
         return names
+
+    def get_tables_tags(
+        self,
+    ) -> list[str]:
+        """
+        Gets the table tags present in the font.
+
+        :returns: The list of table tags.
+        :rtype: list[str]
+        """
+        font = self.get_ttfont()
+        return list(font.keys())
+
+    def get_tables(
+        self,
+    ) -> list[dict[str, Any]]:
+        """
+        Gets the table metadata present in the font.
+
+        :returns: The list of table metadata dicts.
+        :rtype: list[dict]
+        """
+        font = self.get_ttfont()
+        tables = []
+        for tag in font.keys():
+            entry = font.reader.tables.get(tag)
+            tables.append(
+                {
+                    "tag": tag,
+                    "name": self._TABLE_NAMES_BY_TAG.get(tag, tag),
+                    "length": getattr(entry, "length", None),
+                    "offset": getattr(entry, "offset", None),
+                }
+            )
+        return tables
 
     def get_style_flag(
         self,

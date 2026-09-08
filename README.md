@@ -58,6 +58,8 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`get_style_flags`](#get_style_flags)
 -   [`get_style_name`](#get_style_name)
 -   [`get_svg`](#get_svg)
+-   [`get_tables`](#get_tables)
+-   [`get_tables_tags`](#get_tables_tags)
 -   [`get_ttfont`](#get_ttfont)
 -   [`get_unicode_block_by_name`](#get_unicode_block_by_name)
 -   [`get_unicode_blocks`](#get_unicode_blocks)
@@ -428,6 +430,30 @@ some text using the given options.
 :rtype: str
 """
 svg_str = font.get_svg(text="Hello!", size=48)
+```
+
+#### `get_tables`
+```python
+"""
+Gets the table metadata present in the font.
+
+:returns: The list of table metadata dictionaries.
+:rtype: list[dict]
+"""
+tables = font.get_tables()
+# [{'tag': 'head', 'name': 'Header', 'length': 54, 'offset': 192}, ...]
+```
+
+#### `get_tables_tags`
+```python
+"""
+Gets the tags of the tables present in the font.
+
+:returns: The list of table tags.
+:rtype: list[str]
+"""
+tables = font.get_tables_tags()
+# ['GlyphOrder', 'head', 'hhea', 'maxp', 'OS/2', ...]
 ```
 
 #### `get_ttfont`

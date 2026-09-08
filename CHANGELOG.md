@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 -   Add `get_embedding_permissions` and `set_embedding_permissions` methods for OS/2 `fsType` embedding flags.
+-   Add `get_tables_tags` to list the table tags in the font.
+-   Add `get_tables` to expose structured table metadata, including tag, name, length, and offset.
 
 ## [0.27.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.27.0) - 2026-04-12
 -   Add `save_as_ttf` method for saving fonts without web compression (woff/woff2 flavor).
