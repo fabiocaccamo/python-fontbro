@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+-   Add `get_supported_languages` and `get_supported_writing_systems` methods based on the Google Fonts languages dataset.
 -   Add `get_embedding_permissions` and `set_embedding_permissions` methods for OS/2 `fsType` embedding flags.
 -   Add `get_tables_tags` to list the table tags in the font.
 -   Add `get_tables` to expose structured table metadata, including tag, name, length, and offset.

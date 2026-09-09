@@ -57,6 +57,8 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`get_style_flag`](#get_style_flag)
 -   [`get_style_flags`](#get_style_flags)
 -   [`get_style_name`](#get_style_name)
+-   [`get_supported_languages`](#get_supported_languages)
+-   [`get_supported_writing_systems`](#get_supported_writing_systems)
 -   [`get_svg`](#get_svg)
 -   [`get_tables`](#get_tables)
 -   [`get_tables_tags`](#get_tables_tags)
@@ -413,6 +415,54 @@ Gets the style name reading the name records with priority order (17, 22, 2).
 :rtype: str
 """
 style_name = font.get_style_name()
+```
+
+#### `get_supported_languages`
+```python
+"""
+Gets the languages supported by the font and their coverage.
+Only languages with coverage >= coverage_threshold (0.0 <= coverage_threshold <= 1.0) will be returned.
+The coverage is the ratio of the base characters of the language
+(as defined by the Google Fonts languages dataset) available in the font.
+
+:param coverage_threshold: The minumum required coverage for a language to be returned.
+:type coverage_threshold: float
+
+:returns: The list of supported languages.
+:rtype: list of dicts
+
+:raises DataError: If it's not possible to find the 'best' unicode cmap dict.
+"""
+languages = font.get_supported_languages(coverage_threshold=1.0)
+# [{'code': 'en_Latn', 'name': 'English', 'writing_system_code': 'Latn',
+#   'writing_system_name': 'Latin', 'coverage': 1.0, 'sample_texts': {...}}, ...]
+```
+
+#### `get_supported_writing_systems`
+```python
+"""
+Gets the writing systems supported by the font and their coverage.
+A writing system is supported if at least one of its languages is supported,
+the coverage is the ratio of the base characters of all its languages
+(as defined by the Google Fonts languages dataset) available in the font.
+
+:param coverage_threshold: The minumum required coverage for a language to be considered supported.
+:type coverage_threshold: float
+:param include_uncommon: If False, only the most common writing systems are returned.
+:type include_uncommon: bool
+:param prioritize_common: If True, the most common writing systems are returned first in a predefined order, otherwise all of them are sorted by name.
+:type prioritize_common: bool
+
+:returns: The list of supported writing systems.
+:rtype: list of dicts
+
+:raises DataError: If it's not possible to find the 'best' unicode cmap dict.
+"""
+writing_systems = font.get_supported_writing_systems(
+    coverage_threshold=1.0, include_uncommon=True, prioritize_common=True
+)
+# [{'code': 'Latn', 'name': 'Latin', 'coverage': 0.55, 'languages_count': 894,
+#   'languages_supported_count': 375, 'sample_texts': {...}}, ...]
 ```
 
 #### `get_svg`

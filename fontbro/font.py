@@ -23,6 +23,7 @@ from fontTools.varLib import instancer
 from fontTools.varLib.instancer import OverlapMode
 from PIL import Image, ImageDraw, ImageFont
 
+from fontbro import support
 from fontbro.exceptions import (
     ArgumentError,
     DataError,
@@ -1172,6 +1173,68 @@ class Font:
             or self.get_name(self.NAME_WWS_SUBFAMILY_NAME)
             or self.get_name(self.NAME_SUBFAMILY_NAME)
             or ""
+        )
+
+    def get_supported_languages(
+        self,
+        *,
+        coverage_threshold: float = 1.0,
+    ) -> list[dict[str, Any]]:
+        """
+        Gets the languages supported by the font and their coverage.
+        Only languages with coverage >= coverage_threshold
+        (0.0 <= coverage_threshold <= 1.0) will be returned.
+        The coverage is the ratio of the base characters of the language
+        (as defined by the Google Fonts languages dataset) available in the font.
+
+        :param coverage_threshold: The minumum required coverage for a language to be returned.
+        :type coverage_threshold: float
+
+        :returns: The list of supported languages.
+        :rtype: list of dicts
+
+        :raises DataError: If it's not possible to find the 'best' unicode cmap dict.
+        """
+        ttfont = self.get_ttfont()
+        return support.get_supported_languages(
+            ttfont,
+            coverage_threshold=coverage_threshold,
+        )
+
+    def get_supported_writing_systems(
+        self,
+        *,
+        coverage_threshold: float = 1.0,
+        include_uncommon: bool = True,
+        prioritize_common: bool = True,
+    ) -> list[dict[str, Any]]:
+        """
+        Gets the writing systems supported by the font and their coverage.
+        A writing system is supported if at least one of its languages is supported,
+        the coverage is the ratio of the base characters of all its languages
+        (as defined by the Google Fonts languages dataset) available in the font.
+
+        :param coverage_threshold: The minumum required coverage for a language to be
+            considered supported.
+        :type coverage_threshold: float
+        :param include_uncommon: If False, only the most common writing systems
+            are returned.
+        :type include_uncommon: bool
+        :param prioritize_common: If True, the most common writing systems are returned
+            first in a predefined order, otherwise all of them are sorted by name.
+        :type prioritize_common: bool
+
+        :returns: The list of supported writing systems.
+        :rtype: list of dicts
+
+        :raises DataError: If it's not possible to find the 'best' unicode cmap dict.
+        """
+        ttfont = self.get_ttfont()
+        return support.get_supported_writing_systems(
+            ttfont,
+            coverage_threshold=coverage_threshold,
+            include_uncommon=include_uncommon,
+            prioritize_common=prioritize_common,
         )
 
     def get_svg(
