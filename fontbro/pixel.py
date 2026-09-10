@@ -9,6 +9,8 @@ from fontTools import unicodedata
 from fontTools.pens.recordingPen import DecomposingRecordingPen
 from fontTools.ttLib import TTFont
 
+from fontbro.unicode import get_best_cmap
+
 Segment = tuple[float, float]
 
 # the glyphs of these characters are used to detect pixel fonts
@@ -92,7 +94,7 @@ def _get_glyphs_segments(
     A-Z, a-z and 0-9, or if the font has none of them, the first glyphs
     (by codepoint) that are not punctuation; glyphs without outlines are ignored.
     """
-    cmap = ttfont.getBestCmap() or {}
+    cmap = get_best_cmap(ttfont) or {}
     codepoints = [ord(char) for char in _CHARACTERS if ord(char) in cmap]
     fallback = not codepoints
     if fallback:

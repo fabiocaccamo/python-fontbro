@@ -7,7 +7,7 @@ from fontTools.ttLib import TTFont
 from gflanguages import LoadLanguages, LoadScripts
 from gflanguages import parse as parse_exemplar_chars
 
-from fontbro.exceptions import DataError
+from fontbro.unicode import get_best_cmap_or_raise
 
 # the most common writing systems, in their default ordering,
 # the uncommon ones follow alphabetically after these
@@ -183,11 +183,7 @@ def _get_codepoints(ttfont: TTFont) -> set[int]:
     """
     Gets the codepoints of the 'best' unicode cmap of the given font.
     """
-    cmap_table = ttfont.get("cmap")
-    cmap = cmap_table.getBestCmap() if cmap_table else None
-    if cmap is None:
-        raise DataError("Unable to find the 'best' unicode cmap dict.")
-    return set(cmap)
+    return set(get_best_cmap_or_raise(ttfont))
 
 
 def _get_coverage(codepoints: set[int], base_codepoints: frozenset[int]) -> float:

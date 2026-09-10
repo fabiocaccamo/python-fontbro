@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Fix `get_width` name for width class 9 (`Ultra-expanded`).
 -   Fix `get_characters` `ignore_blank` option with CFF fonts.
 -   Fix `get_svg` crash with fonts without unicode cmap.
+-   Fix `get_characters` crash with fonts without `cmap` table.
 -   Fix `set_style_flags` validation, raise `ArgumentError` instead of using `assert`.
 
 ## [0.27.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.27.0) - 2026-04-12

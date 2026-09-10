@@ -1,3 +1,4 @@
+from fontbro.exceptions import DataError
 from tests import AbstractTestCase
 
 
@@ -29,6 +30,20 @@ class CharactersTestCase(AbstractTestCase):
         self.assertTrue(isinstance(chars, type(0 for i in [])))
         self.assertEqual(len(chars_list), 875)
         self.assertTrue(all(key in chars_list[0] for key in expected_keys))
+
+    def test_get_characters_without_unicode_cmap(self):
+        # fonts without unicode cmap raise DataError
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        cmap_table = font.get_ttfont()["cmap"]
+        cmap_table.tables = [
+            table for table in cmap_table.tables if not table.isUnicode()
+        ]
+        with self.assertRaises(DataError):
+            list(font.get_characters())
+        # regression: DataError also without cmap table (instead of KeyError)
+        del font.get_ttfont()["cmap"]
+        with self.assertRaises(DataError):
+            list(font.get_characters())
 
     def test_get_characters_count(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")

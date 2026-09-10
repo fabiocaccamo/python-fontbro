@@ -34,6 +34,7 @@ from fontbro.flags import get_flag, set_flag
 from fontbro.glyphs import is_glyph_blank
 from fontbro.math import get_euclidean_distance
 from fontbro.subset import parse_unicodes
+from fontbro.unicode import get_best_cmap_or_raise
 from fontbro.utils import (
     concat_names,
     find_item,
@@ -542,12 +543,10 @@ class Font:
         :returns: The characters.
         :rtype: generator of dicts
 
-        :raises TypeError: If it's not possible to find the 'best' unicode cmap dict.
+        :raises DataError: If it's not possible to find the 'best' unicode cmap dict.
         """
         font = self.get_ttfont()
-        cmap = font.getBestCmap()
-        if cmap is None:
-            raise DataError("Unable to find the 'best' unicode cmap dict.")
+        cmap = get_best_cmap_or_raise(font)
         glyphset = font.getGlyphSet() if ignore_blank else None
         for code, char_name in cmap.items():
             code_hex = f"{code:04X}"
@@ -1246,10 +1245,7 @@ class Font:
 
         # get glyph set and character map
         glyphset = font.getGlyphSet()
-        cmap_table = font.get("cmap")
-        cmap = cmap_table.getBestCmap() if cmap_table else None
-        if cmap is None:
-            raise DataError("Unable to find the 'best' unicode cmap dict.")
+        cmap = get_best_cmap_or_raise(font)
 
         # generate svg path for each glyph in text
         glyphs: list[str] = list(filter(None, [cmap.get(ord(char)) for char in text]))

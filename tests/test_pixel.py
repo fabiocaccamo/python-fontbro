@@ -178,6 +178,12 @@ class PixelTestCase(AbstractTestCase):
                 table.cmap[ord("A")] = "glyph99999"
             self.assertTrue(font.is_pixel())
 
+    def test_is_pixel_without_cmap_table(self):
+        # regression: fonts without cmap table are not pixel fonts (no KeyError)
+        with self._get_font(PIXEL_FONT_PATH) as font:
+            del font.get_ttfont()["cmap"]
+            self.assertFalse(font.is_pixel())
+
     def test_is_pixel_module_with_ttfont(self):
         # the module functions work directly on a fontTools TTFont
         ttfont = TTFont(self._get_font_path(PIXEL_FONT_PATH))
