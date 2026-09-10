@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import math
 import os
-import re
 import sys
 import tempfile
 from collections import Counter
@@ -21,7 +20,15 @@ from fontTools.varLib import instancer
 from fontTools.varLib.instancer import OverlapMode
 from PIL import Image, ImageDraw, ImageFont
 
-from fontbro import bitmap, embedding_permissions, pixel, support, tables, unicode
+from fontbro import (
+    bitmap,
+    embedding_permissions,
+    names,
+    pixel,
+    support,
+    tables,
+    unicode,
+)
 from fontbro.exceptions import (
     ArgumentError,
     DataError,
@@ -149,65 +156,34 @@ class Font:
     _FORMATS_LIST: list[str] = [FORMAT_OTF, FORMAT_TTF, FORMAT_WOFF, FORMAT_WOFF2]
 
     # Names:
-    NAME_COPYRIGHT_NOTICE: str = "copyright_notice"
-    NAME_FAMILY_NAME: str = "family_name"
-    NAME_SUBFAMILY_NAME: str = "subfamily_name"
-    NAME_UNIQUE_IDENTIFIER: str = "unique_identifier"
-    NAME_FULL_NAME: str = "full_name"
-    NAME_VERSION: str = "version"
-    NAME_POSTSCRIPT_NAME: str = "postscript_name"
-    NAME_TRADEMARK: str = "trademark"
-    NAME_MANUFACTURER_NAME: str = "manufacturer_name"
-    NAME_DESIGNER: str = "designer"
-    NAME_DESCRIPTION: str = "description"
-    NAME_VENDOR_URL: str = "vendor_url"
-    NAME_DESIGNER_URL: str = "designer_url"
-    NAME_LICENSE_DESCRIPTION: str = "license_description"
-    NAME_LICENSE_INFO_URL: str = "license_info_url"
-    NAME_RESERVED: str = "reserved"
-    NAME_TYPOGRAPHIC_FAMILY_NAME: str = "typographic_family_name"
-    NAME_TYPOGRAPHIC_SUBFAMILY_NAME: str = "typographic_subfamily_name"
-    NAME_COMPATIBLE_FULL: str = "compatible_full"
-    NAME_SAMPLE_TEXT: str = "sample_text"
-    NAME_POSTSCRIPT_CID_FINDFONT_NAME: str = "postscript_cid_findfont_name"
-    NAME_WWS_FAMILY_NAME: str = "wws_family_name"
-    NAME_WWS_SUBFAMILY_NAME: str = "wws_subfamily_name"
-    NAME_LIGHT_BACKGROUND_PALETTE: str = "light_background_palette"
-    NAME_DARK_BACKGROUND_PALETTE: str = "dark_background_palette"
-    NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX: str = "variations_postscript_name_prefix"
-
-    _NAMES: list[dict[str, Any]] = [
-        {"id": 0, "key": NAME_COPYRIGHT_NOTICE},
-        {"id": 1, "key": NAME_FAMILY_NAME},
-        {"id": 2, "key": NAME_SUBFAMILY_NAME},
-        {"id": 3, "key": NAME_UNIQUE_IDENTIFIER},
-        {"id": 4, "key": NAME_FULL_NAME},
-        {"id": 5, "key": NAME_VERSION},
-        {"id": 6, "key": NAME_POSTSCRIPT_NAME},
-        {"id": 7, "key": NAME_TRADEMARK},
-        {"id": 8, "key": NAME_MANUFACTURER_NAME},
-        {"id": 9, "key": NAME_DESIGNER},
-        {"id": 10, "key": NAME_DESCRIPTION},
-        {"id": 11, "key": NAME_VENDOR_URL},
-        {"id": 12, "key": NAME_DESIGNER_URL},
-        {"id": 13, "key": NAME_LICENSE_DESCRIPTION},
-        {"id": 14, "key": NAME_LICENSE_INFO_URL},
-        {"id": 15, "key": NAME_RESERVED},
-        {"id": 16, "key": NAME_TYPOGRAPHIC_FAMILY_NAME},
-        {"id": 17, "key": NAME_TYPOGRAPHIC_SUBFAMILY_NAME},
-        {"id": 18, "key": NAME_COMPATIBLE_FULL},
-        {"id": 19, "key": NAME_SAMPLE_TEXT},
-        {"id": 20, "key": NAME_POSTSCRIPT_CID_FINDFONT_NAME},
-        {"id": 21, "key": NAME_WWS_FAMILY_NAME},
-        {"id": 22, "key": NAME_WWS_SUBFAMILY_NAME},
-        {"id": 23, "key": NAME_LIGHT_BACKGROUND_PALETTE},
-        {"id": 24, "key": NAME_DARK_BACKGROUND_PALETTE},
-        {"id": 25, "key": NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX},
-    ]
-    _NAMES_BY_ID: dict[int, dict[str, Any]] = {item["id"]: item for item in _NAMES}
-    _NAMES_BY_KEY: dict[str, dict[str, Any]] = {item["key"]: item for item in _NAMES}
-    _NAMES_MAC_IDS: dict[str, Any] = {"platformID": 3, "platEncID": 1, "langID": 0x409}
-    _NAMES_WIN_IDS: dict[str, Any] = {"platformID": 1, "platEncID": 0, "langID": 0x0}
+    NAME_COPYRIGHT_NOTICE: str = names.NAME_COPYRIGHT_NOTICE
+    NAME_FAMILY_NAME: str = names.NAME_FAMILY_NAME
+    NAME_SUBFAMILY_NAME: str = names.NAME_SUBFAMILY_NAME
+    NAME_UNIQUE_IDENTIFIER: str = names.NAME_UNIQUE_IDENTIFIER
+    NAME_FULL_NAME: str = names.NAME_FULL_NAME
+    NAME_VERSION: str = names.NAME_VERSION
+    NAME_POSTSCRIPT_NAME: str = names.NAME_POSTSCRIPT_NAME
+    NAME_TRADEMARK: str = names.NAME_TRADEMARK
+    NAME_MANUFACTURER_NAME: str = names.NAME_MANUFACTURER_NAME
+    NAME_DESIGNER: str = names.NAME_DESIGNER
+    NAME_DESCRIPTION: str = names.NAME_DESCRIPTION
+    NAME_VENDOR_URL: str = names.NAME_VENDOR_URL
+    NAME_DESIGNER_URL: str = names.NAME_DESIGNER_URL
+    NAME_LICENSE_DESCRIPTION: str = names.NAME_LICENSE_DESCRIPTION
+    NAME_LICENSE_INFO_URL: str = names.NAME_LICENSE_INFO_URL
+    NAME_RESERVED: str = names.NAME_RESERVED
+    NAME_TYPOGRAPHIC_FAMILY_NAME: str = names.NAME_TYPOGRAPHIC_FAMILY_NAME
+    NAME_TYPOGRAPHIC_SUBFAMILY_NAME: str = names.NAME_TYPOGRAPHIC_SUBFAMILY_NAME
+    NAME_COMPATIBLE_FULL: str = names.NAME_COMPATIBLE_FULL
+    NAME_SAMPLE_TEXT: str = names.NAME_SAMPLE_TEXT
+    NAME_POSTSCRIPT_CID_FINDFONT_NAME: str = names.NAME_POSTSCRIPT_CID_FINDFONT_NAME
+    NAME_WWS_FAMILY_NAME: str = names.NAME_WWS_FAMILY_NAME
+    NAME_WWS_SUBFAMILY_NAME: str = names.NAME_WWS_SUBFAMILY_NAME
+    NAME_LIGHT_BACKGROUND_PALETTE: str = names.NAME_LIGHT_BACKGROUND_PALETTE
+    NAME_DARK_BACKGROUND_PALETTE: str = names.NAME_DARK_BACKGROUND_PALETTE
+    NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX: str = (
+        names.NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX
+    )
 
     # Style Flags:
     # https://docs.microsoft.com/en-us/typography/opentype/spec/head
@@ -629,12 +605,8 @@ class Font:
         :returns: The font family name.
         :rtype: str
         """
-        return (
-            self.get_name(self.NAME_TYPOGRAPHIC_FAMILY_NAME)
-            or self.get_name(self.NAME_WWS_FAMILY_NAME)
-            or self.get_name(self.NAME_FAMILY_NAME)
-            or ""
-        )
+        ttfont = self.get_ttfont()
+        return names.get_family_name(ttfont)
 
     def get_features(
         self,
@@ -939,21 +911,6 @@ class Font:
         }
         return italic_angle
 
-    @classmethod
-    def _get_name_id(
-        cls,
-        key: int | str,
-    ) -> int:
-        if isinstance(key, int):
-            return key
-        elif isinstance(key, str):
-            return int(cls._NAMES_BY_KEY[key]["id"])
-        else:
-            key_type = type(key).__name__
-            raise ArgumentError(
-                f"Invalid key type, expected int or str, found '{key_type}'."
-            )
-
     def get_name(
         self,
         key: str,
@@ -969,13 +926,8 @@ class Font:
 
         :raises KeyError: if the key is not a valid name key/id
         """
-        font = self.get_ttfont()
-        name_id = self._get_name_id(key)
-        name_table = font["name"]
-        name = name_table.getName(name_id, **self._NAMES_MAC_IDS)
-        if not name:
-            name = name_table.getName(name_id, **self._NAMES_WIN_IDS)
-        return str(name.toUnicode()) if name else None
+        ttfont = self.get_ttfont()
+        return names.get_name(ttfont, key)
 
     def get_names(
         self,
@@ -986,14 +938,8 @@ class Font:
         :returns: The names.
         :rtype: dict
         """
-        font = self.get_ttfont()
-        names_by_id = {record.nameID: f"{record}" for record in font["name"].names}
-        names = {
-            self._NAMES_BY_ID[name_id]["key"]: value
-            for name_id, value in names_by_id.items()
-            if name_id in self._NAMES_BY_ID
-        }
-        return names
+        ttfont = self.get_ttfont()
+        return names.get_names(ttfont)
 
     def get_tables_tags(
         self,
@@ -1105,12 +1051,8 @@ class Font:
         :returns: The font style name.
         :rtype: str
         """
-        return (
-            self.get_name(self.NAME_TYPOGRAPHIC_SUBFAMILY_NAME)
-            or self.get_name(self.NAME_WWS_SUBFAMILY_NAME)
-            or self.get_name(self.NAME_SUBFAMILY_NAME)
-            or ""
-        )
+        ttfont = self.get_ttfont()
+        return names.get_style_name(ttfont)
 
     def get_supported_languages(
         self,
@@ -1672,74 +1614,8 @@ class Font:
         :raises ValueError: if the computed PostScript-name is longer than 63 characters.
         :return: None
         """
-        family_name = (family_name or "").strip() or self.get_family_name()
-        style_name = (style_name or "").strip() or self.get_style_name()
-
-        # typographic and wws names
-        typographic_family_name = family_name
-        typographic_subfamily_name = style_name
-        wws_family_name = family_name
-        wws_subfamily_name = style_name
-
-        # family name and subfamily name
-        subfamily_names = ["regular", "italic", "bold", "bold italic"]
-        subfamily_name = style_name.lower()
-        if subfamily_name not in subfamily_names:
-            # fix legacy name records 1 and 2
-            family_name_suffix = re.sub(
-                r"\ italic$", "", style_name, flags=re.IGNORECASE
-            )
-            if family_name_suffix:
-                family_name = f"{typographic_family_name} {family_name_suffix}"
-            subfamily_name = subfamily_names["italic" in subfamily_name]
-        subfamily_name = subfamily_name.title()
-
-        # full name
-        full_name = concat_names(typographic_family_name, typographic_subfamily_name)
-
-        # postscript name
-        postscript_name = concat_names(
-            remove_spaces(typographic_family_name),
-            remove_spaces(typographic_subfamily_name),
-        )
-
-        # keep only printable ASCII subset:
-        # https://learn.microsoft.com/en-us/typography/opentype/spec/name#name-ids
-        # postscript_name_allowed_chars = {chr(code) for code in range(33, 127)}
-        # !"#$&'*+,-.0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\^_`abcdefghijklmnopqrstuvwxyz|~
-        postscript_name_pattern = (
-            r"[^0-9A-Za-z\!\"\#\$\&\'\*\+\,\-\.\:\;\=\?\@\\\^\_\`\|\~]"
-        )
-        postscript_name = re.sub(postscript_name_pattern, "-", postscript_name)
-        postscript_name = re.sub(r"[\-]+", "-", postscript_name).strip("-")
-        postscript_name_length = len(postscript_name)
-        if postscript_name_length > 63:
-            raise ArgumentError(
-                "Computed PostScript name exceeded 63 characters max-length"
-                f" ({postscript_name_length} characters)."
-            )
-
-        # update unique identifier
-        postscript_name_old = self.get_name(self.NAME_POSTSCRIPT_NAME) or ""
-        unique_identifier = self.get_name(self.NAME_UNIQUE_IDENTIFIER) or ""
-        unique_identifier = unique_identifier.replace(
-            postscript_name_old,
-            postscript_name,
-        )
-
-        # update name records
-        names = {
-            self.NAME_FAMILY_NAME: family_name,
-            self.NAME_SUBFAMILY_NAME: subfamily_name,
-            self.NAME_UNIQUE_IDENTIFIER: unique_identifier,
-            self.NAME_FULL_NAME: full_name,
-            self.NAME_POSTSCRIPT_NAME: postscript_name,
-            self.NAME_TYPOGRAPHIC_FAMILY_NAME: typographic_family_name,
-            self.NAME_TYPOGRAPHIC_SUBFAMILY_NAME: typographic_subfamily_name,
-            self.NAME_WWS_FAMILY_NAME: wws_family_name,
-            self.NAME_WWS_SUBFAMILY_NAME: wws_subfamily_name,
-        }
-        self.set_names(names=names)
+        ttfont = self.get_ttfont()
+        names.rename(ttfont, family_name=family_name, style_name=style_name)
 
         if update_style_flags:
             self.set_style_flags_by_subfamily_name()
@@ -2099,12 +1975,8 @@ class Font:
         :param value: The value
         :type value: str
         """
-        font = self.get_ttfont()
-        name_id = self._get_name_id(key)
-        name_table = font["name"]
-        # https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/ttLib/tables/_n_a_m_e.py#L568
-        name_table.setName(value, name_id, **self._NAMES_MAC_IDS)
-        name_table.setName(value, name_id, **self._NAMES_WIN_IDS)
+        ttfont = self.get_ttfont()
+        names.set_name(ttfont, key, value)
 
     def set_names(
         self,
