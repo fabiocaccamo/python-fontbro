@@ -11,6 +11,7 @@ from fontTools.ttLib import TTCollection, TTFont, TTLibError
 
 from fontbro import (
     bitmap,
+    color,
     embedding_permissions,
     family_classification,
     features,
@@ -1101,12 +1102,8 @@ class Font:
         :returns: True if color font, False otherwise.
         :rtype: bool
         """
-        font = self.get_ttfont()
-        color_tables_tags = {"COLR", "CPAL", "CBDT", "CBLC", "SVG ", "sbix"}
-        for tag in color_tables_tags:
-            if tag in font:
-                return True
-        return False
+        ttfont = self.get_ttfont()
+        return color.is_color(ttfont)
 
     def is_monospace(
         self,
