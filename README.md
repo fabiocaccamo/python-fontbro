@@ -109,6 +109,7 @@ with open("fonts/MyFont.ttf") as fh:
 """
 Creates a new Font instance reading the same binary file.
 """
+
 font_clone = font.clone()
 ```
 
@@ -119,6 +120,7 @@ Close the wrapped TTFont instance.
 After closing, any operation on the font raises OperationError,
 closing an already closed font does nothing.
 """
+
 font.close()
 ```
 
@@ -133,6 +135,7 @@ Gets a list of Font objects from a font collection file (.ttc / .otc)
 :returns: A list of Font objects.
 :rtype: list
 """
+
 fonts = Font.from_collection(filepath="my-font-collection.ttc")
 ```
 
@@ -149,6 +152,7 @@ Gets the font characters.
 
 :raises DataError: If it's not possible to find the 'best' unicode cmap dict in the font.
 """
+
 chars = font.get_characters(ignore_blank=False)
 ```
 
@@ -163,6 +167,7 @@ Gets the font characters count.
 :returns: The characters count.
 :rtype: int
 """
+
 chars_count = font.get_characters_count(ignore_blank=False)
 ```
 
@@ -176,6 +181,7 @@ and "editable" is set, since they are mutually exclusive usage permissions.
 :returns: A dictionary representing the embedding permission flags.
 :rtype: dict
 """
+
 permissions = font.get_embedding_permissions()
 # {'installable': True, 'restricted': False, 'preview_and_print': False,
 #  'editable': False, 'no_subsetting': False, 'bitmap_embedding_only': False}
@@ -198,6 +204,7 @@ If the OS/2 table is not available None is returned.
     }
 :rtype: dict
 """
+
 family_classification = font.get_family_classification()
 ```
 
@@ -209,6 +216,7 @@ Gets the family name reading the name records with priority order (16, 21, 1).
 :returns: The font family name.
 :rtype: str
 """
+
 family_name = font.get_family_name()
 ```
 
@@ -220,6 +228,7 @@ Gets the font opentype features.
 :returns: The features.
 :rtype: list of dict
 """
+
 features = font.get_features()
 ```
 
@@ -231,6 +240,7 @@ Gets the font opentype features tags.
 :returns: The features tags list.
 :rtype: list of str
 """
+
 features_tags = font.get_features_tags()
 ```
 
@@ -251,7 +261,10 @@ Gets the filename to use for saving the font to file-system.
 :returns: The filename.
 :rtype: str
 """
-filename = font.get_filename(variable_suffix="Variable", variable_axes_tags=True, variable_axes_values=False)
+
+filename = font.get_filename(
+    variable_suffix="Variable", variable_axes_tags=True, variable_axes_values=False
+)
 ```
 
 #### `get_fingerprint`
@@ -265,6 +278,7 @@ Changing the text option affects the returned fingerprint.
 :returns: The fingerprint hash.
 :rtype: imagehash.ImageHash
 """
+
 hash = font.get_fingerprint()
 ```
 
@@ -283,7 +297,10 @@ by checking if their fingerprints are equal (difference <= tolerance).
 :returns: A tuple containing the match info (match, diff, hash, other_hash).
 :rtype: tuple
 """
-match, diff, hash, other_hash = font.get_fingerprint_match(other="other_font.ttf", tolerance=10)
+
+match, diff, hash, other_hash = font.get_fingerprint_match(
+    other="other_font.ttf", tolerance=10
+)
 ```
 
 #### `get_format`
@@ -297,6 +314,7 @@ Gets the font format: otf, ttf, woff, woff2.
 :returns: The format.
 :rtype: str or None
 """
+
 format = font.get_format(ignore_flavor=False)
 ```
 
@@ -308,6 +326,7 @@ Gets the font glyphs and their own composition.
 :returns: The glyphs.
 :rtype: generator of dicts
 """
+
 glyphs = font.get_glyphs()
 ```
 
@@ -319,6 +338,7 @@ Gets the font glyphs count.
 :returns: The glyphs count.
 :rtype: int
 """
+
 glyphs_count = font.get_glyphs_count()
 ```
 
@@ -337,7 +357,10 @@ some text using the given options.
 :param background_color: The background color
 :type background_color: tuple
 """
-img = font.get_image(text="Hello!", size=48, color=(0, 0, 0, 255), background_color=(255, 255, 255, 255))
+
+img = font.get_image(
+    text="Hello!", size=48, color=(0, 0, 0, 255), background_color=(255, 255, 255, 255)
+)
 ```
 
 #### `get_italic_angle`
@@ -348,6 +371,7 @@ Gets the font italic angle.
 :returns: The angle value including backslant, italic and roman flags.
 :rtype: dict or None
 """
+
 italic_angle = font.get_italic_angle()
 ```
 
@@ -364,6 +388,7 @@ Gets the name by its identifier from the font name table.
 
 :raises KeyError: if the key is not a valid name key/id
 """
+
 family_name = font.get_name(key=Font.NAME_FAMILY_NAME)
 ```
 
@@ -375,6 +400,7 @@ Gets the names records mapped by their property name.
 :returns: The names.
 :rtype: dict
 """
+
 names = font.get_names()
 ```
 
@@ -389,6 +415,7 @@ Gets the style flag reading OS/2 and macStyle tables.
 :returns: The style flag.
 :rtype: bool
 """
+
 flag = font.get_style_flag(Font.STYLE_FLAG_BOLD)
 ```
 
@@ -400,6 +427,7 @@ Gets the style flags reading OS/2 and macStyle tables.
 :returns: The dict representing the style flags.
 :rtype: dict
 """
+
 flags = font.get_style_flags()
 ```
 
@@ -411,6 +439,7 @@ Gets the style name reading the name records with priority order (17, 22, 2).
 :returns: The font style name.
 :rtype: str
 """
+
 style_name = font.get_style_name()
 ```
 
@@ -430,6 +459,7 @@ The coverage is the ratio of the base characters of the language
 
 :raises DataError: If it's not possible to find the 'best' unicode cmap dict.
 """
+
 languages = font.get_supported_languages(coverage_threshold=1.0)
 # [{'code': 'en_Latn', 'name': 'English', 'writing_system_code': 'Latn',
 #   'writing_system_name': 'Latin', 'coverage': 1.0, 'sample_texts': {...}}, ...]
@@ -455,6 +485,7 @@ the coverage is the ratio of the base characters of all its languages
 
 :raises DataError: If it's not possible to find the 'best' unicode cmap dict.
 """
+
 writing_systems = font.get_supported_writing_systems(
     coverage_threshold=1.0, include_uncommon=True, prioritize_common=True
 )
@@ -478,6 +509,7 @@ some text using the given options.
 
 :raises DataError: If it's not possible to find the 'best' unicode cmap dict.
 """
+
 svg_str = font.get_svg(text="Hello!", size=48)
 ```
 
@@ -500,6 +532,7 @@ so they will be None for tables added in-memory that haven't been saved.
 :returns: The list of table metadata dictionaries.
 :rtype: list[dict]
 """
+
 tables = font.get_tables(include_unknown=True)
 # [{'tag': 'head', 'name': 'Header', 'length': 54, 'offset': 192}, ...]
 ```
@@ -518,6 +551,7 @@ stored by font editors / tools (eg. VTT "TSI0"..."TSI5", FontForge "FFTM").
 :returns: The list of table tags.
 :rtype: list[str]
 """
+
 tables = font.get_tables_tags(include_unknown=True)
 # ['head', 'hhea', 'maxp', 'OS/2', ...]
 ```
@@ -532,6 +566,7 @@ Gets the wrapped TTFont instance.
 
 :raises OperationError: If the font has been closed.
 """
+
 ttfont = font.get_ttfont()
 ```
 
@@ -546,6 +581,7 @@ Gets the unicode block by name (name is case-insensitive and ignores "-").
 :returns: The unicode block dict if the name is valid, None otherwise.
 :rtype: dict or None
 """
+
 block = font.get_unicode_block_by_name(name="Basic Latin")
 ```
 
@@ -561,6 +597,7 @@ Only blocks with coverage >= coverage_threshold (0.0 <= coverage_threshold <= 1.
 :returns: The list of unicode blocks.
 :rtype: list of dicts
 """
+
 blocks = font.get_unicode_blocks(coverage_threshold=0.00001)
 ```
 
@@ -575,6 +612,7 @@ Gets the unicode script by name/tag (name/tag is case-insensitive and ignores "-
 :returns: The unicode script dict if the name/tag is valid, None otherwise.
 :rtype: dict or None
 """
+
 script = font.get_unicode_script_by_name(name="Latn")
 ```
 
@@ -590,6 +628,7 @@ Only scripts with coverage >= coverage_threshold (0.0 <= coverage_threshold <= 1
 :returns: The list of unicode scripts.
 :rtype: list of dicts
 """
+
 scripts = font.get_unicode_scripts(coverage_threshold=0.00001)
 ```
 
@@ -601,6 +640,7 @@ Gets the font variable axes.
 :returns: The list of axes if the font is a variable font otherwise None.
 :rtype: list of dict or None
 """
+
 axes = font.get_variable_axes()
 ```
 
@@ -612,6 +652,7 @@ Gets the variable axes tags.
 :returns: The variable axis tags.
 :rtype: list or None
 """
+
 axes_tags = font.get_variable_axes_tags()
 ```
 
@@ -626,6 +667,7 @@ Gets a variable axis by tag.
 :returns: The variable axis by tag.
 :rtype: dict or None
 """
+
 axis = font.get_variable_axis_by_tag(tag="wght")
 ```
 
@@ -637,6 +679,7 @@ Gets the variable instances.
 :returns: The list of instances if the font is a variable font otherwise None.
 :rtype: list of dict or None
 """
+
 instances = font.get_variable_instances()
 ```
 
@@ -651,6 +694,7 @@ Gets the variable instance by style name, eg. style_name = 'Bold'
 :returns: The variable instance matching the given style name.
 :rtype: dict or None
 """
+
 instance = font.get_variable_instance_by_style_name(style_name="Bold")
 ```
 
@@ -667,7 +711,10 @@ If coordinates do not specify some axes, axes default value is used for lookup.
 :returns: The variable instance closest to coordinates.
 :rtype: dict or None
 """
-instance = font.get_variable_instance_closest_to_coordinates(coordinates={"wght": 1000, "slnt": 815, "wdth": 775})
+
+instance = font.get_variable_instance_closest_to_coordinates(
+    coordinates={"wght": 1000, "slnt": 815, "wdth": 775}
+)
 ```
 
 #### `get_version`
@@ -678,6 +725,7 @@ Gets the font version.
 :returns: The font version value.
 :rtype: float
 """
+
 version = font.get_version()
 ```
 
@@ -692,6 +740,7 @@ Gets the font vertical metrics.
     "win_ascent", "win_descent"
 :rtype: dict
 """
+
 metrics = font.get_vertical_metrics()
 ```
 
@@ -703,6 +752,7 @@ Gets the font weight value and name.
 :returns: The weight name and value.
 :rtype: dict or None
 """
+
 weight = font.get_weight()
 ```
 
@@ -714,6 +764,7 @@ Gets the font width value and name.
 :returns: The width name and value.
 :rtype: dict or None
 """
+
 width = font.get_width()
 ```
 
@@ -728,6 +779,7 @@ are not considered bitmap fonts.
 :returns: True if bitmap font, False otherwise.
 :rtype: bool
 """
+
 bitmap = font.is_bitmap()
 ```
 
@@ -739,6 +791,7 @@ Determines if the font is a color font.
 :returns: True if color font, False otherwise.
 :rtype: bool
 """
+
 color = font.is_color()
 ```
 
@@ -758,6 +811,7 @@ Zero-width glyphs are ignored.
 :returns: True if monospace font, False otherwise.
 :rtype: bool
 """
+
 mono = font.is_monospace(threshold=0.8)
 ```
 
@@ -778,6 +832,7 @@ Bitmap fonts (without outlines) are not considered pixel fonts.
 :returns: True if pixel font, False otherwise.
 :rtype: bool
 """
+
 pixel = font.is_pixel(threshold=0.9)
 ```
 
@@ -789,6 +844,7 @@ Determines if the font is a static font.
 :returns: True if static font, False otherwise.
 :rtype: bool
 """
+
 static = font.is_static()
 ```
 
@@ -800,6 +856,7 @@ Determines if the font is a variable font.
 :returns: True if variable font, False otherwise.
 :rtype: bool
 """
+
 variable = font.is_variable()
 ```
 
@@ -821,7 +878,10 @@ If style_name is not defined it will be auto-detected.
 
 :raises ValueError: if the computed PostScript-name is longer than 63 characters.
 """
-font.rename(family_name="My Font New", style_name="Bold Italic", update_style_flags=True)
+
+font.rename(
+    family_name="My Font New", style_name="Bold Italic", update_style_flags=True
+)
 ```
 
 #### `sanitize`
@@ -842,6 +902,7 @@ https://github.com/googlefonts/ots-python
     If `strict` is True (default), treats sanitizer warnings as errors.
     If `strict` is False, only checks for sanitizer errors.
 """
+
 font.sanitize(strict=True)
 ```
 
@@ -860,6 +921,7 @@ Saves the font at filepath.
 
 :raises ValueError: If the filepath is the same of the source font and overwrite is not allowed.
 """
+
 saved_font_path = font.save(filepath=None, overwrite=False)
 ```
 
@@ -876,6 +938,7 @@ Saves font as woff.
 :returns: The filepath where the font has been saved to.
 :rtype: str
 """
+
 saved_font_path = font.save_as_woff(filepath=None, overwrite=True)
 ```
 
@@ -892,6 +955,7 @@ Saves font as woff2.
 :returns: The filepath where the font has been saved to.
 :rtype: str
 """
+
 saved_font_path = font.save_as_woff2(filepath=None, overwrite=True)
 ```
 
@@ -933,7 +997,9 @@ Save all instances of a variable font to specified directory in one or more form
 :raises TypeError: If the font is not a variable font.
 """
 
-saved_fonts = font.save_variable_instances(dirpath, woff2=True, woff=True, overwrite=True, **options)
+saved_fonts = font.save_variable_instances(
+    dirpath, woff2=True, woff=True, overwrite=True, **options
+)
 ```
 
 #### `set_embedding_permissions`
@@ -966,6 +1032,7 @@ The fsType field is left untouched if any argument is invalid.
     installable is set to False while no other usage permission is in effect.
 :raises OperationError: If the OS/2 table is not available in the font.
 """
+
 font.set_embedding_permissions(
     restricted=False,
     preview_and_print=True,
@@ -986,6 +1053,7 @@ based on provided class_id and subclass_id.
 :raises OperationError: If the OS/2 table is not available in the font.
 :raises ArgumentError: If class_id is invalid or subclass_id is specified but invalid.
 """
+
 font.set_family_classification(**font.FAMILY_CLASSIFICATION_SCRIPTS_CALLIGRAPHIC)
 # alternatively:
 font.set_family_classification(class_id=10, subclass_id=5)
@@ -999,6 +1067,7 @@ Sets the family name updating the related font names records.
 :param name: The name
 :type name: The new family name.
 """
+
 font.set_family_name(name="My Font New")
 ```
 
@@ -1012,6 +1081,7 @@ Sets the name by its identifier in the font name table.
 :param value: The value
 :type value: str
 """
+
 font.set_name(Font.NAME_FAMILY_NAME, "Family Name Renamed")
 ```
 
@@ -1023,10 +1093,13 @@ Sets the names by their identifier in the name table.
 :param names: The names
 :type names: dict
 """
-font.set_names(names={
-    Font.NAME_FAMILY_NAME: "Family Name Renamed",
-    Font.NAME_SUBFAMILY_NAME: "Regular Renamed",
-})
+
+font.set_names(
+    names={
+        Font.NAME_FAMILY_NAME: "Family Name Renamed",
+        Font.NAME_SUBFAMILY_NAME: "Regular Renamed",
+    }
+)
 ```
 
 #### `set_style_flag`
@@ -1039,6 +1112,7 @@ Sets the style flag.
 :param value: The value
 :type value: bool
 """
+
 font.set_style_flag(Font.STYLE_FLAG_BOLD, True)
 ```
 
@@ -1066,6 +1140,7 @@ Sets the style flags, keys set to None will be ignored.
 
 :raises ArgumentError: If a value is not a bool or None.
 """
+
 font.set_style_flags(
     regular=None,
     bold=None,
@@ -1085,6 +1160,7 @@ Sets the style flags by the subfamily name value.
 The subfamily values should be "regular", "italic", "bold" or "bold italic"
 to allow this method to work properly.
 """
+
 font.set_style_flags_by_subfamily_name()
 ```
 
@@ -1096,6 +1172,7 @@ Sets the style name updating the related font names records.
 :param name: The name
 :type name: The new style name.
 """
+
 font.set_style_name(name="Bold Italic")
 ```
 
@@ -1109,7 +1186,22 @@ Sets the vertical metrics.
     "typo_ascender", "typo_descender", "typo_line_gap", "cap_height", "x_height",
     "win_ascent", "win_descent"
 """
-font.set_vertical_metrics(units_per_em=2000, y_max=2102, y_min=-533, ascent=1800, descent=-400, line_gap=0, typo_ascender=1800, typo_descender=-400, typo_line_gap=0, cap_height=1400, x_height=1080, win_ascent=2160, win_descent=540)
+
+font.set_vertical_metrics(
+    units_per_em=2000,
+    y_max=2102,
+    y_min=-533,
+    ascent=1800,
+    descent=-400,
+    line_gap=0,
+    typo_ascender=1800,
+    typo_descender=-400,
+    typo_line_gap=0,
+    cap_height=1400,
+    x_height=1080,
+    win_ascent=2160,
+    win_descent=540,
+)
 ```
 
 #### `subset`
@@ -1128,6 +1220,7 @@ https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/subset/__init__.p
 :param options: The subsetter options
 :type options: dict
 """
+
 font.subset(unicodes="", glyphs=[], text="", **options)
 ```
 
@@ -1151,6 +1244,7 @@ If an axis min and max values are equal, the axis will be pinned.
 :raises ValueError: If the coordinates are not defined (empty)
 :raises ValueError: If the coordinates axes are all pinned
 """
+
 font.to_sliced_variable(coordinates, **options)
 ```
 
@@ -1177,7 +1271,14 @@ If coordinates are not specified each axis will be pinned at its default value.
 :raises TypeError: If the font is not a variable font
 :raises ValueError: If the coordinates axes are not all pinned
 """
-font.to_static(coordinates=None, style_name=None, update_names=True, update_style_flags=True, **options)
+
+font.to_static(
+    coordinates=None,
+    style_name=None,
+    update_names=True,
+    update_style_flags=True,
+    **options,
+)
 ```
 
 ## Testing
