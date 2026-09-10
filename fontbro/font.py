@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-import tempfile
 from collections import Counter
 from collections.abc import Generator
 from io import BytesIO
@@ -9,7 +8,6 @@ from pathlib import Path
 from typing import IO, Any, cast
 
 import fsutil
-import ots
 from fontTools.ttLib import TTCollection, TTFont, TTLibError
 from fontTools.varLib import instancer
 from fontTools.varLib.instancer import OverlapMode
@@ -23,6 +21,7 @@ from fontbro import (
     names,
     pixel,
     render,
+    sanitize,
     style_flags,
     subset,
     support,
@@ -34,7 +33,6 @@ from fontbro.exceptions import (
     ArgumentError,
     DataError,
     OperationError,
-    SanitizationError,
 )
 from fontbro.utils import (
     concat_names,
@@ -1315,30 +1313,8 @@ class Font:
             If `strict` is True (default), treats sanitizer warnings as errors.
             If `strict` is False, only checks for sanitizer errors.
         """
-        with tempfile.TemporaryDirectory() as dest:
-            filename = self.get_filename()
-            filepath = fsutil.join_path(dest, filename)
-            filepath = self.save(filepath)
-            result = ots.sanitize(
-                filepath,
-                capture_output=True,
-                encoding="utf-8",
-            )
-            error_code = result.returncode
-            errors = result.stderr
-            if error_code:
-                raise SanitizationError(
-                    f"OpenType Sanitizer returned non-zero exit code ({error_code}): \n{errors}"
-                )
-
-            elif strict:
-                warnings = result.stdout
-                success_message = "File sanitized successfully!\n"
-                if warnings != success_message:
-                    warnings = warnings.rstrip(success_message)
-                    raise SanitizationError(
-                        f"OpenType Sanitizer warnings: \n{warnings}"
-                    )
+        ttfont = self.get_ttfont()
+        sanitize.sanitize(ttfont, strict=strict)
 
     def save(
         self,

@@ -78,17 +78,15 @@ class SanitizeTestCase(AbstractTestCase):
         )
 
     def test_sanitize_with_good_fonts(self):
-        # some fonts have version == "OTTO" but there is not "CFF " table
         self._test_sanitize(
             "fonts-ots/good",
             strict=False,
-            expected_errors_count=2,  # should reduce to 0
+            expected_errors_count=0,
         )
 
     def test_sanitize_strict_with_good_fonts(self):
-        # some fonts have version == "OTTO" but there is not "CFF " table
         self._test_sanitize(
             "fonts-ots/good",
             strict=True,
-            expected_errors_count=2,  # should reduce to 0
+            expected_errors_count=0,
         )
