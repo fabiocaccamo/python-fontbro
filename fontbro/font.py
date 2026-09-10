@@ -10,8 +10,6 @@ from typing import IO, Any, cast
 
 import fsutil
 import ots
-from fontTools.subset import Options as SubsetterOptions
-from fontTools.subset import Subsetter
 from fontTools.ttLib import TTCollection, TTFont, TTLibError
 from fontTools.varLib import instancer
 from fontTools.varLib.instancer import OverlapMode
@@ -26,6 +24,7 @@ from fontbro import (
     pixel,
     render,
     style_flags,
+    subset,
     support,
     tables,
     unicode,
@@ -37,7 +36,6 @@ from fontbro.exceptions import (
     OperationError,
     SanitizationError,
 )
-from fontbro.subset import parse_unicodes
 from fontbro.utils import (
     concat_names,
     read_json,
@@ -1826,30 +1824,14 @@ class Font:
         :param options: The subsetter options
         :type options: dict
         """
-        font = self.get_ttfont()
-        if not any([unicodes, glyphs, text]):
-            raise ArgumentError(
-                "Subsetting requires at least one of "
-                "the following args: unicode, glyphs, text."
-            )
-        unicodes_list = parse_unicodes(unicodes)
-        glyphs_list = glyphs or []
-        options.setdefault("glyph_names", True)
-        options.setdefault("ignore_missing_glyphs", True)
-        options.setdefault("ignore_missing_unicodes", True)
-        options.setdefault("layout_features", ["*"])
-        options.setdefault("name_IDs", "*")
-        options.setdefault("notdef_outline", True)
-        subs_args = {
-            "unicodes": unicodes_list,
-            "glyphs": glyphs_list,
-            "text": text,
-        }
-        # https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/subset/__init__.py
-        subs_options = SubsetterOptions(**options)
-        subs = Subsetter(options=subs_options)
-        subs.populate(**subs_args)
-        subs.subset(font)
+        ttfont = self.get_ttfont()
+        subset.subset(
+            ttfont,
+            unicodes=unicodes,
+            glyphs=glyphs,
+            text=text,
+            **options,
+        )
 
     def to_sliced_variable(
         self,
