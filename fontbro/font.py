@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-from collections import Counter
 from collections.abc import Generator
 from io import BytesIO
 from pathlib import Path
@@ -18,6 +17,7 @@ from fontbro import (
     fingerprint,
     glyphs,
     metrics,
+    monospace,
     names,
     pixel,
     render,
@@ -1176,12 +1176,8 @@ class Font:
         :returns: True if monospace font, False otherwise.
         :rtype: bool
         """
-        font = self.get_ttfont()
-        widths = [metrics[0] for metrics in font["hmtx"].metrics.values()]
-        widths_counter = Counter(widths)
-        same_width_count = widths_counter.most_common(1)[0][1]
-        same_width_amount = same_width_count / self.get_glyphs_count()
-        return same_width_amount >= threshold
+        ttfont = self.get_ttfont()
+        return monospace.is_monospace(ttfont, threshold=threshold)
 
     def is_pixel(
         self,
