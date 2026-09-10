@@ -1044,6 +1044,8 @@ Sets the style flags, flags set to None will be ignored.
 :type underline: bool or None
 :param outline: The outline flag value.
 :type outline: bool or None
+
+:raises ArgumentError: If a value is not a bool or None.
 """
 font.set_style_flags(regular=None, bold=None, italic=None, outline=None, underline=None)
 ```

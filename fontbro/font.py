@@ -2266,6 +2266,8 @@ class Font:
         :type condensed: bool or None
         :param extended: The extended style flag value
         :type extended: bool or None
+
+        :raises ArgumentError: If a value is not a bool or None.
         """
         flags = {
             "regular": regular,
@@ -2277,9 +2279,14 @@ class Font:
             "condensed": condensed,
             "extended": extended,
         }
+        # validate all values before setting any flag
+        for key, value in flags.items():
+            if value is not None and not isinstance(value, bool):
+                raise ArgumentError(
+                    f"Invalid '{key}' value, expected bool or None, got {value!r}."
+                )
         for key, value in flags.items():
             if value is not None:
-                assert isinstance(value, bool)
                 self.set_style_flag(key, value)
 
     def set_embedding_permissions(

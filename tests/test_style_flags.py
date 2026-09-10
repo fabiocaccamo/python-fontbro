@@ -1,3 +1,4 @@
+from fontbro.exceptions import ArgumentError
 from tests import AbstractTestCase
 
 
@@ -116,6 +117,21 @@ class StyleFlagsTestCase(AbstractTestCase):
 
         font.set_style_flags(regular=True)
         self.assertTrue(font.get_style_flags()["regular"])
+
+    def test_set_style_flags_with_invalid_value(self):
+        # regression: invalid values must raise ArgumentError (not rely on assert,
+        # stripped with python -O) before setting any flag
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        style_flags = font.get_style_flags()
+        for kwargs in [
+            {"bold": 1},
+            {"italic": "yes"},
+            {"bold": True, "italic": None, "underline": 0},
+        ]:
+            with self.subTest(kwargs=kwargs):
+                with self.assertRaises(ArgumentError):
+                    font.set_style_flags(**kwargs)
+                self.assertEqual(font.get_style_flags(), style_flags)
 
     def test_set_style_flags_by_subfamily_name(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
