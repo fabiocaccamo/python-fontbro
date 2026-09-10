@@ -14,6 +14,7 @@ from fontbro import (
     embedding_permissions,
     family_classification,
     features,
+    files,
     fingerprint,
     glyphs,
     metrics,
@@ -31,12 +32,7 @@ from fontbro import (
 )
 from fontbro.exceptions import (
     ArgumentError,
-    DataError,
     OperationError,
-)
-from fontbro.utils import (
-    concat_names,
-    remove_spaces,
 )
 
 
@@ -130,12 +126,12 @@ class Font:
     # fmt: on
 
     # Formats:
-    FORMAT_OTF: str = "otf"
-    FORMAT_TTF: str = "ttf"
-    FORMAT_WOFF: str = "woff"
-    FORMAT_WOFF2: str = "woff2"
+    FORMAT_OTF: str = files.FORMAT_OTF
+    FORMAT_TTF: str = files.FORMAT_TTF
+    FORMAT_WOFF: str = files.FORMAT_WOFF
+    FORMAT_WOFF2: str = files.FORMAT_WOFF2
 
-    _FORMATS_LIST: list[str] = [FORMAT_OTF, FORMAT_TTF, FORMAT_WOFF, FORMAT_WOFF2]
+    _FORMATS_LIST: list[str] = files._FORMATS_LIST
 
     # Names:
     NAME_COPYRIGHT_NOTICE: str = names.NAME_COPYRIGHT_NOTICE
@@ -475,47 +471,13 @@ class Font:
         :returns: The filename.
         :rtype: str
         """
-        if self.is_variable():
-            family_name = self.get_family_name()
-            family_name = remove_spaces(family_name)
-            subfamily_name = self.get_name(Font.NAME_SUBFAMILY_NAME) or ""
-            basename = family_name
-            # append subfamily name
-            if subfamily_name.lower() in ("bold", "bold italic", "italic"):
-                subfamily_name = remove_spaces(subfamily_name.lower().title())
-                basename = f"{basename}-{subfamily_name}"
-            # append variable suffix
-            variable_suffix = (variable_suffix or "").strip()
-            if variable_suffix:
-                if variable_suffix.lower() not in basename.lower():
-                    basename = f"{basename}-{variable_suffix}"
-            # append axis tags stringified suffix, eg. [wdth,wght,slnt]
-            if variable_axes_tags:
-                axes = self.get_variable_axes(sort=True) or []
-                axes_str_parts = []
-                for axis in axes:
-                    axis_tag = axis["tag"]
-                    axis_str = f"{axis_tag}"
-                    if variable_axes_values:
-                        axis_min_value = int(axis["min_value"])
-                        axis_default_value = int(axis["default_value"])
-                        axis_max_value = int(axis["max_value"])
-                        axis_str += (
-                            f"({axis_min_value},{axis_default_value},{axis_max_value})"
-                        )
-                    axes_str_parts.append(axis_str)
-                axes_str = ",".join(axes_str_parts)
-                axes_str = f"[{axes_str}]"
-                basename = f"{basename}{axes_str}"
-        else:
-            family_name = self.get_family_name()
-            family_name = remove_spaces(family_name)
-            style_name = self.get_style_name()
-            style_name = remove_spaces(style_name)
-            basename = concat_names(family_name, style_name, separator="-")
-        extension = self.get_format()
-        filename = f"{basename}.{extension}"
-        return filename
+        ttfont = self.get_ttfont()
+        return files.get_filename(
+            ttfont,
+            variable_suffix=variable_suffix,
+            variable_axes_tags=variable_axes_tags,
+            variable_axes_values=variable_axes_values,
+        )
 
     def get_fingerprint(  # type: ignore
         self,
@@ -590,23 +552,8 @@ class Font:
         :returns: The format.
         :rtype: str
         """
-        font = self.get_ttfont()
-        version = font.sfntVersion
-        flavor = font.flavor
-        format_ = ""
-        if flavor in [self.FORMAT_WOFF, self.FORMAT_WOFF2] and not ignore_flavor:
-            format_ = str(flavor)
-        elif version == "OTTO" and ("CFF " in font or "CFF2" in font):
-            format_ = self.FORMAT_OTF
-        elif version == "\0\1\0\0":
-            format_ = self.FORMAT_TTF
-        elif version == "wOFF":
-            format_ = self.FORMAT_WOFF
-        elif version == "wOF2":
-            format_ = self.FORMAT_WOFF2
-        if not format_:
-            raise DataError("Unable to get the font format.")
-        return format_
+        ttfont = self.get_ttfont()
+        return files.get_format(ttfont, ignore_flavor=ignore_flavor)
 
     def get_glyphs(
         self,
@@ -1088,10 +1035,8 @@ class Font:
         :returns: The font version value.
         :rtype: float
         """
-        font = self.get_ttfont()
-        head = font.get("head")
-        version = float(head.fontRevision)
-        return version
+        ttfont = self.get_ttfont()
+        return files.get_version(ttfont)
 
     def get_vertical_metrics(
         self,
