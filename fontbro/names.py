@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from fontTools.misc.encodingTools import getEncoding
 from fontTools.ttLib import TTFont
 
 from fontbro.exceptions import ArgumentError
@@ -87,6 +88,26 @@ def _get_name_id(
         )
 
 
+def _is_encodable(
+    value: str,
+    platform_ids: dict[str, Any],
+) -> bool:
+    """
+    Determines if the value can be encoded with the encoding
+    of the name records with the given platform ids.
+    """
+    encoding = getEncoding(
+        platform_ids["platformID"],
+        platform_ids["platEncID"],
+        platform_ids["langID"],
+    )
+    try:
+        value.encode(encoding)
+    except UnicodeEncodeError:
+        return False
+    return True
+
+
 def get_name(
     ttfont: TTFont,
     key: int | str,
@@ -129,7 +150,13 @@ def set_name(
     name_table = ttfont["name"]
     # https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/ttLib/tables/_n_a_m_e.py#L568
     name_table.setName(value, name_id, **_NAMES_WIN_IDS)
-    name_table.setName(value, name_id, **_NAMES_MAC_IDS)
+    # the mac roman encoding can't encode many characters (eg. greek, cyrillic, cjk),
+    # in that case the mac name record is removed (as fontTools addMultilingualName
+    # does), otherwise the font would raise UnicodeEncodeError when saved
+    if _is_encodable(value, _NAMES_MAC_IDS):
+        name_table.setName(value, name_id, **_NAMES_MAC_IDS)
+    else:
+        name_table.removeNames(nameID=name_id, **_NAMES_MAC_IDS)
 
 
 def set_names(
