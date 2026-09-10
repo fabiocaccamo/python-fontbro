@@ -889,13 +889,15 @@ class Font:
         :rtype: generator of dicts
         """
         font = self.get_ttfont()
-        glyfs = font["glyf"]
+        # components are available only in TrueType (glyf) outlines
+        glyfs = font.get("glyf")
         glyphset = font.getGlyphSet()
         for name in glyphset.keys():
-            glyf = glyfs[name]
             yield {
                 "name": name,
-                "components_names": glyf.getComponentNames(glyfs),
+                "components_names": (
+                    glyfs[name].getComponentNames(glyfs) if glyfs else []
+                ),
             }
 
     def get_glyphs_count(
