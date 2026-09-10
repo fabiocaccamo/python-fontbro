@@ -384,7 +384,7 @@ class Font:
         {"value": 6, "perc": 112.5, "name": WIDTH_SEMI_EXPANDED},
         {"value": 7, "perc": 125.0, "name": WIDTH_EXPANDED},
         {"value": 8, "perc": 150.0, "name": WIDTH_EXTRA_EXPANDED},
-        {"value": 9, "perc": 200.0, "name": WIDTH_ULTRA_CONDENSED},
+        {"value": 9, "perc": 200.0, "name": WIDTH_ULTRA_EXPANDED},
     ]
     _WIDTHS_BY_VALUE: dict[int, dict[str, Any]] = {
         width["value"]: width for width in _WIDTHS

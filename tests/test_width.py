@@ -47,6 +47,28 @@ class WidthTestCase(AbstractTestCase):
             expected_name=Font.WIDTH_MEDIUM,
         )
 
+    def test_get_width_with_all_width_classes(self):
+        # regression: width class 9 is "Ultra-expanded" (not "Ultra-condensed")
+        # https://learn.microsoft.com/en-us/typography/opentype/spec/os2#uswidthclass
+        expected_widths = {
+            1: (50.0, Font.WIDTH_ULTRA_CONDENSED),
+            2: (62.5, Font.WIDTH_EXTRA_CONDENSED),
+            3: (75.0, Font.WIDTH_CONDENSED),
+            4: (87.5, Font.WIDTH_SEMI_CONDENSED),
+            5: (100.0, Font.WIDTH_MEDIUM),
+            6: (112.5, Font.WIDTH_SEMI_EXPANDED),
+            7: (125.0, Font.WIDTH_EXPANDED),
+            8: (150.0, Font.WIDTH_EXTRA_EXPANDED),
+            9: (200.0, Font.WIDTH_ULTRA_EXPANDED),
+        }
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        for value, (perc, name) in expected_widths.items():
+            with self.subTest(value=value):
+                font.get_ttfont()["OS/2"].usWidthClass = value
+                self.assertEqual(
+                    font.get_width(), {"value": value, "perc": perc, "name": name}
+                )
+
     def test_get_width_without_os2_table(self):
         font = self._get_font("/Noto_Sans_TC/NotoSansTC-Regular.otf")
         del font.get_ttfont()["OS/2"]
