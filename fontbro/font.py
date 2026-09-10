@@ -1230,6 +1230,8 @@ class Font:
 
         :returns: An SVG string that represents the rendered text.
         :rtype: str
+
+        :raises DataError: If it's not possible to find the 'best' unicode cmap dict.
         """
         font = self.get_ttfont()
 
@@ -1244,7 +1246,10 @@ class Font:
 
         # get glyph set and character map
         glyphset = font.getGlyphSet()
-        cmap = font["cmap"].getBestCmap()
+        cmap_table = font.get("cmap")
+        cmap = cmap_table.getBestCmap() if cmap_table else None
+        if cmap is None:
+            raise DataError("Unable to find the 'best' unicode cmap dict.")
 
         # generate svg path for each glyph in text
         glyphs: list[str] = list(filter(None, [cmap.get(ord(char)) for char in text]))

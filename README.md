@@ -473,6 +473,8 @@ some text using the given options.
 
 :returns: An SVG string that represents the rendered text.
 :rtype: str
+
+:raises DataError: If it's not possible to find the 'best' unicode cmap dict.
 """
 svg_str = font.get_svg(text="Hello!", size=48)
 ```
