@@ -1647,7 +1647,7 @@ class Font:
         :rtype: bool
         """
         font = self.get_ttfont()
-        color_tables_tags = {"COLR", "CPAL", "CBDT", "CBLC"}
+        color_tables_tags = {"COLR", "CPAL", "CBDT", "CBLC", "SVG ", "sbix"}
         for tag in color_tables_tags:
             if tag in font:
                 return True
