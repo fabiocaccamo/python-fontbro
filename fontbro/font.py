@@ -16,6 +16,7 @@ from fontbro import (
     bitmap,
     embedding_permissions,
     family_classification,
+    features,
     fingerprint,
     metrics,
     names,
@@ -36,7 +37,6 @@ from fontbro.exceptions import (
 )
 from fontbro.utils import (
     concat_names,
-    read_json,
     remove_spaces,
 )
 
@@ -129,14 +129,6 @@ class Font:
     FAMILY_CLASSIFICATION_SYMBOLIC_NEO_GROTESQUE_SANS_SERIF: dict[str, int] = {'class_id':12, 'subclass_id':7}
     FAMILY_CLASSIFICATION_SYMBOLIC_MISCELLANEOUS: dict[str, int] = {'class_id':12, 'subclass_id':15}
     # fmt: on
-
-    # Features:
-    # https://docs.microsoft.com/en-gb/typography/opentype/spec/featurelist
-    # https://developer.mozilla.org/en-US/docs/Web/CSS/font-feature-settings
-    _FEATURES_LIST: list[dict[str, Any]] = read_json("data/features.json")
-    _FEATURES_BY_TAG: dict[str, dict[str, Any]] = {
-        feature["tag"]: feature for feature in _FEATURES_LIST
-    }
 
     # Formats:
     FORMAT_OTF: str = "otf"
@@ -444,12 +436,8 @@ class Font:
         :returns: The features list.
         :rtype: list of dict
         """
-        features_tags = self.get_features_tags()
-        return [
-            self._FEATURES_BY_TAG.get(features_tag, {}).copy()
-            for features_tag in features_tags
-            if features_tag in self._FEATURES_BY_TAG
-        ]
+        ttfont = self.get_ttfont()
+        return features.get_features(ttfont)
 
     def get_features_tags(
         self,
@@ -460,18 +448,8 @@ class Font:
         :returns: The features tags list.
         :rtype: list of str
         """
-        font = self.get_ttfont()
-        features_tags = set()
-        for table_tag in ["GPOS", "GSUB"]:
-            if table_tag in font:
-                table = font[table_tag].table
-                try:
-                    feature_record = table.FeatureList.FeatureRecord or []
-                except AttributeError:
-                    feature_record = []
-                for feature in feature_record:
-                    features_tags.add(feature.FeatureTag)
-        return sorted(features_tags)
+        ttfont = self.get_ttfont()
+        return features.get_features_tags(ttfont)
 
     def get_filename(
         self,
