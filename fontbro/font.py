@@ -9,8 +9,6 @@ from typing import IO, Any, cast
 
 import fsutil
 from fontTools.ttLib import TTCollection, TTFont, TTLibError
-from fontTools.varLib import instancer
-from fontTools.varLib.instancer import OverlapMode
 
 from fontbro import (
     bitmap,
@@ -1802,19 +1800,8 @@ class Font:
         :raises ValueError: If the coordinates are not defined (blank)
         :raises ValueError: If the coordinates axes are all pinned
         """
-        if not self.is_variable():
-            raise OperationError("Only a variable font can be sliced.")
-
-        font = self.get_ttfont()
-        coordinates = variable.get_sliced_coordinates(font, coordinates)
-
-        # set default instancer options
-        options.setdefault("optimize", True)
-        options.setdefault("overlap", OverlapMode.KEEP_AND_SET_FLAGS)
-        options.setdefault("updateFontNames", False)
-
-        # instantiate the sliced variable font
-        instancer.instantiateVariableFont(font, coordinates, inplace=True, **options)
+        ttfont = self.get_ttfont()
+        variable.to_sliced_variable(ttfont, coordinates=coordinates, **options)
 
     def to_static(
         self,
@@ -1846,59 +1833,15 @@ class Font:
         :raises TypeError: If the font is not a variable font
         :raises ValueError: If the coordinates axes are not all pinned
         """
-        if not self.is_variable():
-            raise OperationError("Only a variable font can be made static.")
-
-        font = self.get_ttfont()
-
-        coordinates = variable.get_static_coordinates(
-            font,
+        ttfont = self.get_ttfont()
+        variable.to_static(
+            ttfont,
             coordinates=coordinates,
             style_name=style_name,
+            update_names=update_names,
+            update_style_flags=update_style_flags,
+            **options,
         )
-
-        # get instance closest to coordinates
-        instance = self.get_variable_instance_closest_to_coordinates(coordinates)
-
-        # set default instancer options
-        options["inplace"] = True
-        options.setdefault("optimize", True)
-        options.setdefault("overlap", OverlapMode.REMOVE)
-        options.setdefault("updateFontNames", False)
-
-        # instantiate the static font
-        instancer.instantiateVariableFont(font, coordinates, **options)
-
-        # remove STAT table
-        # not useful in static fonts and after instancing it may contain incorrect values
-        self._remove_stat_table()
-
-        # update name records and style flags based on instance style name
-        if instance and update_names:
-            self.rename(
-                style_name=instance["style_name"],
-                update_style_flags=update_style_flags,
-            )
-
-        # update style flags based on coordinates values
-        if update_style_flags:
-            has_italic = (coordinates.get("ital", 0) or 0) == 1
-            has_slant = (coordinates.get("slnt", 0) or 0) < 0
-            if has_italic or has_slant:
-                self.set_style_flags(regular=False, italic=True)
-
-    def _remove_stat_table(self) -> bool:
-        """
-        Removes the STAT table from the font.
-
-        :returns: True if the STAT table was removed, False if it was not present.
-        :rtype: bool
-        """
-        font = self.get_ttfont()
-        if "STAT" in font:
-            del font["STAT"]
-            return True
-        return False
 
     def __str__(
         self,

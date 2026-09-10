@@ -4,8 +4,11 @@ import sys
 from typing import Any
 
 from fontTools.ttLib import TTFont
+from fontTools.varLib import instancer
+from fontTools.varLib.instancer import OverlapMode
 
-from fontbro.exceptions import ArgumentError
+from fontbro import names, style_flags
+from fontbro.exceptions import ArgumentError, OperationError
 from fontbro.math import get_euclidean_distance
 from fontbro.utils import slugify
 
@@ -283,3 +286,91 @@ def get_static_coordinates(
     if not _all_axes_pinned(coordinates):
         raise ArgumentError("Invalid coordinates: all axes must be pinned.")
     return coordinates
+
+
+def _remove_stat_table(
+    ttfont: TTFont,
+) -> bool:
+    """
+    Removes the STAT table from the given font.
+    """
+    if "STAT" in ttfont:
+        del ttfont["STAT"]
+        return True
+    return False
+
+
+def to_sliced_variable(
+    ttfont: TTFont,
+    *,
+    coordinates: dict[str, Any],
+    **options: Any,
+) -> None:
+    """
+    Converts the given variable font to a partial one slicing
+    the variable axes at the given coordinates.
+    """
+    if not is_variable(ttfont):
+        raise OperationError("Only a variable font can be sliced.")
+
+    coordinates = get_sliced_coordinates(ttfont, coordinates)
+
+    # set default instancer options
+    options.setdefault("optimize", True)
+    options.setdefault("overlap", OverlapMode.KEEP_AND_SET_FLAGS)
+    options.setdefault("updateFontNames", False)
+
+    # instantiate the sliced variable font
+    instancer.instantiateVariableFont(ttfont, coordinates, inplace=True, **options)
+
+
+def to_static(
+    ttfont: TTFont,
+    *,
+    coordinates: dict[str, Any] | None = None,
+    style_name: str | None = None,
+    update_names: bool = True,
+    update_style_flags: bool = True,
+    **options: Any,
+) -> None:
+    """
+    Converts the given variable font to a static one pinning
+    the variable axes at the given coordinates.
+    """
+    if not is_variable(ttfont):
+        raise OperationError("Only a variable font can be made static.")
+
+    coordinates = get_static_coordinates(
+        ttfont,
+        coordinates=coordinates,
+        style_name=style_name,
+    )
+
+    # get instance closest to coordinates
+    instance = get_variable_instance_closest_to_coordinates(ttfont, coordinates)
+
+    # set default instancer options
+    options["inplace"] = True
+    options.setdefault("optimize", True)
+    options.setdefault("overlap", OverlapMode.REMOVE)
+    options.setdefault("updateFontNames", False)
+
+    # instantiate the static font
+    instancer.instantiateVariableFont(ttfont, coordinates, **options)
+
+    # remove STAT table
+    # not useful in static fonts and after instancing it may contain incorrect values
+    _remove_stat_table(ttfont)
+
+    # update name records and style flags based on instance style name
+    if instance and update_names:
+        names.rename(ttfont, style_name=instance["style_name"])
+        if update_style_flags:
+            style_flags.set_style_flags_by_subfamily_name(ttfont)
+
+    # update style flags based on coordinates values
+    if update_style_flags:
+        has_italic = (coordinates.get("ital", 0) or 0) == 1
+        has_slant = (coordinates.get("slnt", 0) or 0) < 0
+        if has_italic or has_slant:
+            style_flags.set_style_flags(ttfont, regular=False, italic=True)
