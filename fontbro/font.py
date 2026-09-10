@@ -9,28 +9,26 @@ from typing import IO, Any, cast
 import fsutil
 from fontTools.ttLib import TTCollection, TTFont, TTLibError
 
-from fontbro import (
-    bitmap,
-    color,
-    embedding_permissions,
-    family_classification,
-    features,
-    files,
-    fingerprint,
-    glyphs,
-    metrics,
-    monospace,
-    names,
-    pixel,
-    render,
-    sanitize,
-    style_flags,
-    subset,
-    support,
-    tables,
-    unicode,
-    variable,
-)
+from fontbro import bitmap as _bitmap
+from fontbro import color as _color
+from fontbro import embedding_permissions as _embedding_permissions
+from fontbro import family_classification as _family_classification
+from fontbro import features as _features
+from fontbro import files as _files
+from fontbro import fingerprint as _fingerprint
+from fontbro import glyphs as _glyphs
+from fontbro import metrics as _metrics
+from fontbro import monospace as _monospace
+from fontbro import names as _names
+from fontbro import pixel as _pixel
+from fontbro import render as _render
+from fontbro import sanitize as _sanitize
+from fontbro import style_flags as _style_flags
+from fontbro import subset as _subset
+from fontbro import support as _support
+from fontbro import tables as _tables
+from fontbro import unicode as _unicode
+from fontbro import variable as _variable
 from fontbro.exceptions import (
     ArgumentError,
     OperationError,
@@ -45,174 +43,174 @@ class Font:
     # Family Classification:
     # https://learn.microsoft.com/en-us/typography/opentype/spec/ibmfc
     # fmt: off
-    FAMILY_CLASSIFICATION_NO_CLASSIFICATION: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_NO_CLASSIFICATION
-    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS
-    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_NO_CLASSIFICATION: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_NO_CLASSIFICATION
-    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_IBM_ROUNDED_LEGIBILITY: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_IBM_ROUNDED_LEGIBILITY
-    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_GARALDE: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_GARALDE
-    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_VENETIAN: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_VENETIAN
-    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_MODIFIED_VENETIAN: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_MODIFIED_VENETIAN
-    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_DUTCH_MODERN: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_DUTCH_MODERN
-    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_DUTCH_TRADITIONAL: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_DUTCH_TRADITIONAL
-    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_CONTEMPORARY: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_CONTEMPORARY
-    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_CALLIGRAPHIC: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_CALLIGRAPHIC
-    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_MISCELLANEOUS: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_MISCELLANEOUS
-    FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS
-    FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_NO_CLASSIFICATION: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_NO_CLASSIFICATION
-    FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_DIRECT_LINE: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_DIRECT_LINE
-    FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_SCRIPT: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_SCRIPT
-    FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_MISCELLANEOUS: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_MISCELLANEOUS
-    FAMILY_CLASSIFICATION_MODERN_SERIFS: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_MODERN_SERIFS
-    FAMILY_CLASSIFICATION_MODERN_SERIFS_NO_CLASSIFICATION: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_MODERN_SERIFS_NO_CLASSIFICATION
-    FAMILY_CLASSIFICATION_MODERN_SERIFS_ITALIAN: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_MODERN_SERIFS_ITALIAN
-    FAMILY_CLASSIFICATION_MODERN_SERIFS_SCRIPT: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_MODERN_SERIFS_SCRIPT
-    FAMILY_CLASSIFICATION_MODERN_SERIFS_MISCELLANEOUS: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_MODERN_SERIFS_MISCELLANEOUS
-    FAMILY_CLASSIFICATION_CLARENDON_SERIFS: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS
-    FAMILY_CLASSIFICATION_CLARENDON_SERIFS_NO_CLASSIFICATION: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS_NO_CLASSIFICATION
-    FAMILY_CLASSIFICATION_CLARENDON_SERIFS_CLARENDON: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS_CLARENDON
-    FAMILY_CLASSIFICATION_CLARENDON_SERIFS_MODERN: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS_MODERN
-    FAMILY_CLASSIFICATION_CLARENDON_SERIFS_TRADITIONAL: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS_TRADITIONAL
-    FAMILY_CLASSIFICATION_CLARENDON_SERIFS_NEWSPAPER: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS_NEWSPAPER
-    FAMILY_CLASSIFICATION_CLARENDON_SERIFS_STUB_SERIF: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS_STUB_SERIF
-    FAMILY_CLASSIFICATION_CLARENDON_SERIFS_MONOTONE: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS_MONOTONE
-    FAMILY_CLASSIFICATION_CLARENDON_SERIFS_TYPEWRITER: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS_TYPEWRITER
-    FAMILY_CLASSIFICATION_CLARENDON_SERIFS_MISCELLANEOUS: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS_MISCELLANEOUS
-    FAMILY_CLASSIFICATION_SLAB_SERIFS: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SLAB_SERIFS
-    FAMILY_CLASSIFICATION_SLAB_SERIFS_NO_CLASSIFICATION: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SLAB_SERIFS_NO_CLASSIFICATION
-    FAMILY_CLASSIFICATION_SLAB_SERIFS_MONOTONE: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SLAB_SERIFS_MONOTONE
-    FAMILY_CLASSIFICATION_SLAB_SERIFS_HUMANIST: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SLAB_SERIFS_HUMANIST
-    FAMILY_CLASSIFICATION_SLAB_SERIFS_GEOMETRIC: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SLAB_SERIFS_GEOMETRIC
-    FAMILY_CLASSIFICATION_SLAB_SERIFS_SWISS: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SLAB_SERIFS_SWISS
-    FAMILY_CLASSIFICATION_SLAB_SERIFS_TYPEWRITER: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SLAB_SERIFS_TYPEWRITER
-    FAMILY_CLASSIFICATION_SLAB_SERIFS_MISCELLANEOUS: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SLAB_SERIFS_MISCELLANEOUS
-    FAMILY_CLASSIFICATION_FREEFORM_SERIFS: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_FREEFORM_SERIFS
-    FAMILY_CLASSIFICATION_FREEFORM_SERIFS_NO_CLASSIFICATION: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_FREEFORM_SERIFS_NO_CLASSIFICATION
-    FAMILY_CLASSIFICATION_FREEFORM_SERIFS_MODERN: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_FREEFORM_SERIFS_MODERN
-    FAMILY_CLASSIFICATION_FREEFORM_SERIFS_MISCELLANEOUS: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_FREEFORM_SERIFS_MISCELLANEOUS
-    FAMILY_CLASSIFICATION_SANS_SERIF: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SANS_SERIF
-    FAMILY_CLASSIFICATION_SANS_SERIF_NO_CLASSIFICATION: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_NO_CLASSIFICATION
-    FAMILY_CLASSIFICATION_SANS_SERIF_IBM_NEO_GROTESQUE_GOTHIC: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_IBM_NEO_GROTESQUE_GOTHIC
-    FAMILY_CLASSIFICATION_SANS_SERIF_HUMANIST: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_HUMANIST
-    FAMILY_CLASSIFICATION_SANS_SERIF_LOW_X_ROUND_GEOMETRIC: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_LOW_X_ROUND_GEOMETRIC
-    FAMILY_CLASSIFICATION_SANS_SERIF_HIGH_X_ROUND_GEOMETRIC: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_HIGH_X_ROUND_GEOMETRIC
-    FAMILY_CLASSIFICATION_SANS_SERIF_NEO_GROTESQUE_GOTHIC: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_NEO_GROTESQUE_GOTHIC
-    FAMILY_CLASSIFICATION_SANS_SERIF_MODIFIED_NEO_GROTESQUE_GOTHIC: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_MODIFIED_NEO_GROTESQUE_GOTHIC
-    FAMILY_CLASSIFICATION_SANS_SERIF_TYPEWRITER_GOTHIC: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_TYPEWRITER_GOTHIC
-    FAMILY_CLASSIFICATION_SANS_SERIF_MATRIX: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_MATRIX
-    FAMILY_CLASSIFICATION_SANS_SERIF_MISCELLANEOUS: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_MISCELLANEOUS
-    FAMILY_CLASSIFICATION_ORNAMENTALS: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_ORNAMENTALS
-    FAMILY_CLASSIFICATION_ORNAMENTALS_NO_CLASSIFICATION: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_ORNAMENTALS_NO_CLASSIFICATION
-    FAMILY_CLASSIFICATION_ORNAMENTALS_ENGRAVER: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_ORNAMENTALS_ENGRAVER
-    FAMILY_CLASSIFICATION_ORNAMENTALS_BLACK_LETTER: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_ORNAMENTALS_BLACK_LETTER
-    FAMILY_CLASSIFICATION_ORNAMENTALS_DECORATIVE: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_ORNAMENTALS_DECORATIVE
-    FAMILY_CLASSIFICATION_ORNAMENTALS_THREE_DIMENSIONAL: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_ORNAMENTALS_THREE_DIMENSIONAL
-    FAMILY_CLASSIFICATION_ORNAMENTALS_MISCELLANEOUS: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_ORNAMENTALS_MISCELLANEOUS
-    FAMILY_CLASSIFICATION_SCRIPTS: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SCRIPTS
-    FAMILY_CLASSIFICATION_SCRIPTS_NO_CLASSIFICATION: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SCRIPTS_NO_CLASSIFICATION
-    FAMILY_CLASSIFICATION_SCRIPTS_UNCIAL: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SCRIPTS_UNCIAL
-    FAMILY_CLASSIFICATION_SCRIPTS_BRUSH_JOINED: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SCRIPTS_BRUSH_JOINED
-    FAMILY_CLASSIFICATION_SCRIPTS_FORMAL_JOINED: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SCRIPTS_FORMAL_JOINED
-    FAMILY_CLASSIFICATION_SCRIPTS_MONOTONE_JOINED: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SCRIPTS_MONOTONE_JOINED
-    FAMILY_CLASSIFICATION_SCRIPTS_CALLIGRAPHIC: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SCRIPTS_CALLIGRAPHIC
-    FAMILY_CLASSIFICATION_SCRIPTS_BRUSH_UNJOINED: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SCRIPTS_BRUSH_UNJOINED
-    FAMILY_CLASSIFICATION_SCRIPTS_FORMAL_UNJOINED: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SCRIPTS_FORMAL_UNJOINED
-    FAMILY_CLASSIFICATION_SCRIPTS_MONOTONE_UNJOINED: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SCRIPTS_MONOTONE_UNJOINED
-    FAMILY_CLASSIFICATION_SCRIPTS_MISCELLANEOUS: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SCRIPTS_MISCELLANEOUS
-    FAMILY_CLASSIFICATION_SYMBOLIC: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SYMBOLIC
-    FAMILY_CLASSIFICATION_SYMBOLIC_NO_CLASSIFICATION: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SYMBOLIC_NO_CLASSIFICATION
-    FAMILY_CLASSIFICATION_SYMBOLIC_MIXED_SERIF: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SYMBOLIC_MIXED_SERIF
-    FAMILY_CLASSIFICATION_SYMBOLIC_OLDSTYLE_SERIF: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SYMBOLIC_OLDSTYLE_SERIF
-    FAMILY_CLASSIFICATION_SYMBOLIC_NEO_GROTESQUE_SANS_SERIF: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SYMBOLIC_NEO_GROTESQUE_SANS_SERIF
-    FAMILY_CLASSIFICATION_SYMBOLIC_MISCELLANEOUS: dict[str, int] = family_classification.FAMILY_CLASSIFICATION_SYMBOLIC_MISCELLANEOUS
+    FAMILY_CLASSIFICATION_NO_CLASSIFICATION: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_NO_CLASSIFICATION
+    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS
+    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_NO_CLASSIFICATION: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_NO_CLASSIFICATION
+    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_IBM_ROUNDED_LEGIBILITY: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_IBM_ROUNDED_LEGIBILITY
+    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_GARALDE: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_GARALDE
+    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_VENETIAN: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_VENETIAN
+    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_MODIFIED_VENETIAN: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_MODIFIED_VENETIAN
+    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_DUTCH_MODERN: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_DUTCH_MODERN
+    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_DUTCH_TRADITIONAL: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_DUTCH_TRADITIONAL
+    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_CONTEMPORARY: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_CONTEMPORARY
+    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_CALLIGRAPHIC: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_CALLIGRAPHIC
+    FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_MISCELLANEOUS: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_MISCELLANEOUS
+    FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS
+    FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_NO_CLASSIFICATION: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_NO_CLASSIFICATION
+    FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_DIRECT_LINE: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_DIRECT_LINE
+    FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_SCRIPT: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_SCRIPT
+    FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_MISCELLANEOUS: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_MISCELLANEOUS
+    FAMILY_CLASSIFICATION_MODERN_SERIFS: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_MODERN_SERIFS
+    FAMILY_CLASSIFICATION_MODERN_SERIFS_NO_CLASSIFICATION: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_MODERN_SERIFS_NO_CLASSIFICATION
+    FAMILY_CLASSIFICATION_MODERN_SERIFS_ITALIAN: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_MODERN_SERIFS_ITALIAN
+    FAMILY_CLASSIFICATION_MODERN_SERIFS_SCRIPT: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_MODERN_SERIFS_SCRIPT
+    FAMILY_CLASSIFICATION_MODERN_SERIFS_MISCELLANEOUS: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_MODERN_SERIFS_MISCELLANEOUS
+    FAMILY_CLASSIFICATION_CLARENDON_SERIFS: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS
+    FAMILY_CLASSIFICATION_CLARENDON_SERIFS_NO_CLASSIFICATION: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS_NO_CLASSIFICATION
+    FAMILY_CLASSIFICATION_CLARENDON_SERIFS_CLARENDON: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS_CLARENDON
+    FAMILY_CLASSIFICATION_CLARENDON_SERIFS_MODERN: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS_MODERN
+    FAMILY_CLASSIFICATION_CLARENDON_SERIFS_TRADITIONAL: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS_TRADITIONAL
+    FAMILY_CLASSIFICATION_CLARENDON_SERIFS_NEWSPAPER: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS_NEWSPAPER
+    FAMILY_CLASSIFICATION_CLARENDON_SERIFS_STUB_SERIF: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS_STUB_SERIF
+    FAMILY_CLASSIFICATION_CLARENDON_SERIFS_MONOTONE: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS_MONOTONE
+    FAMILY_CLASSIFICATION_CLARENDON_SERIFS_TYPEWRITER: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS_TYPEWRITER
+    FAMILY_CLASSIFICATION_CLARENDON_SERIFS_MISCELLANEOUS: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_CLARENDON_SERIFS_MISCELLANEOUS
+    FAMILY_CLASSIFICATION_SLAB_SERIFS: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SLAB_SERIFS
+    FAMILY_CLASSIFICATION_SLAB_SERIFS_NO_CLASSIFICATION: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SLAB_SERIFS_NO_CLASSIFICATION
+    FAMILY_CLASSIFICATION_SLAB_SERIFS_MONOTONE: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SLAB_SERIFS_MONOTONE
+    FAMILY_CLASSIFICATION_SLAB_SERIFS_HUMANIST: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SLAB_SERIFS_HUMANIST
+    FAMILY_CLASSIFICATION_SLAB_SERIFS_GEOMETRIC: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SLAB_SERIFS_GEOMETRIC
+    FAMILY_CLASSIFICATION_SLAB_SERIFS_SWISS: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SLAB_SERIFS_SWISS
+    FAMILY_CLASSIFICATION_SLAB_SERIFS_TYPEWRITER: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SLAB_SERIFS_TYPEWRITER
+    FAMILY_CLASSIFICATION_SLAB_SERIFS_MISCELLANEOUS: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SLAB_SERIFS_MISCELLANEOUS
+    FAMILY_CLASSIFICATION_FREEFORM_SERIFS: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_FREEFORM_SERIFS
+    FAMILY_CLASSIFICATION_FREEFORM_SERIFS_NO_CLASSIFICATION: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_FREEFORM_SERIFS_NO_CLASSIFICATION
+    FAMILY_CLASSIFICATION_FREEFORM_SERIFS_MODERN: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_FREEFORM_SERIFS_MODERN
+    FAMILY_CLASSIFICATION_FREEFORM_SERIFS_MISCELLANEOUS: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_FREEFORM_SERIFS_MISCELLANEOUS
+    FAMILY_CLASSIFICATION_SANS_SERIF: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SANS_SERIF
+    FAMILY_CLASSIFICATION_SANS_SERIF_NO_CLASSIFICATION: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_NO_CLASSIFICATION
+    FAMILY_CLASSIFICATION_SANS_SERIF_IBM_NEO_GROTESQUE_GOTHIC: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_IBM_NEO_GROTESQUE_GOTHIC
+    FAMILY_CLASSIFICATION_SANS_SERIF_HUMANIST: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_HUMANIST
+    FAMILY_CLASSIFICATION_SANS_SERIF_LOW_X_ROUND_GEOMETRIC: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_LOW_X_ROUND_GEOMETRIC
+    FAMILY_CLASSIFICATION_SANS_SERIF_HIGH_X_ROUND_GEOMETRIC: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_HIGH_X_ROUND_GEOMETRIC
+    FAMILY_CLASSIFICATION_SANS_SERIF_NEO_GROTESQUE_GOTHIC: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_NEO_GROTESQUE_GOTHIC
+    FAMILY_CLASSIFICATION_SANS_SERIF_MODIFIED_NEO_GROTESQUE_GOTHIC: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_MODIFIED_NEO_GROTESQUE_GOTHIC
+    FAMILY_CLASSIFICATION_SANS_SERIF_TYPEWRITER_GOTHIC: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_TYPEWRITER_GOTHIC
+    FAMILY_CLASSIFICATION_SANS_SERIF_MATRIX: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_MATRIX
+    FAMILY_CLASSIFICATION_SANS_SERIF_MISCELLANEOUS: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SANS_SERIF_MISCELLANEOUS
+    FAMILY_CLASSIFICATION_ORNAMENTALS: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_ORNAMENTALS
+    FAMILY_CLASSIFICATION_ORNAMENTALS_NO_CLASSIFICATION: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_ORNAMENTALS_NO_CLASSIFICATION
+    FAMILY_CLASSIFICATION_ORNAMENTALS_ENGRAVER: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_ORNAMENTALS_ENGRAVER
+    FAMILY_CLASSIFICATION_ORNAMENTALS_BLACK_LETTER: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_ORNAMENTALS_BLACK_LETTER
+    FAMILY_CLASSIFICATION_ORNAMENTALS_DECORATIVE: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_ORNAMENTALS_DECORATIVE
+    FAMILY_CLASSIFICATION_ORNAMENTALS_THREE_DIMENSIONAL: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_ORNAMENTALS_THREE_DIMENSIONAL
+    FAMILY_CLASSIFICATION_ORNAMENTALS_MISCELLANEOUS: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_ORNAMENTALS_MISCELLANEOUS
+    FAMILY_CLASSIFICATION_SCRIPTS: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SCRIPTS
+    FAMILY_CLASSIFICATION_SCRIPTS_NO_CLASSIFICATION: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SCRIPTS_NO_CLASSIFICATION
+    FAMILY_CLASSIFICATION_SCRIPTS_UNCIAL: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SCRIPTS_UNCIAL
+    FAMILY_CLASSIFICATION_SCRIPTS_BRUSH_JOINED: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SCRIPTS_BRUSH_JOINED
+    FAMILY_CLASSIFICATION_SCRIPTS_FORMAL_JOINED: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SCRIPTS_FORMAL_JOINED
+    FAMILY_CLASSIFICATION_SCRIPTS_MONOTONE_JOINED: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SCRIPTS_MONOTONE_JOINED
+    FAMILY_CLASSIFICATION_SCRIPTS_CALLIGRAPHIC: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SCRIPTS_CALLIGRAPHIC
+    FAMILY_CLASSIFICATION_SCRIPTS_BRUSH_UNJOINED: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SCRIPTS_BRUSH_UNJOINED
+    FAMILY_CLASSIFICATION_SCRIPTS_FORMAL_UNJOINED: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SCRIPTS_FORMAL_UNJOINED
+    FAMILY_CLASSIFICATION_SCRIPTS_MONOTONE_UNJOINED: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SCRIPTS_MONOTONE_UNJOINED
+    FAMILY_CLASSIFICATION_SCRIPTS_MISCELLANEOUS: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SCRIPTS_MISCELLANEOUS
+    FAMILY_CLASSIFICATION_SYMBOLIC: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SYMBOLIC
+    FAMILY_CLASSIFICATION_SYMBOLIC_NO_CLASSIFICATION: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SYMBOLIC_NO_CLASSIFICATION
+    FAMILY_CLASSIFICATION_SYMBOLIC_MIXED_SERIF: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SYMBOLIC_MIXED_SERIF
+    FAMILY_CLASSIFICATION_SYMBOLIC_OLDSTYLE_SERIF: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SYMBOLIC_OLDSTYLE_SERIF
+    FAMILY_CLASSIFICATION_SYMBOLIC_NEO_GROTESQUE_SANS_SERIF: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SYMBOLIC_NEO_GROTESQUE_SANS_SERIF
+    FAMILY_CLASSIFICATION_SYMBOLIC_MISCELLANEOUS: dict[str, int] = _family_classification.FAMILY_CLASSIFICATION_SYMBOLIC_MISCELLANEOUS
     # fmt: on
 
     # Formats:
-    FORMAT_OTF: str = files.FORMAT_OTF
-    FORMAT_TTF: str = files.FORMAT_TTF
-    FORMAT_WOFF: str = files.FORMAT_WOFF
-    FORMAT_WOFF2: str = files.FORMAT_WOFF2
+    FORMAT_OTF: str = _files.FORMAT_OTF
+    FORMAT_TTF: str = _files.FORMAT_TTF
+    FORMAT_WOFF: str = _files.FORMAT_WOFF
+    FORMAT_WOFF2: str = _files.FORMAT_WOFF2
 
-    _FORMATS_LIST: list[str] = files._FORMATS_LIST
+    _FORMATS_LIST: list[str] = _files._FORMATS_LIST
 
     # Names:
-    NAME_COPYRIGHT_NOTICE: str = names.NAME_COPYRIGHT_NOTICE
-    NAME_FAMILY_NAME: str = names.NAME_FAMILY_NAME
-    NAME_SUBFAMILY_NAME: str = names.NAME_SUBFAMILY_NAME
-    NAME_UNIQUE_IDENTIFIER: str = names.NAME_UNIQUE_IDENTIFIER
-    NAME_FULL_NAME: str = names.NAME_FULL_NAME
-    NAME_VERSION: str = names.NAME_VERSION
-    NAME_POSTSCRIPT_NAME: str = names.NAME_POSTSCRIPT_NAME
-    NAME_TRADEMARK: str = names.NAME_TRADEMARK
-    NAME_MANUFACTURER_NAME: str = names.NAME_MANUFACTURER_NAME
-    NAME_DESIGNER: str = names.NAME_DESIGNER
-    NAME_DESCRIPTION: str = names.NAME_DESCRIPTION
-    NAME_VENDOR_URL: str = names.NAME_VENDOR_URL
-    NAME_DESIGNER_URL: str = names.NAME_DESIGNER_URL
-    NAME_LICENSE_DESCRIPTION: str = names.NAME_LICENSE_DESCRIPTION
-    NAME_LICENSE_INFO_URL: str = names.NAME_LICENSE_INFO_URL
-    NAME_RESERVED: str = names.NAME_RESERVED
-    NAME_TYPOGRAPHIC_FAMILY_NAME: str = names.NAME_TYPOGRAPHIC_FAMILY_NAME
-    NAME_TYPOGRAPHIC_SUBFAMILY_NAME: str = names.NAME_TYPOGRAPHIC_SUBFAMILY_NAME
-    NAME_COMPATIBLE_FULL: str = names.NAME_COMPATIBLE_FULL
-    NAME_SAMPLE_TEXT: str = names.NAME_SAMPLE_TEXT
-    NAME_POSTSCRIPT_CID_FINDFONT_NAME: str = names.NAME_POSTSCRIPT_CID_FINDFONT_NAME
-    NAME_WWS_FAMILY_NAME: str = names.NAME_WWS_FAMILY_NAME
-    NAME_WWS_SUBFAMILY_NAME: str = names.NAME_WWS_SUBFAMILY_NAME
-    NAME_LIGHT_BACKGROUND_PALETTE: str = names.NAME_LIGHT_BACKGROUND_PALETTE
-    NAME_DARK_BACKGROUND_PALETTE: str = names.NAME_DARK_BACKGROUND_PALETTE
+    NAME_COPYRIGHT_NOTICE: str = _names.NAME_COPYRIGHT_NOTICE
+    NAME_FAMILY_NAME: str = _names.NAME_FAMILY_NAME
+    NAME_SUBFAMILY_NAME: str = _names.NAME_SUBFAMILY_NAME
+    NAME_UNIQUE_IDENTIFIER: str = _names.NAME_UNIQUE_IDENTIFIER
+    NAME_FULL_NAME: str = _names.NAME_FULL_NAME
+    NAME_VERSION: str = _names.NAME_VERSION
+    NAME_POSTSCRIPT_NAME: str = _names.NAME_POSTSCRIPT_NAME
+    NAME_TRADEMARK: str = _names.NAME_TRADEMARK
+    NAME_MANUFACTURER_NAME: str = _names.NAME_MANUFACTURER_NAME
+    NAME_DESIGNER: str = _names.NAME_DESIGNER
+    NAME_DESCRIPTION: str = _names.NAME_DESCRIPTION
+    NAME_VENDOR_URL: str = _names.NAME_VENDOR_URL
+    NAME_DESIGNER_URL: str = _names.NAME_DESIGNER_URL
+    NAME_LICENSE_DESCRIPTION: str = _names.NAME_LICENSE_DESCRIPTION
+    NAME_LICENSE_INFO_URL: str = _names.NAME_LICENSE_INFO_URL
+    NAME_RESERVED: str = _names.NAME_RESERVED
+    NAME_TYPOGRAPHIC_FAMILY_NAME: str = _names.NAME_TYPOGRAPHIC_FAMILY_NAME
+    NAME_TYPOGRAPHIC_SUBFAMILY_NAME: str = _names.NAME_TYPOGRAPHIC_SUBFAMILY_NAME
+    NAME_COMPATIBLE_FULL: str = _names.NAME_COMPATIBLE_FULL
+    NAME_SAMPLE_TEXT: str = _names.NAME_SAMPLE_TEXT
+    NAME_POSTSCRIPT_CID_FINDFONT_NAME: str = _names.NAME_POSTSCRIPT_CID_FINDFONT_NAME
+    NAME_WWS_FAMILY_NAME: str = _names.NAME_WWS_FAMILY_NAME
+    NAME_WWS_SUBFAMILY_NAME: str = _names.NAME_WWS_SUBFAMILY_NAME
+    NAME_LIGHT_BACKGROUND_PALETTE: str = _names.NAME_LIGHT_BACKGROUND_PALETTE
+    NAME_DARK_BACKGROUND_PALETTE: str = _names.NAME_DARK_BACKGROUND_PALETTE
     NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX: str = (
-        names.NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX
+        _names.NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX
     )
 
     # Style Flags:
-    STYLE_FLAG_REGULAR: str = style_flags.STYLE_FLAG_REGULAR
-    STYLE_FLAG_BOLD: str = style_flags.STYLE_FLAG_BOLD
-    STYLE_FLAG_ITALIC: str = style_flags.STYLE_FLAG_ITALIC
-    STYLE_FLAG_UNDERLINE: str = style_flags.STYLE_FLAG_UNDERLINE
-    STYLE_FLAG_OUTLINE: str = style_flags.STYLE_FLAG_OUTLINE
-    STYLE_FLAG_SHADOW: str = style_flags.STYLE_FLAG_SHADOW
-    STYLE_FLAG_CONDENSED: str = style_flags.STYLE_FLAG_CONDENSED
-    STYLE_FLAG_EXTENDED: str = style_flags.STYLE_FLAG_EXTENDED
+    STYLE_FLAG_REGULAR: str = _style_flags.STYLE_FLAG_REGULAR
+    STYLE_FLAG_BOLD: str = _style_flags.STYLE_FLAG_BOLD
+    STYLE_FLAG_ITALIC: str = _style_flags.STYLE_FLAG_ITALIC
+    STYLE_FLAG_UNDERLINE: str = _style_flags.STYLE_FLAG_UNDERLINE
+    STYLE_FLAG_OUTLINE: str = _style_flags.STYLE_FLAG_OUTLINE
+    STYLE_FLAG_SHADOW: str = _style_flags.STYLE_FLAG_SHADOW
+    STYLE_FLAG_CONDENSED: str = _style_flags.STYLE_FLAG_CONDENSED
+    STYLE_FLAG_EXTENDED: str = _style_flags.STYLE_FLAG_EXTENDED
 
     # Vertical Metrics:
-    VERTICAL_METRIC_UNITS_PER_EM: str = metrics.VERTICAL_METRIC_UNITS_PER_EM
-    VERTICAL_METRIC_Y_MAX: str = metrics.VERTICAL_METRIC_Y_MAX
-    VERTICAL_METRIC_Y_MIN: str = metrics.VERTICAL_METRIC_Y_MIN
-    VERTICAL_METRIC_ASCENT: str = metrics.VERTICAL_METRIC_ASCENT
-    VERTICAL_METRIC_DESCENT: str = metrics.VERTICAL_METRIC_DESCENT
-    VERTICAL_METRIC_LINE_GAP: str = metrics.VERTICAL_METRIC_LINE_GAP
-    VERTICAL_METRIC_TYPO_ASCENDER: str = metrics.VERTICAL_METRIC_TYPO_ASCENDER
-    VERTICAL_METRIC_TYPO_DESCENDER: str = metrics.VERTICAL_METRIC_TYPO_DESCENDER
-    VERTICAL_METRIC_TYPO_LINE_GAP: str = metrics.VERTICAL_METRIC_TYPO_LINE_GAP
-    VERTICAL_METRIC_CAP_HEIGHT: str = metrics.VERTICAL_METRIC_CAP_HEIGHT
-    VERTICAL_METRIC_X_HEIGHT: str = metrics.VERTICAL_METRIC_X_HEIGHT
-    VERTICAL_METRIC_WIN_ASCENT: str = metrics.VERTICAL_METRIC_WIN_ASCENT
-    VERTICAL_METRIC_WIN_DESCENT: str = metrics.VERTICAL_METRIC_WIN_DESCENT
+    VERTICAL_METRIC_UNITS_PER_EM: str = _metrics.VERTICAL_METRIC_UNITS_PER_EM
+    VERTICAL_METRIC_Y_MAX: str = _metrics.VERTICAL_METRIC_Y_MAX
+    VERTICAL_METRIC_Y_MIN: str = _metrics.VERTICAL_METRIC_Y_MIN
+    VERTICAL_METRIC_ASCENT: str = _metrics.VERTICAL_METRIC_ASCENT
+    VERTICAL_METRIC_DESCENT: str = _metrics.VERTICAL_METRIC_DESCENT
+    VERTICAL_METRIC_LINE_GAP: str = _metrics.VERTICAL_METRIC_LINE_GAP
+    VERTICAL_METRIC_TYPO_ASCENDER: str = _metrics.VERTICAL_METRIC_TYPO_ASCENDER
+    VERTICAL_METRIC_TYPO_DESCENDER: str = _metrics.VERTICAL_METRIC_TYPO_DESCENDER
+    VERTICAL_METRIC_TYPO_LINE_GAP: str = _metrics.VERTICAL_METRIC_TYPO_LINE_GAP
+    VERTICAL_METRIC_CAP_HEIGHT: str = _metrics.VERTICAL_METRIC_CAP_HEIGHT
+    VERTICAL_METRIC_X_HEIGHT: str = _metrics.VERTICAL_METRIC_X_HEIGHT
+    VERTICAL_METRIC_WIN_ASCENT: str = _metrics.VERTICAL_METRIC_WIN_ASCENT
+    VERTICAL_METRIC_WIN_DESCENT: str = _metrics.VERTICAL_METRIC_WIN_DESCENT
 
     # Weights:
-    WEIGHT_EXTRA_THIN: str = metrics.WEIGHT_EXTRA_THIN
-    WEIGHT_THIN: str = metrics.WEIGHT_THIN
-    WEIGHT_EXTRA_LIGHT: str = metrics.WEIGHT_EXTRA_LIGHT
-    WEIGHT_LIGHT: str = metrics.WEIGHT_LIGHT
-    WEIGHT_REGULAR: str = metrics.WEIGHT_REGULAR
-    WEIGHT_BOOK: str = metrics.WEIGHT_BOOK
-    WEIGHT_MEDIUM: str = metrics.WEIGHT_MEDIUM
-    WEIGHT_SEMI_BOLD: str = metrics.WEIGHT_SEMI_BOLD
-    WEIGHT_BOLD: str = metrics.WEIGHT_BOLD
-    WEIGHT_EXTRA_BOLD: str = metrics.WEIGHT_EXTRA_BOLD
-    WEIGHT_BLACK: str = metrics.WEIGHT_BLACK
-    WEIGHT_EXTRA_BLACK: str = metrics.WEIGHT_EXTRA_BLACK
+    WEIGHT_EXTRA_THIN: str = _metrics.WEIGHT_EXTRA_THIN
+    WEIGHT_THIN: str = _metrics.WEIGHT_THIN
+    WEIGHT_EXTRA_LIGHT: str = _metrics.WEIGHT_EXTRA_LIGHT
+    WEIGHT_LIGHT: str = _metrics.WEIGHT_LIGHT
+    WEIGHT_REGULAR: str = _metrics.WEIGHT_REGULAR
+    WEIGHT_BOOK: str = _metrics.WEIGHT_BOOK
+    WEIGHT_MEDIUM: str = _metrics.WEIGHT_MEDIUM
+    WEIGHT_SEMI_BOLD: str = _metrics.WEIGHT_SEMI_BOLD
+    WEIGHT_BOLD: str = _metrics.WEIGHT_BOLD
+    WEIGHT_EXTRA_BOLD: str = _metrics.WEIGHT_EXTRA_BOLD
+    WEIGHT_BLACK: str = _metrics.WEIGHT_BLACK
+    WEIGHT_EXTRA_BLACK: str = _metrics.WEIGHT_EXTRA_BLACK
 
     # Widths:
-    WIDTH_ULTRA_CONDENSED: str = metrics.WIDTH_ULTRA_CONDENSED
-    WIDTH_EXTRA_CONDENSED: str = metrics.WIDTH_EXTRA_CONDENSED
-    WIDTH_CONDENSED: str = metrics.WIDTH_CONDENSED
-    WIDTH_SEMI_CONDENSED: str = metrics.WIDTH_SEMI_CONDENSED
-    WIDTH_MEDIUM: str = metrics.WIDTH_MEDIUM
-    WIDTH_SEMI_EXPANDED: str = metrics.WIDTH_SEMI_EXPANDED
-    WIDTH_EXPANDED: str = metrics.WIDTH_EXPANDED
-    WIDTH_EXTRA_EXPANDED: str = metrics.WIDTH_EXTRA_EXPANDED
-    WIDTH_ULTRA_EXPANDED: str = metrics.WIDTH_ULTRA_EXPANDED
+    WIDTH_ULTRA_CONDENSED: str = _metrics.WIDTH_ULTRA_CONDENSED
+    WIDTH_EXTRA_CONDENSED: str = _metrics.WIDTH_EXTRA_CONDENSED
+    WIDTH_CONDENSED: str = _metrics.WIDTH_CONDENSED
+    WIDTH_SEMI_CONDENSED: str = _metrics.WIDTH_SEMI_CONDENSED
+    WIDTH_MEDIUM: str = _metrics.WIDTH_MEDIUM
+    WIDTH_SEMI_EXPANDED: str = _metrics.WIDTH_SEMI_EXPANDED
+    WIDTH_EXPANDED: str = _metrics.WIDTH_EXPANDED
+    WIDTH_EXTRA_EXPANDED: str = _metrics.WIDTH_EXTRA_EXPANDED
+    WIDTH_ULTRA_EXPANDED: str = _metrics.WIDTH_ULTRA_EXPANDED
 
     def __init__(
         self,
@@ -371,7 +369,7 @@ class Font:
         :raises DataError: If it's not possible to find the 'best' unicode cmap dict.
         """
         ttfont = self.get_ttfont()
-        return unicode.get_characters(ttfont, ignore_blank=ignore_blank)
+        return _unicode.get_characters(ttfont, ignore_blank=ignore_blank)
 
     def get_characters_count(
         self,
@@ -388,7 +386,7 @@ class Font:
         :rtype: int
         """
         ttfont = self.get_ttfont()
-        return unicode.get_characters_count(ttfont, ignore_blank=ignore_blank)
+        return _unicode.get_characters_count(ttfont, ignore_blank=ignore_blank)
 
     def get_family_classification(
         self,
@@ -409,7 +407,7 @@ class Font:
         :rtype: dict
         """
         ttfont = self.get_ttfont()
-        return family_classification.get_family_classification(ttfont)
+        return _family_classification.get_family_classification(ttfont)
 
     def get_family_name(
         self,
@@ -421,7 +419,7 @@ class Font:
         :rtype: str
         """
         ttfont = self.get_ttfont()
-        return names.get_family_name(ttfont)
+        return _names.get_family_name(ttfont)
 
     def get_features(
         self,
@@ -433,7 +431,7 @@ class Font:
         :rtype: list of dict
         """
         ttfont = self.get_ttfont()
-        return features.get_features(ttfont)
+        return _features.get_features(ttfont)
 
     def get_features_tags(
         self,
@@ -445,7 +443,7 @@ class Font:
         :rtype: list of str
         """
         ttfont = self.get_ttfont()
-        return features.get_features_tags(ttfont)
+        return _features.get_features_tags(ttfont)
 
     def get_filename(
         self,
@@ -473,7 +471,7 @@ class Font:
         :rtype: str
         """
         ttfont = self.get_ttfont()
-        return files.get_filename(
+        return _files.get_filename(
             ttfont,
             variable_suffix=variable_suffix,
             variable_axes_tags=variable_axes_tags,
@@ -497,7 +495,7 @@ class Font:
         :rtype: imagehash.ImageHash
         """
         ttfont = self.get_ttfont()
-        return fingerprint.get_fingerprint(ttfont, text=text)
+        return _fingerprint.get_fingerprint(ttfont, text=text)
 
     def get_fingerprint_match(  # type: ignore
         self,
@@ -532,7 +530,7 @@ class Font:
                 "Invalid other filepath/font: expected str or Font instance, "
                 f"found '{other_type}'."
             )
-        return fingerprint.get_fingerprint_match(
+        return _fingerprint.get_fingerprint_match(
             self.get_ttfont(),
             other_font.get_ttfont(),
             tolerance=tolerance,
@@ -554,7 +552,7 @@ class Font:
         :rtype: str
         """
         ttfont = self.get_ttfont()
-        return files.get_format(ttfont, ignore_flavor=ignore_flavor)
+        return _files.get_format(ttfont, ignore_flavor=ignore_flavor)
 
     def get_glyphs(
         self,
@@ -566,7 +564,7 @@ class Font:
         :rtype: generator of dicts
         """
         ttfont = self.get_ttfont()
-        return glyphs.get_glyphs(ttfont)
+        return _glyphs.get_glyphs(ttfont)
 
     def get_glyphs_count(
         self,
@@ -578,7 +576,7 @@ class Font:
         :rtype: int
         """
         ttfont = self.get_ttfont()
-        return glyphs.get_glyphs_count(ttfont)
+        return _glyphs.get_glyphs_count(ttfont)
 
     def get_image(  # type: ignore
         self,
@@ -605,7 +603,7 @@ class Font:
         :rtype: PIL.Image
         """
         ttfont = self.get_ttfont()
-        return render.get_image(
+        return _render.get_image(
             ttfont,
             text=text,
             size=size,
@@ -623,7 +621,7 @@ class Font:
         :rtype: dict or None
         """
         ttfont = self.get_ttfont()
-        return metrics.get_italic_angle(ttfont)
+        return _metrics.get_italic_angle(ttfont)
 
     def get_name(
         self,
@@ -641,7 +639,7 @@ class Font:
         :raises KeyError: if the key is not a valid name key/id
         """
         ttfont = self.get_ttfont()
-        return names.get_name(ttfont, key)
+        return _names.get_name(ttfont, key)
 
     def get_names(
         self,
@@ -653,7 +651,7 @@ class Font:
         :rtype: dict
         """
         ttfont = self.get_ttfont()
-        return names.get_names(ttfont)
+        return _names.get_names(ttfont)
 
     def get_tables_tags(
         self,
@@ -673,7 +671,7 @@ class Font:
         :rtype: list[str]
         """
         ttfont = self.get_ttfont()
-        return tables.get_tables_tags(ttfont, include_unknown=include_unknown)
+        return _tables.get_tables_tags(ttfont, include_unknown=include_unknown)
 
     def get_tables(
         self,
@@ -698,7 +696,7 @@ class Font:
         :rtype: list[dict]
         """
         ttfont = self.get_ttfont()
-        return tables.get_tables(ttfont, include_unknown=include_unknown)
+        return _tables.get_tables(ttfont, include_unknown=include_unknown)
 
     def get_style_flag(
         self,
@@ -714,7 +712,7 @@ class Font:
         :rtype: bool
         """
         ttfont = self.get_ttfont()
-        return style_flags.get_style_flag(ttfont, key)
+        return _style_flags.get_style_flag(ttfont, key)
 
     def get_style_flags(
         self,
@@ -726,7 +724,7 @@ class Font:
         :rtype: dict
         """
         ttfont = self.get_ttfont()
-        return style_flags.get_style_flags(ttfont)
+        return _style_flags.get_style_flags(ttfont)
 
     def get_embedding_permissions(
         self,
@@ -740,7 +738,7 @@ class Font:
         :rtype: dict
         """
         ttfont = self.get_ttfont()
-        return embedding_permissions.get_embedding_permissions(ttfont)
+        return _embedding_permissions.get_embedding_permissions(ttfont)
 
     def get_style_name(
         self,
@@ -752,7 +750,7 @@ class Font:
         :rtype: str
         """
         ttfont = self.get_ttfont()
-        return names.get_style_name(ttfont)
+        return _names.get_style_name(ttfont)
 
     def get_supported_languages(
         self,
@@ -775,7 +773,7 @@ class Font:
         :raises DataError: If it's not possible to find the 'best' unicode cmap dict.
         """
         ttfont = self.get_ttfont()
-        return support.get_supported_languages(
+        return _support.get_supported_languages(
             ttfont,
             coverage_threshold=coverage_threshold,
         )
@@ -809,7 +807,7 @@ class Font:
         :raises DataError: If it's not possible to find the 'best' unicode cmap dict.
         """
         ttfont = self.get_ttfont()
-        return support.get_supported_writing_systems(
+        return _support.get_supported_writing_systems(
             ttfont,
             coverage_threshold=coverage_threshold,
             include_uncommon=include_uncommon,
@@ -837,7 +835,7 @@ class Font:
         :raises DataError: If it's not possible to find the 'best' unicode cmap dict.
         """
         ttfont = self.get_ttfont()
-        return render.get_svg(ttfont, text=text, size=size)
+        return _render.get_svg(ttfont, text=text, size=size)
 
     def get_ttfont(
         self,
@@ -871,7 +869,7 @@ class Font:
         :rtype: dict or None
         """
         ttfont = self.get_ttfont()
-        return unicode.get_unicode_block_by_name(ttfont, name)
+        return _unicode.get_unicode_block_by_name(ttfont, name)
 
     def get_unicode_blocks(
         self,
@@ -890,7 +888,7 @@ class Font:
         :rtype: list of dicts
         """
         ttfont = self.get_ttfont()
-        return unicode.get_unicode_blocks(
+        return _unicode.get_unicode_blocks(
             ttfont,
             coverage_threshold=coverage_threshold,
         )
@@ -909,7 +907,7 @@ class Font:
         :rtype: dict or None
         """
         ttfont = self.get_ttfont()
-        return unicode.get_unicode_script_by_name(ttfont, name)
+        return _unicode.get_unicode_script_by_name(ttfont, name)
 
     def get_unicode_scripts(
         self,
@@ -928,7 +926,7 @@ class Font:
         :rtype: list of dicts
         """
         ttfont = self.get_ttfont()
-        return unicode.get_unicode_scripts(
+        return _unicode.get_unicode_scripts(
             ttfont,
             coverage_threshold=coverage_threshold,
         )
@@ -949,7 +947,7 @@ class Font:
         :rtype: list of dict or None
         """
         ttfont = self.get_ttfont()
-        return variable.get_variable_axes(ttfont, sort=sort)
+        return _variable.get_variable_axes(ttfont, sort=sort)
 
     def get_variable_axis_by_tag(
         self,
@@ -965,7 +963,7 @@ class Font:
         :rtype: dict or None
         """
         ttfont = self.get_ttfont()
-        return variable.get_variable_axis_by_tag(ttfont, tag)
+        return _variable.get_variable_axis_by_tag(ttfont, tag)
 
     def get_variable_axes_tags(
         self,
@@ -977,7 +975,7 @@ class Font:
         :rtype: list or None
         """
         ttfont = self.get_ttfont()
-        return variable.get_variable_axes_tags(ttfont)
+        return _variable.get_variable_axes_tags(ttfont)
 
     def get_variable_instances(
         self,
@@ -989,7 +987,7 @@ class Font:
         :rtype: list of dict or None
         """
         ttfont = self.get_ttfont()
-        return variable.get_variable_instances(ttfont)
+        return _variable.get_variable_instances(ttfont)
 
     def get_variable_instance_by_style_name(
         self,
@@ -1005,7 +1003,7 @@ class Font:
         :rtype: dict or None
         """
         ttfont = self.get_ttfont()
-        return variable.get_variable_instance_by_style_name(ttfont, style_name)
+        return _variable.get_variable_instance_by_style_name(ttfont, style_name)
 
     def get_variable_instance_closest_to_coordinates(
         self,
@@ -1023,7 +1021,7 @@ class Font:
         :rtype: dict or None
         """
         ttfont = self.get_ttfont()
-        return variable.get_variable_instance_closest_to_coordinates(
+        return _variable.get_variable_instance_closest_to_coordinates(
             ttfont, coordinates
         )
 
@@ -1037,7 +1035,7 @@ class Font:
         :rtype: float
         """
         ttfont = self.get_ttfont()
-        return files.get_version(ttfont)
+        return _files.get_version(ttfont)
 
     def get_vertical_metrics(
         self,
@@ -1052,7 +1050,7 @@ class Font:
         :rtype: dict
         """
         ttfont = self.get_ttfont()
-        return metrics.get_vertical_metrics(ttfont)
+        return _metrics.get_vertical_metrics(ttfont)
 
     def get_weight(
         self,
@@ -1064,7 +1062,7 @@ class Font:
         :rtype: dict or None
         """
         ttfont = self.get_ttfont()
-        return metrics.get_weight(ttfont)
+        return _metrics.get_weight(ttfont)
 
     def get_width(
         self,
@@ -1076,7 +1074,7 @@ class Font:
         :rtype: dict or None
         """
         ttfont = self.get_ttfont()
-        return metrics.get_width(ttfont)
+        return _metrics.get_width(ttfont)
 
     def is_bitmap(
         self,
@@ -1091,7 +1089,7 @@ class Font:
         :rtype: bool
         """
         ttfont = self.get_ttfont()
-        return bitmap.is_bitmap(ttfont)
+        return _bitmap.is_bitmap(ttfont)
 
     def is_color(
         self,
@@ -1103,7 +1101,7 @@ class Font:
         :rtype: bool
         """
         ttfont = self.get_ttfont()
-        return color.is_color(ttfont)
+        return _color.is_color(ttfont)
 
     def is_monospace(
         self,
@@ -1124,7 +1122,7 @@ class Font:
         :rtype: bool
         """
         ttfont = self.get_ttfont()
-        return monospace.is_monospace(ttfont, threshold=threshold)
+        return _monospace.is_monospace(ttfont, threshold=threshold)
 
     def is_pixel(
         self,
@@ -1146,7 +1144,7 @@ class Font:
         :rtype: bool
         """
         ttfont = self.get_ttfont()
-        return pixel.is_pixel(ttfont, threshold=threshold)
+        return _pixel.is_pixel(ttfont, threshold=threshold)
 
     def is_static(
         self,
@@ -1169,7 +1167,7 @@ class Font:
         :rtype: bool
         """
         ttfont = self.get_ttfont()
-        return variable.is_variable(ttfont)
+        return _variable.is_variable(ttfont)
 
     def rename(
         self,
@@ -1196,7 +1194,7 @@ class Font:
         :return: None
         """
         ttfont = self.get_ttfont()
-        names.rename(ttfont, family_name=family_name, style_name=style_name)
+        _names.rename(ttfont, family_name=family_name, style_name=style_name)
 
         if update_style_flags:
             self.set_style_flags_by_subfamily_name()
@@ -1223,7 +1221,7 @@ class Font:
             If `strict` is False, only checks for sanitizer errors.
         """
         ttfont = self.get_ttfont()
-        sanitize.sanitize(ttfont, strict=strict)
+        _sanitize.sanitize(ttfont, strict=strict)
 
     def save(
         self,
@@ -1484,7 +1482,7 @@ class Font:
         :raises ArgumentError: If class_id is invalid or subclass_id is specified but invalid.
         """
         ttfont = self.get_ttfont()
-        family_classification.set_family_classification(
+        _family_classification.set_family_classification(
             ttfont,
             class_id=class_id,
             subclass_id=subclass_id,
@@ -1519,7 +1517,7 @@ class Font:
         :type value: str
         """
         ttfont = self.get_ttfont()
-        names.set_name(ttfont, key, value)
+        _names.set_name(ttfont, key, value)
 
     def set_names(
         self,
@@ -1548,7 +1546,7 @@ class Font:
         :type value: bool
         """
         ttfont = self.get_ttfont()
-        style_flags.set_style_flag(ttfont, key, value)
+        _style_flags.set_style_flag(ttfont, key, value)
 
     def set_style_flags(
         self,
@@ -1585,7 +1583,7 @@ class Font:
         :raises ArgumentError: If a value is not a bool or None.
         """
         ttfont = self.get_ttfont()
-        style_flags.set_style_flags(
+        _style_flags.set_style_flags(
             ttfont,
             regular=regular,
             bold=bold,
@@ -1636,7 +1634,7 @@ class Font:
         :raises OperationError: If the OS/2 table is not available in the font.
         """
         ttfont = self.get_ttfont()
-        embedding_permissions.set_embedding_permissions(
+        _embedding_permissions.set_embedding_permissions(
             ttfont,
             installable=installable,
             restricted=restricted,
@@ -1655,7 +1653,7 @@ class Font:
         to allow this method to work properly.
         """
         ttfont = self.get_ttfont()
-        style_flags.set_style_flags_by_subfamily_name(ttfont)
+        _style_flags.set_style_flags_by_subfamily_name(ttfont)
 
     def set_style_name(
         self,
@@ -1685,7 +1683,7 @@ class Font:
             "win_ascent", "win_descent"
         """
         ttfont = self.get_ttfont()
-        metrics.set_vertical_metrics(ttfont, **vertical_metrics)
+        _metrics.set_vertical_metrics(ttfont, **vertical_metrics)
 
     def subset(
         self,
@@ -1710,7 +1708,7 @@ class Font:
         :type options: dict
         """
         ttfont = self.get_ttfont()
-        subset.subset(
+        _subset.subset(
             ttfont,
             unicodes=unicodes,
             glyphs=glyphs,
@@ -1744,7 +1742,7 @@ class Font:
         :raises ValueError: If the coordinates axes are all pinned
         """
         ttfont = self.get_ttfont()
-        variable.to_sliced_variable(ttfont, coordinates=coordinates, **options)
+        _variable.to_sliced_variable(ttfont, coordinates=coordinates, **options)
 
     def to_static(
         self,
@@ -1777,7 +1775,7 @@ class Font:
         :raises ValueError: If the coordinates axes are not all pinned
         """
         ttfont = self.get_ttfont()
-        variable.to_static(
+        _variable.to_static(
             ttfont,
             coordinates=coordinates,
             style_name=style_name,

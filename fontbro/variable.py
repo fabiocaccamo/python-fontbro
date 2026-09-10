@@ -7,7 +7,8 @@ from fontTools.ttLib import TTFont
 from fontTools.varLib import instancer
 from fontTools.varLib.instancer import OverlapMode
 
-from fontbro import names, style_flags
+from fontbro import names as _names
+from fontbro import style_flags as _style_flags
 from fontbro.exceptions import ArgumentError, OperationError
 from fontbro.math import get_euclidean_distance
 from fontbro.utils import slugify
@@ -364,13 +365,13 @@ def to_static(
 
     # update name records and style flags based on instance style name
     if instance and update_names:
-        names.rename(ttfont, style_name=instance["style_name"])
+        _names.rename(ttfont, style_name=instance["style_name"])
         if update_style_flags:
-            style_flags.set_style_flags_by_subfamily_name(ttfont)
+            _style_flags.set_style_flags_by_subfamily_name(ttfont)
 
     # update style flags based on coordinates values
     if update_style_flags:
         has_italic = (coordinates.get("ital", 0) or 0) == 1
         has_slant = (coordinates.get("slnt", 0) or 0) < 0
         if has_italic or has_slant:
-            style_flags.set_style_flags(ttfont, regular=False, italic=True)
+            _style_flags.set_style_flags(ttfont, regular=False, italic=True)

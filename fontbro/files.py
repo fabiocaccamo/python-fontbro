@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from fontTools.ttLib import TTFont
 
-from fontbro import names, variable
+from fontbro import names as _names
+from fontbro import variable as _variable
 from fontbro.exceptions import DataError
 from fontbro.utils import concat_names, remove_spaces
 
@@ -51,10 +52,10 @@ def get_filename(
     """
     Gets the filename to use for saving the given font to file-system.
     """
-    if variable.is_variable(ttfont):
-        family_name = names.get_family_name(ttfont)
+    if _variable.is_variable(ttfont):
+        family_name = _names.get_family_name(ttfont)
         family_name = remove_spaces(family_name)
-        subfamily_name = names.get_name(ttfont, names.NAME_SUBFAMILY_NAME) or ""
+        subfamily_name = _names.get_name(ttfont, _names.NAME_SUBFAMILY_NAME) or ""
         basename = family_name
         # append subfamily name
         if subfamily_name.lower() in ("bold", "bold italic", "italic"):
@@ -67,7 +68,7 @@ def get_filename(
                 basename = f"{basename}-{variable_suffix}"
         # append axis tags stringified suffix, eg. [wdth,wght,slnt]
         if variable_axes_tags:
-            axes = variable.get_variable_axes(ttfont, sort=True) or []
+            axes = _variable.get_variable_axes(ttfont, sort=True) or []
             axes_str_parts = []
             for axis in axes:
                 axis_tag = axis["tag"]
@@ -84,9 +85,9 @@ def get_filename(
             axes_str = f"[{axes_str}]"
             basename = f"{basename}{axes_str}"
     else:
-        family_name = names.get_family_name(ttfont)
+        family_name = _names.get_family_name(ttfont)
         family_name = remove_spaces(family_name)
-        style_name = names.get_style_name(ttfont)
+        style_name = _names.get_style_name(ttfont)
         style_name = remove_spaces(style_name)
         basename = concat_names(family_name, style_name, separator="-")
     extension = get_format(ttfont)
