@@ -24,6 +24,7 @@ from fontbro import (
     embedding_permissions,
     names,
     pixel,
+    style_flags,
     support,
     tables,
     unicode,
@@ -35,7 +36,6 @@ from fontbro.exceptions import (
     OperationError,
     SanitizationError,
 )
-from fontbro.flags import get_flag, set_flag
 from fontbro.subset import parse_unicodes
 from fontbro.utils import (
     concat_names,
@@ -184,27 +184,14 @@ class Font:
     )
 
     # Style Flags:
-    # https://docs.microsoft.com/en-us/typography/opentype/spec/head
-    # https://docs.microsoft.com/en-us/typography/opentype/spec/os2#fsselection
-    STYLE_FLAG_REGULAR: str = "regular"
-    STYLE_FLAG_BOLD: str = "bold"
-    STYLE_FLAG_ITALIC: str = "italic"
-    STYLE_FLAG_UNDERLINE: str = "underline"
-    STYLE_FLAG_OUTLINE: str = "outline"
-    STYLE_FLAG_SHADOW: str = "shadow"
-    STYLE_FLAG_CONDENSED: str = "condensed"
-    STYLE_FLAG_EXTENDED: str = "extended"
-    _STYLE_FLAGS: dict[str, dict[str, Any]] = {
-        STYLE_FLAG_REGULAR: {"bit_head_mac": None, "bit_os2_fs": 6},
-        STYLE_FLAG_BOLD: {"bit_head_mac": 0, "bit_os2_fs": 5},
-        STYLE_FLAG_ITALIC: {"bit_head_mac": 1, "bit_os2_fs": 0},
-        STYLE_FLAG_UNDERLINE: {"bit_head_mac": 2, "bit_os2_fs": None},
-        STYLE_FLAG_OUTLINE: {"bit_head_mac": 3, "bit_os2_fs": 3},
-        STYLE_FLAG_SHADOW: {"bit_head_mac": 4, "bit_os2_fs": None},
-        STYLE_FLAG_CONDENSED: {"bit_head_mac": 5, "bit_os2_fs": None},
-        STYLE_FLAG_EXTENDED: {"bit_head_mac": 6, "bit_os2_fs": None},
-    }
-    _STYLE_FLAGS_KEYS: list[str] = list(_STYLE_FLAGS.keys())
+    STYLE_FLAG_REGULAR: str = style_flags.STYLE_FLAG_REGULAR
+    STYLE_FLAG_BOLD: str = style_flags.STYLE_FLAG_BOLD
+    STYLE_FLAG_ITALIC: str = style_flags.STYLE_FLAG_ITALIC
+    STYLE_FLAG_UNDERLINE: str = style_flags.STYLE_FLAG_UNDERLINE
+    STYLE_FLAG_OUTLINE: str = style_flags.STYLE_FLAG_OUTLINE
+    STYLE_FLAG_SHADOW: str = style_flags.STYLE_FLAG_SHADOW
+    STYLE_FLAG_CONDENSED: str = style_flags.STYLE_FLAG_CONDENSED
+    STYLE_FLAG_EXTENDED: str = style_flags.STYLE_FLAG_EXTENDED
 
     # Vertical Metrics:
     VERTICAL_METRIC_UNITS_PER_EM: str = "units_per_em"
@@ -935,23 +922,8 @@ class Font:
         :returns: The style flag.
         :rtype: bool
         """
-        font = self.get_ttfont()
-        bits = self._STYLE_FLAGS[key]
-        bit_os2_fs = bits["bit_os2_fs"]
-        bit_head_mac = bits["bit_head_mac"]
-        # https://docs.microsoft.com/en-us/typography/opentype/spec/os2#fsselection
-        flag_os2_fs = False
-        if bit_os2_fs is not None:
-            os2 = font.get("OS/2")
-            if os2:
-                flag_os2_fs = get_flag(os2.fsSelection, bit_os2_fs)
-        # https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6head.html
-        flag_head_mac = False
-        if bit_head_mac is not None:
-            head = font.get("head")
-            if head:
-                flag_head_mac = get_flag(head.macStyle, bit_head_mac)
-        return flag_os2_fs or flag_head_mac
+        ttfont = self.get_ttfont()
+        return style_flags.get_style_flag(ttfont, key)
 
     def get_style_flags(
         self,
@@ -962,7 +934,8 @@ class Font:
         :returns: The dict representing the style flags.
         :rtype: dict
         """
-        return {key: self.get_style_flag(key) for key in self._STYLE_FLAGS_KEYS}
+        ttfont = self.get_ttfont()
+        return style_flags.get_style_flags(ttfont)
 
     def get_embedding_permissions(
         self,
@@ -1885,18 +1858,8 @@ class Font:
         :param value: The value
         :type value: bool
         """
-        font = self.get_ttfont()
-        bits = self._STYLE_FLAGS[key]
-        bit_os2_fs = bits["bit_os2_fs"]
-        bit_head_mac = bits["bit_head_mac"]
-        if bit_os2_fs is not None:
-            os2 = font.get("OS/2")
-            if os2:
-                os2.fsSelection = set_flag(os2.fsSelection, bit_os2_fs, value)
-        if bit_head_mac is not None:
-            head = font.get("head")
-            if head:
-                head.macStyle = set_flag(head.macStyle, bit_head_mac, value)
+        ttfont = self.get_ttfont()
+        style_flags.set_style_flag(ttfont, key, value)
 
     def set_style_flags(
         self,
@@ -1932,25 +1895,18 @@ class Font:
 
         :raises ArgumentError: If a value is not a bool or None.
         """
-        flags = {
-            "regular": regular,
-            "bold": bold,
-            "italic": italic,
-            "underline": underline,
-            "outline": outline,
-            "shadow": shadow,
-            "condensed": condensed,
-            "extended": extended,
-        }
-        # validate all values before setting any flag
-        for key, value in flags.items():
-            if value is not None and not isinstance(value, bool):
-                raise ArgumentError(
-                    f"Invalid '{key}' value, expected bool or None, got {value!r}."
-                )
-        for key, value in flags.items():
-            if value is not None:
-                self.set_style_flag(key, value)
+        ttfont = self.get_ttfont()
+        style_flags.set_style_flags(
+            ttfont,
+            regular=regular,
+            bold=bold,
+            italic=italic,
+            underline=underline,
+            outline=outline,
+            shadow=shadow,
+            condensed=condensed,
+            extended=extended,
+        )
 
     def set_embedding_permissions(
         self,
@@ -2009,15 +1965,8 @@ class Font:
         The subfamily values should be "regular", "italic", "bold" or "bold italic"
         to allow this method to work properly.
         """
-        subfamily_name = (self.get_name(Font.NAME_SUBFAMILY_NAME) or "").lower()
-        if subfamily_name == Font.STYLE_FLAG_REGULAR:
-            self.set_style_flags(regular=True, bold=False, italic=False)
-        elif subfamily_name == Font.STYLE_FLAG_BOLD:
-            self.set_style_flags(regular=False, bold=True, italic=False)
-        elif subfamily_name == Font.STYLE_FLAG_ITALIC:
-            self.set_style_flags(regular=False, bold=False, italic=True)
-        elif subfamily_name == f"{Font.STYLE_FLAG_BOLD} {Font.STYLE_FLAG_ITALIC}":
-            self.set_style_flags(regular=False, bold=True, italic=True)
+        ttfont = self.get_ttfont()
+        style_flags.set_style_flags_by_subfamily_name(ttfont)
 
     def set_style_name(
         self,
