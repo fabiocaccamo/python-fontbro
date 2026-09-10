@@ -39,3 +39,12 @@ class CharactersTestCase(AbstractTestCase):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
         chars_count = font.get_characters_count(ignore_blank=True)
         self.assertEqual(chars_count, 861)
+
+    def test_get_characters_count_with_ignore_blank_and_cff_outlines(self):
+        # regression: blank characters must be ignored also with CFF outlines
+        font = self._get_font("/Noto_Sans_TC/NotoSansTC-Regular.otf")
+        self.assertEqual(font.get_characters_count(), 20748)
+        self.assertEqual(font.get_characters_count(ignore_blank=True), 20743)
+        chars = {char["unicode"] for char in font.get_characters(ignore_blank=True)}
+        for blank_char in ["U+0020", "U+00A0", "U+2002", "U+2003", "U+3000"]:
+            self.assertNotIn(blank_char, chars)

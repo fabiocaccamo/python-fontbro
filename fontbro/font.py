@@ -31,6 +31,7 @@ from fontbro.exceptions import (
     SanitizationError,
 )
 from fontbro.flags import get_flag, set_flag
+from fontbro.glyphs import is_glyph_blank
 from fontbro.math import get_euclidean_distance
 from fontbro.subset import parse_unicodes
 from fontbro.utils import (
@@ -547,7 +548,7 @@ class Font:
         cmap = font.getBestCmap()
         if cmap is None:
             raise DataError("Unable to find the 'best' unicode cmap dict.")
-        glyfs = font.get("glyf")
+        glyphset = font.getGlyphSet() if ignore_blank else None
         for code, char_name in cmap.items():
             code_hex = f"{code:04X}"
             if 0 <= code < 0x110000:
@@ -558,10 +559,12 @@ class Font:
             char_code = ord(char)
             if char_code < 0x20 or char_code == 0x7F:
                 continue
-            if glyfs and ignore_blank:
-                glyf = glyfs.get(char_name)
-                if glyf and glyf.numberOfContours == 0:
-                    continue
+            if (
+                glyphset is not None
+                and char_name in glyphset
+                and is_glyph_blank(glyphset, char_name)
+            ):
+                continue
             unicode_name = unicodedata.name(char, None)
             unicode_block_name = unicodedata.block(code)
             unicode_script_tag = unicodedata.script(code)
