@@ -1,4 +1,5 @@
 from fontbro import Font
+from fontbro.exceptions import OperationError
 from tests import AbstractTestCase
 
 
@@ -11,5 +12,13 @@ class ContextManagerTestCase(AbstractTestCase):
         filepath = self._get_font_path("/Noto_Sans_TC/NotoSansTC-Regular.otf")
         with Font(filepath=filepath) as font:
             self.assertTrue(len(font.get_names()) > 0)
-        with self.assertRaises(KeyError):
+        with self.assertRaises(OperationError):
             font.get_characters_count()
+
+    def test_context_manager_with_explicit_close(self):
+        # closing the font inside the context manager must not raise on exit
+        filepath = self._get_font_path("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        with Font(filepath=filepath) as font:
+            font.close()
+        with self.assertRaises(OperationError):
+            font.get_names()

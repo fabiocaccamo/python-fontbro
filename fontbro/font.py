@@ -504,9 +504,12 @@ class Font:
     ) -> None:
         """
         Close the wrapped TTFont instance.
+        After closing, any operation on the font raises OperationError,
+        closing an already closed font does nothing.
         """
-        font = self.get_ttfont()
-        font.close()
+        # TTFont.close() is idempotent (it closes the reader and sets it to None)
+        if self._ttfont is not None:
+            self._ttfont.close()
 
     @classmethod
     def from_collection(
@@ -1277,7 +1280,14 @@ class Font:
 
         :returns: The TTFont instance.
         :rtype: TTFont
+
+        :raises OperationError: If the font has been closed.
         """
+        # all the font operations get the TTFont instance through this method,
+        # the TTFont can also be closed directly (bypassing this instance):
+        # when closed, fontTools sets its reader to None
+        if self._ttfont is None or self._ttfont.reader is None:
+            raise OperationError("Invalid operation, the font is closed.")
         return self._ttfont
 
     @classmethod
