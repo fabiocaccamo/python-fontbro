@@ -12,6 +12,87 @@ from fontbro.utils import concat_names, find_item, read_json
 _FAMILY_CLASSIFICATIONS: dict[str, list[dict[str, Any]]] = read_json(
     "data/family-classifications.json"
 )
+# fmt: off
+FAMILY_CLASSIFICATION_NO_CLASSIFICATION: dict[str, int] = {'class_id': 0}
+FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS: dict[str, int] = {'class_id': 1}
+FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_NO_CLASSIFICATION: dict[str, int] = {'class_id':1, 'subclass_id':0}
+FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_IBM_ROUNDED_LEGIBILITY: dict[str, int] = {'class_id':1, 'subclass_id':1}
+FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_GARALDE: dict[str, int] = {'class_id':1, 'subclass_id':2}
+FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_VENETIAN: dict[str, int] = {'class_id':1, 'subclass_id':3}
+FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_MODIFIED_VENETIAN: dict[str, int] = {'class_id':1, 'subclass_id':4}
+FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_DUTCH_MODERN: dict[str, int] = {'class_id':1, 'subclass_id':5}
+FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_DUTCH_TRADITIONAL: dict[str, int] = {'class_id':1, 'subclass_id':6}
+FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_CONTEMPORARY: dict[str, int] = {'class_id':1, 'subclass_id':7}
+FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_CALLIGRAPHIC: dict[str, int] = {'class_id':1, 'subclass_id':8}
+FAMILY_CLASSIFICATION_OLDSTYLE_SERIFS_MISCELLANEOUS: dict[str, int] = {'class_id':1, 'subclass_id':15}
+FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS: dict[str, int] = {'class_id': 2}
+FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_NO_CLASSIFICATION: dict[str, int] = {'class_id':2, 'subclass_id':0}
+FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_DIRECT_LINE: dict[str, int] = {'class_id':2, 'subclass_id':1}
+FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_SCRIPT: dict[str, int] = {'class_id':2, 'subclass_id':2}
+FAMILY_CLASSIFICATION_TRANSITIONAL_SERIFS_MISCELLANEOUS: dict[str, int] = {'class_id':2, 'subclass_id':15}
+FAMILY_CLASSIFICATION_MODERN_SERIFS: dict[str, int] = {'class_id': 3}
+FAMILY_CLASSIFICATION_MODERN_SERIFS_NO_CLASSIFICATION: dict[str, int] = {'class_id':3, 'subclass_id':0}
+FAMILY_CLASSIFICATION_MODERN_SERIFS_ITALIAN: dict[str, int] = {'class_id':3, 'subclass_id':1}
+FAMILY_CLASSIFICATION_MODERN_SERIFS_SCRIPT: dict[str, int] = {'class_id':3, 'subclass_id':2}
+FAMILY_CLASSIFICATION_MODERN_SERIFS_MISCELLANEOUS: dict[str, int] = {'class_id':3, 'subclass_id':15}
+FAMILY_CLASSIFICATION_CLARENDON_SERIFS: dict[str, int] = {'class_id': 4}
+FAMILY_CLASSIFICATION_CLARENDON_SERIFS_NO_CLASSIFICATION: dict[str, int] = {'class_id':4, 'subclass_id':0}
+FAMILY_CLASSIFICATION_CLARENDON_SERIFS_CLARENDON: dict[str, int] = {'class_id':4, 'subclass_id':1}
+FAMILY_CLASSIFICATION_CLARENDON_SERIFS_MODERN: dict[str, int] = {'class_id':4, 'subclass_id':2}
+FAMILY_CLASSIFICATION_CLARENDON_SERIFS_TRADITIONAL: dict[str, int] = {'class_id':4, 'subclass_id':3}
+FAMILY_CLASSIFICATION_CLARENDON_SERIFS_NEWSPAPER: dict[str, int] = {'class_id':4, 'subclass_id':4}
+FAMILY_CLASSIFICATION_CLARENDON_SERIFS_STUB_SERIF: dict[str, int] = {'class_id':4, 'subclass_id':5}
+FAMILY_CLASSIFICATION_CLARENDON_SERIFS_MONOTONE: dict[str, int] = {'class_id':4, 'subclass_id':6}
+FAMILY_CLASSIFICATION_CLARENDON_SERIFS_TYPEWRITER: dict[str, int] = {'class_id':4, 'subclass_id':7}
+FAMILY_CLASSIFICATION_CLARENDON_SERIFS_MISCELLANEOUS: dict[str, int] = {'class_id':4, 'subclass_id':15}
+FAMILY_CLASSIFICATION_SLAB_SERIFS: dict[str, int] = {'class_id': 5}
+FAMILY_CLASSIFICATION_SLAB_SERIFS_NO_CLASSIFICATION: dict[str, int] = {'class_id':5, 'subclass_id':0}
+FAMILY_CLASSIFICATION_SLAB_SERIFS_MONOTONE: dict[str, int] = {'class_id':5, 'subclass_id':1}
+FAMILY_CLASSIFICATION_SLAB_SERIFS_HUMANIST: dict[str, int] = {'class_id':5, 'subclass_id':2}
+FAMILY_CLASSIFICATION_SLAB_SERIFS_GEOMETRIC: dict[str, int] = {'class_id':5, 'subclass_id':3}
+FAMILY_CLASSIFICATION_SLAB_SERIFS_SWISS: dict[str, int] = {'class_id':5, 'subclass_id':4}
+FAMILY_CLASSIFICATION_SLAB_SERIFS_TYPEWRITER: dict[str, int] = {'class_id':5, 'subclass_id':5}
+FAMILY_CLASSIFICATION_SLAB_SERIFS_MISCELLANEOUS: dict[str, int] = {'class_id':5, 'subclass_id':15}
+FAMILY_CLASSIFICATION_FREEFORM_SERIFS: dict[str, int] = {'class_id': 7}
+FAMILY_CLASSIFICATION_FREEFORM_SERIFS_NO_CLASSIFICATION: dict[str, int] = {'class_id':7, 'subclass_id':0}
+FAMILY_CLASSIFICATION_FREEFORM_SERIFS_MODERN: dict[str, int] = {'class_id':7, 'subclass_id':1}
+FAMILY_CLASSIFICATION_FREEFORM_SERIFS_MISCELLANEOUS: dict[str, int] = {'class_id':7, 'subclass_id':15}
+FAMILY_CLASSIFICATION_SANS_SERIF: dict[str, int] = {'class_id': 8}
+FAMILY_CLASSIFICATION_SANS_SERIF_NO_CLASSIFICATION: dict[str, int] = {'class_id':8, 'subclass_id':0}
+FAMILY_CLASSIFICATION_SANS_SERIF_IBM_NEO_GROTESQUE_GOTHIC: dict[str, int] = {'class_id':8, 'subclass_id':1}
+FAMILY_CLASSIFICATION_SANS_SERIF_HUMANIST: dict[str, int] = {'class_id':8, 'subclass_id':2}
+FAMILY_CLASSIFICATION_SANS_SERIF_LOW_X_ROUND_GEOMETRIC: dict[str, int] = {'class_id':8, 'subclass_id':3}
+FAMILY_CLASSIFICATION_SANS_SERIF_HIGH_X_ROUND_GEOMETRIC: dict[str, int] = {'class_id':8, 'subclass_id':4}
+FAMILY_CLASSIFICATION_SANS_SERIF_NEO_GROTESQUE_GOTHIC: dict[str, int] = {'class_id':8, 'subclass_id':5}
+FAMILY_CLASSIFICATION_SANS_SERIF_MODIFIED_NEO_GROTESQUE_GOTHIC: dict[str, int] = {'class_id':8, 'subclass_id':6}
+FAMILY_CLASSIFICATION_SANS_SERIF_TYPEWRITER_GOTHIC: dict[str, int] = {'class_id':8, 'subclass_id':9}
+FAMILY_CLASSIFICATION_SANS_SERIF_MATRIX: dict[str, int] = {'class_id':8, 'subclass_id':10}
+FAMILY_CLASSIFICATION_SANS_SERIF_MISCELLANEOUS: dict[str, int] = {'class_id':8, 'subclass_id':15}
+FAMILY_CLASSIFICATION_ORNAMENTALS: dict[str, int] = {'class_id': 9}
+FAMILY_CLASSIFICATION_ORNAMENTALS_NO_CLASSIFICATION: dict[str, int] = {'class_id':9, 'subclass_id':0}
+FAMILY_CLASSIFICATION_ORNAMENTALS_ENGRAVER: dict[str, int] = {'class_id':9, 'subclass_id':1}
+FAMILY_CLASSIFICATION_ORNAMENTALS_BLACK_LETTER: dict[str, int] = {'class_id':9, 'subclass_id':2}
+FAMILY_CLASSIFICATION_ORNAMENTALS_DECORATIVE: dict[str, int] = {'class_id':9, 'subclass_id':3}
+FAMILY_CLASSIFICATION_ORNAMENTALS_THREE_DIMENSIONAL: dict[str, int] = {'class_id':9, 'subclass_id':4}
+FAMILY_CLASSIFICATION_ORNAMENTALS_MISCELLANEOUS: dict[str, int] = {'class_id':9, 'subclass_id':15}
+FAMILY_CLASSIFICATION_SCRIPTS: dict[str, int] = {'class_id': 10}
+FAMILY_CLASSIFICATION_SCRIPTS_NO_CLASSIFICATION: dict[str, int] = {'class_id':10, 'subclass_id':0}
+FAMILY_CLASSIFICATION_SCRIPTS_UNCIAL: dict[str, int] = {'class_id':10, 'subclass_id':1}
+FAMILY_CLASSIFICATION_SCRIPTS_BRUSH_JOINED: dict[str, int] = {'class_id':10, 'subclass_id':2}
+FAMILY_CLASSIFICATION_SCRIPTS_FORMAL_JOINED: dict[str, int] = {'class_id':10, 'subclass_id':3}
+FAMILY_CLASSIFICATION_SCRIPTS_MONOTONE_JOINED: dict[str, int] = {'class_id':10, 'subclass_id':4}
+FAMILY_CLASSIFICATION_SCRIPTS_CALLIGRAPHIC: dict[str, int] = {'class_id':10, 'subclass_id':5}
+FAMILY_CLASSIFICATION_SCRIPTS_BRUSH_UNJOINED: dict[str, int] = {'class_id':10, 'subclass_id':6}
+FAMILY_CLASSIFICATION_SCRIPTS_FORMAL_UNJOINED: dict[str, int] = {'class_id':10, 'subclass_id':7}
+FAMILY_CLASSIFICATION_SCRIPTS_MONOTONE_UNJOINED: dict[str, int] = {'class_id':10, 'subclass_id':8}
+FAMILY_CLASSIFICATION_SCRIPTS_MISCELLANEOUS: dict[str, int] = {'class_id':10, 'subclass_id':15}
+FAMILY_CLASSIFICATION_SYMBOLIC: dict[str, int] = {'class_id': 12}
+FAMILY_CLASSIFICATION_SYMBOLIC_NO_CLASSIFICATION: dict[str, int] = {'class_id':12, 'subclass_id':0}
+FAMILY_CLASSIFICATION_SYMBOLIC_MIXED_SERIF: dict[str, int] = {'class_id':12, 'subclass_id':3}
+FAMILY_CLASSIFICATION_SYMBOLIC_OLDSTYLE_SERIF: dict[str, int] = {'class_id':12, 'subclass_id':6}
+FAMILY_CLASSIFICATION_SYMBOLIC_NEO_GROTESQUE_SANS_SERIF: dict[str, int] = {'class_id':12, 'subclass_id':7}
+FAMILY_CLASSIFICATION_SYMBOLIC_MISCELLANEOUS: dict[str, int] = {'class_id':12, 'subclass_id':15}
+# fmt: on
 
 
 def _get_family_classification_items(
