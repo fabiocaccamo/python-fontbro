@@ -1,6 +1,7 @@
-from fontTools.ttLib import newTable
+from fontTools.ttLib import TTFont, newTable
 
 from fontbro import Font
+from fontbro.tables import get_tables, get_tables_tags
 from tests import AbstractTestCase
 
 
@@ -97,6 +98,27 @@ class TablesTestCase(AbstractTestCase):
             font.get_tables_tags(include_unknown=False),
         )
         self.assertNotIn("TSI0", [table["tag"] for table in known_tables])
+
+    def test_tables_module_with_ttfont(self):
+        # the module functions work directly on a fontTools TTFont
+        ttfont = TTFont(
+            self._get_font_path("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        )
+        ttfont["TSI0"] = newTable("TSI0")
+
+        tags = get_tables_tags(ttfont)
+        self.assertNotIn("GlyphOrder", tags)
+        self.assertIn("TSI0", tags)
+        self.assertNotIn("TSI0", get_tables_tags(ttfont, include_unknown=False))
+
+        tables = {table["tag"]: table for table in get_tables(ttfont)}
+        self.assertEqual(tables["head"]["name"], "Header")
+        self.assertEqual(tables["head"]["length"], 54)
+        self.assertIsInstance(tables["head"]["offset"], int)
+        self.assertEqual(
+            [table["tag"] for table in get_tables(ttfont, include_unknown=False)],
+            get_tables_tags(ttfont, include_unknown=False),
+        )
 
     def test_get_tables_with_woff(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
