@@ -23,7 +23,7 @@ _STYLE_FLAGS: dict[str, dict[str, Any]] = {
     STYLE_FLAG_REGULAR: {"bit_head_mac": None, "bit_os2_fs": 6},
     STYLE_FLAG_BOLD: {"bit_head_mac": 0, "bit_os2_fs": 5},
     STYLE_FLAG_ITALIC: {"bit_head_mac": 1, "bit_os2_fs": 0},
-    STYLE_FLAG_UNDERLINE: {"bit_head_mac": 2, "bit_os2_fs": None},
+    STYLE_FLAG_UNDERLINE: {"bit_head_mac": 2, "bit_os2_fs": 1},
     STYLE_FLAG_OUTLINE: {"bit_head_mac": 3, "bit_os2_fs": 3},
     STYLE_FLAG_SHADOW: {"bit_head_mac": 4, "bit_os2_fs": None},
     STYLE_FLAG_CONDENSED: {"bit_head_mac": 5, "bit_os2_fs": None},

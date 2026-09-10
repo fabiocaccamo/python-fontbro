@@ -118,6 +118,27 @@ class StyleFlagsTestCase(AbstractTestCase):
         font.set_style_flags(regular=True)
         self.assertTrue(font.get_style_flags()["regular"])
 
+    def test_underline_flag_uses_os2_fs_selection(self):
+        # regression: the underline flag is also OS/2.fsSelection bit 1 (UNDERSCORE)
+        # https://learn.microsoft.com/en-us/typography/opentype/spec/os2#fsselection
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        ttfont = font.get_ttfont()
+        self.assertFalse(font.get_style_flags()["underline"])
+
+        # set: both OS/2.fsSelection bit 1 and head.macStyle bit 2 are set
+        font.set_style_flags(underline=True)
+        self.assertTrue(ttfont["OS/2"].fsSelection & (1 << 1))
+        self.assertTrue(ttfont["head"].macStyle & (1 << 2))
+
+        # unset: both bits are cleared
+        font.set_style_flags(underline=False)
+        self.assertFalse(ttfont["OS/2"].fsSelection & (1 << 1))
+        self.assertFalse(ttfont["head"].macStyle & (1 << 2))
+
+        # get: the OS/2.fsSelection bit alone is enough
+        ttfont["OS/2"].fsSelection |= 1 << 1
+        self.assertTrue(font.get_style_flags()["underline"])
+
     def test_set_style_flags_with_invalid_value(self):
         # regression: invalid values must raise ArgumentError (not rely on assert,
         # stripped with python -O) before setting any flag
