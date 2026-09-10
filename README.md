@@ -745,15 +745,20 @@ color = font.is_color()
 #### `is_monospace`
 ```python
 """
-Determines if the font is a monospace font.
+Determines if the font is a monospace font (same criteria used by Fontbakery):
+if the font covers at least 80% of the printable ascii characters, at least
+threshold of their glyphs must have the same width, otherwise the glyphs of
+the characters (excluding marks) must have at most 2 different widths
+(eg. cjk monospace fonts with half-width and full-width characters).
+Zero-width glyphs are ignored.
 
-:param threshold: The threshold (0.0 <= n <= 1.0) of glyphs with the same width to consider the font as monospace.
+:param threshold: The threshold (0.0 <= n <= 1.0) of printable ascii characters glyphs with the same width to consider the font as monospace.
 :type threshold: float
 
 :returns: True if monospace font, False otherwise.
 :rtype: bool
 """
-mono = font.is_monospace(threshold=0.85)
+mono = font.is_monospace(threshold=0.8)
 ```
 
 #### `is_pixel`
