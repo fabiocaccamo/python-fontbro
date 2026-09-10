@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Add `get_tables` to expose structured table metadata, including tag, name, length, and offset.
 -   Add `is_bitmap` method to detect bitmap fonts (glyphs stored only as monochrome bitmaps, without outlines).
 -   Add `is_pixel` method to detect pixel fonts (glyphs outlines drawn with pixels aligned to a grid).
+-   Fix `get_glyphs` crash with CFF fonts.
+-   Fix `get_width` name for width class 9 (`Ultra-expanded`).
+-   Fix `get_characters` `ignore_blank` option with CFF fonts.
 -   Fix `get_svg` crash with fonts without unicode cmap.
 -   Fix `set_style_flags` validation, raise `ArgumentError` instead of using `assert`.
 
