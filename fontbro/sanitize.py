@@ -38,5 +38,5 @@ def sanitize(
             warnings = result.stdout
             success_message = "File sanitized successfully!\n"
             if warnings != success_message:
-                warnings = warnings.rstrip(success_message)
+                warnings = warnings.removesuffix(success_message)
                 raise SanitizationError(f"OpenType Sanitizer warnings: \n{warnings}")

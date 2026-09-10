@@ -1,8 +1,11 @@
 import logging
+import subprocess
+from unittest import mock
 
 import fsutil
 
 from fontbro import Font
+from fontbro.exceptions import SanitizationError
 from tests import AbstractTestCase
 
 
@@ -90,3 +93,23 @@ class SanitizeTestCase(AbstractTestCase):
             strict=True,
             expected_errors_count=0,
         )
+
+    def test_sanitize_strict_warnings_message(self):
+        # regression: the warnings must not be truncated when removing the
+        # sanitizer success message (str.rstrip removes any of its characters)
+        result = subprocess.CompletedProcess(
+            args=[],
+            returncode=0,
+            stdout="WARNING: CFF: bad table\nFile sanitized successfully!\n",
+            stderr="",
+        )
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        with mock.patch("fontbro.sanitize.ots.sanitize", return_value=result):
+            with self.assertRaises(SanitizationError) as context:
+                font.sanitize(strict=True)
+            self.assertEqual(
+                str(context.exception),
+                "OpenType Sanitizer warnings: \nWARNING: CFF: bad table\n",
+            )
+            # warnings are ignored when not strict
+            font.sanitize(strict=False)
