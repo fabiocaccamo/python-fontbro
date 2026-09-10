@@ -26,6 +26,9 @@ repos:
       - id: mypy
         args: [--config-file=pyproject.toml]
         exclude: "tests"
+        # check the whole package (pyproject.toml "files"), because with
+        # follow_imports = "skip" the non-passed modules would be typed as Any
+        pass_filenames: false
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0

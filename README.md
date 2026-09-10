@@ -166,11 +166,15 @@ chars_count = font.get_characters_count(ignore_blank=False)
 ```python
 """
 Gets the embedding permissions from the OS/2 fsType field.
+"installable" is True only when none of "restricted", "preview_and_print"
+and "editable" is set, since they are mutually exclusive usage permissions.
 
 :returns: A dictionary representing the embedding permission flags.
 :rtype: dict
 """
 permissions = font.get_embedding_permissions()
+# {'installable': True, 'restricted': False, 'preview_and_print': False,
+#  'editable': False, 'no_subsetting': False, 'bitmap_embedding_only': False}
 ```
 
 #### `get_family_classification`
@@ -370,17 +374,6 @@ Gets the names records mapped by their property name.
 names = font.get_names()
 ```
 
-#### `get_embedding_permissions`
-```python
-"""
-Gets the embedding permissions from the OS/2 fsType field.
-
-:returns: A dictionary representing the embedding permission flags.
-:rtype: dict
-"""
-permissions = font.get_embedding_permissions()
-```
-
 #### `get_style_flag`
 ```python
 """
@@ -486,6 +479,12 @@ svg_str = font.get_svg(text="Hello!", size=48)
 ```python
 """
 Gets the table metadata present in the font.
+The length is the uncompressed table length (also for woff/woff2 fonts),
+the offset is the position of the table data in the loaded font file,
+it's None for woff2 fonts because tables are stored in a single
+compressed stream and have no individual offset in the file.
+Both length and offset are read from the originally loaded font file,
+so they will be None for tables added in-memory that haven't been saved.
 
 :returns: The list of table metadata dictionaries.
 :rtype: list[dict]
@@ -503,7 +502,7 @@ Gets the tags of the tables present in the font.
 :rtype: list[str]
 """
 tables = font.get_tables_tags()
-# ['GlyphOrder', 'head', 'hhea', 'maxp', 'OS/2', ...]
+# ['head', 'hhea', 'maxp', 'OS/2', ...]
 ```
 
 #### `get_ttfont`
@@ -884,8 +883,14 @@ saved_fonts = font.save_variable_instances(dirpath, woff2=True, woff=True, overw
 """
 Sets the embedding permissions in the OS/2 fsType field.
 Keys set to None will be ignored.
+"installable", "restricted", "preview_and_print" and "editable" are
+mutually exclusive usage permissions: exactly one of them is always
+in effect, so setting one of them to True replaces the current one,
+while setting the current one to False makes the font installable.
+The fsType field is left untouched if any argument is invalid.
 
-:param installable: The installable embedding permission flag.
+:param installable: The installable embedding permission flag,
+    it can be False only if another usage permission is in effect.
 :type installable: bool or None
 :param restricted: The restricted license embedding permission flag.
 :type restricted: bool or None
@@ -895,16 +900,20 @@ Keys set to None will be ignored.
 :type editable: bool or None
 :param no_subsetting: The no subsetting embedding permission flag.
 :type no_subsetting: bool or None
-:param no_layout: The no layout embedding permission flag.
-:type no_layout: bool or None
+:param bitmap_embedding_only: The bitmap-only embedding permission flag.
+:type bitmap_embedding_only: bool or None
+
+:raises ArgumentError: If a value is not a bool or None, if more than one
+    of the mutually exclusive usage permissions is set to True, or if
+    installable is set to False while no other usage permission is in effect.
+:raises OperationError: If the OS/2 table is not available in the font.
 """
 font.set_embedding_permissions(
-    installable=True,
     restricted=False,
     preview_and_print=True,
     editable=False,
     no_subsetting=False,
-    no_layout=False,
+    bitmap_embedding_only=False,
 )
 ```
 
@@ -960,35 +969,6 @@ font.set_names(names={
     Font.NAME_FAMILY_NAME: "Family Name Renamed",
     Font.NAME_SUBFAMILY_NAME: "Regular Renamed",
 })
-```
-
-#### `set_embedding_permissions`
-```python
-"""
-Sets the embedding permissions in the OS/2 fsType field.
-Keys set to None will be ignored.
-
-:param installable: The installable embedding permission flag.
-:type installable: bool or None
-:param restricted: The restricted license embedding permission flag.
-:type restricted: bool or None
-:param preview_and_print: The preview and print embedding permission flag.
-:type preview_and_print: bool or None
-:param editable: The editable embedding permission flag.
-:type editable: bool or None
-:param no_subsetting: The no subsetting embedding permission flag.
-:type no_subsetting: bool or None
-:param no_layout: The no layout embedding permission flag.
-:type no_layout: bool or None
-"""
-font.set_embedding_permissions(
-    installable=True,
-    restricted=False,
-    preview_and_print=True,
-    editable=False,
-    no_subsetting=False,
-    no_layout=False,
-)
 ```
 
 #### `set_style_flag`

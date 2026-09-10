@@ -23,7 +23,7 @@ from fontTools.varLib import instancer
 from fontTools.varLib.instancer import OverlapMode
 from PIL import Image, ImageDraw, ImageFont
 
-from fontbro import support
+from fontbro import embedding_permissions, support
 from fontbro.exceptions import (
     ArgumentError,
     DataError,
@@ -233,18 +233,6 @@ class Font:
         STYLE_FLAG_EXTENDED: {"bit_head_mac": 6, "bit_os2_fs": None},
     }
     _STYLE_FLAGS_KEYS: list[str] = list(_STYLE_FLAGS.keys())
-
-    # Embedding Permissions:
-    # https://learn.microsoft.com/en-us/typography/opentype/spec/os2#fstype
-    _EMBEDDING_PERMISSIONS: dict[str, int] = {
-        "installable": 0,
-        "restricted": 1,
-        "preview_and_print": 2,
-        "editable": 3,
-        "no_subsetting": 4,
-        "no_layout": 5,
-    }
-    _EMBEDDING_PERMISSIONS_KEYS: list[str] = list(_EMBEDDING_PERMISSIONS.keys())
 
     _TABLE_NAMES_BY_TAG: dict[str, str] = {
         "cmap": "Character Map",
@@ -1146,18 +1134,14 @@ class Font:
     ) -> dict[str, bool]:
         """
         Gets the embedding permissions from the OS/2 fsType field.
+        "installable" is True only when none of "restricted", "preview_and_print"
+        and "editable" is set, since they are mutually exclusive usage permissions.
 
         :returns: A dictionary representing the embedding permission flags.
         :rtype: dict
         """
-        font = self.get_ttfont()
-        os2 = font.get("OS/2")
-        if not os2:
-            return dict.fromkeys(self._EMBEDDING_PERMISSIONS_KEYS, False)
-        return {
-            key: get_flag(os2.fsType, bit)
-            for key, bit in self._EMBEDDING_PERMISSIONS.items()
-        }
+        ttfont = self.get_ttfont()
+        return embedding_permissions.get_embedding_permissions(ttfont)
 
     def get_style_name(
         self,
@@ -2277,13 +2261,19 @@ class Font:
         preview_and_print: bool | None = None,
         editable: bool | None = None,
         no_subsetting: bool | None = None,
-        no_layout: bool | None = None,
+        bitmap_embedding_only: bool | None = None,
     ) -> None:
         """
         Sets the embedding permissions in the OS/2 fsType field.
         Keys set to None will be ignored.
+        "installable", "restricted", "preview_and_print" and "editable" are
+        mutually exclusive usage permissions: exactly one of them is always
+        in effect, so setting one of them to True replaces the current one,
+        while setting the current one to False makes the font installable.
+        The fsType field is left untouched if any argument is invalid.
 
-        :param installable: The installable embedding permission flag.
+        :param installable: The installable embedding permission flag,
+            it can be False only if another usage permission is in effect.
         :type installable: bool or None
         :param restricted: The restricted license embedding permission flag.
         :type restricted: bool or None
@@ -2293,28 +2283,24 @@ class Font:
         :type editable: bool or None
         :param no_subsetting: The no subsetting embedding permission flag.
         :type no_subsetting: bool or None
-        :param no_layout: The no layout embedding permission flag.
-        :type no_layout: bool or None
-        """
-        font = self.get_ttfont()
-        os2 = font.get("OS/2")
-        if not os2:
-            return
+        :param bitmap_embedding_only: The bitmap-only embedding permission flag.
+        :type bitmap_embedding_only: bool or None
 
-        permissions = {
-            "installable": installable,
-            "restricted": restricted,
-            "preview_and_print": preview_and_print,
-            "editable": editable,
-            "no_subsetting": no_subsetting,
-            "no_layout": no_layout,
-        }
-        for key, value in permissions.items():
-            if value is not None:
-                assert isinstance(value, bool)
-                os2.fsType = set_flag(
-                    os2.fsType, self._EMBEDDING_PERMISSIONS[key], value
-                )
+        :raises ArgumentError: If a value is not a bool or None, if more than one
+            of the mutually exclusive usage permissions is set to True, or if
+            installable is set to False while no other usage permission is in effect.
+        :raises OperationError: If the OS/2 table is not available in the font.
+        """
+        ttfont = self.get_ttfont()
+        embedding_permissions.set_embedding_permissions(
+            ttfont,
+            installable=installable,
+            restricted=restricted,
+            preview_and_print=preview_and_print,
+            editable=editable,
+            no_subsetting=no_subsetting,
+            bitmap_embedding_only=bitmap_embedding_only,
+        )
 
     def set_style_flags_by_subfamily_name(
         self,
