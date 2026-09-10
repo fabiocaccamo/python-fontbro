@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import math
 import os
 import tempfile
 from collections import Counter
@@ -11,21 +10,21 @@ from typing import IO, Any, cast
 
 import fsutil
 import ots
-from fontTools.pens.svgPathPen import SVGPathPen
 from fontTools.subset import Options as SubsetterOptions
 from fontTools.subset import Subsetter
 from fontTools.ttLib import TTCollection, TTFont, TTLibError
 from fontTools.varLib import instancer
 from fontTools.varLib.instancer import OverlapMode
-from PIL import Image, ImageDraw, ImageFont
 
 from fontbro import (
     bitmap,
     embedding_permissions,
     family_classification,
+    fingerprint,
     metrics,
     names,
     pixel,
+    render,
     style_flags,
     support,
     tables,
@@ -561,19 +560,8 @@ class Font:
         :returns: The fingerprint hash.
         :rtype: imagehash.ImageHash
         """
-        import imagehash
-
-        text = text or "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-
-        img = self.get_image(text=text, size=72)
-        img_size = img.size
-        img = img.resize((img_size[0] // 2, img_size[1] // 2))
-        img = img.resize((img_size[0], img_size[1]), Image.Resampling.NEAREST)
-        img = img.quantize(colors=8)
-        # img.show()
-
-        hash = imagehash.average_hash(img, hash_size=64)
-        return hash
+        ttfont = self.get_ttfont()
+        return fingerprint.get_fingerprint(ttfont, text=text)
 
     def get_fingerprint_match(  # type: ignore
         self,
@@ -608,12 +596,12 @@ class Font:
                 "Invalid other filepath/font: expected str or Font instance, "
                 f"found '{other_type}'."
             )
-        hash = self.get_fingerprint(text=text)
-        other_hash = other_font.get_fingerprint(text=text)
-        diff = hash - other_hash
-        match = diff <= tolerance
-        match = match and self.is_variable() == other_font.is_variable()
-        return (match, diff, hash, other_hash)
+        return fingerprint.get_fingerprint_match(
+            self.get_ttfont(),
+            other_font.get_ttfont(),
+            tolerance=tolerance,
+            text=text,
+        )
 
     def get_format(
         self,
@@ -706,20 +694,14 @@ class Font:
         :returns: The image.
         :rtype: PIL.Image
         """
-        with tempfile.TemporaryDirectory() as dest:
-            filepath = self.save(dest)
-            img = Image.new("RGBA", (2, 2), background_color)
-            draw = ImageDraw.Draw(img)
-            img_font = ImageFont.truetype(filepath, size)
-            img_bbox = draw.textbbox((0, 0), text, font=img_font)
-            img_width = img_bbox[2] - img_bbox[0]
-            img_height = img_bbox[3] - img_bbox[1]
-            img_size = (img_width, img_height)
-            img = img.resize(img_size)
-            draw = ImageDraw.Draw(img)
-            draw.text((-img_bbox[0], -img_bbox[1]), text, font=img_font, fill=color)
-            del img_font
-            return img
+        ttfont = self.get_ttfont()
+        return render.get_image(
+            ttfont,
+            text=text,
+            size=size,
+            color=color,
+            background_color=background_color,
+        )
 
     def get_italic_angle(
         self,
@@ -944,42 +926,8 @@ class Font:
 
         :raises DataError: If it's not possible to find the 'best' unicode cmap dict.
         """
-        font = self.get_ttfont()
-
-        # get font metrics
-        units_per_em = font["head"].unitsPerEm
-        scale = size / units_per_em
-        hhea = font["hhea"]
-        ascent = hhea.ascent * scale
-        descent = hhea.descent * scale
-        width = 0
-        height = ascent - descent
-
-        # get glyph set and character map
-        glyphset = font.getGlyphSet()
-        cmap = unicode.get_best_cmap_or_raise(font)
-
-        # generate svg path for each glyph in text
-        glyphs: list[str] = list(filter(None, [cmap.get(ord(char)) for char in text]))
-        paths = ""
-        for glyph_name in glyphs:
-            glyph = glyphset[glyph_name]
-            pen = SVGPathPen(glyphset)
-            glyph.draw(pen)
-            commands = pen.getCommands()
-            transform = f"translate({width:.2f} {ascent:.2f}) scale({scale} -{scale})"
-            paths += f"""<path d="{commands}" transform="{transform}" />"""
-            width += glyph.width * scale
-
-        # round width and height
-        width = int(math.ceil(width))
-        height = int(math.ceil(height))
-        viewbox = f"0 0 {width} {height}"
-        xmlns = "http://www.w3.org/2000/svg"
-
-        # generate svg string
-        svg_str = f"""<svg width="{width}" height="{height}" viewBox="{viewbox}" xmlns="{xmlns}">{paths}</svg>"""
-        return svg_str
+        ttfont = self.get_ttfont()
+        return render.get_svg(ttfont, text=text, size=size)
 
     def get_ttfont(
         self,
