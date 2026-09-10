@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.28.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.28.0) - 2026-09-11
 -   Add `get_supported_languages` and `get_supported_writing_systems` methods based on the Google Fonts languages dataset.
 -   Add `get_embedding_permissions` and `set_embedding_permissions` methods for OS/2 `fsType` embedding flags.
 -   Add `get_tables_tags` to list the table tags in the font.
@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Fix `underline` style flag ignoring the `OS/2.fsSelection` bit 1 (`UNDERSCORE`).
 -   Fix `sanitize` failing with valid fonts when the font format can't be detected (eg. `OTTO` version without `CFF ` table).
 -   Fix `sanitize` truncating the warnings in the `strict` mode error message.
+-   Bump requirements and `pre-commit` hooks.
 
 ## [0.27.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.27.0) - 2026-04-12
 -   Add `save_as_ttf` method for saving fonts without web compression (woff/woff2 flavor).
