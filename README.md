@@ -1099,7 +1099,7 @@ font.set_style_name(name="Bold Italic")
 """
 Sets the vertical metrics.
 
-:param metrics: Keyword arguments representing the vertical metrics that can be set:
+:param vertical_metrics: Keyword arguments representing the vertical metrics that can be set:
     "units_per_em", "y_max", "y_min", "ascent", "descent", "line_gap",
     "typo_ascender", "typo_descender", "typo_line_gap", "cap_height", "x_height",
     "win_ascent", "win_descent"
