@@ -40,6 +40,14 @@ class InstantiationTestCase(AbstractTestCase):
         # weight axis pinned to default value
         self.assertEqual(font.get_weight()["value"], 100)
 
+    def test_to_static_does_not_modify_coordinates(self):
+        # regression: the coordinates passed by the caller must not be modified
+        # (axes not defined were added with None value)
+        font = self._get_variable_font()
+        coordinates = {"wdth": 110}
+        font.to_static(coordinates=coordinates)
+        self.assertEqual(coordinates, {"wdth": 110})
+
     def test_to_static_with_coordinates_for_slicing(self):
         font = self._get_variable_font()
         with self.assertRaises(ValueError):
@@ -306,6 +314,16 @@ class InstantiationTestCase(AbstractTestCase):
             },
         ]
         self.assertEqual(font.get_variable_axes(), expected_axes)
+
+    def test_to_sliced_variable_does_not_modify_coordinates(self):
+        # regression: the coordinates passed by the caller must not be modified
+        # (list and dict values were converted to tuples)
+        font = self._get_variable_font()
+        coordinates = {"wght": [100, 400], "wdth": {"min": 100, "max": 110}}
+        font.to_sliced_variable(coordinates=coordinates)
+        self.assertEqual(
+            coordinates, {"wght": [100, 400], "wdth": {"min": 100, "max": 110}}
+        )
 
     def test_to_sliced_variable_with_coordinates_sliced_and_pinned(self):
         font = self._get_variable_font()

@@ -217,7 +217,8 @@ def get_sliced_coordinates(
     Gets the coordinates to slice the given variable font,
     list and dict axis values are converted to (min, default, max) tuples.
     """
-    coordinates = coordinates or {}
+    # copy the coordinates to not modify the dict passed by the caller
+    coordinates = dict(coordinates or {})
     coordinates_axes_tags = coordinates.keys()
 
     # make coordinates more friendly accepting also list and dict values
@@ -269,7 +270,8 @@ def get_static_coordinates(
         coordinates = instance["coordinates"].copy()
 
     # make coordinates more friendly by using default axis values by default
-    coordinates = coordinates or {}
+    # copy the coordinates to not modify the dict passed by the caller
+    coordinates = dict(coordinates or {})
     default_coordinates = {
         axis_tag: None
         for axis_tag in (get_variable_axes_tags(ttfont) or [])

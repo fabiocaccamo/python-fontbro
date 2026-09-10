@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Fix `get_characters` crash with fonts without `cmap` table.
 -   Fix `set_style_flags` validation, raise `ArgumentError` instead of using `assert`.
 -   Fix `set_name` and `rename` making the font unsaveable with names not encodable in Mac Roman (eg. greek, cyrillic, cjk).
+-   Fix `to_static` and `to_sliced_variable` modifying the `coordinates` dict passed by the caller.
 
 ## [0.27.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.27.0) - 2026-04-12
 -   Add `save_as_ttf` method for saving fonts without web compression (woff/woff2 flavor).
