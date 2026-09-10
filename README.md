@@ -479,6 +479,8 @@ svg_str = font.get_svg(text="Hello!", size=48)
 ```python
 """
 Gets the table metadata present in the font.
+Unknown tables are the ones not defined by the OpenType specification
+or by the Apple TrueType Reference Manual, their name is their tag.
 The length is the uncompressed table length (also for woff/woff2 fonts),
 the offset is the position of the table data in the loaded font file,
 it's None for woff2 fonts because tables are stored in a single
@@ -486,10 +488,13 @@ compressed stream and have no individual offset in the file.
 Both length and offset are read from the originally loaded font file,
 so they will be None for tables added in-memory that haven't been saved.
 
+:param include_unknown: If False, unknown tables are excluded.
+:type include_unknown: bool
+
 :returns: The list of table metadata dictionaries.
 :rtype: list[dict]
 """
-tables = font.get_tables()
+tables = font.get_tables(include_unknown=True)
 # [{'tag': 'head', 'name': 'Header', 'length': 54, 'offset': 192}, ...]
 ```
 
@@ -497,11 +502,17 @@ tables = font.get_tables()
 ```python
 """
 Gets the tags of the tables present in the font.
+Unknown tables are the ones not defined by the OpenType specification
+or by the Apple TrueType Reference Manual, eg. custom tables or tables
+stored by font editors / tools (eg. VTT "TSI0"..."TSI5", FontForge "FFTM").
+
+:param include_unknown: If False, unknown tables are excluded.
+:type include_unknown: bool
 
 :returns: The list of table tags.
 :rtype: list[str]
 """
-tables = font.get_tables_tags()
+tables = font.get_tables_tags(include_unknown=True)
 # ['head', 'hhea', 'maxp', 'OS/2', ...]
 ```
 

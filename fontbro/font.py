@@ -234,27 +234,94 @@ class Font:
     }
     _STYLE_FLAGS_KEYS: list[str] = list(_STYLE_FLAGS.keys())
 
+    # https://learn.microsoft.com/en-us/typography/opentype/spec/otff#font-tables
     _TABLE_NAMES_BY_TAG: dict[str, str] = {
+        # required tables
         "cmap": "Character Map",
         "head": "Header",
         "hhea": "Horizontal Header",
+        "hmtx": "Horizontal Metrics",
         "maxp": "Maximum Profile",
         "name": "Naming",
         "OS/2": "OS/2",
         "post": "PostScript",
-        "GDEF": "Glyph Definition",
-        "GPOS": "Glyph Positioning",
-        "GSUB": "Glyph Substitution",
+        # truetype outlines tables
         "cvt ": "Control Value Table",
         "fpgm": "Font Program",
         "glyf": "Glyph Data",
         "loca": "Location",
-        "prep": "Prep",
+        "prep": "Control Value Program",
+        "gasp": "Grid-fitting and Scan-conversion Procedure",
+        # cff outlines tables
         "CFF ": "CFF",
         "CFF2": "CFF2",
         "VORG": "Vertical Origin",
+        # svg outlines tables
+        "SVG ": "Scalable Vector Graphics",
+        # bitmap glyphs tables
+        "EBDT": "Embedded Bitmap Data",
+        "EBLC": "Embedded Bitmap Location",
+        "EBSC": "Embedded Bitmap Scaling",
+        "CBDT": "Color Bitmap Data",
+        "CBLC": "Color Bitmap Location",
+        "sbix": "Standard Bitmap Graphics",
+        # advanced typographic tables
+        "BASE": "Baseline",
+        "GDEF": "Glyph Definition",
+        "GPOS": "Glyph Positioning",
+        "GSUB": "Glyph Substitution",
+        "JSTF": "Justification",
+        "MATH": "Math Layout",
+        # font variations tables
+        "avar": "Axis Variations",
+        "cvar": "CVT Variations",
+        "fvar": "Font Variations",
+        "gvar": "Glyph Variations",
+        "HVAR": "Horizontal Metrics Variations",
+        "MVAR": "Metrics Variations",
+        # also listed in other tables by the spec, since static fonts can use it
         "STAT": "Style Attributes",
+        "VVAR": "Vertical Metrics Variations",
+        # color fonts tables
+        "COLR": "Color",
+        "CPAL": "Color Palette",
+        # other tables
         "DSIG": "Digital Signature",
+        "hdmx": "Horizontal Device Metrics",
+        "kern": "Kerning",
+        "LTSH": "Linear Threshold",
+        "MERG": "Merge",
+        "meta": "Metadata",
+        "PCLT": "PCL 5",
+        "VDMX": "Vertical Device Metrics",
+        "vhea": "Vertical Header",
+        "vmtx": "Vertical Metrics",
+        # apple tables not in the opentype spec
+        # https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6.html
+        "acnt": "Accent Attachment",
+        "ankr": "Anchor Point",
+        "bdat": "Bitmap Data",
+        "bhed": "Bitmap Header",
+        "bloc": "Bitmap Location",
+        "bsln": "Baseline",
+        "fdsc": "Font Descriptors",
+        "feat": "Feature Name",
+        "fmtx": "Font Metrics",
+        "fond": "Font Family Compatibility",
+        "gcid": "Glyph to CID Mapping",
+        "hvgl": "Hierarchical Variation Glyphs",
+        "hvpm": "Hierarchical Variation Part Mapping",
+        "just": "Justification",
+        "kerx": "Extended Kerning",
+        "lcar": "Ligature Caret",
+        "ltag": "Language Tags",
+        "mort": "Glyph Metamorphosis",
+        "morx": "Extended Glyph Metamorphosis",
+        "opbd": "Optical Bounds",
+        "prop": "Glyph Properties",
+        "trak": "Tracking",
+        "xref": "Cross-Reference",
+        "Zapf": "Glyph Information",
     }
 
     # Unicode blocks/scripts data:
@@ -1054,35 +1121,66 @@ class Font:
 
     def get_tables_tags(
         self,
+        *,
+        include_unknown: bool = True,
     ) -> list[str]:
         """
         Gets the table tags present in the font.
+        Unknown tables are the ones not defined by the OpenType specification
+        or by the Apple TrueType Reference Manual, eg. custom tables or tables
+        stored by font editors / tools (eg. VTT "TSI0"..."TSI5", FontForge "FFTM").
+
+        :param include_unknown: If False, unknown tables are excluded.
+        :type include_unknown: bool
 
         :returns: The list of table tags.
         :rtype: list[str]
         """
         font = self.get_ttfont()
-        return list(font.keys())
+        return [
+            tag
+            for tag in font.keys()
+            # "GlyphOrder" is a fontTools bookkeeping entry, not a real font table
+            if tag != "GlyphOrder"
+            and (include_unknown or tag in self._TABLE_NAMES_BY_TAG)
+        ]
 
     def get_tables(
         self,
+        *,
+        include_unknown: bool = True,
     ) -> list[dict[str, Any]]:
         """
         Gets the table metadata present in the font.
+        Unknown tables are the ones not defined by the OpenType specification
+        or by the Apple TrueType Reference Manual, their name is their tag.
+        The length is the uncompressed table length (also for woff/woff2 fonts),
+        the offset is the position of the table data in the loaded font file,
+        it's None for woff2 fonts because tables are stored in a single
+        compressed stream and have no individual offset in the file.
+        Both length and offset are read from the originally loaded font file,
+        so they will be None for tables added in-memory that haven't been saved.
+
+        :param include_unknown: If False, unknown tables are excluded.
+        :type include_unknown: bool
 
         :returns: The list of table metadata dicts.
         :rtype: list[dict]
         """
         font = self.get_ttfont()
+        is_woff2 = font.flavor == self.FORMAT_WOFF2
         tables = []
-        for tag in font.keys():
+        for tag in self.get_tables_tags(include_unknown=include_unknown):
             entry = font.reader.tables.get(tag)
+            # woff/woff2 entries store the compressed length in "length"
+            length = getattr(entry, "origLength", getattr(entry, "length", None))
+            offset = None if is_woff2 else getattr(entry, "offset", None)
             tables.append(
                 {
                     "tag": tag,
                     "name": self._TABLE_NAMES_BY_TAG.get(tag, tag),
-                    "length": getattr(entry, "length", None),
-                    "offset": getattr(entry, "offset", None),
+                    "length": length,
+                    "offset": offset,
                 }
             )
         return tables
