@@ -18,6 +18,7 @@ from fontbro import (
     family_classification,
     features,
     fingerprint,
+    glyphs,
     metrics,
     names,
     pixel,
@@ -618,17 +619,8 @@ class Font:
         :returns: The glyphs.
         :rtype: generator of dicts
         """
-        font = self.get_ttfont()
-        # components are available only in TrueType (glyf) outlines
-        glyfs = font.get("glyf")
-        glyphset = font.getGlyphSet()
-        for name in glyphset.keys():
-            yield {
-                "name": name,
-                "components_names": (
-                    glyfs[name].getComponentNames(glyfs) if glyfs else []
-                ),
-            }
+        ttfont = self.get_ttfont()
+        return glyphs.get_glyphs(ttfont)
 
     def get_glyphs_count(
         self,
@@ -639,10 +631,8 @@ class Font:
         :returns: The glyphs count.
         :rtype: int
         """
-        font = self.get_ttfont()
-        glyphset = font.getGlyphSet()
-        count = len(glyphset)
-        return count
+        ttfont = self.get_ttfont()
+        return glyphs.get_glyphs_count(ttfont)
 
     def get_image(  # type: ignore
         self,

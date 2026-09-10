@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+from collections.abc import Generator
 from typing import Any
+
+from fontTools.ttLib import TTFont
 
 
 class _OutlineFoundError(Exception):
@@ -50,3 +53,30 @@ def is_glyph_blank(
     except _OutlineFoundError:
         return False
     return True
+
+
+def get_glyphs(
+    ttfont: TTFont,
+) -> Generator[dict[str, Any]]:
+    """
+    Gets the glyphs of the given font and their own composition.
+    """
+    # components are available only in TrueType (glyf) outlines
+    glyfs = ttfont.get("glyf")
+    glyphset = ttfont.getGlyphSet()
+    for name in glyphset.keys():
+        yield {
+            "name": name,
+            "components_names": (glyfs[name].getComponentNames(glyfs) if glyfs else []),
+        }
+
+
+def get_glyphs_count(
+    ttfont: TTFont,
+) -> int:
+    """
+    Gets the glyphs count of the given font.
+    """
+    glyphset = ttfont.getGlyphSet()
+    count = len(glyphset)
+    return count
