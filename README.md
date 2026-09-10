@@ -77,8 +77,10 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`get_vertical_metrics`](#get_vertical_metrics)
 -   [`get_weight`](#get_weight)
 -   [`get_width`](#get_width)
+-   [`is_bitmap`](#is_bitmap)
 -   [`is_color`](#is_color)
 -   [`is_monospace`](#is_monospace)
+-   [`is_pixel`](#is_pixel)
 -   [`is_static`](#is_static)
 -   [`is_variable`](#is_variable)
 -   [`rename`](#rename)
@@ -709,6 +711,20 @@ Gets the font width value and name.
 width = font.get_width()
 ```
 
+#### `is_bitmap`
+```python
+"""
+Determines if the font is a bitmap font: glyphs are stored only as
+monochrome bitmaps (EBDT/EBLC or Apple bdat/bloc tables), without outlines.
+Color bitmap fonts (eg. emoji fonts with CBDT/CBLC or sbix tables)
+are not considered bitmap fonts.
+
+:returns: True if bitmap font, False otherwise.
+:rtype: bool
+"""
+bitmap = font.is_bitmap()
+```
+
 #### `is_color`
 ```python
 """
@@ -732,6 +748,26 @@ Determines if the font is a monospace font.
 :rtype: bool
 """
 mono = font.is_monospace(threshold=0.85)
+```
+
+#### `is_pixel`
+```python
+"""
+Determines if the font is a pixel font: glyphs outlines are drawn
+with pixels (square or rectangular) aligned to a grid
+(horizontal / vertical segments only).
+The check is done on the A-Z, a-z and 0-9 glyphs, or if the font has none
+of them, on the first 50 glyphs (by codepoint) that are not punctuation,
+glyphs without outlines (eg. space) are ignored.
+Bitmap fonts (without outlines) are not considered pixel fonts.
+
+:param threshold: The threshold (0.0 <= n <= 1.0) of glyphs drawn with pixels to consider the font as pixel font.
+:type threshold: float
+
+:returns: True if pixel font, False otherwise.
+:rtype: bool
+"""
+pixel = font.is_pixel(threshold=0.9)
 ```
 
 #### `is_static`

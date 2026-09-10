@@ -23,7 +23,7 @@ from fontTools.varLib import instancer
 from fontTools.varLib.instancer import OverlapMode
 from PIL import Image, ImageDraw, ImageFont
 
-from fontbro import embedding_permissions, support, tables
+from fontbro import bitmap, embedding_permissions, pixel, support, tables
 from fontbro.exceptions import (
     ArgumentError,
     DataError,
@@ -1637,6 +1637,21 @@ class Font:
         width["value"] = width_value
         return width
 
+    def is_bitmap(
+        self,
+    ) -> bool:
+        """
+        Determines if the font is a bitmap font: glyphs are stored only as
+        monochrome bitmaps (EBDT/EBLC or Apple bdat/bloc tables), without outlines.
+        Color bitmap fonts (eg. emoji fonts with CBDT/CBLC or sbix tables)
+        are not considered bitmap fonts.
+
+        :returns: True if bitmap font, False otherwise.
+        :rtype: bool
+        """
+        ttfont = self.get_ttfont()
+        return bitmap.is_bitmap(ttfont)
+
     def is_color(
         self,
     ) -> bool:
@@ -1672,6 +1687,28 @@ class Font:
         same_width_count = widths_counter.most_common(1)[0][1]
         same_width_amount = same_width_count / self.get_glyphs_count()
         return same_width_amount >= threshold
+
+    def is_pixel(
+        self,
+        threshold: float = 0.9,
+    ) -> bool:
+        """
+        Determines if the font is a pixel font: glyphs outlines are drawn
+        with pixels (square or rectangular) aligned to a grid
+        (horizontal / vertical segments only).
+        The check is done on the A-Z, a-z and 0-9 glyphs, or if the font has none
+        of them, on the first 50 glyphs (by codepoint) that are not punctuation,
+        glyphs without outlines (eg. space) are ignored.
+        Bitmap fonts (without outlines) are not considered pixel fonts.
+
+        :param threshold: The threshold (0.0 <= n <= 1.0) of glyphs drawn with pixels to consider the font as pixel font.
+        :type threshold: float
+
+        :returns: True if pixel font, False otherwise.
+        :rtype: bool
+        """
+        ttfont = self.get_ttfont()
+        return pixel.is_pixel(ttfont, threshold=threshold)
 
     def is_static(
         self,
