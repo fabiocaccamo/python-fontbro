@@ -116,6 +116,8 @@ font_clone = font.clone()
 ```python
 """
 Close the wrapped TTFont instance.
+After closing, any operation on the font raises OperationError,
+closing an already closed font does nothing.
 """
 font.close()
 ```
@@ -145,7 +147,7 @@ Gets the font characters.
 :returns: The characters.
 :rtype: generator of dicts
 
-:raises TypeError: If it's not possible to find the 'best' unicode cmap dict in the font.
+:raises DataError: If it's not possible to find the 'best' unicode cmap dict in the font.
 """
 chars = font.get_characters(ignore_blank=False)
 ```
@@ -527,6 +529,8 @@ Gets the wrapped TTFont instance.
 
 :returns: The TTFont instance.
 :rtype: TTFont
+
+:raises OperationError: If the font has been closed.
 """
 ttfont = font.get_ttfont()
 ```
@@ -1036,20 +1040,37 @@ font.set_style_flag(Font.STYLE_FLAG_BOLD, True)
 #### `set_style_flags`
 ```python
 """
-Sets the style flags, flags set to None will be ignored.
+Sets the style flags, keys set to None will be ignored.
 
-:param bold: The bold flag value.
+:param regular: The regular style flag value
+:type regular: bool or None
+:param bold: The bold style flag value
 :type bold: bool or None
-:param italic: The italic flag value.
+:param italic: The italic style flag value
 :type italic: bool or None
-:param underline: The underline flag value.
+:param underline: The underline style flag value
 :type underline: bool or None
-:param outline: The outline flag value.
+:param outline: The outline style flag value
 :type outline: bool or None
+:param shadow: The shadow style flag value
+:type shadow: bool or None
+:param condensed: The condensed style flag value
+:type condensed: bool or None
+:param extended: The extended style flag value
+:type extended: bool or None
 
 :raises ArgumentError: If a value is not a bool or None.
 """
-font.set_style_flags(regular=None, bold=None, italic=None, outline=None, underline=None)
+font.set_style_flags(
+    regular=None,
+    bold=None,
+    italic=None,
+    underline=None,
+    outline=None,
+    shadow=None,
+    condensed=None,
+    extended=None,
+)
 ```
 
 #### `set_style_flags_by_subfamily_name`
