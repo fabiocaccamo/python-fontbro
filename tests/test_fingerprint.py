@@ -69,7 +69,7 @@ class FingerprintTestCase(AbstractTestCase):
     def test_get_fingerprint_match_with_same_static_fonts(self):
         font_a = self._get_font("/Tourney/static/Tourney/Tourney-Regular.ttf")
         font_b = self._get_font("/Tourney/static/Tourney/Tourney-Regular.ttf")
-        match, diff, hash, other_hash = font_a.get_fingerprint_match(
+        match, diff, image_hash, other_image_hash = font_a.get_fingerprint_match(
             other=font_b, tolerance=10
         )
         self.assertTrue(match)
@@ -77,7 +77,7 @@ class FingerprintTestCase(AbstractTestCase):
     def test_get_fingerprint_match_with_different_static_fonts(self):
         font_a = self._get_font("/Tourney/static/Tourney/Tourney-Medium.ttf")
         font_b = self._get_font("/Tourney/static/Tourney/Tourney-Regular.ttf")
-        match, diff, hash, other_hash = font_a.get_fingerprint_match(
+        match, diff, image_hash, other_image_hash = font_a.get_fingerprint_match(
             other=font_b, tolerance=10
         )
         self.assertFalse(match)
@@ -85,7 +85,7 @@ class FingerprintTestCase(AbstractTestCase):
     def test_get_fingerprint_match_with_same_variable_fonts(self):
         font_a = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
         font_b = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
-        match, diff, hash, other_hash = font_a.get_fingerprint_match(
+        match, diff, image_hash, other_image_hash = font_a.get_fingerprint_match(
             other=font_b, tolerance=10
         )
         self.assertTrue(match)
@@ -93,7 +93,7 @@ class FingerprintTestCase(AbstractTestCase):
     def test_get_fingerprint_match_with_different_variable_fonts(self):
         font_a = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
         font_b = self._get_font("/Tourney/Tourney-Italic-VariableFont_wdth,wght.ttf")
-        match, diff, hash, other_hash = font_a.get_fingerprint_match(
+        match, diff, image_hash, other_image_hash = font_a.get_fingerprint_match(
             other=font_b, tolerance=10
         )
         self.assertFalse(match)
@@ -101,7 +101,7 @@ class FingerprintTestCase(AbstractTestCase):
     def test_get_fingerprint_match_with_variable_and_static_fonts(self):
         font_a = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
         font_b = self._get_font("/Tourney/static/Tourney/Tourney-Regular.ttf")
-        match, diff, hash, other_hash = font_a.get_fingerprint_match(
+        match, diff, image_hash, other_image_hash = font_a.get_fingerprint_match(
             other=font_b, tolerance=10
         )
         self.assertFalse(match)
@@ -109,7 +109,7 @@ class FingerprintTestCase(AbstractTestCase):
     def test_get_fingerprint_match_with_other_font_filepath(self):
         font_a = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
         font_b = self._get_font_path("/Tourney/static/Tourney/Tourney-Regular.ttf")
-        match, diff, hash, other_hash = font_a.get_fingerprint_match(
+        match, diff, image_hash, other_image_hash = font_a.get_fingerprint_match(
             other=font_b, tolerance=10
         )
         self.assertFalse(match)
