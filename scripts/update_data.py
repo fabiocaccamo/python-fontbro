@@ -5,7 +5,7 @@ from typing import Any
 import fsutil
 from fontTools import unicodedata
 
-from fontbro import Font
+from fontbro.unicode import _populate_unicode_items_set
 
 
 def _write_data_json(filepath: str, data: Any) -> None:
@@ -25,14 +25,14 @@ def update_unicode_data() -> None:
         block = {
             "name": block_name,
         }
-        Font._populate_unicode_items_set(blocks, blocks_cache, block)
+        _populate_unicode_items_set(blocks, blocks_cache, block)
         script_tag = unicodedata.script(code)
         script_name = unicodedata.script_name(script_tag)
         script = {
             "name": script_name,
             "tag": script_tag,
         }
-        Font._populate_unicode_items_set(scripts, scripts_cache, script)
+        _populate_unicode_items_set(scripts, scripts_cache, script)
 
     for block in blocks:
         block["characters_total"] = block["characters_count"]

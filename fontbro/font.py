@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import copy
 import math
 import os
 import re
@@ -14,7 +13,6 @@ from typing import IO, Any, cast
 
 import fsutil
 import ots
-from fontTools import unicodedata
 from fontTools.pens.svgPathPen import SVGPathPen
 from fontTools.subset import Options as SubsetterOptions
 from fontTools.subset import Subsetter
@@ -23,7 +21,7 @@ from fontTools.varLib import instancer
 from fontTools.varLib.instancer import OverlapMode
 from PIL import Image, ImageDraw, ImageFont
 
-from fontbro import bitmap, embedding_permissions, pixel, support, tables
+from fontbro import bitmap, embedding_permissions, pixel, support, tables, unicode
 from fontbro.exceptions import (
     ArgumentError,
     DataError,
@@ -31,10 +29,8 @@ from fontbro.exceptions import (
     SanitizationError,
 )
 from fontbro.flags import get_flag, set_flag
-from fontbro.glyphs import is_glyph_blank
 from fontbro.math import get_euclidean_distance
 from fontbro.subset import parse_unicodes
-from fontbro.unicode import get_best_cmap_or_raise
 from fontbro.utils import (
     concat_names,
     find_item,
@@ -235,10 +231,6 @@ class Font:
         STYLE_FLAG_EXTENDED: {"bit_head_mac": 6, "bit_os2_fs": None},
     }
     _STYLE_FLAGS_KEYS: list[str] = list(_STYLE_FLAGS.keys())
-
-    # Unicode blocks/scripts data:
-    _UNICODE_BLOCKS: list[dict[str, Any]] = read_json("data/unicode-blocks.json")
-    _UNICODE_SCRIPTS: list[dict[str, Any]] = read_json("data/unicode-scripts.json")
 
     # Variable Axes:
     _VARIABLE_AXES: list[dict[str, Any]] = [
@@ -548,42 +540,8 @@ class Font:
 
         :raises DataError: If it's not possible to find the 'best' unicode cmap dict.
         """
-        font = self.get_ttfont()
-        cmap = get_best_cmap_or_raise(font)
-        glyphset = font.getGlyphSet() if ignore_blank else None
-        for code, char_name in cmap.items():
-            code_hex = f"{code:04X}"
-            if 0 <= code < 0x110000:
-                char = chr(code)
-            else:
-                continue
-            # check if is control character
-            char_code = ord(char)
-            if char_code < 0x20 or char_code == 0x7F:
-                continue
-            if (
-                glyphset is not None
-                and char_name in glyphset
-                and is_glyph_blank(glyphset, char_name)
-            ):
-                continue
-            unicode_name = unicodedata.name(char, None)
-            unicode_block_name = unicodedata.block(code)
-            unicode_script_tag = unicodedata.script(code)
-            unicode_script_name = unicodedata.script_name(unicode_script_tag)
-            yield {
-                "character": char,
-                "character_name": char_name,
-                "code": code,
-                "escape_sequence": f"\\u{code_hex}",
-                "html_code": f"&#{code};",
-                "unicode": f"U+{code_hex}",
-                "unicode_code": code,
-                "unicode_name": unicode_name,
-                "unicode_block_name": unicode_block_name,
-                "unicode_script_name": unicode_script_name,
-                "unicode_script_tag": unicode_script_tag,
-            }
+        ttfont = self.get_ttfont()
+        return unicode.get_characters(ttfont, ignore_blank=ignore_blank)
 
     def get_characters_count(
         self,
@@ -599,7 +557,8 @@ class Font:
         :returns: The characters count.
         :rtype: int
         """
-        return len(list(self.get_characters(ignore_blank=ignore_blank)))
+        ttfont = self.get_ttfont()
+        return unicode.get_characters_count(ttfont, ignore_blank=ignore_blank)
 
     def _get_family_classification_items(
         self,
@@ -1248,7 +1207,7 @@ class Font:
 
         # get glyph set and character map
         glyphset = font.getGlyphSet()
-        cmap = get_best_cmap_or_raise(font)
+        cmap = unicode.get_best_cmap_or_raise(font)
 
         # generate svg path for each glyph in text
         glyphs: list[str] = list(filter(None, [cmap.get(ord(char)) for char in text]))
@@ -1290,45 +1249,6 @@ class Font:
             raise OperationError("Invalid operation, the font is closed.")
         return self._ttfont
 
-    @classmethod
-    def _populate_unicode_items_set(
-        cls,
-        items: list[dict[str, Any]],
-        items_cache: dict[str, Any],
-        item: dict[str, Any],
-    ) -> None:
-        item_key = item["name"]
-        if item_key not in items_cache:
-            item = item.copy()
-            item["characters_count"] = 0
-            items_cache[item_key] = item
-            items.append(item)
-        item = items_cache[item_key]
-        item["characters_count"] += 1
-
-    @staticmethod
-    def _get_unicode_items_set_with_coverage(
-        all_items: list[dict[str, Any]],
-        items: list[dict[str, Any]],
-        *,
-        coverage_threshold: float = 0.0,
-    ) -> list[dict[str, Any]]:
-        all_items = copy.deepcopy(all_items)
-        items_indexed = {item["name"]: item.copy() for item in items}
-        for item in all_items:
-            item_key = item["name"]
-            if item_key in items_indexed:
-                item["characters_count"] = items_indexed[item_key]["characters_count"]
-                item["coverage"] = item["characters_count"] / item["characters_total"]
-            else:
-                item["characters_count"] = 0
-                item["coverage"] = 0.0
-        items_filtered = [
-            item for item in all_items if item["coverage"] >= coverage_threshold
-        ]
-        # items_filtered.sort(key=lambda item: item['name'])
-        return items_filtered
-
     def get_unicode_block_by_name(
         self,
         name: str,
@@ -1342,12 +1262,8 @@ class Font:
         :returns: The unicode block dict if the name is valid, None otherwise.
         :rtype: dict or None
         """
-        blocks = self.get_unicode_blocks(coverage_threshold=0.0)
-        for block in blocks:
-            if slugify(name) == slugify(block["name"]):
-                return block
-        # raise KeyError("Invalid unicode block name: '{name}'")
-        return None
+        ttfont = self.get_ttfont()
+        return unicode.get_unicode_block_by_name(ttfont, name)
 
     def get_unicode_blocks(
         self,
@@ -1365,17 +1281,11 @@ class Font:
         :returns: The list of unicode blocks.
         :rtype: list of dicts
         """
-        items: list[dict[str, Any]] = []
-        items_cache: dict[str, Any] = {}
-        for char in self.get_characters():
-            item = {
-                "name": char["unicode_block_name"],
-            }
-            self._populate_unicode_items_set(items, items_cache, item)
-        blocks = self._get_unicode_items_set_with_coverage(
-            self._UNICODE_BLOCKS, items, coverage_threshold=coverage_threshold
+        ttfont = self.get_ttfont()
+        return unicode.get_unicode_blocks(
+            ttfont,
+            coverage_threshold=coverage_threshold,
         )
-        return blocks
 
     def get_unicode_script_by_name(
         self,
@@ -1390,12 +1300,8 @@ class Font:
         :returns: The unicode script dict if the name/tag is valid, None otherwise.
         :rtype: dict or None
         """
-        scripts = self.get_unicode_scripts(coverage_threshold=0.0)
-        for script in scripts:
-            if slugify(name) in (slugify(script["name"]), slugify(script["tag"])):
-                return script
-        # raise KeyError("Invalid unicode script name/tag: '{name}'")
-        return None
+        ttfont = self.get_ttfont()
+        return unicode.get_unicode_script_by_name(ttfont, name)
 
     def get_unicode_scripts(
         self,
@@ -1413,18 +1319,11 @@ class Font:
         :returns: The list of unicode scripts.
         :rtype: list of dicts
         """
-        items: list[dict[str, Any]] = []
-        items_cache: dict[str, Any] = {}
-        for char in self.get_characters():
-            item = {
-                "name": char["unicode_script_name"],
-                "tag": char["unicode_script_tag"],
-            }
-            self._populate_unicode_items_set(items, items_cache, item)
-        scripts = self._get_unicode_items_set_with_coverage(
-            self._UNICODE_SCRIPTS, items, coverage_threshold=coverage_threshold
+        ttfont = self.get_ttfont()
+        return unicode.get_unicode_scripts(
+            ttfont,
+            coverage_threshold=coverage_threshold,
         )
-        return scripts
 
     def get_variable_axes(
         self,
