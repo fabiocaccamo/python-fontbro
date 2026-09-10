@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Add `is_pixel` method to detect pixel fonts (glyphs outlines drawn with pixels aligned to a grid).
 -   Raise `OperationError` on any operation with a closed font (previously `KeyError` or wrong results).
 -   Improve `is_monospace` accuracy using the Fontbakery criteria (cjk fonts with proportional latin glyphs are no more detected as monospace), default `threshold` changed from `0.85` to `0.8`.
+-   Refactor `Font` class moving its logic to dedicated modules (the `Font` public API is unchanged).
 -   Fix `is_color` method missing some color font formats (`SVG` and `sbix` tables).
 -   Fix `get_glyphs` crash with CFF fonts.
 -   Fix `get_width` name for width class 9 (`Ultra-expanded`).
