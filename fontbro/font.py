@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import math
 import os
-import sys
 import tempfile
 from collections import Counter
 from collections.abc import Generator
@@ -28,6 +27,7 @@ from fontbro import (
     support,
     tables,
     unicode,
+    variable,
 )
 from fontbro.exceptions import (
     ArgumentError,
@@ -36,14 +36,12 @@ from fontbro.exceptions import (
     SanitizationError,
 )
 from fontbro.flags import get_flag, set_flag
-from fontbro.math import get_euclidean_distance
 from fontbro.subset import parse_unicodes
 from fontbro.utils import (
     concat_names,
     find_item,
     read_json,
     remove_spaces,
-    slugify,
 )
 
 
@@ -207,68 +205,6 @@ class Font:
         STYLE_FLAG_EXTENDED: {"bit_head_mac": 6, "bit_os2_fs": None},
     }
     _STYLE_FLAGS_KEYS: list[str] = list(_STYLE_FLAGS.keys())
-
-    # Variable Axes:
-    _VARIABLE_AXES: list[dict[str, Any]] = [
-        {"tag": "ital", "name": "Italic"},
-        {"tag": "opsz", "name": "Optical Size"},
-        {"tag": "slnt", "name": "Slant"},
-        {"tag": "wdth", "name": "Width"},
-        {"tag": "wght", "name": "Weight"},
-        # https://fonts.google.com/variablefonts#axis-definitions
-        {"tag": "ARRR", "name": "AR Retinal Resolution"},
-        {"tag": "YTAS", "name": "Ascender Height"},
-        {"tag": "BLED", "name": "Bleed"},
-        {"tag": "BNCE", "name": "Bounce"},
-        {"tag": "CASL", "name": "Casual"},
-        {"tag": "CTRS", "name": "Contrast"},
-        {"tag": "XTRA", "name": "Counter Width"},
-        {"tag": "CRSV", "name": "Cursive"},
-        {"tag": "YTDE", "name": "Descender Depth"},
-        {"tag": "EHLT", "name": "Edge Highlight"},
-        {"tag": "ELXP", "name": "Element Expansion"},
-        {"tag": "ELGR", "name": "Element Grid"},
-        {"tag": "ELSH", "name": "Element Shape"},
-        {"tag": "EDPT", "name": "Extrusion Depth"},
-        {"tag": "YTFI", "name": "Figure Height"},
-        # Removed: https://github.com/google/fonts/pull/2594
-        {"tag": "XPRN", "name": "Expression"},
-        {"tag": "FILL", "name": "Fill"},
-        {"tag": "FLAR", "name": "Flare"},
-        {"tag": "GRAD", "name": "Grade"},
-        {"tag": "XELA", "name": "Horizontal Element Alignment"},
-        {"tag": "XPN1", "name": "Horizontal Position of Paint 1"},
-        {"tag": "XPN2", "name": "Horizontal Position of Paint 2"},
-        {"tag": "HEXP", "name": "Hyper Expansion"},
-        {"tag": "INFM", "name": "Informality"},
-        {"tag": "YTLC", "name": "Lowercase Height"},
-        {"tag": "MONO", "name": "Monospace"},
-        {"tag": "MORF", "name": "Morph"},
-        {"tag": "XROT", "name": "Rotation in X"},
-        {"tag": "YROT", "name": "Rotation in Y"},
-        {"tag": "ZROT", "name": "Rotation in Z"},
-        {"tag": "ROND", "name": "Roundness"},
-        {"tag": "SCAN", "name": "Scanlines"},
-        {"tag": "SHLN", "name": "Shadow Length"},
-        {"tag": "SHRP", "name": "Sharpness"},
-        {"tag": "SZP1", "name": "Size of Paint 1"},
-        {"tag": "SZP2", "name": "Size of Paint 2"},
-        {"tag": "SOFT", "name": "Softness"},
-        {"tag": "SPAC", "name": "Spacing"},
-        {"tag": "XOPQ", "name": "Thick Stroke"},
-        {"tag": "YOPQ", "name": "Thin Stroke"},
-        {"tag": "YTUC", "name": "Uppercase Height"},
-        {"tag": "YELA", "name": "Vertical Element Alignment"},
-        {"tag": "YEXT", "name": "Vertical Extension"},
-        {"tag": "YPN1", "name": "Vertical Position of Paint 1"},
-        {"tag": "YPN2", "name": "Vertical Position of Paint 2"},
-        {"tag": "VOLM", "name": "Volume"},
-        {"tag": "WONK", "name": "Wonky"},
-        {"tag": "YEAR", "name": "Year"},
-    ]
-    _VARIABLE_AXES_BY_TAG: dict[str, Any] = {
-        axis["tag"]: axis for axis in _VARIABLE_AXES
-    }
 
     # Vertical Metrics:
     VERTICAL_METRIC_UNITS_PER_EM: str = "units_per_em"
@@ -1282,27 +1218,8 @@ class Font:
         :returns: The list of axes if the font is a variable font otherwise None.
         :rtype: list of dict or None
         """
-        if not self.is_variable():
-            return None
-        font = self.get_ttfont()
-        axes = [
-            {
-                "tag": axis.axisTag,
-                "name": self._VARIABLE_AXES_BY_TAG.get(axis.axisTag, {}).get(
-                    "name", axis.axisTag.title()
-                ),
-                "min_value": axis.minValue,
-                "max_value": axis.maxValue,
-                "default_value": axis.defaultValue,
-            }
-            for axis in font["fvar"].axes
-        ]
-        if sort:
-            axes = sorted(
-                axes,
-                key=lambda axis: (axis["tag"].islower(), axis["tag"]),
-            )
-        return axes
+        ttfont = self.get_ttfont()
+        return variable.get_variable_axes(ttfont, sort=sort)
 
     def get_variable_axis_by_tag(
         self,
@@ -1317,13 +1234,8 @@ class Font:
         :returns: The variable axis by tag.
         :rtype: dict or None
         """
-        axes = self.get_variable_axes()
-        if axes:
-            for axis in axes:
-                if axis.get("tag") == tag:
-                    return axis
-        # raise KeyError("Invalid axis tag: '{tag}'")
-        return None
+        ttfont = self.get_ttfont()
+        return variable.get_variable_axis_by_tag(ttfont, tag)
 
     def get_variable_axes_tags(
         self,
@@ -1334,10 +1246,8 @@ class Font:
         :returns: The variable axis tags.
         :rtype: list or None
         """
-        if not self.is_variable():
-            return None
-        font = self.get_ttfont()
-        return [axis.axisTag for axis in font["fvar"].axes]
+        ttfont = self.get_ttfont()
+        return variable.get_variable_axes_tags(ttfont)
 
     def get_variable_instances(
         self,
@@ -1348,17 +1258,8 @@ class Font:
         :returns: The list of instances if the font is a variable font otherwise None.
         :rtype: list of dict or None
         """
-        if not self.is_variable():
-            return None
-        font = self.get_ttfont()
-        name_table = font["name"]
-        return [
-            {
-                "coordinates": instance.coordinates,
-                "style_name": name_table.getDebugName(instance.subfamilyNameID),
-            }
-            for instance in font["fvar"].instances
-        ]
+        ttfont = self.get_ttfont()
+        return variable.get_variable_instances(ttfont)
 
     def get_variable_instance_by_style_name(
         self,
@@ -1373,11 +1274,8 @@ class Font:
         :returns: The variable instance matching the given style name.
         :rtype: dict or None
         """
-        instances = self.get_variable_instances() or []
-        for instance in instances:
-            if slugify(instance["style_name"]) == slugify(style_name):
-                return instance
-        return None
+        ttfont = self.get_ttfont()
+        return variable.get_variable_instance_by_style_name(ttfont, style_name)
 
     def get_variable_instance_closest_to_coordinates(
         self,
@@ -1394,27 +1292,10 @@ class Font:
         :returns: The variable instance closest to coordinates.
         :rtype: dict or None
         """
-        if not self.is_variable():
-            return None
-
-        # set default axes values for axes not present in coordinates
-        lookup_values = coordinates.copy()
-        axes = self.get_variable_axes() or []
-        for axis in axes:
-            # don't use setdefault to override possible None values
-            if lookup_values.get(axis["tag"]) is None:
-                lookup_values[axis["tag"]] = axis["default_value"]
-
-        instances = self.get_variable_instances() or []
-        closest_instance_distance = float(sys.maxsize)
-        closest_instance = None
-        for instance in instances:
-            instance_values = instance["coordinates"]
-            instance_distance = get_euclidean_distance(instance_values, lookup_values)
-            if instance_distance < closest_instance_distance:
-                closest_instance_distance = instance_distance
-                closest_instance = instance
-        return closest_instance
+        ttfont = self.get_ttfont()
+        return variable.get_variable_instance_closest_to_coordinates(
+            ttfont, coordinates
+        )
 
     def get_version(
         self,
@@ -1587,8 +1468,8 @@ class Font:
         :returns: True if variable font, False otherwise.
         :rtype: bool
         """
-        font = self.get_ttfont()
-        return "fvar" in font
+        ttfont = self.get_ttfont()
+        return variable.is_variable(ttfont)
 
     def rename(
         self,
@@ -2219,23 +2100,6 @@ class Font:
         subs.populate(**subs_args)
         subs.subset(font)
 
-    @staticmethod
-    def _all_axes_pinned(
-        axes: dict[str, Any],
-    ) -> bool:
-        """
-        Check if all the axes values are pinned or not.
-
-        :param axes: The axes
-        :type axes: dict
-        :returns: True if all the axes values are pinned, False otherwise.
-        :rtype: bool
-        """
-        return all(
-            isinstance(axis_value, (type(None), int, float))
-            for axis_value in axes.values()
-        )
-
     def to_sliced_variable(
         self,
         *,
@@ -2265,30 +2129,7 @@ class Font:
             raise OperationError("Only a variable font can be sliced.")
 
         font = self.get_ttfont()
-        coordinates = coordinates or {}
-        coordinates_axes_tags = coordinates.keys()
-
-        # make coordinates more friendly accepting also list and dict values
-        for axis_tag in coordinates_axes_tags:
-            axis_value = coordinates[axis_tag]
-            if isinstance(axis_value, list):
-                axis_value = tuple(axis_value)
-            elif isinstance(axis_value, dict):
-                axis = self.get_variable_axis_by_tag(axis_tag) or {}
-                axis_min = axis_value.get("min", axis.get("min_value"))
-                axis_default = axis_value.get("default", axis.get("default_value"))
-                axis_max = axis_value.get("max", axis.get("max_value"))
-                axis_value = (axis_min, axis_default, axis_max)
-            coordinates[axis_tag] = axis_value
-
-        # ensure that coordinates axes are defined and that are not all pinned
-        if len(coordinates_axes_tags) == 0:
-            raise ArgumentError("Invalid coordinates: axes not defined.")
-        elif set(coordinates_axes_tags) == set(self.get_variable_axes_tags() or []):
-            if self._all_axes_pinned(coordinates):
-                raise ArgumentError(
-                    "Invalid coordinates: all axes are pinned (use to_static method)."
-                )
+        coordinates = variable.get_sliced_coordinates(font, coordinates)
 
         # set default instancer options
         options.setdefault("optimize", True)
@@ -2333,31 +2174,11 @@ class Font:
 
         font = self.get_ttfont()
 
-        # take coordinates from instance with specified style name
-        if style_name:
-            if coordinates:
-                raise ArgumentError(
-                    "Invalid arguments: 'coordinates' and 'style_name' are mutually exclusive."
-                )
-            instance = self.get_variable_instance_by_style_name(style_name=style_name)
-            if not instance:
-                raise ArgumentError(
-                    f"Invalid style name: instance with style name '{style_name}' not found."
-                )
-            coordinates = instance["coordinates"].copy()
-
-        # make coordinates more friendly by using default axis values by default
-        coordinates = coordinates or {}
-        default_coordinates = {
-            axis_tag: None
-            for axis_tag in (self.get_variable_axes_tags() or [])
-            if axis_tag not in coordinates
-        }
-        coordinates.update(default_coordinates)
-
-        # ensure that coordinates axes are all pinned
-        if not self._all_axes_pinned(coordinates):
-            raise ArgumentError("Invalid coordinates: all axes must be pinned.")
+        coordinates = variable.get_static_coordinates(
+            font,
+            coordinates=coordinates,
+            style_name=style_name,
+        )
 
         # get instance closest to coordinates
         instance = self.get_variable_instance_closest_to_coordinates(coordinates)
