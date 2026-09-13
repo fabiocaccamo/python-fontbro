@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 -   Update `set_name` to not add legacy Mac name records to fonts that don't have them (Mac records are updated only if already present).
+-   Fix `get_names` returning names in other languages (eg. japanese) instead of the english ones returned by `get_name`.
+-   Fix `get_name` returning `None` when the font has no Windows English name records (fallback to the other name records).
+-   Fix `get_name` and `get_names` crash with undecodable name records or without `name` table.
+
 ## [0.28.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.28.0) - 2026-09-11
 -   Add `get_supported_languages` and `get_supported_writing_systems` methods based on the Google Fonts languages dataset.
 -   Add `get_embedding_permissions` and `set_embedding_permissions` methods for OS/2 `fsType` embedding flags.

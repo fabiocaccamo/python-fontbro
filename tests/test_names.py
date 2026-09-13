@@ -148,3 +148,59 @@ class NamesTestCase(AbstractTestCase):
         self.assertEqual(family_name, "Roboto Mono Renamed")
         subfamily_name = font.get_name(Font.NAME_SUBFAMILY_NAME)
         self.assertEqual(subfamily_name, "Regular Renamed")
+
+    def test_get_names_consistent_with_get_name(self):
+        # regression: get_names returned the last name record found for each name id,
+        # (eg. the japanese family name), instead of the same value of get_name
+        font = self._get_font("/DotGothic16/DotGothic16-Regular.ttf")
+        font_names = font.get_names()
+        self.assertEqual(font_names["family_name"], "DotGothic16")
+        for key, value in font_names.items():
+            with self.subTest(key=key):
+                self.assertEqual(font.get_name(key), value)
+
+    def _replace_name_records(self, font, platform_id, plat_enc_id, lang_id):
+        # replace all the name records with records of the given platform/language
+        name_table = font.get_ttfont()["name"]
+        for record in list(name_table.names):
+            name_table.setName(
+                record.toUnicode(), record.nameID, platform_id, plat_enc_id, lang_id
+            )
+        for record in list(name_table.names):
+            if (record.platformID, record.platEncID, record.langID) != (
+                platform_id,
+                plat_enc_id,
+                lang_id,
+            ):
+                name_table.names.remove(record)
+
+    def test_get_name_without_windows_english_records(self):
+        # regression: names were not found without windows english name records
+        platforms_ids = {
+            "unicode": (0, 3, 0),
+            "windows japanese": (3, 1, 0x411),
+            "mac english": (1, 0, 0),
+        }
+        for label, (platform_id, plat_enc_id, lang_id) in platforms_ids.items():
+            with self.subTest(records=label):
+                font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+                self._replace_name_records(font, platform_id, plat_enc_id, lang_id)
+                self.assertEqual(font.get_name(Font.NAME_FAMILY_NAME), "Roboto Mono")
+                self.assertEqual(font.get_family_name(), "Roboto Mono")
+                self.assertEqual(font.get_names()["family_name"], "Roboto Mono")
+
+    def test_get_name_with_undecodable_windows_record(self):
+        # an undecodable windows record is skipped, the other records are read
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        self._add_mac_name_record(font)
+        name_table = font.get_ttfont()["name"]
+        # lone utf-16 surrogate
+        name_table.getName(1, 3, 1, 0x409).string = b"\xd8\x00"
+        self.assertEqual(font.get_name(Font.NAME_FAMILY_NAME), "Roboto Mono")
+
+    def test_get_name_without_name_table(self):
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        del font.get_ttfont()["name"]
+        self.assertIsNone(font.get_name(Font.NAME_FAMILY_NAME))
+        self.assertEqual(font.get_names(), {})
+        self.assertEqual(font.get_family_name(), "")

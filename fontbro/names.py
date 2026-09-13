@@ -116,11 +116,20 @@ def get_name(
     Gets the name by its identifier from the name table of the given font.
     """
     name_id = _get_name_id(key)
-    name_table = ttfont["name"]
-    name = name_table.getName(name_id, **_NAMES_WIN_IDS)
-    if not name:
-        name = name_table.getName(name_id, **_NAMES_MAC_IDS)
-    return str(name.toUnicode()) if name else None
+    name_table = ttfont.get("name")
+    if not name_table:
+        return None
+    # the windows english record is preferred: mac records are legacy
+    # and they can follow different naming conventions (eg. name id 1)
+    name_record = name_table.getName(name_id, **_NAMES_WIN_IDS)
+    if name_record:
+        try:
+            return str(name_record.toUnicode())
+        except UnicodeDecodeError:
+            pass
+    # fallback to the english (mac) record or to any other decodable record
+    name: str | None = name_table.getDebugName(name_id)
+    return name
 
 
 def get_names(
@@ -129,12 +138,12 @@ def get_names(
     """
     Gets the names records of the given font mapped by their property name.
     """
-    names_by_id = {record.nameID: f"{record}" for record in ttfont["name"].names}
-    names = {
-        _NAMES_BY_ID[name_id]["key"]: value
-        for name_id, value in names_by_id.items()
-        if name_id in _NAMES_BY_ID
-    }
+    # read each name as get_name does, to get consistent values
+    names = {}
+    for name_id, name_item in _NAMES_BY_ID.items():
+        name = get_name(ttfont, name_id)
+        if name is not None:
+            names[name_item["key"]] = name
     return names
 
 
