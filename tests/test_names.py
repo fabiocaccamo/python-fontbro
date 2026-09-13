@@ -85,9 +85,25 @@ class NamesTestCase(AbstractTestCase):
                 font_saved = Font(font.save_to_fileobject())
                 self.assertEqual(font_saved.get_name(Font.NAME_FAMILY_NAME), value)
 
+    def _add_mac_name_record(self, font):
+        # the fixtures fonts have only windows name records
+        name_table = font.get_ttfont()["name"]
+        name_table.setName("Roboto Mono", 1, 1, 0, 0)
+
+    def test_set_name_without_mac_records(self):
+        # mac records are legacy (modern tools don't produce them anymore),
+        # so they are not added to fonts having only windows records
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        font.set_name(Font.NAME_FAMILY_NAME, "Café Sans")
+        self.assertEqual(self._get_name_records_by_platform(font, 1), {3: "Café Sans"})
+        platforms = {record.platformID for record in font.get_ttfont()["name"].names}
+        self.assertEqual(platforms, {3})
+
     def test_set_name_encodable_in_mac_roman(self):
         # values encodable in mac roman are written in both windows and mac records
+        # if the font already has mac records
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        self._add_mac_name_record(font)
         font.set_name(Font.NAME_FAMILY_NAME, "Café Sans")
         self.assertEqual(
             self._get_name_records_by_platform(font, 1),
@@ -95,11 +111,17 @@ class NamesTestCase(AbstractTestCase):
         )
 
     def test_set_name_not_encodable_in_mac_roman_removes_mac_record(self):
-        # an existing mac name record is removed to not keep an outdated value
+        # an existing mac name record is removed to not keep an outdated value,
+        # the name is still readable from the windows record
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
-        font.set_name(Font.NAME_FAMILY_NAME, "Café Sans")
+        self._add_mac_name_record(font)
+        self.assertEqual(
+            self._get_name_records_by_platform(font, 1),
+            {1: "Roboto Mono", 3: "Roboto Mono"},
+        )
         font.set_name(Font.NAME_FAMILY_NAME, "Шрифт")
         self.assertEqual(self._get_name_records_by_platform(font, 1), {3: "Шрифт"})
+        self.assertEqual(font.get_name(Font.NAME_FAMILY_NAME), "Шрифт")
 
     def test_rename_not_encodable_in_mac_roman(self):
         # regression: renaming with non-latin names must not prevent saving

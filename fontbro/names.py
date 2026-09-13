@@ -149,10 +149,17 @@ def set_name(
     name_id = _get_name_id(key)
     name_table = ttfont["name"]
     # https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/ttLib/tables/_n_a_m_e.py#L568
+    # the windows record is always written, it's the one read first by get_name
     name_table.setName(value, name_id, **_NAMES_WIN_IDS)
+    # mac records are legacy (modern tools don't produce them anymore),
+    # so they are updated only if the font already has some of them
+    mac_platform_id = _NAMES_MAC_IDS["platformID"]
+    if not any(record.platformID == mac_platform_id for record in name_table.names):
+        return
     # the mac roman encoding can't encode many characters (eg. greek, cyrillic, cjk),
     # in that case the mac name record is removed (as fontTools addMultilingualName
-    # does), otherwise the font would raise UnicodeEncodeError when saved
+    # does), otherwise the font would raise UnicodeEncodeError when saved;
+    # removing it is safe because the windows record has just been written
     if _is_encodable(value, _NAMES_MAC_IDS):
         name_table.setName(value, name_id, **_NAMES_MAC_IDS)
     else:
