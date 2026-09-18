@@ -72,6 +72,8 @@ _NAMES_BY_KEY: dict[str, dict[str, Any]] = {item["key"]: item for item in _NAMES
 _NAMES_WIN_IDS: dict[str, Any] = {"platformID": 3, "platEncID": 1, "langID": 0x409}
 # macintosh: platform 1, encoding 0 (roman), language 0 (english)
 _NAMES_MAC_IDS: dict[str, Any] = {"platformID": 1, "platEncID": 0, "langID": 0x0}
+# unicode: platform 0, encoding 3 (unicode bmp), language 0 (no language)
+_NAMES_UNI_IDS: dict[str, Any] = {"platformID": 0, "platEncID": 3, "langID": 0x0}
 
 
 def _get_name_id(
@@ -101,11 +103,40 @@ def _is_encodable(
         platform_ids["platEncID"],
         platform_ids["langID"],
     )
+    if not encoding:
+        # the encoding of the name records is unknown (eg. the macintosh
+        # "uninterpreted" script), so the value cannot be written to them
+        return False
     try:
         value.encode(encoding)
     except UnicodeEncodeError:
         return False
     return True
+
+
+def _get_name_records_ids(
+    name_table: Any,
+    name_id: int,
+    platform_ids: dict[str, Any],
+) -> list[dict[str, Any]]:
+    """
+    Gets the ids of the existing name records with the given name id, matching
+    the platform and the language of the given platform ids. The encoding is
+    not matched: the same name id can have more than one record with different
+    encodings (eg. a windows symbol record and a windows unicode one).
+    Records in other languages are not matched, so they are never overwritten.
+    """
+    return [
+        {
+            "platformID": record.platformID,
+            "platEncID": record.platEncID,
+            "langID": record.langID,
+        }
+        for record in name_table.names
+        if record.nameID == name_id
+        and record.platformID == platform_ids["platformID"]
+        and record.langID == platform_ids["langID"]
+    ]
 
 
 def get_name(
@@ -160,19 +191,21 @@ def set_name(
     # https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/ttLib/tables/_n_a_m_e.py#L568
     # the windows record is always written, it's the one read first by get_name
     name_table.setName(value, name_id, **_NAMES_WIN_IDS)
-    # mac records are legacy (modern tools don't produce them anymore),
-    # so they are updated only if the font already has some of them
-    mac_platform_id = _NAMES_MAC_IDS["platformID"]
-    if not any(record.platformID == mac_platform_id for record in name_table.names):
-        return
-    # the mac roman encoding can't encode many characters (eg. greek, cyrillic, cjk),
-    # in that case the mac name record is removed (as fontTools addMultilingualName
-    # does), otherwise the font would raise UnicodeEncodeError when saved;
-    # removing it is safe because the windows record has just been written
-    if _is_encodable(value, _NAMES_MAC_IDS):
-        name_table.setName(value, name_id, **_NAMES_MAC_IDS)
-    else:
-        name_table.removeNames(nameID=name_id, **_NAMES_MAC_IDS)
+    # the other records of the same name id are updated only if the font
+    # already has them (mac and unicode records are legacy, modern tools don't
+    # produce them anymore, so they are never added): a record left with its
+    # previous value would contradict the record just written
+    for platform_ids in (_NAMES_WIN_IDS, _NAMES_UNI_IDS, _NAMES_MAC_IDS):
+        for record_ids in _get_name_records_ids(name_table, name_id, platform_ids):
+            # the value is written only if the record encoding can encode it
+            # (eg. mac roman can't encode greek, cyrillic, cjk), otherwise the
+            # record is removed (as fontTools addMultilingualName does),
+            # because the font would raise UnicodeEncodeError when saved;
+            # removing it is safe because the windows record has just been written
+            if _is_encodable(value, record_ids):
+                name_table.setName(value, name_id, **record_ids)
+            else:
+                name_table.removeNames(nameID=name_id, **record_ids)
 
 
 def set_names(

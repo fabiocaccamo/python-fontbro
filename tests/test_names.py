@@ -123,6 +123,99 @@ class NamesTestCase(AbstractTestCase):
         self.assertEqual(self._get_name_records_by_platform(font, 1), {3: "Шрифт"})
         self.assertEqual(font.get_name(Font.NAME_FAMILY_NAME), "Шрифт")
 
+    def _get_name_records_by_encoding(self, font, name_id, platform_id):
+        return {
+            (record.platEncID, record.langID): record.toUnicode()
+            for record in font.get_ttfont()["name"].names
+            if record.nameID == name_id and record.platformID == platform_id
+        }
+
+    def test_set_name_with_unicode_records(self):
+        # unicode records are updated if the font has them, otherwise they
+        # would keep an outdated value contradicting the other records
+        font = self._get_font("/issues/issue-0051/ANASTCN.ttf")
+        self.assertEqual(
+            self._get_name_records_by_encoding(font, 1, 0),
+            {(0, 0): "AG_Anastasia_C"},
+        )
+        font.set_name(Font.NAME_FAMILY_NAME, "Anastasia Renamed")
+        self.assertEqual(
+            self._get_name_records_by_encoding(font, 1, 0),
+            {(0, 0): "Anastasia Renamed"},
+        )
+
+    def test_set_name_with_multiple_unicode_records(self):
+        # the same name id can have more than one unicode record, with
+        # different encoding ids (eg. cambria.ttc), all of them are updated
+        font = self._get_font("/issues/issue-0051/ANASTCN.ttf")
+        font.get_ttfont()["name"].setName("AG_Anastasia_C", 1, 0, 3, 0)
+        font.set_name(Font.NAME_FAMILY_NAME, "Anastasia Renamed")
+        self.assertEqual(
+            self._get_name_records_by_encoding(font, 1, 0),
+            {(0, 0): "Anastasia Renamed", (3, 0): "Anastasia Renamed"},
+        )
+
+    def test_set_name_with_windows_symbol_record(self):
+        # the windows record of a symbol font uses the encoding id 0, it is
+        # updated as well, otherwise it would keep an outdated value
+        font = self._get_font("/issues/issue-0051/ANASTCN.ttf")
+        self.assertEqual(
+            self._get_name_records_by_encoding(font, 1, 3),
+            {(0, 0x409): "AG_Anastasia_C"},
+        )
+        font.set_name(Font.NAME_FAMILY_NAME, "Anastasia Renamed")
+        self.assertEqual(
+            self._get_name_records_by_encoding(font, 1, 3),
+            {(0, 0x409): "Anastasia Renamed", (1, 0x409): "Anastasia Renamed"},
+        )
+
+    def test_set_name_with_name_records_in_other_languages(self):
+        # records in other languages hold localized names, they are not touched
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        font.get_ttfont()["name"].setName("ロボトモノ", 1, 3, 1, 0x411)
+        font.set_name(Font.NAME_FAMILY_NAME, "Roboto Mono Renamed")
+        self.assertEqual(
+            self._get_name_records_by_encoding(font, 1, 3),
+            {(1, 0x409): "Roboto Mono Renamed", (1, 0x411): "ロボトモノ"},
+        )
+
+    def test_set_name_with_mac_record_with_other_encoding(self):
+        # the mac records of the font are updated whatever their encoding is,
+        # no record with the canonical mac roman encoding is added
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        font.get_ttfont()["name"].setName("Ρομπότο", 1, 1, 6, 0)
+        font.set_name(Font.NAME_FAMILY_NAME, "Ρομπότο Μόνο")
+        self.assertEqual(
+            self._get_name_records_by_encoding(font, 1, 1),
+            {(6, 0): "Ρομπότο Μόνο"},
+        )
+
+    def test_set_name_with_name_records_with_unknown_encoding(self):
+        # the macintosh "uninterpreted" script has no known encoding, the value
+        # can't be written to it, so the record is removed
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        font.get_ttfont()["name"].setName("Roboto Mono", 1, 1, 32, 0)
+        font.set_name(Font.NAME_FAMILY_NAME, "Roboto Mono Renamed")
+        self.assertEqual(self._get_name_records_by_encoding(font, 1, 1), {})
+
+    def test_set_name_without_unicode_records(self):
+        # unicode records are not added to fonts that don't have them
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        font.set_name(Font.NAME_FAMILY_NAME, "Roboto Mono Renamed")
+        platforms = {record.platformID for record in font.get_ttfont()["name"].names}
+        self.assertEqual(platforms, {3})
+
+    def test_set_name_with_unicode_records_with_language_tag(self):
+        # unicode records using a language-tag (langID >= 0x8000) hold names
+        # in other languages, so they are not overwritten
+        font = self._get_font("/issues/issue-0051/ANASTCN.ttf")
+        font.get_ttfont()["name"].setName("Anastasia (localized)", 1, 0, 3, 0x8000)
+        font.set_name(Font.NAME_FAMILY_NAME, "Anastasia Renamed")
+        self.assertEqual(
+            self._get_name_records_by_encoding(font, 1, 0),
+            {(0, 0): "Anastasia Renamed", (3, 0x8000): "Anastasia (localized)"},
+        )
+
     def test_rename_not_encodable_in_mac_roman(self):
         # regression: renaming with non-latin names must not prevent saving
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
