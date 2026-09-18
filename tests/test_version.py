@@ -68,6 +68,9 @@ class VersionTestCase(AbstractTestCase):
             # the version is not read from unrelated numbers
             ("Feb.12th.1998;1.00, initial realease", 0.0),
             ("Macromedia Fontographer 4.1 4/3/97", 0.0),
+            # values that cannot be stored as head.fontRevision
+            ("Version 32768.0", 0.0),
+            ("Version 99999999999999999999.0", 0.0),
         ]
         for value, expected_value in values:
             with self.subTest(f"Test with value: {value!r}", value=value):
@@ -138,6 +141,14 @@ class VersionTestCase(AbstractTestCase):
         font = self._get_font_with_unset_head_revision()
         font.get_ttfont()["name"].removeNames(nameID=5)
         self.assertEqual(font.get_version(), 0.0)
+
+    def test_get_version_with_head_revision_out_of_range(self):
+        font = self._get_font(self.FONT_FILEPATH)
+        # a value that cannot be stored as a 16.16 fixed-point value
+        font.get_ttfont()["head"].fontRevision = 99999999999999999999.0
+        # the version is read from the version name record
+        self.assertEqual(font.get_version(), 1.015)
+        self.assertEqual(font.get_version(use_name_record=False), 0.0)
 
     def test_get_version_without_head_table(self):
         font = self._get_font(self.FONT_FILEPATH)
@@ -268,19 +279,34 @@ class VersionTestCase(AbstractTestCase):
         self.assertEqual(font.get_version(), 2.5)
 
     def test_set_version_with_saved_font(self):
+        # 1.015 is not exactly representable as a 16.16 fixed-point value,
+        # it is stored as 1.0149993896484375 and read back as 1.015
         font = self._get_font("/issues/issue-0050/LeagueGothic-Regular.otf")
-        font.set_version(2.5)
+        font.set_version(1.015)
         font_temp_path = self._get_font_temp_path("LeagueGothic-Regular.otf")
         font.save(font_temp_path, overwrite=True)
         font_saved = Font(filepath=font_temp_path)
-        self.assertEqual(font_saved.get_version(), 2.5)
-        self.assertEqual(font_saved.get_name(Font.NAME_VERSION), "Version 2.500")
+        self.assertEqual(
+            font_saved.get_ttfont()["head"].fontRevision, 1.0149993896484375
+        )
+        self.assertEqual(font_saved.get_version(), 1.015)
+        self.assertEqual(font_saved.get_version(use_head_revision=False), 1.015)
+        self.assertEqual(font_saved.get_name(Font.NAME_VERSION), "Version 1.015")
         self.assertEqual(
             font_saved.get_name(Font.NAME_UNIQUE_IDENTIFIER),
-            "2.500;UKWN;LeagueGothic-Regular",
+            "1.015;UKWN;LeagueGothic-Regular",
         )
         top_dict = font_saved.get_ttfont()["CFF "].cff.topDictIndex[0]
-        self.assertEqual(top_dict.version, "002.500")
+        self.assertEqual(top_dict.version, "001.015")
+
+    def test_set_version_with_saved_font_with_max_version(self):
+        font = self._get_font(self.FONT_FILEPATH)
+        font.set_version(32767.999)
+        font_temp_path = self._get_font_temp_path("Tourney-Regular.ttf")
+        # the greatest storable version value doesn't make the font unsaveable
+        font.save(font_temp_path, overwrite=True)
+        font_saved = Font(filepath=font_temp_path)
+        self.assertEqual(font_saved.get_version(), 32767.999)
 
     def test_set_version_with_version_str(self):
         versions = [
@@ -308,6 +334,11 @@ class VersionTestCase(AbstractTestCase):
             "Version",
             "Regular",
             "Macromedia Fontographer 4.1 4/3/97",
+            # values that cannot be stored as head.fontRevision
+            32768.0,
+            "Version 32768.0",
+            # a value too small to be stored would unset the version
+            0.000001,
             # invalid types
             None,
             [1.015],

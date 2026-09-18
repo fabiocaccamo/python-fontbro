@@ -21,6 +21,11 @@ _VERSION_PATTERN: re.Pattern[str] = re.compile(
 # head.fontRevision is a 16.16 fixed-point value
 _VERSION_PRECISION_BITS: int = 16
 
+# head.fontRevision is encoded as a signed 32 bits integer, so this is the
+# greatest value it can hold: greater values cannot be stored in a font
+# (and they would make fontTools fail when saving it)
+_VERSION_MAX_VALUE: float = ((2**31) - 1) / (1 << _VERSION_PRECISION_BITS)
+
 
 def _get_version_str(
     version: float,
@@ -67,12 +72,15 @@ def parse_version(
     eg. "Version 1.015;git-0a5106e0b" -> 1.015.
     The value is matched from the beginning of the string to avoid reading
     unrelated numbers (eg. a date or a tool version).
-    Returns 0.0 if the value cannot be parsed.
+    Returns 0.0 if the value cannot be parsed, or if it holds a value that
+    cannot be stored as a font version.
     """
     match = _VERSION_PATTERN.match((value or "").strip())
     if not match:
         return 0.0
     version = float(f"{match[1]}.{match[2]}")
+    if not 0 < version <= _VERSION_MAX_VALUE:
+        return 0.0
     return normalize_version(version)
 
 
@@ -99,7 +107,7 @@ def get_version(
         if head is not None:
             # fontRevision is 0.0 when it has not been set
             version = float(getattr(head, "fontRevision", None) or 0.0)
-            if version > 0:
+            if 0 < version <= _VERSION_MAX_VALUE:
                 return normalize_version(version)
     if use_name_record:
         version = parse_version(_names.get_name(ttfont, _names.NAME_VERSION))
@@ -191,13 +199,19 @@ def set_version(
         raise ArgumentError(
             f"Invalid version type, expected float or str, found '{version_type}'."
         )
-    if version_value <= 0:
+    new_version = 0.0
+    if 0 < version_value <= _VERSION_MAX_VALUE:
+        # a value too small to be stored is rounded to 0.0, ie. no version set,
+        # so it is rejected as well
+        new_version = normalize_version(version_value)
+    if new_version <= 0:
         raise ArgumentError(
             f"Invalid version value: {version!r}, expected a number greater than 0"
-            ' or a parsable version string, eg. 1.015 or "Version 1.015".'
+            f" and not greater than {_VERSION_MAX_VALUE} (head.fontRevision is a"
+            " 16.16 fixed-point value), or a parsable version string,"
+            ' eg. 1.015 or "Version 1.015".'
         )
     old_version = get_version(ttfont)
-    new_version = normalize_version(version_value)
     # head.fontRevision (only if the font has the head table)
     head = ttfont.get("head")
     if head is not None:
