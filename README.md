@@ -720,13 +720,22 @@ instance = font.get_variable_instance_closest_to_coordinates(
 #### `get_version`
 ```python
 """
-Gets the font version.
+Gets the font version reading it from head.fontRevision,
+with fallback on the version name record (name id 5) parsed value,
+eg. "Version 1.015;git-0a5106e0b" -> 1.015.
 
-:returns: The font version value.
+:param use_head_revision: If True, the head.fontRevision value is used (if set).
+:type use_head_revision: bool
+:param use_name_record: If True, the version name record value is used as fallback.
+:type use_name_record: bool
+
+:returns: The font version value, 0.0 if the version cannot be read.
 :rtype: float
+
+:raises ArgumentError: If both options are False.
 """
 
-version = font.get_version()
+version = font.get_version(use_head_revision=True, use_name_record=True)
 ```
 
 #### `get_vertical_metrics`

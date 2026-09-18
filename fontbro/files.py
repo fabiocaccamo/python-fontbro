@@ -93,14 +93,3 @@ def get_filename(
     extension = get_format(ttfont)
     filename = f"{basename}.{extension}"
     return filename
-
-
-def get_version(
-    ttfont: TTFont,
-) -> float:
-    """
-    Gets the version of the given font (head.fontRevision).
-    """
-    head = ttfont.get("head")
-    version = float(head.fontRevision)
-    return version

@@ -29,6 +29,7 @@ from fontbro import support as _support
 from fontbro import tables as _tables
 from fontbro import unicode as _unicode
 from fontbro import variable as _variable
+from fontbro import version as _version
 from fontbro.exceptions import (
     ArgumentError,
     OperationError,
@@ -1027,15 +1028,31 @@ class Font:
 
     def get_version(
         self,
+        *,
+        use_head_revision: bool = True,
+        use_name_record: bool = True,
     ) -> float:
         """
-        Gets the font version.
+        Gets the font version reading it from head.fontRevision,
+        with fallback on the version name record (name id 5) parsed value,
+        eg. "Version 1.015;git-0a5106e0b" -> 1.015.
 
-        :returns: The font version value.
+        :param use_head_revision: If True, the head.fontRevision value is used (if set).
+        :type use_head_revision: bool
+        :param use_name_record: If True, the version name record value is used as fallback.
+        :type use_name_record: bool
+
+        :returns: The font version value, 0.0 if the version cannot be read.
         :rtype: float
+
+        :raises ArgumentError: If both options are False.
         """
         ttfont = self.get_ttfont()
-        return _files.get_version(ttfont)
+        return _version.get_version(
+            ttfont,
+            use_head_revision=use_head_revision,
+            use_name_record=use_name_record,
+        )
 
     def get_vertical_metrics(
         self,
