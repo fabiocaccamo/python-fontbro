@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.29.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.29.0) - 2026-09-18
+-   Update `set_name` to update all the name records of the font holding the name (any platform and encoding, eg. Unicode records and Windows symbol records), instead of the Windows and Mac ones only (records are never added, and records in other languages are not overwritten).
+-   Add `set_version` method to set the version (as `float` or `str`) updating `head.fontRevision`, the version name record (name id 5), the unique identifier name record (name id 3) and the `CFF` version.
+-   Add `get_version_formatted` method to get the version formatted for display, eg. `"v1.015"`, with `prefix` option.
+-   Update `get_version` to read the version from the version name record (name id 5) when `head.fontRevision` is not set, with `use_head_revision` and `use_name_record` options.
+-   Update `get_version` to return the shortest decimal representation of the version value, eg. `1.0149993896484375` -> `1.015` (the returned value still converts back to the same `head.fontRevision` value).
+
 ## [0.28.1](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.28.1) - 2026-09-13
 -   Update `set_name` to not add legacy Mac name records to fonts that don't have them (Mac records are updated only if already present).
 -   Fix `get_names` returning names in other languages (eg. japanese) instead of the english ones returned by `get_name`.
