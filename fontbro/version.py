@@ -49,6 +49,17 @@ def normalize_version(
     return float(_get_version_str(version))
 
 
+def _get_version_parts(
+    version: float,
+) -> tuple[str, str]:
+    """
+    Gets the (major, minor) parts of the given version value as digit strings,
+    with the minor part padded to a minimum of 3 digits, eg. 1.1 -> ("1", "100").
+    """
+    major, _, minor = _get_version_str(version).partition(".")
+    return major, minor.ljust(3, "0")
+
+
 def format_version(
     version: float,
     *,
@@ -59,8 +70,7 @@ def format_version(
     with the given prefix and a minimum of 3 decimal digits, eg. 1.1 -> "v1.100".
     More decimal digits are kept if the value needs them, eg. 1.0001 -> "v1.0001".
     """
-    major, _, minor = _get_version_str(version).partition(".")
-    minor = minor.ljust(3, "0")
+    major, minor = _get_version_parts(version)
     return f"{prefix}{major}.{minor}"
 
 
@@ -169,7 +179,7 @@ def _format_cff_version(
     Formats the given version value using the CFF top dict convention,
     eg. 1.015 -> "001.015".
     """
-    major, _, minor = format_version(version, prefix="").partition(".")
+    major, minor = _get_version_parts(version)
     return f"{int(major):03d}.{minor}"
 
 
