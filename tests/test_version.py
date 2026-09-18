@@ -139,6 +139,18 @@ class VersionTestCase(AbstractTestCase):
         font.get_ttfont()["name"].removeNames(nameID=5)
         self.assertEqual(font.get_version(), 0.0)
 
+    def test_get_version_without_head_table(self):
+        font = self._get_font(self.FONT_FILEPATH)
+        del font.get_ttfont()["head"]
+        # the version is read from the version name record
+        self.assertEqual(font.get_version(), 1.015)
+        self.assertEqual(font.get_version(use_name_record=False), 0.0)
+
+    def test_get_version_without_name_table(self):
+        font = self._get_font_with_unset_head_revision()
+        del font.get_ttfont()["name"]
+        self.assertEqual(font.get_version(), 0.0)
+
     def test_get_version_with_use_head_revision_only(self):
         font = self._get_font_with_unset_head_revision()
         self.assertEqual(font.get_version(use_name_record=False), 0.0)
@@ -177,3 +189,190 @@ class VersionTestCase(AbstractTestCase):
                 use_head_revision=False,
                 use_name_record=False,
             )
+
+    def test_set_version(self):
+        font = self._get_font(self.FONT_FILEPATH)
+        font.set_version(2.5)
+        self.assertEqual(font.get_version(), 2.5)
+        self.assertEqual(font.get_version_formatted(), "v2.500")
+        self.assertEqual(font.get_ttfont()["head"].fontRevision, 2.5)
+        self.assertEqual(font.get_name(Font.NAME_VERSION), "Version 2.500")
+        self.assertEqual(
+            font.get_name(Font.NAME_UNIQUE_IDENTIFIER),
+            "2.500;ETCO;Tourney-Regular",
+        )
+
+    def test_set_version_overwrites_name_record_extra_info(self):
+        font = self._get_font("/Inter/static/Inter-Regular.ttf")
+        self.assertEqual(
+            font.get_name(Font.NAME_VERSION), "Version 3.019;git-0a5106e0b"
+        )
+        font.set_version(3.02)
+        self.assertEqual(font.get_name(Font.NAME_VERSION), "Version 3.020")
+        self.assertEqual(
+            font.get_name(Font.NAME_UNIQUE_IDENTIFIER),
+            "3.020;RSMS;Inter-Regular",
+        )
+
+    def test_set_version_with_unique_identifier_without_version(self):
+        font = self._get_font(self.FONT_FILEPATH)
+        font.set_name(Font.NAME_UNIQUE_IDENTIFIER, "ETCO;Tourney-Regular")
+        font.set_version(2.5)
+        # the unique identifier is left untouched
+        self.assertEqual(
+            font.get_name(Font.NAME_UNIQUE_IDENTIFIER),
+            "ETCO;Tourney-Regular",
+        )
+
+    def test_set_version_with_unique_identifier_with_other_version(self):
+        font = self._get_font(self.FONT_FILEPATH)
+        font.set_name(Font.NAME_UNIQUE_IDENTIFIER, "1.234;ETCO;Tourney-Regular")
+        font.set_version(2.5)
+        # the unique identifier is left untouched
+        self.assertEqual(
+            font.get_name(Font.NAME_UNIQUE_IDENTIFIER),
+            "1.234;ETCO;Tourney-Regular",
+        )
+
+    def test_set_version_with_unique_identifier_with_version_and_extra_info(self):
+        font = self._get_font(self.FONT_FILEPATH)
+        font.set_name(Font.NAME_UNIQUE_IDENTIFIER, "1.015 UKWN;Tourney-Regular")
+        font.set_version(2.5)
+        # the whole first part is replaced, it is the one holding the version
+        self.assertEqual(
+            font.get_name(Font.NAME_UNIQUE_IDENTIFIER),
+            "2.500;Tourney-Regular",
+        )
+
+    def test_set_version_with_cff_font(self):
+        font = self._get_font("/issues/issue-0050/LeagueGothic-Regular.otf")
+        ttfont = font.get_ttfont()
+        top_dict = ttfont["CFF "].cff.topDictIndex[0]
+        self.assertEqual(top_dict.version, "001.560")
+        font.set_version(2.5)
+        self.assertEqual(top_dict.version, "002.500")
+        self.assertEqual(font.get_name(Font.NAME_VERSION), "Version 2.500")
+        self.assertEqual(
+            font.get_name(Font.NAME_UNIQUE_IDENTIFIER),
+            "2.500;UKWN;LeagueGothic-Regular",
+        )
+
+    def test_set_version_with_cff_font_without_cff_version(self):
+        font = self._get_font("/Noto_Sans_TC/NotoSansTC-Regular.otf")
+        ttfont = font.get_ttfont()
+        top_dict = ttfont["CFF "].cff.topDictIndex[0]
+        self.assertNotIn("version", top_dict.rawDict)
+        font.set_version(2.5)
+        # the cff version is not added to fonts that don't have it
+        self.assertNotIn("version", top_dict.rawDict)
+        self.assertEqual(font.get_version(), 2.5)
+
+    def test_set_version_with_saved_font(self):
+        font = self._get_font("/issues/issue-0050/LeagueGothic-Regular.otf")
+        font.set_version(2.5)
+        font_temp_path = self._get_font_temp_path("LeagueGothic-Regular.otf")
+        font.save(font_temp_path, overwrite=True)
+        font_saved = Font(filepath=font_temp_path)
+        self.assertEqual(font_saved.get_version(), 2.5)
+        self.assertEqual(font_saved.get_name(Font.NAME_VERSION), "Version 2.500")
+        self.assertEqual(
+            font_saved.get_name(Font.NAME_UNIQUE_IDENTIFIER),
+            "2.500;UKWN;LeagueGothic-Regular",
+        )
+        top_dict = font_saved.get_ttfont()["CFF "].cff.topDictIndex[0]
+        self.assertEqual(top_dict.version, "002.500")
+
+    def test_set_version_with_version_str(self):
+        versions = [
+            ("Version 2.500", 2.5),
+            ("Version 2.500;git-0a5106e0b", 2.5),
+            ("2.500", 2.5),
+            ("v2.5", 2.5),
+            ("2.5", 2.5),
+        ]
+        for version, expected_value in versions:
+            with self.subTest(f"Test with version: {version!r}", version=version):
+                font = self._get_font(self.FONT_FILEPATH)
+                font.set_version(version)
+                self.assertEqual(font.get_version(), expected_value)
+                self.assertEqual(font.get_name(Font.NAME_VERSION), "Version 2.500")
+
+    def test_set_version_with_invalid_version(self):
+        font = self._get_font(self.FONT_FILEPATH)
+        versions = [
+            # invalid values
+            0.0,
+            -1.0,
+            # unparsable version strings
+            "",
+            "Version",
+            "Regular",
+            "Macromedia Fontographer 4.1 4/3/97",
+            # invalid types
+            None,
+            [1.015],
+        ]
+        for version in versions:
+            with self.subTest(f"Test with version: {version!r}", version=version):
+                with self.assertRaises(ArgumentError):
+                    font.set_version(version)
+        # the font is left untouched
+        self.assertEqual(font.get_version(), 1.015)
+        self.assertEqual(font.get_name(Font.NAME_VERSION), "Version 1.015")
+
+    def test_set_version_without_head_table(self):
+        font = self._get_font(self.FONT_FILEPATH)
+        del font.get_ttfont()["head"]
+        font.set_version(2.5)
+        # the name records are updated anyway
+        self.assertEqual(font.get_name(Font.NAME_VERSION), "Version 2.500")
+        self.assertEqual(
+            font.get_name(Font.NAME_UNIQUE_IDENTIFIER),
+            "2.500;ETCO;Tourney-Regular",
+        )
+
+    def test_set_version_without_name_table(self):
+        font = self._get_font(self.FONT_FILEPATH)
+        del font.get_ttfont()["name"]
+        font.set_version(2.5)
+        # the head.fontRevision is updated anyway
+        self.assertEqual(font.get_ttfont()["head"].fontRevision, 2.5)
+        self.assertEqual(font.get_version(), 2.5)
+
+    def test_set_version_with_cff_font_with_multiple_fonts(self):
+        font = self._get_font("/issues/issue-0050/LeagueGothic-Regular.otf")
+        other_font = self._get_font("/issues/issue-0062/ABCTest-Thin.otf")
+        cff = font.get_ttfont()["CFF "].cff
+        other_cff = other_font.get_ttfont()["CFF "].cff
+        top_dict = cff.topDictIndex[0]
+        other_top_dict = other_cff.topDictIndex[0]
+        # simulate a cff holding more than one font (eg. in a font collection),
+        # with the font of this face at index 1
+        cff.fontNames = list(other_cff.fontNames) + list(cff.fontNames)
+        cff.topDictIndex.items.insert(0, other_top_dict)
+        font.set_version(2.5)
+        # the font is looked up by its postscript name, not by its index
+        self.assertEqual(top_dict.version, "002.500")
+        self.assertEqual(other_top_dict.version, "001.000")
+
+    def test_set_version_with_cff_font_without_top_dict(self):
+        font = self._get_font("/issues/issue-0050/LeagueGothic-Regular.otf")
+        cff = font.get_ttfont()["CFF "].cff
+        top_dict = cff.topDictIndex[0]
+        cff.topDictIndex.items.clear()
+        font.set_version(2.5)
+        # the cff version is left untouched
+        self.assertEqual(top_dict.version, "001.560")
+        self.assertEqual(font.get_version(), 2.5)
+
+    def test_set_version_with_cff_font_without_matching_font(self):
+        font = self._get_font("/issues/issue-0050/LeagueGothic-Regular.otf")
+        cff = font.get_ttfont()["CFF "].cff
+        top_dict = cff.topDictIndex[0]
+        cff.fontNames = ["OtherFont-Regular", "AnotherFont-Regular"]
+        font.set_version(2.5)
+        # the cff version is left untouched
+        self.assertEqual(top_dict.version, "001.560")
+        # the other values are updated anyway
+        self.assertEqual(font.get_version(), 2.5)
+        self.assertEqual(font.get_name(Font.NAME_VERSION), "Version 2.500")

@@ -100,6 +100,7 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`set_style_flags`](#set_style_flags)
 -   [`set_style_flags_by_subfamily_name`](#set_style_flags_by_subfamily_name)
 -   [`set_style_name`](#set_style_name)
+-   [`set_version`](#set_version)
 -   [`set_vertical_metrics`](#set_vertical_metrics)
 -   [`subset`](#subset)
 -   [`to_sliced_variable`](#to_sliced_variable)
@@ -1210,6 +1211,28 @@ Sets the style name updating the related font names records.
 """
 
 font.set_style_name(name="Bold Italic")
+```
+
+#### `set_version`
+```python
+"""
+Sets the font version, the version value can be a number (eg. 1.015)
+or a version string (eg. "Version 1.015"), parsed the same way the
+version name record value is parsed when read.
+The head.fontRevision and the version name record (name id 5) are
+updated, the latter is overwritten with the canonical "Version X.YYY"
+form (any extra info it contained is dropped).
+The unique identifier name record (name id 3) is updated only if its
+first ";" separated part holds the current version value, and only in
+that part. The CFF version is updated only if the font already has it.
+
+:param version: The version value, eg. 1.015 or "Version 1.015"
+:type version: float or str
+
+:raises ArgumentError: If the version value is not valid.
+"""
+
+font.set_version(1.015)
 ```
 
 #### `set_vertical_metrics`

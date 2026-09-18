@@ -1718,6 +1718,29 @@ class Font:
             style_name=name,
         )
 
+    def set_version(
+        self,
+        version: float | str,
+    ) -> None:
+        """
+        Sets the font version, the version value can be a number (eg. 1.015)
+        or a version string (eg. "Version 1.015"), parsed the same way the
+        version name record value is parsed when read.
+        The head.fontRevision and the version name record (name id 5) are
+        updated, the latter is overwritten with the canonical "Version X.YYY"
+        form (any extra info it contained is dropped).
+        The unique identifier name record (name id 3) is updated only if its
+        first ";" separated part holds the current version value, and only in
+        that part. The CFF version is updated only if the font already has it.
+
+        :param version: The version value, eg. 1.015 or "Version 1.015"
+        :type version: float or str
+
+        :raises ArgumentError: If the version value is not valid.
+        """
+        ttfont = self.get_ttfont()
+        _version.set_version(ttfont, version)
+
     def set_vertical_metrics(
         self,
         **vertical_metrics: Any,
