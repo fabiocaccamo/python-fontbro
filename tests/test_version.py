@@ -2,7 +2,7 @@ from fontTools.misc.fixedTools import floatToFixed
 
 from fontbro import Font
 from fontbro.exceptions import ArgumentError
-from fontbro.version import normalize_version, parse_version
+from fontbro.version import format_version, normalize_version, parse_version
 from tests import AbstractTestCase
 
 
@@ -94,6 +94,31 @@ class VersionTestCase(AbstractTestCase):
                     floatToFixed(value, precisionBits=16),
                 )
 
+    def test_format_version(self):
+        values = [
+            (1.015, "v1.015"),
+            (2.002, "v2.002"),
+            (3.019, "v3.019"),
+            (10.25, "v10.250"),
+            # the minor part is padded to 3 decimal digits
+            (1.1, "v1.100"),
+            (3.0, "v3.000"),
+            # more decimal digits are kept when the value needs them
+            (1.0001, "v1.0001"),
+            # the raw head.fontRevision values are formatted as well
+            (1.0149993896484375, "v1.015"),
+            (1.100006103515625, "v1.100"),
+            # unreadable version
+            (0.0, "v0.000"),
+        ]
+        for value, expected_value in values:
+            with self.subTest(f"Test with value: {value!r}", value=value):
+                self.assertEqual(format_version(value), expected_value)
+
+    def test_format_version_with_prefix(self):
+        self.assertEqual(format_version(1.015, prefix=""), "1.015")
+        self.assertEqual(format_version(1.015, prefix="ver. "), "ver. 1.015")
+
     def _get_font_with_unset_head_revision(self):
         font = self._get_font(self.FONT_FILEPATH)
         font.get_ttfont()["head"].fontRevision = 0.0
@@ -134,3 +159,21 @@ class VersionTestCase(AbstractTestCase):
         font = self._get_font(self.FONT_FILEPATH)
         with self.assertRaises(ArgumentError):
             font.get_version(use_head_revision=False, use_name_record=False)
+
+    def test_get_version_formatted(self):
+        font = self._get_font(self.FONT_FILEPATH)
+        self.assertEqual(font.get_version_formatted(), "v1.015")
+        self.assertEqual(font.get_version_formatted(prefix=""), "1.015")
+
+    def test_get_version_formatted_with_unset_head_revision(self):
+        font = self._get_font_with_unset_head_revision()
+        self.assertEqual(font.get_version_formatted(), "v1.015")
+        self.assertEqual(font.get_version_formatted(use_name_record=False), "v0.000")
+
+    def test_get_version_formatted_without_sources(self):
+        font = self._get_font(self.FONT_FILEPATH)
+        with self.assertRaises(ArgumentError):
+            font.get_version_formatted(
+                use_head_revision=False,
+                use_name_record=False,
+            )

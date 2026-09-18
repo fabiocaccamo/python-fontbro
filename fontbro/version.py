@@ -21,6 +21,17 @@ _VERSION_PATTERN: re.Pattern[str] = re.compile(
 _VERSION_PRECISION_BITS: int = 16
 
 
+def _get_version_str(
+    version: float,
+) -> str:
+    """
+    Gets the shortest decimal representation of the given version value
+    that converts back to the same head.fontRevision fixed-point value.
+    """
+    version_fixed = floatToFixed(version, precisionBits=_VERSION_PRECISION_BITS)
+    return str(fixedToStr(version_fixed, precisionBits=_VERSION_PRECISION_BITS))
+
+
 def normalize_version(
     version: float,
 ) -> float:
@@ -29,9 +40,22 @@ def normalize_version(
     that converts back to the same head.fontRevision fixed-point value,
     eg. 1.0149993896484375 -> 1.015 (both are stored as 66519 in the head table).
     """
-    version_fixed = floatToFixed(version, precisionBits=_VERSION_PRECISION_BITS)
-    version_str = fixedToStr(version_fixed, precisionBits=_VERSION_PRECISION_BITS)
-    return float(version_str)
+    return float(_get_version_str(version))
+
+
+def format_version(
+    version: float,
+    *,
+    prefix: str = "v",
+) -> str:
+    """
+    Formats the given version value using the version name record convention,
+    with the given prefix and a minimum of 3 decimal digits, eg. 1.1 -> "v1.100".
+    More decimal digits are kept if the value needs them, eg. 1.0001 -> "v1.0001".
+    """
+    major, _, minor = _get_version_str(version).partition(".")
+    minor = minor.ljust(3, "0")
+    return f"{prefix}{major}.{minor}"
 
 
 def parse_version(
@@ -79,3 +103,21 @@ def get_version(
         if version > 0:
             return version
     return 0.0
+
+
+def get_version_formatted(
+    ttfont: TTFont,
+    *,
+    use_head_revision: bool = True,
+    use_name_record: bool = True,
+    prefix: str = "v",
+) -> str:
+    """
+    Gets the formatted version of the given font, eg. "v1.015".
+    """
+    version = get_version(
+        ttfont,
+        use_head_revision=use_head_revision,
+        use_name_record=use_name_record,
+    )
+    return format_version(version, prefix=prefix)

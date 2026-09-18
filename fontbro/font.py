@@ -1054,6 +1054,37 @@ class Font:
             use_name_record=use_name_record,
         )
 
+    def get_version_formatted(
+        self,
+        *,
+        use_head_revision: bool = True,
+        use_name_record: bool = True,
+        prefix: str = "v",
+    ) -> str:
+        """
+        Gets the font version formatted using the version name record convention,
+        with the given prefix and a minimum of 3 decimal digits, eg. "v1.015".
+
+        :param use_head_revision: If True, the head.fontRevision value is used (if set).
+        :type use_head_revision: bool
+        :param use_name_record: If True, the version name record value is used as fallback.
+        :type use_name_record: bool
+        :param prefix: The prefix to prepend to the version value.
+        :type prefix: str
+
+        :returns: The formatted font version value, eg. "v0.000" if the version cannot be read.
+        :rtype: str
+
+        :raises ArgumentError: If both source options are False.
+        """
+        ttfont = self.get_ttfont()
+        return _version.get_version_formatted(
+            ttfont,
+            use_head_revision=use_head_revision,
+            use_name_record=use_name_record,
+            prefix=prefix,
+        )
+
     def get_vertical_metrics(
         self,
     ) -> dict[str, Any]:
