@@ -1016,6 +1016,10 @@
         "name": "Tolong Siki"
     },
     {
+        "characters_total": 16,
+        "name": "Bengali Supplement"
+    },
+    {
         "characters_total": 32,
         "name": "Makasar"
     },
@@ -1042,6 +1046,10 @@
     {
         "characters_total": 208,
         "name": "Early Dynastic Cuneiform"
+    },
+    {
+        "characters_total": 320,
+        "name": "Archaic Cuneiform Numerals"
     },
     {
         "characters_total": 112,
@@ -1128,6 +1136,14 @@
         "name": "Tangut Components Supplement"
     },
     {
+        "characters_total": 928,
+        "name": "Jurchen"
+    },
+    {
+        "characters_total": 64,
+        "name": "Jurchen Radicals"
+    },
+    {
         "characters_total": 16,
         "name": "Kana Extended-B"
     },
@@ -1180,6 +1196,10 @@
         "name": "Ancient Greek Musical Notation"
     },
     {
+        "characters_total": 64,
+        "name": "Musical Symbols Supplement"
+    },
+    {
         "characters_total": 32,
         "name": "Kaktovik Numerals"
     },
@@ -1202,6 +1222,10 @@
     {
         "characters_total": 688,
         "name": "Sutton SignWriting"
+    },
+    {
+        "characters_total": 256,
+        "name": "Miscellaneous Symbols and Arrows Extended"
     },
     {
         "characters_total": 256,
@@ -1366,6 +1390,10 @@
     {
         "characters_total": 4304,
         "name": "CJK Unified Ideographs Extension J"
+    },
+    {
+        "characters_total": 11328,
+        "name": "Seal"
     },
     {
         "characters_total": 128,

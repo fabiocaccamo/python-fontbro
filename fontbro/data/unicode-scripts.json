@@ -1,11 +1,11 @@
 [
     {
-        "characters_total": 9123,
+        "characters_total": 9276,
         "name": "Common",
         "tag": "Zyyy"
     },
     {
-        "characters_total": 1492,
+        "characters_total": 1653,
         "name": "Latin",
         "tag": "Latn"
     },
@@ -15,17 +15,17 @@
         "tag": "Bopo"
     },
     {
-        "characters_total": 684,
+        "characters_total": 695,
         "name": "Inherited",
         "tag": "Zinh"
     },
     {
-        "characters_total": 518,
+        "characters_total": 520,
         "name": "Greek",
         "tag": "Grek"
     },
     {
-        "characters_total": 143942,
+        "characters_total": 143911,
         "name": "Unknown",
         "tag": "Zzzz"
     },
@@ -40,17 +40,17 @@
         "tag": "Cyrl"
     },
     {
-        "characters_total": 96,
+        "characters_total": 99,
         "name": "Armenian",
         "tag": "Armn"
     },
     {
-        "characters_total": 134,
+        "characters_total": 136,
         "name": "Hebrew",
         "tag": "Hebr"
     },
     {
-        "characters_total": 1413,
+        "characters_total": 1452,
         "name": "Arabic",
         "tag": "Arab"
     },
@@ -80,12 +80,12 @@
         "tag": "Mand"
     },
     {
-        "characters_total": 164,
+        "characters_total": 165,
         "name": "Devanagari",
         "tag": "Deva"
     },
     {
-        "characters_total": 96,
+        "characters_total": 98,
         "name": "Bengali",
         "tag": "Beng"
     },
@@ -100,7 +100,7 @@
         "tag": "Gujr"
     },
     {
-        "characters_total": 91,
+        "characters_total": 93,
         "name": "Oriya",
         "tag": "Orya"
     },
@@ -280,17 +280,17 @@
         "tag": "Tfng"
     },
     {
-        "characters_total": 103351,
+        "characters_total": 103352,
         "name": "Han",
         "tag": "Hani"
     },
     {
-        "characters_total": 381,
+        "characters_total": 382,
         "name": "Hiragana",
         "tag": "Hira"
     },
     {
-        "characters_total": 321,
+        "characters_total": 327,
         "name": "Katakana",
         "tag": "Kana"
     },
@@ -745,9 +745,14 @@
         "tag": "Kawi"
     },
     {
-        "characters_total": 1234,
+        "characters_total": 1393,
         "name": "Cuneiform",
         "tag": "Xsux"
+    },
+    {
+        "characters_total": 164,
+        "name": "Proto Cuneiform",
+        "tag": "Pcun"
     },
     {
         "characters_total": 99,
@@ -810,7 +815,7 @@
         "tag": "Plrd"
     },
     {
-        "characters_total": 7059,
+        "characters_total": 7061,
         "name": "Tangut",
         "tag": "Tang"
     },
@@ -820,9 +825,14 @@
         "tag": "Nshu"
     },
     {
-        "characters_total": 472,
+        "characters_total": 477,
         "name": "Khitan Small Script",
         "tag": "Kits"
+    },
+    {
+        "characters_total": 965,
+        "name": "Jurchen",
+        "tag": "Jurc"
     },
     {
         "characters_total": 143,
@@ -873,5 +883,10 @@
         "characters_total": 88,
         "name": "Adlam",
         "tag": "Adlm"
+    },
+    {
+        "characters_total": 11328,
+        "name": "Seal",
+        "tag": "Seal"
     }
 ]
