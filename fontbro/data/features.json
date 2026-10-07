@@ -88,7 +88,7 @@
         "tag": "clig",
         "name": "Contextual Ligatures",
         "exposed": true,
-        "exposed_active": false
+        "exposed_active": true
     },
     {
         "tag": "cpct",
