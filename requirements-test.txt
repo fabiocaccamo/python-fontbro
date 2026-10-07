@@ -1,4 +1,4 @@
 coverage == 7.16.*
-mypy == 2.3.*
+mypy == 2.4.*
 pre-commit == 4.6.*
-tox == 4.61.*
+tox == 4.64.*
