@@ -2,6 +2,7 @@ name: Update data
 
 permissions:
   contents: write
+  pull-requests: write
 
 on:
   workflow_dispatch:
@@ -36,13 +37,37 @@ jobs:
         run: |
           pre-commit run --files fontbro/data/unicode-blocks.json fontbro/data/unicode-scripts.json
 
-      - name: Commit data
-        uses: test-room-7/action-update-file@6b8249d09d5926fbae288c0bb640757f09ec7ce0 # v2
+      - name: Check data changes
+        id: data
+        run: |
+          if git diff --quiet -- fontbro/data/unicode-blocks.json fontbro/data/unicode-scripts.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update fonttools requirement
+        if: steps.data.outputs.changed == 'true'
+        id: fonttools
+        run: |
+          FONTTOOLS_VERSION=$(python -c "import fontTools; print(fontTools.version)")
+          sed -i -E "s/^(fonttools\[[^]]*\] == ).*/\1${FONTTOOLS_VERSION}/" requirements.txt
+          echo "version=${FONTTOOLS_VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Create pull request
+        if: steps.data.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
-          file-path: |
+          token: ${{ secrets.WORKFLOWS_UPDATE_DATA_TOKEN }}
+          add-paths: |
             fontbro/data/unicode-blocks.json
             fontbro/data/unicode-scripts.json
-          commit-msg: "Update `unicode-blocks.json` and `unicode-scripts.json` data."
-          committer-name: "Fabio Caccamo [bot]"
-          committer-email: "fabio.caccamo@gmail.com"
-          github-token: ${{ secrets.WORKFLOWS_UPDATE_DATA_TOKEN }}
+            requirements.txt
+          branch: update-data
+          delete-branch: true
+          commit-message: "Update `unicode-blocks.json` and `unicode-scripts.json` data."
+          title: "Update `unicode-blocks.json` and `unicode-scripts.json` data."
+          body: |
+            Update `unicode-blocks.json` and `unicode-scripts.json` data generated with `fonttools == ${{ steps.fonttools.outputs.version }}` (also updated in `requirements.txt`).
+          author: "Fabio Caccamo [bot] <fabio.caccamo@gmail.com>"
+          committer: "Fabio Caccamo [bot] <fabio.caccamo@gmail.com>"
