@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from typing import Any
 
 import fsutil
@@ -10,7 +11,9 @@ from fontbro.unicode import _populate_unicode_items_set
 
 def _write_data_json(filepath: str, data: Any) -> None:
     data_filepath = fsutil.join_path(__file__, filepath)
-    fsutil.write_file_json(data_filepath, data, indent=4, sort_keys=True)
+    # end the file with a newline (as required by the end-of-file-fixer pre-commit hook)
+    content = json.dumps(data, indent=4, sort_keys=True) + "\n"
+    fsutil.write_file(data_filepath, content)
 
 
 def update_unicode_data() -> None:
