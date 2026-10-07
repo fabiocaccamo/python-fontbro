@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.30.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.30.0) - 2026-10-07
+-   Update `get_features` to return the designer-defined feature params for each feature in a `params` dict: `name`, `tooltip`, `sample_text`, `labels` and `characters` (available for stylistic sets `ss01`-`ss20` and character variants `cv01`-`cv99`, empty for other features).
+-   Fix `clig` feature `exposed_active` value (contextual ligatures are active by default).
+
 ## [0.29.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.29.0) - 2026-09-18
 -   Update `set_name` to update all the name records of the font holding the name (any platform and encoding, eg. Unicode records and Windows symbol records), instead of the Windows and Mac ones only (records are never added, and records in other languages are not overwritten).
 -   Add `set_version` method to set the version (as `float` or `str`) updating `head.fontRevision`, the version name record (name id 5), the unique identifier name record (name id 3) and the `CFF` version.
