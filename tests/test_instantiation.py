@@ -64,6 +64,12 @@ class InstantiationTestCase(AbstractTestCase):
         with self.assertRaises(ValueError):
             font.to_static(coordinates={"wght": [100, 400]}, style_name="ExtraBlack")
 
+    def test_to_static_removes_variations_postscript_name_prefix(self):
+        font = self._get_variable_font()
+        font.to_static(style_name="Black")
+        self.assertIsNone(font.get_name(Font.NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX))
+        self._assert_font_valid(font, "/Tourney/Tourney-VariableFont_wdth,wght.ttf")
+
     def test_to_static_with_style_name_invalid(self):
         font = self._get_variable_font()
         with self.assertRaises(ValueError):
