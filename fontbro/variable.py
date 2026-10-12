@@ -363,6 +363,11 @@ def to_static(
     # not useful in static fonts and after instancing it may contain incorrect values
     _remove_stat_table(ttfont)
 
+    # remove variations postscript name prefix (25), used only by variable fonts
+    # (as fontTools does when instancing with updateFontNames=True)
+    if "name" in ttfont:
+        ttfont["name"].removeNames(nameID=25)
+
     # update name records and style flags based on instance style name
     if instance and update_names:
         _names.rename(ttfont, style_name=instance["style_name"])
