@@ -182,26 +182,41 @@ def set_name(
     ttfont: TTFont,
     key: int | str,
     value: str,
+    *,
+    windows: bool = True,
+    mac: bool = True,
+    unicode: bool = True,
 ) -> None:
     """
-    Sets the name by its identifier in the name table of the given font.
+    Sets the name by its identifier in the name table of the given font,
+    only in the records of the platforms enabled by the windows, mac
+    and unicode flags.
     """
     name_id = _get_name_id(key)
     name_table = ttfont["name"]
-    # https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/ttLib/tables/_n_a_m_e.py#L568
-    # the windows record is always written, it's the one read first by get_name
-    name_table.setName(value, name_id, **_NAMES_WIN_IDS)
+    if windows:
+        # https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/ttLib/tables/_n_a_m_e.py#L568
+        # the windows record is always written, it's the one read first by get_name
+        name_table.setName(value, name_id, **_NAMES_WIN_IDS)
     # the other records of the same name id are updated only if the font
     # already has them (mac and unicode records are legacy, modern tools don't
     # produce them anymore, so they are never added): a record left with its
     # previous value would contradict the record just written
-    for platform_ids in (_NAMES_WIN_IDS, _NAMES_UNI_IDS, _NAMES_MAC_IDS):
+    platforms = [
+        platform_ids
+        for platform_ids, enabled in (
+            (_NAMES_WIN_IDS, windows),
+            (_NAMES_UNI_IDS, unicode),
+            (_NAMES_MAC_IDS, mac),
+        )
+        if enabled
+    ]
+    for platform_ids in platforms:
         for record_ids in _get_name_records_ids(name_table, name_id, platform_ids):
             # the value is written only if the record encoding can encode it
             # (eg. mac roman can't encode greek, cyrillic, cjk), otherwise the
             # record is removed (as fontTools addMultilingualName does),
-            # because the font would raise UnicodeEncodeError when saved;
-            # removing it is safe because the windows record has just been written
+            # because the font would raise UnicodeEncodeError when saved
             if _is_encodable(value, record_ids):
                 name_table.setName(value, name_id, **record_ids)
             else:
