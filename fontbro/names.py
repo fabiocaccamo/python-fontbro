@@ -6,7 +6,7 @@ from typing import Any
 from fontTools.misc.encodingTools import getEncoding
 from fontTools.ttLib import TTFont
 
-from fontbro.exceptions import ArgumentError
+from fontbro.exceptions import ArgumentError, OperationError
 from fontbro.utils import concat_names, remove_spaces
 
 # Names:
@@ -264,6 +264,185 @@ def get_style_name(
     )
 
 
+def _get_postscript_name(
+    value: str,
+) -> str:
+    """
+    Gets a PostScript name from the given value,
+    replacing the characters not allowed with hyphens.
+    """
+    # keep only printable ASCII subset:
+    # https://learn.microsoft.com/en-us/typography/opentype/spec/name#name-ids
+    # postscript_name_allowed_chars = {chr(code) for code in range(33, 127)}
+    # !"#$&'*+,-.0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\^_`abcdefghijklmnopqrstuvwxyz|~
+    postscript_name_pattern = (
+        r"[^0-9A-Za-z\!\"\#\$\&\'\*\+\,\-\.\:\;\=\?\@\\\^\_\`\|\~]"
+    )
+    postscript_name = re.sub(postscript_name_pattern, "-", value)
+    postscript_name = re.sub(r"[\-]+", "-", postscript_name).strip("-")
+    return postscript_name
+
+
+def _get_default_instance_style_name(
+    ttfont: TTFont,
+) -> str:
+    """
+    Gets the style name of the fvar named instance at the default coordinates.
+    """
+    fvar = ttfont["fvar"]
+    coordinates = {axis.axisTag: axis.defaultValue for axis in fvar.axes}
+    for instance in fvar.instances:
+        if instance.coordinates == coordinates:
+            return get_name(ttfont, instance.subfamilyNameID) or ""
+    return ""
+
+
+def rename_variable_instances(
+    ttfont: TTFont,
+    *,
+    family_name: str = "",
+    style_names: dict[str, str] | None = None,
+) -> None:
+    """
+    Renames the named instances of the given variable font: the family_name
+    replaces the family part of the instances PostScript names (and of the
+    variations PostScript name prefix, 25), the style_names (old style name
+    to new style name) replace the instances style names and the style part
+    of their PostScript names. The axes names are unchanged.
+    The default instance style name must match the font style name,
+    so renaming it renames the font style too.
+    """
+    if "fvar" not in ttfont:
+        raise OperationError("Only the instances of a variable font can be renamed.")
+    # style names are matched case-insensitively
+    style_names = {key.lower(): value for key, value in (style_names or {}).items()}
+    default_style_name = _get_default_instance_style_name(ttfont).lower()
+    default_style_name_new = style_names.get(default_style_name, "")
+    if default_style_name_new:
+        rename(ttfont, style_name=default_style_name_new)
+    family_name = (family_name or "").strip() or get_family_name(ttfont)
+    _rename_variable_instances(ttfont, family_name, style_names)
+
+
+def _get_instance_postscript_name(
+    prefix: str,
+    style_name: str,
+) -> str:
+    """
+    Gets the PostScript name of a variable font named instance, the "Italic"
+    style suffix is omitted if the prefix already ends with it
+    (eg. "TourneyItalic-Thin" instead of "TourneyItalic-ThinItalic").
+    """
+    style_name = remove_spaces(style_name)
+    if prefix.lower().endswith("italic"):
+        style_name = re.sub(r"italic$", "", style_name, flags=re.IGNORECASE)
+        style_name = style_name or "Regular"
+    return _get_postscript_name(f"{prefix}-{style_name}")
+
+
+def _rename_variable_instances(
+    ttfont: TTFont,
+    family_name: str,
+    style_names: dict[str, str],
+) -> None:
+    """
+    Renames the named instances of the given variable font,
+    the style_names keys must be lowercase.
+    """
+    name_table = ttfont["name"]
+
+    # the old family name is read before updating it (rename calls this function
+    # before updating the name records), the old prefixes are computed from it
+    family_name_old = get_family_name(ttfont)
+    prefix_old = get_name(ttfont, NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX) or ""
+    if prefix_old:
+        # variations postscript name prefix: only ASCII letters and digits allowed,
+        # its suffix is kept (eg. "Roman", "Italic") to avoid the same instances
+        # postscript names in the roman and italic fonts
+        suffix = ""
+        family_name_old_prefix = re.sub(r"[^0-9A-Za-z]", "", family_name_old)
+        if family_name_old_prefix and prefix_old.startswith(family_name_old_prefix):
+            suffix = prefix_old[len(family_name_old_prefix) :]
+        elif "italic" in get_style_name(ttfont).lower() and not (
+            family_name.lower().endswith("italic")
+        ):
+            suffix = "Italic"
+        prefix = re.sub(r"[^0-9A-Za-z]", "", f"{family_name}{suffix}")
+        # the windows record is written only if the font already has it
+        name_id = _get_name_id(NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX)
+        windows = bool(name_table.getName(name_id, **_NAMES_WIN_IDS))
+        set_name(
+            ttfont, NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX, prefix, windows=windows
+        )
+    else:
+        prefix_old = _get_postscript_name(remove_spaces(family_name_old))
+        prefix = _get_postscript_name(remove_spaces(family_name))
+
+    # the style names are read before updating them,
+    # because the same name record can be shared by more instances
+    instances = ttfont["fvar"].instances
+    instances_style_names = [
+        get_name(ttfont, instance.subfamilyNameID) or "" for instance in instances
+    ]
+    for instance, style_name in zip(instances, instances_style_names, strict=True):
+        style_name_new = style_names.get(style_name.lower(), "")
+        if style_name_new and instance.subfamilyNameID < 256:
+            # name ids 2 and 17 are the font style names (updated by rename),
+            # so a new name record is added for the instance
+            instance.subfamilyNameID = name_table.addName(
+                style_name_new, platforms=((3, 1, 0x409),)
+            )
+        elif style_name_new:
+            # the existing name record is updated, also where it is shared
+            # (eg. the STAT table axis values), the windows record is written
+            # only if the font already has it
+            name_id = instance.subfamilyNameID
+            windows = bool(name_table.getName(name_id, **_NAMES_WIN_IDS))
+            set_name(ttfont, name_id, style_name_new, windows=windows)
+        name_id = instance.postscriptNameID
+        name = get_name(ttfont, name_id) if 255 < name_id < 0xFFFF else None
+        if not name:
+            continue
+        if not style_name_new and prefix_old and name.startswith(prefix_old):
+            # only the prefix is replaced, to keep the font naming convention
+            name = prefix + name[len(prefix_old) :]
+        else:
+            # the name is generated if the style is renamed,
+            # or if it doesn't start with the old prefix (inconsistent font)
+            name = _get_instance_postscript_name(prefix, style_name_new or style_name)
+        set_name(ttfont, name_id, name)
+
+
+def _rename_cff(
+    ttfont: TTFont,
+    postscript_name: str,
+    full_name: str,
+    family_name: str,
+    weight: str,
+) -> None:
+    """
+    Renames the CFF table names (otf fonts): the font name and the FDArray
+    font names (CID-keyed fonts) prefixed by it, FullName, FamilyName and
+    Weight (only if not empty) only if already defined.
+    """
+    if "CFF " not in ttfont:
+        return
+    cff = ttfont["CFF "].cff
+    postscript_name_old = cff.fontNames[0]
+    cff.fontNames[0] = postscript_name
+    top_dict = cff.topDictIndex[0]
+    for font_dict in getattr(top_dict, "FDArray", []):
+        font_name = getattr(font_dict, "FontName", None)
+        if font_name and font_name.startswith(postscript_name_old):
+            font_dict.FontName = postscript_name + font_name[len(postscript_name_old) :]
+    if getattr(top_dict, "FullName", None):
+        top_dict.FullName = full_name
+    if getattr(top_dict, "FamilyName", None):
+        top_dict.FamilyName = family_name
+    if weight and getattr(top_dict, "Weight", None):
+        top_dict.Weight = weight
+
+
 def rename(
     ttfont: TTFont,
     *,
@@ -274,6 +453,8 @@ def rename(
     Renames the names records (1, 2, 3, 4, 6, 16, 17, 21, 22) of the given font
     according to the given family_name and style_name (subfamily_name),
     if not defined they will be auto-detected.
+    The records 18 and 25, the fvar instances PostScript names and the CFF
+    names are updated only if already defined.
     """
     family_name = (family_name or "").strip() or get_family_name(ttfont)
     style_name = (style_name or "").strip() or get_style_name(ttfont)
@@ -304,15 +485,7 @@ def rename(
         remove_spaces(typographic_subfamily_name),
     )
 
-    # keep only printable ASCII subset:
-    # https://learn.microsoft.com/en-us/typography/opentype/spec/name#name-ids
-    # postscript_name_allowed_chars = {chr(code) for code in range(33, 127)}
-    # !"#$&'*+,-.0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\^_`abcdefghijklmnopqrstuvwxyz|~
-    postscript_name_pattern = (
-        r"[^0-9A-Za-z\!\"\#\$\&\'\*\+\,\-\.\:\;\=\?\@\\\^\_\`\|\~]"
-    )
-    postscript_name = re.sub(postscript_name_pattern, "-", postscript_name)
-    postscript_name = re.sub(r"[\-]+", "-", postscript_name).strip("-")
+    postscript_name = _get_postscript_name(postscript_name)
     postscript_name_length = len(postscript_name)
     if postscript_name_length > 63:
         raise ArgumentError(
@@ -340,4 +513,52 @@ def rename(
         NAME_WWS_FAMILY_NAME: wws_family_name,
         NAME_WWS_SUBFAMILY_NAME: wws_subfamily_name,
     }
+
+    # compatible full name: if it's not the full name (eg. a designer-defined
+    # short menu name), only the family name in it is replaced
+    compatible_full_name = get_name(ttfont, NAME_COMPATIBLE_FULL) or ""
+    if compatible_full_name:
+        family_name_old = get_family_name(ttfont)
+        full_name_old = concat_names(family_name_old, get_style_name(ttfont))
+        if (
+            compatible_full_name == full_name_old
+            or not family_name_old
+            or family_name_old not in compatible_full_name
+        ):
+            compatible_full_name = full_name
+        else:
+            compatible_full_name = compatible_full_name.replace(
+                family_name_old, typographic_family_name, 1
+            )
+
+    # cff weight (eg. "Bold" for "Bold Italic"), updated only if the style changes
+    style_name_old = get_style_name(ttfont)
+    weight = ""
+    if style_name_old != typographic_subfamily_name:
+        weight = re.sub(
+            r"\s*italic$", "", typographic_subfamily_name, flags=re.IGNORECASE
+        )
+        weight = weight or "Regular"
+
+    # fvar instances (and name id 25) need the old postscript name
+    if "fvar" in ttfont:
+        # the default instance style name must match the font style name, it's
+        # renamed only if it matches the old one (otherwise a family rename of
+        # an inconsistent font would rename it, and the STAT values sharing it)
+        style_names = {}
+        if (
+            style_name_old != typographic_subfamily_name
+            and _get_default_instance_style_name(ttfont) == style_name_old
+        ):
+            style_names[style_name_old.lower()] = typographic_subfamily_name
+        _rename_variable_instances(ttfont, typographic_family_name, style_names)
+
     set_names(ttfont, names)
+    # name id 18 (macintosh only) is updated only if already defined,
+    # the windows record is written only if the font already has it
+    if compatible_full_name:
+        name_id = _get_name_id(NAME_COMPATIBLE_FULL)
+        windows = bool(ttfont["name"].getName(name_id, **_NAMES_WIN_IDS))
+        set_name(ttfont, NAME_COMPATIBLE_FULL, compatible_full_name, windows=windows)
+
+    _rename_cff(ttfont, postscript_name, full_name, typographic_family_name, weight)

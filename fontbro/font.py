@@ -1227,6 +1227,8 @@ class Font:
         """
         Renames the font names records (1, 2, 4, 6, 16, 17) according to
         the given family_name and style_name (subfamily_name).
+        The names records (18, 25), the fvar named instances PostScript names
+        and the CFF table names are updated too, only if already defined.
 
         If family_name is not defined it will be auto-detected.
         If style_name is not defined it will be auto-detected.
@@ -1245,6 +1247,48 @@ class Font:
         _names.rename(ttfont, family_name=family_name, style_name=style_name)
 
         if update_style_flags:
+            self.set_style_flags_by_subfamily_name()
+
+    def rename_variable_instances(
+        self,
+        *,
+        family_name: str = "",
+        style_names: dict[str, str] | None = None,
+        update_style_flags: bool = True,
+    ) -> None:
+        """
+        Renames the named instances of the variable font.
+
+        The family_name replaces the family part of the instances PostScript names
+        (and of the variations PostScript name prefix, if defined).
+        The style_names replace the instances style names and the style part
+        of their PostScript names. The axes names are unchanged.
+        The default instance style name must match the font style name,
+        so renaming it renames the font style too.
+
+        If family_name is not defined it will be auto-detected.
+
+        :param family_name: The family name
+        :type family_name: str
+        :param style_names: The new style names mapped by the old ones (case-insensitive),
+            eg. {"Thin": "Hairline"}
+        :type style_names: dict or None
+        :param update_style_flags: if True the style flags will be updated by subfamily name
+            (only if the default instance style name is renamed)
+        :type update_style_flags: bool
+
+        :raises OperationError: if the font is not a variable font.
+        :return: None
+        """
+        ttfont = self.get_ttfont()
+        style_name = self.get_style_name()
+        _names.rename_variable_instances(
+            ttfont,
+            family_name=family_name,
+            style_names=style_names,
+        )
+
+        if update_style_flags and self.get_style_name() != style_name:
             self.set_style_flags_by_subfamily_name()
 
     def sanitize(
