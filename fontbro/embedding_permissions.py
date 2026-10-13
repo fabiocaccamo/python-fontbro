@@ -2,8 +2,9 @@ from __future__ import annotations
 
 from fontTools.ttLib import TTFont
 
-from fontbro.exceptions import ArgumentError, MissingTableError
+from fontbro.exceptions import ArgumentError
 from fontbro.flags import get_flag, set_flag
+from fontbro.tables import get_table_or_raise
 
 # Embedding Permissions:
 # https://learn.microsoft.com/en-us/typography/opentype/spec/os2#fstype
@@ -95,9 +96,7 @@ def set_embedding_permissions(
     Sets the embedding permissions in the OS/2 fsType field of the given font,
     the fsType field is left untouched if any argument is invalid.
     """
-    os2 = ttfont.get("OS/2")
-    if not os2:
-        raise MissingTableError("OS/2")
+    os2 = get_table_or_raise(ttfont, "OS/2")
 
     usage_permissions = {
         "installable": installable,

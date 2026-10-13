@@ -9,12 +9,9 @@ from fontTools.varLib.instancer import OverlapMode
 
 from fontbro import names as _names
 from fontbro import style_flags as _style_flags
-from fontbro.exceptions import (
-    ArgumentError,
-    MissingTableError,
-    VariableFontRequiredError,
-)
+from fontbro.exceptions import ArgumentError, VariableFontRequiredError
 from fontbro.math import get_euclidean_distance
+from fontbro.tables import get_table_or_raise
 from fontbro.utils import slugify
 
 # Variable Axes:
@@ -163,9 +160,7 @@ def get_variable_instances(
     """
     if not is_variable(ttfont):
         return None
-    if "name" not in ttfont:
-        raise MissingTableError("name")
-    name_table = ttfont["name"]
+    name_table = get_table_or_raise(ttfont, "name")
     return [
         {
             "coordinates": instance.coordinates,

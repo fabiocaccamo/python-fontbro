@@ -6,7 +6,7 @@ from collections import Counter
 from fontTools import unicodedata
 from fontTools.ttLib import TTFont
 
-from fontbro.exceptions import MissingTableError
+from fontbro.tables import get_table_or_raise
 from fontbro.unicode import get_best_cmap
 
 # same criteria used by Fontbakery (glyph_metrics_stats condition):
@@ -37,11 +37,10 @@ def _get_widths(
     """
     Gets the advance widths of the given glyphs, zero widths are ignored.
     """
-    if "hmtx" not in ttfont:
-        raise MissingTableError("hmtx")
+    hmtx = get_table_or_raise(ttfont, "hmtx")
     return [
         advance
-        for glyph_name, (advance, _) in ttfont["hmtx"].metrics.items()
+        for glyph_name, (advance, _) in hmtx.metrics.items()
         if glyph_name in glyphs_names and advance != 0
     ]
 

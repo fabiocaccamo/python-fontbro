@@ -6,11 +6,8 @@ from typing import Any
 from fontTools.misc.encodingTools import getEncoding
 from fontTools.ttLib import TTFont
 
-from fontbro.exceptions import (
-    ArgumentError,
-    MissingTableError,
-    VariableFontRequiredError,
-)
+from fontbro.exceptions import ArgumentError, VariableFontRequiredError
+from fontbro.tables import get_table_or_raise
 from fontbro.utils import concat_names, remove_spaces
 
 # Names:
@@ -197,9 +194,7 @@ def set_name(
     and unicode flags.
     """
     name_id = _get_name_id(key)
-    if "name" not in ttfont:
-        raise MissingTableError("name")
-    name_table = ttfont["name"]
+    name_table = get_table_or_raise(ttfont, "name")
     if windows:
         # https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/ttLib/tables/_n_a_m_e.py#L568
         # the windows record is always written, it's the one read first by get_name

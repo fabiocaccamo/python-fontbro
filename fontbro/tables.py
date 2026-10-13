@@ -4,6 +4,8 @@ from typing import Any
 
 from fontTools.ttLib import TTFont
 
+from fontbro.exceptions import MissingTableError
+
 # https://learn.microsoft.com/en-us/typography/opentype/spec/otff#font-tables
 _TABLE_NAMES_BY_TAG: dict[str, str] = {
     # required tables
@@ -93,6 +95,19 @@ _TABLE_NAMES_BY_TAG: dict[str, str] = {
     "xref": "Cross-Reference",
     "Zapf": "Glyph Information",
 }
+
+
+def get_table_or_raise(
+    ttfont: TTFont,
+    tag: str,
+) -> Any:
+    """
+    Gets the table with the given tag of the given font,
+    MissingTableError is raised if the font has no table with the given tag.
+    """
+    if tag not in ttfont:
+        raise MissingTableError(tag)
+    return ttfont[tag]
 
 
 def get_tables_tags(

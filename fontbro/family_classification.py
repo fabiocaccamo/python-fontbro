@@ -4,7 +4,8 @@ from typing import Any
 
 from fontTools.ttLib import TTFont
 
-from fontbro.exceptions import ArgumentError, MissingTableError
+from fontbro.exceptions import ArgumentError
+from fontbro.tables import get_table_or_raise
 from fontbro.utils import concat_names, find_item, read_json
 
 # Family Classification:
@@ -152,9 +153,7 @@ def set_family_classification(
     """
     Sets the family classification of the given font in the OS/2.sFamilyClass field.
     """
-    os2 = ttfont.get("OS/2")
-    if not os2:
-        raise MissingTableError("OS/2")
+    os2 = get_table_or_raise(ttfont, "OS/2")
 
     # validate class key and subclass key
     class_item, subclass_item = _get_family_classification_items(
