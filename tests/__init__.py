@@ -1,4 +1,5 @@
 import json
+import tempfile
 import unittest
 
 import fsutil
@@ -17,14 +18,24 @@ class AbstractTestCase(unittest.TestCase):
         self.maxDiff = None
 
     def setUp(self):
-        fsutil.remove_dir(self._get_font_temp_path())
+        # each test has its own temp directory, so tests can run in parallel
+        # (eg. tox -p) without deleting or overwriting each other's files
+        self._temp_dirpath = tempfile.mkdtemp(prefix="fontbro-tests-")
 
     def tearDown(self):
-        fsutil.remove_dir(self._get_font_temp_path())
+        fsutil.remove_dir(self._temp_dirpath)
 
-    @classmethod
-    def _get_font_temp_path(cls, filepath=""):
-        return fsutil.join_path(__file__, f"temp/{filepath}")
+    def _get_font_temp_path(self, filepath=""):
+        return fsutil.join_path(self._temp_dirpath, filepath)
+
+    def _get_font_temp_copy_path(self, filepath):
+        """
+        Copies the font at filepath to the temp directory and returns the copy path,
+        to test operations that overwrite the font file without modifying it.
+        """
+        font_copy_path = self._get_font_temp_path(fsutil.get_filename(filepath))
+        fsutil.copy_file(self._get_font_path(filepath), font_copy_path)
+        return font_copy_path
 
     @classmethod
     def _get_font_path(cls, filepath):

@@ -8,15 +8,16 @@ from fontTools import unicodedata
 
 from fontbro.unicode import _populate_unicode_items_set
 
+_DATA_DIRPATH: str = fsutil.join_path(__file__, "../fontbro/data")
+
 
 def _write_data_json(filepath: str, data: Any) -> None:
-    data_filepath = fsutil.join_path(__file__, filepath)
     # end the file with a newline (as required by the end-of-file-fixer pre-commit hook)
     content = json.dumps(data, indent=4, sort_keys=True) + "\n"
-    fsutil.write_file(data_filepath, content)
+    fsutil.write_file(filepath, content)
 
 
-def update_unicode_data() -> None:
+def update_unicode_data(dirpath: str = _DATA_DIRPATH) -> None:
     blocks: list[dict[str, Any]] = []
     blocks_cache: dict[str, Any] = {}
     scripts: list[dict[str, Any]] = []
@@ -45,8 +46,12 @@ def update_unicode_data() -> None:
         script["characters_total"] = script["characters_count"]
         script.pop("characters_count", None)
 
-    _write_data_json(filepath="../fontbro/data/unicode-blocks.json", data=blocks)
-    _write_data_json(filepath="../fontbro/data/unicode-scripts.json", data=scripts)
+    _write_data_json(
+        filepath=fsutil.join_path(dirpath, "unicode-blocks.json"), data=blocks
+    )
+    _write_data_json(
+        filepath=fsutil.join_path(dirpath, "unicode-scripts.json"), data=scripts
+    )
 
 
 def main() -> None:

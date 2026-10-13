@@ -12,18 +12,18 @@ class SaveTestCase(AbstractTestCase):
     """
 
     def test_save_with_font_src_path_as_filepath_with_overwrite(self):
-        font_filepath = self._get_font_path(
+        font_filepath = self._get_font_temp_copy_path(
             "/Roboto_Mono/static/RobotoMono-Regular.ttf"
         )
-        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        font = Font(font_filepath)
         font_saved_path = font.save(font_filepath, overwrite=True)
         self.assertEqual(font_saved_path, font_filepath)
 
     def test_save_without_filepath_with_overwrite(self):
-        font_filepath = self._get_font_path(
+        font_filepath = self._get_font_temp_copy_path(
             "/Roboto_Mono/static/RobotoMono-Regular.ttf"
         )
-        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        font = Font(font_filepath)
         font_saved_path = font.save(overwrite=True)
         self.assertEqual(font_saved_path, font_filepath)
 
@@ -41,7 +41,9 @@ class SaveTestCase(AbstractTestCase):
             font.save(font_filepath)
 
     def test_save_fileobject(self):
-        font_filepath = self._get_font_path("/Noto_Sans_TC/NotoSansTC-Regular.otf")
+        font_filepath = self._get_font_temp_copy_path(
+            "/Noto_Sans_TC/NotoSansTC-Regular.otf"
+        )
         with open(font_filepath, "rb") as fh:
             font = Font(fh)
             font_saved_path = font.save(font_filepath, overwrite=True)
