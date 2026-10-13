@@ -1,0 +1,17 @@
+# https://docs.codecov.com/docs/codecovyml-reference
+coverage:
+  status:
+    project:
+      default:
+        # compare with the base commit coverage,
+        # allowing a small decrease without failing the build
+        target: auto
+        threshold: 0.5%
+
+comment:
+  # comment pull requests only if the coverage changes
+  require_changes: true
+
+github_checks:
+  # don't annotate the uncovered lines in the pull requests diff
+  annotations: false
