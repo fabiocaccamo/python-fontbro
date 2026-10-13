@@ -4,7 +4,7 @@ from typing import Any
 
 from fontTools.ttLib import TTFont
 
-from fontbro.exceptions import ArgumentError, OperationError
+from fontbro.exceptions import ArgumentError, MissingTableError
 from fontbro.utils import concat_names, find_item, read_json
 
 # Family Classification:
@@ -154,7 +154,7 @@ def set_family_classification(
     """
     os2 = ttfont.get("OS/2")
     if not os2:
-        raise OperationError("Invalid OS/2 table (doesn't exist).")
+        raise MissingTableError("OS/2")
 
     # validate class key and subclass key
     class_item, subclass_item = _get_family_classification_items(

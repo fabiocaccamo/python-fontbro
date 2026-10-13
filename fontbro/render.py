@@ -9,6 +9,7 @@ from fontTools.pens.svgPathPen import SVGPathPen
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont
 
+from fontbro.exceptions import MissingTableError
 from fontbro.unicode import get_best_cmap_or_raise
 
 
@@ -51,6 +52,9 @@ def get_svg(
     Gets an SVG representation of the given font rendering some text.
     """
     # get font metrics
+    for table_tag in ("head", "hhea"):
+        if table_tag not in ttfont:
+            raise MissingTableError(table_tag)
     units_per_em = ttfont["head"].unitsPerEm
     scale = size / units_per_em
     hhea = ttfont["hhea"]

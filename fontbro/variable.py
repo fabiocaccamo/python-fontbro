@@ -9,7 +9,11 @@ from fontTools.varLib.instancer import OverlapMode
 
 from fontbro import names as _names
 from fontbro import style_flags as _style_flags
-from fontbro.exceptions import ArgumentError, OperationError
+from fontbro.exceptions import (
+    ArgumentError,
+    MissingTableError,
+    VariableFontRequiredError,
+)
 from fontbro.math import get_euclidean_distance
 from fontbro.utils import slugify
 
@@ -159,6 +163,8 @@ def get_variable_instances(
     """
     if not is_variable(ttfont):
         return None
+    if "name" not in ttfont:
+        raise MissingTableError("name")
     name_table = ttfont["name"]
     return [
         {
@@ -320,7 +326,7 @@ def to_sliced_variable(
     the variable axes at the given coordinates.
     """
     if not is_variable(ttfont):
-        raise OperationError("Only a variable font can be sliced.")
+        raise VariableFontRequiredError("Only a variable font can be sliced.")
 
     coordinates = get_sliced_coordinates(ttfont, coordinates)
 
@@ -364,7 +370,7 @@ def to_static(
     the variable axes at the given coordinates.
     """
     if not is_variable(ttfont):
-        raise OperationError("Only a variable font can be made static.")
+        raise VariableFontRequiredError("Only a variable font can be made static.")
 
     coordinates = get_static_coordinates(
         ttfont,

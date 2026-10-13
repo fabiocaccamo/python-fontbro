@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from fontTools.ttLib import TTFont
 
-from fontbro.exceptions import ArgumentError, OperationError
+from fontbro.exceptions import ArgumentError, MissingTableError
 from fontbro.flags import get_flag, set_flag
 
 # Embedding Permissions:
@@ -97,7 +97,7 @@ def set_embedding_permissions(
     """
     os2 = ttfont.get("OS/2")
     if not os2:
-        raise OperationError("Invalid OS/2 table (doesn't exist).")
+        raise MissingTableError("OS/2")
 
     usage_permissions = {
         "installable": installable,

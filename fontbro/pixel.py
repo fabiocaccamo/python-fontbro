@@ -9,6 +9,7 @@ from fontTools import unicodedata
 from fontTools.pens.recordingPen import DecomposingRecordingPen
 from fontTools.ttLib import TTFont
 
+from fontbro.exceptions import MissingTableError
 from fontbro.unicode import get_best_cmap
 
 Segment = tuple[float, float]
@@ -219,6 +220,8 @@ def is_pixel(
 
     # 2nd check: segments aligned to a plausible pixel grid,
     # it excludes squared ("techno") fonts
+    if "head" not in ttfont:
+        raise MissingTableError("head")
     units_per_em = ttfont["head"].unitsPerEm
     pixel_width, pixel_height = (
         _get_pixel_dimension(

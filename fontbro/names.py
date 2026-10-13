@@ -6,7 +6,11 @@ from typing import Any
 from fontTools.misc.encodingTools import getEncoding
 from fontTools.ttLib import TTFont
 
-from fontbro.exceptions import ArgumentError, OperationError
+from fontbro.exceptions import (
+    ArgumentError,
+    MissingTableError,
+    VariableFontRequiredError,
+)
 from fontbro.utils import concat_names, remove_spaces
 
 # Names:
@@ -193,6 +197,8 @@ def set_name(
     and unicode flags.
     """
     name_id = _get_name_id(key)
+    if "name" not in ttfont:
+        raise MissingTableError("name")
     name_table = ttfont["name"]
     if windows:
         # https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/ttLib/tables/_n_a_m_e.py#L568
@@ -313,7 +319,9 @@ def rename_variable_instances(
     so renaming it renames the font style too.
     """
     if "fvar" not in ttfont:
-        raise OperationError("Only the instances of a variable font can be renamed.")
+        raise VariableFontRequiredError(
+            "Only the instances of a variable font can be renamed."
+        )
     # style names are matched case-insensitively
     style_names = {key.lower(): value for key, value in (style_names or {}).items()}
     default_style_name = _get_default_instance_style_name(ttfont).lower()

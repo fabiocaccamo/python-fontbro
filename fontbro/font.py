@@ -32,7 +32,8 @@ from fontbro import variable as _variable
 from fontbro import version as _version
 from fontbro.exceptions import (
     ArgumentError,
-    OperationError,
+    ClosedFontError,
+    VariableFontRequiredError,
 )
 
 
@@ -325,7 +326,7 @@ class Font:
     ) -> None:
         """
         Close the wrapped TTFont instance.
-        After closing, any operation on the font raises OperationError,
+        After closing, any operation on the font raises ClosedFontError,
         closing an already closed font does nothing.
         """
         # TTFont.close() is idempotent (it closes the reader and sets it to None)
@@ -847,13 +848,13 @@ class Font:
         :returns: The TTFont instance.
         :rtype: TTFont
 
-        :raises OperationError: If the font has been closed.
+        :raises ClosedFontError: If the font has been closed.
         """
         # all the font operations get the TTFont instance through this method,
         # the TTFont can also be closed directly (bypassing this instance):
         # when closed, fontTools sets its reader to None
         if self._ttfont is None or self._ttfont.reader is None:
-            raise OperationError("Invalid operation, the font is closed.")
+            raise ClosedFontError("Invalid operation, the font is closed.")
         return self._ttfont
 
     def get_unicode_block_by_name(
@@ -1277,7 +1278,7 @@ class Font:
             (only if the default instance style name is renamed)
         :type update_style_flags: bool
 
-        :raises OperationError: if the font is not a variable font.
+        :raises VariableFontRequiredError: if the font is not a variable font.
         :return: None
         """
         ttfont = self.get_ttfont()
@@ -1512,10 +1513,10 @@ class Font:
             includes 'instance' (containing instance metadata) and 'files' (a dictionary
             with file formats as keys and file-paths as values).
 
-        :raises TypeError: If the font is not a variable font.
+        :raises VariableFontRequiredError: If the font is not a variable font.
         """
         if not self.is_variable():
-            raise OperationError("Only a variable font can be instantiated.")
+            raise VariableFontRequiredError("Only a variable font can be instantiated.")
 
         fsutil.assert_not_file(dirpath)
         fsutil.make_dirs(dirpath)
@@ -1570,7 +1571,7 @@ class Font:
 
         :param class_id: Numeric identifier of the font family class.
         :param subclass_id: Optional numeric identifier of the font family subclass (default is 0).
-        :raises OperationError: If the OS/2 table is not available in the font.
+        :raises MissingTableError: If the OS/2 table is not available in the font.
         :raises ArgumentError: If class_id is invalid or subclass_id is specified but invalid.
         """
         ttfont = self.get_ttfont()
@@ -1723,7 +1724,7 @@ class Font:
         :raises ArgumentError: If a value is not a bool or None, if more than one
             of the mutually exclusive usage permissions is set to True, or if
             installable is set to False while no other usage permission is in effect.
-        :raises OperationError: If the OS/2 table is not available in the font.
+        :raises MissingTableError: If the OS/2 table is not available in the font.
         """
         ttfont = self.get_ttfont()
         _embedding_permissions.set_embedding_permissions(
@@ -1860,7 +1861,7 @@ class Font:
         :param options: The options for the fontTools.varLib.instancer
         :type options: dictionary
 
-        :raises TypeError: If the font is not a variable font
+        :raises VariableFontRequiredError: If the font is not a variable font
         :raises ValueError: If the coordinates are not defined (blank)
         :raises ValueError: If the coordinates axes are all pinned
         """
@@ -1900,7 +1901,7 @@ class Font:
         :param options: The options for the fontTools.varLib.instancer
         :type options: dictionary
 
-        :raises TypeError: If the font is not a variable font
+        :raises VariableFontRequiredError: If the font is not a variable font
         :raises ValueError: If the coordinates axes are not all pinned
         """
         ttfont = self.get_ttfont()
