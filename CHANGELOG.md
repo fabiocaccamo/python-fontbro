@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.31.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.31.0) - 2026-10-13
+-   Update `rename` to update also the compatible full name (name id 18) and the variations PostScript name prefix (name id 25), only if already defined (records are never added), keeping a designer-defined compatible full name (only the family name in it is replaced) and the prefix suffix (eg. `Roman`, `Italic`).
+-   Update `rename` to update the PostScript names of the variable font named instances with the new family name, and the default instance style name when the style name changes (instances and axes names are otherwise unchanged).
+-   Update `rename` to update the `CFF` table names: font name, `FDArray` font names (CID-keyed fonts), `FullName`, `FamilyName` and `Weight` (only if already defined).
+-   Add `rename_variable_instances` method to rename the variable font named instances (family name and style names), with `update_style_flags` option.
+-   Update `to_sliced_variable` to update the name records and the style flags when the default instance changes, with `update_names` and `update_style_flags` options.
+-   Update `to_static` to remove the variations PostScript name prefix (name id 25) and the name records no more used by the font.
+-   Bump requirements.
+
 ## [0.30.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.30.0) - 2026-10-07
 -   Update `get_features` to return the designer-defined feature params for each feature in a `params` dict: `name`, `tooltip`, `sample_text`, `labels` and `characters` (available for stylistic sets `ss01`-`ss20` and character variants `cv01`-`cv99`, empty for other features).
 -   Fix `clig` feature `exposed_active` value (contextual ligatures are active by default).
