@@ -76,6 +76,15 @@ class InstantiationTestCase(AbstractTestCase):
         name_ids = {record.nameID for record in font.get_ttfont()["name"].names}
         self.assertEqual({name_id for name_id in name_ids if name_id > 255}, set())
 
+    def test_to_static_without_stat_table(self):
+        font = self._get_variable_font()
+        ttfont = font.get_ttfont()
+        del ttfont["STAT"]
+        font.to_static(style_name="Black")
+        self.assertFalse(font.is_variable())
+        self.assertNotIn("STAT", ttfont)
+        self.assertEqual(font.get_name(Font.NAME_POSTSCRIPT_NAME), "Tourney-Black")
+
     def test_to_static_with_style_name_invalid(self):
         font = self._get_variable_font()
         with self.assertRaises(ValueError):
