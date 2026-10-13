@@ -3,4 +3,4 @@ gflanguages == 0.7.11
 imagehash == 4.3.2
 opentype-sanitizer == 9.2.0
 pillow == 12.3.0
-python-fsutil == 0.17.0
+python-fsutil == 0.18.0
