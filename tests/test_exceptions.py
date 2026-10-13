@@ -1,3 +1,6 @@
+import copy
+import pickle
+
 from fontbro.exceptions import (
     ClosedFontError,
     MissingTableError,
@@ -39,6 +42,15 @@ class ExceptionsTestCase(AbstractTestCase):
         error = MissingTableError("OS/2", "Custom message.")
         self.assertEqual(error.table_tag, "OS/2")
         self.assertEqual(str(error), "Custom message.")
+
+    def test_missing_table_error_pickle_and_copy(self):
+        # regression: the exception was recreated passing the message as table tag
+        for message in (None, "Custom message."):
+            error = MissingTableError("OS/2", message)
+            for error_copy in (pickle.loads(pickle.dumps(error)), copy.copy(error)):
+                with self.subTest(message=message):
+                    self.assertEqual(error_copy.table_tag, "OS/2")
+                    self.assertEqual(str(error_copy), str(error))
 
     def test_missing_table_error_set_embedding_permissions(self):
         font = self._get_static_font()
