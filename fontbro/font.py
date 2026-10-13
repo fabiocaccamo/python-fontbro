@@ -1835,6 +1835,8 @@ class Font:
         self,
         *,
         coordinates: dict[str, Any],
+        update_names: bool = True,
+        update_style_flags: bool = True,
         **options: Any,
     ) -> None:
         """
@@ -1849,6 +1851,12 @@ class Font:
             {'wdth':100, 'wght':[100,600], 'ital':[30,65,70]} or
             {'wdth':100, 'wght':{'min':100,'max':600}, 'ital':{'min':30,'default':65,'max':70}}
         :type coordinates: dict
+        :param update_names: if True the name records will be updated based on
+            the closest instance to the new default coordinates (only if changed)
+        :type update_names: bool
+        :param update_style_flags: if True the style flags will be updated based on
+            the closest instance to the new default coordinates (only if changed)
+        :type update_style_flags: bool
         :param options: The options for the fontTools.varLib.instancer
         :type options: dictionary
 
@@ -1857,7 +1865,13 @@ class Font:
         :raises ValueError: If the coordinates axes are all pinned
         """
         ttfont = self.get_ttfont()
-        _variable.to_sliced_variable(ttfont, coordinates=coordinates, **options)
+        _variable.to_sliced_variable(
+            ttfont,
+            coordinates=coordinates,
+            update_names=update_names,
+            update_style_flags=update_style_flags,
+            **options,
+        )
 
     def to_static(
         self,

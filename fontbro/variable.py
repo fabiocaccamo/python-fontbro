@@ -301,10 +301,18 @@ def _remove_stat_table(
     return False
 
 
+def _get_default_coordinates(
+    ttfont: TTFont,
+) -> dict[str, float]:
+    return {axis.axisTag: axis.defaultValue for axis in ttfont["fvar"].axes}
+
+
 def to_sliced_variable(
     ttfont: TTFont,
     *,
     coordinates: dict[str, Any],
+    update_names: bool = True,
+    update_style_flags: bool = True,
     **options: Any,
 ) -> None:
     """
@@ -322,7 +330,24 @@ def to_sliced_variable(
     options.setdefault("updateFontNames", False)
 
     # instantiate the sliced variable font
+    default_coordinates = _get_default_coordinates(ttfont)
     instancer.instantiateVariableFont(ttfont, coordinates, inplace=True, **options)
+
+    # update name records and style flags if the default instance changed
+    # (unless they have been updated by fontTools using the STAT table)
+    default_coordinates_new = _get_default_coordinates(ttfont)
+    if (
+        update_names
+        and default_coordinates_new != default_coordinates
+        and not options["updateFontNames"]
+    ):
+        instance = get_variable_instance_closest_to_coordinates(
+            ttfont, default_coordinates_new
+        )
+        if instance:
+            _names.rename(ttfont, style_name=instance["style_name"])
+            if update_style_flags:
+                _style_flags.set_style_flags_by_subfamily_name(ttfont)
 
 
 def to_static(

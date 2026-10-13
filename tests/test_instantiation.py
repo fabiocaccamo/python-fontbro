@@ -327,6 +327,40 @@ class InstantiationTestCase(AbstractTestCase):
         ]
         self.assertEqual(font.get_variable_axes(), expected_axes)
 
+    def test_to_sliced_variable_with_default_instance_changed(self):
+        font = self._get_variable_font()
+        font.to_sliced_variable(coordinates={"wght": (600, 900)})
+        self.assertEqual(font.get_name(Font.NAME_POSTSCRIPT_NAME), "Tourney-SemiBold")
+        self.assertEqual(
+            font.get_name(Font.NAME_TYPOGRAPHIC_SUBFAMILY_NAME), "SemiBold"
+        )
+        font.sanitize()
+
+    def test_to_sliced_variable_with_default_instance_changed_without_update_names(
+        self,
+    ):
+        font = self._get_variable_font()
+        font.to_sliced_variable(coordinates={"wght": (600, 900)}, update_names=False)
+        self.assertEqual(font.get_name(Font.NAME_POSTSCRIPT_NAME), "Tourney-Thin")
+        self.assertEqual(font.get_name(Font.NAME_TYPOGRAPHIC_SUBFAMILY_NAME), "Thin")
+
+    def test_to_sliced_variable_with_default_instance_changed_without_update_style_flags(
+        self,
+    ):
+        font = self._get_variable_font()
+        style_flags = font.get_style_flags()
+        font.to_sliced_variable(
+            coordinates={"wght": (700, 900)}, update_style_flags=False
+        )
+        self.assertEqual(font.get_name(Font.NAME_TYPOGRAPHIC_SUBFAMILY_NAME), "Bold")
+        self.assertEqual(font.get_style_flags(), style_flags)
+
+    def test_to_sliced_variable_with_default_instance_unchanged(self):
+        font = self._get_variable_font()
+        font.to_sliced_variable(coordinates={"wght": (100, 400)})
+        self.assertEqual(font.get_name(Font.NAME_POSTSCRIPT_NAME), "Tourney-Thin")
+        self.assertEqual(font.get_name(Font.NAME_TYPOGRAPHIC_SUBFAMILY_NAME), "Thin")
+
     def test_to_sliced_variable_does_not_modify_coordinates(self):
         # regression: the coordinates passed by the caller must not be modified
         # (list and dict values were converted to tuples)
