@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     # environment: release
     permissions:
-      contents: write
+      contents: read
       id-token: write
 
     steps:
