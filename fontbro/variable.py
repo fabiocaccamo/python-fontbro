@@ -365,8 +365,10 @@ def to_static(
 
     # remove variations postscript name prefix (25), used only by variable fonts
     # (as fontTools does when instancing with updateFontNames=True)
+    # and the names used only by the removed fvar and STAT tables
     if "name" in ttfont:
         ttfont["name"].removeNames(nameID=25)
+        ttfont["name"].removeUnusedNames(ttfont)
 
     # update name records and style flags based on instance style name
     if instance and update_names:

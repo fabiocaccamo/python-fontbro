@@ -68,7 +68,13 @@ class InstantiationTestCase(AbstractTestCase):
         font = self._get_variable_font()
         font.to_static(style_name="Black")
         self.assertIsNone(font.get_name(Font.NAME_VARIATIONS_POSTSCRIPT_NAME_PREFIX))
-        self._assert_font_valid(font, "/Tourney/Tourney-VariableFont_wdth,wght.ttf")
+        font.sanitize()
+
+    def test_to_static_removes_unused_names(self):
+        font = self._get_variable_font()
+        font.to_static(style_name="Black")
+        name_ids = {record.nameID for record in font.get_ttfont()["name"].names}
+        self.assertEqual({name_id for name_id in name_ids if name_id > 255}, set())
 
     def test_to_static_with_style_name_invalid(self):
         font = self._get_variable_font()
