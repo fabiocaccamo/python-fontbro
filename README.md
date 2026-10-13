@@ -85,6 +85,7 @@ with open("fonts/MyFont.ttf") as fh:
 -   [`is_static`](#is_static)
 -   [`is_variable`](#is_variable)
 -   [`rename`](#rename)
+-   [`rename_variable_instances`](#rename_variable_instances)
 -   [`sanitize`](#sanitize)
 -   [`save`](#save)
 -   [`save_as_woff`](#save_as_woff)
@@ -902,6 +903,8 @@ variable = font.is_variable()
 """
 Renames the font names records (1, 2, 4, 6, 16, 17) according to
 the given family_name and style_name (subfamily_name).
+The names records (18, 25), the fvar named instances PostScript names
+and the CFF table names are updated too, only if already defined.
 
 If family_name is not defined it will be auto-detected.
 If style_name is not defined it will be auto-detected.
@@ -918,6 +921,39 @@ If style_name is not defined it will be auto-detected.
 
 font.rename(
     family_name="My Font New", style_name="Bold Italic", update_style_flags=True
+)
+```
+
+#### `rename_variable_instances`
+```python
+"""
+Renames the named instances of the variable font.
+
+The family_name replaces the family part of the instances PostScript names
+(and of the variations PostScript name prefix, if defined).
+The style_names replace the instances style names and the style part
+of their PostScript names. The axes names are unchanged.
+The default instance style name must match the font style name,
+so renaming it renames the font style too.
+
+If family_name is not defined it will be auto-detected.
+
+:param family_name: The family name
+:type family_name: str
+:param style_names: The new style names mapped by the old ones (case-insensitive),
+    eg. {"Thin": "Hairline"}
+:type style_names: dict or None
+:param update_style_flags: if True the style flags will be updated by subfamily name
+    (only if the default instance style name is renamed)
+:type update_style_flags: bool
+
+:raises OperationError: if the font is not a variable font.
+"""
+
+font.rename_variable_instances(
+    family_name="My Font New",
+    style_names={"Thin": "Hairline"},
+    update_style_flags=True,
 )
 ```
 
@@ -1296,6 +1332,12 @@ If an axis min and max values are equal, the axis will be pinned.
     {'wdth':100, 'wght':[100,600], 'ital':[30,65,70]} or
     {'wdth':100, 'wght':{'min':100,'max':600}, 'ital':{'min':30,'default':65,'max':70}}
 :type coordinates: dict
+:param update_names: if True the name records will be updated based on
+    the closest instance to the new default coordinates (only if changed)
+:type update_names: bool
+:param update_style_flags: if True the style flags will be updated based on
+    the closest instance to the new default coordinates (only if changed)
+:type update_style_flags: bool
 :param options: The options for the fontTools.varLib.instancer
 :type options: dictionary
 
@@ -1304,7 +1346,12 @@ If an axis min and max values are equal, the axis will be pinned.
 :raises ValueError: If the coordinates axes are all pinned
 """
 
-font.to_sliced_variable(coordinates, **options)
+font.to_sliced_variable(
+    coordinates,
+    update_names=True,
+    update_style_flags=True,
+    **options,
+)
 ```
 
 #### `to_static`
