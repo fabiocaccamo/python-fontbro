@@ -448,6 +448,36 @@ class RenameTestCase(AbstractTestCase):
         }
         self.assertEqual(names["Hair Italic"], "TourneyItalic-Hair")
 
+    def test_rename_variable_font_without_default_instance(self):
+        font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
+        fvar = font.get_ttfont()["fvar"]
+        # remove the default instance ("Thin")
+        fvar.instances.pop(0)
+        font.rename(style_name="Hair Line")
+        self.assertEqual(font.get_name(Font.NAME_POSTSCRIPT_NAME), "Tourney-HairLine")
+        self.assertEqual(font.get_name(fvar.instances[0].subfamilyNameID), "ExtraLight")
+
+    def test_rename_variable_font_without_instances_postscript_names(self):
+        font = self._get_font("/Inter/Inter-VariableFont_slnt,wght.ttf")
+        fvar = font.get_ttfont()["fvar"]
+        font.rename(family_name="Inter New")
+        self.assertEqual(font.get_name(Font.NAME_POSTSCRIPT_NAME), "InterNew-Regular")
+        for instance in fvar.instances:
+            self.assertEqual(instance.postscriptNameID, 0xFFFF)
+
+    def test_rename_variable_instances_with_style_name_shared_with_font_style_name(
+        self,
+    ):
+        # the instance style name record is the font subfamily name (2),
+        # so a new name record is added for the instance
+        font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
+        instance = font.get_ttfont()["fvar"].instances[1]
+        instance.subfamilyNameID = 2
+        font.rename_variable_instances(style_names={"regular": "Normal"})
+        self.assertGreater(instance.subfamilyNameID, 255)
+        self.assertEqual(font.get_name(instance.subfamilyNameID), "Normal")
+        self.assertEqual(font.get_name(Font.NAME_SUBFAMILY_NAME), "Regular")
+
     def test_rename_variable_instances_with_static_font(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
         with self.assertRaises(TypeError):
