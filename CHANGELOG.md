@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.32.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.32.0) - 2026-10-13
+-   Drop Python 3.10 support (`fonttools` requires Python >= 3.11 since 4.66.0).
+-   Add `MissingTableError`, `ClosedFontError` and `VariableFontRequiredError` subclasses of `OperationError` to tell the failures apart (backward compatible).
+-   Raise `MissingTableError` (also a `KeyError`, backward compatible) instead of a bare `KeyError` when a required table is missing in `set_name`, `set_names`, `rename`, `rename_variable_instances`, `get_variable_instances`, `is_monospace`, `is_pixel` and `get_svg`.
+-   Bump requirements and `pre-commit` hooks.
+
 ## [0.31.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.31.0) - 2026-10-13
 -   Update `rename` to update also the compatible full name (name id 18) and the variations PostScript name prefix (name id 25), only if already defined (records are never added), keeping a designer-defined compatible full name (only the family name in it is replaced) and the prefix suffix (eg. `Roman`, `Italic`).
 -   Update `rename` to update the PostScript names of the variable font named instances with the new family name, and the default instance style name when the style name changes (instances and axes names are otherwise unchanged).
