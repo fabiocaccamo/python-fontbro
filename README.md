@@ -120,7 +120,7 @@ font_clone = font.clone()
 ```python
 """
 Close the wrapped TTFont instance.
-After closing, any operation on the font raises OperationError,
+After closing, any operation on the font raises ClosedFontError,
 closing an already closed font does nothing.
 """
 
@@ -567,7 +567,7 @@ Gets the wrapped TTFont instance.
 :returns: The TTFont instance.
 :rtype: TTFont
 
-:raises OperationError: If the font has been closed.
+:raises ClosedFontError: If the font has been closed.
 """
 
 ttfont = font.get_ttfont()
@@ -947,7 +947,7 @@ If family_name is not defined it will be auto-detected.
     (only if the default instance style name is renamed)
 :type update_style_flags: bool
 
-:raises OperationError: if the font is not a variable font.
+:raises VariableFontRequiredError: if the font is not a variable font.
 """
 
 font.rename_variable_instances(
@@ -1067,7 +1067,7 @@ Save all instances of a variable font to specified directory in one or more form
     includes 'instance' (containing instance metadata) and 'files' (a dictionary
     with file formats as keys and file-paths as values).
 
-:raises TypeError: If the font is not a variable font.
+:raises VariableFontRequiredError: If the font is not a variable font.
 """
 
 saved_fonts = font.save_variable_instances(
@@ -1103,7 +1103,7 @@ The fsType field is left untouched if any argument is invalid.
 :raises ArgumentError: If a value is not a bool or None, if more than one
     of the mutually exclusive usage permissions is set to True, or if
     installable is set to False while no other usage permission is in effect.
-:raises OperationError: If the OS/2 table is not available in the font.
+:raises MissingTableError: If the OS/2 table is not available in the font.
 """
 
 font.set_embedding_permissions(
@@ -1123,7 +1123,7 @@ based on provided class_id and subclass_id.
 
 :param class_id: Numeric identifier of the font family class.
 :param subclass_id: Optional numeric identifier of the font family subclass (default is 0).
-:raises OperationError: If the OS/2 table is not available in the font.
+:raises MissingTableError: If the OS/2 table is not available in the font.
 :raises ArgumentError: If class_id is invalid or subclass_id is specified but invalid.
 """
 
@@ -1341,7 +1341,7 @@ If an axis min and max values are equal, the axis will be pinned.
 :param options: The options for the fontTools.varLib.instancer
 :type options: dictionary
 
-:raises TypeError: If the font is not a variable font
+:raises VariableFontRequiredError: If the font is not a variable font
 :raises ValueError: If the coordinates are not defined (empty)
 :raises ValueError: If the coordinates axes are all pinned
 """
@@ -1374,7 +1374,7 @@ If coordinates are not specified each axis will be pinned at its default value.
 :param options: The options for the fontTools.varLib.instancer
 :type options: dictionary
 
-:raises TypeError: If the font is not a variable font
+:raises VariableFontRequiredError: If the font is not a variable font
 :raises ValueError: If the coordinates axes are not all pinned
 """
 
