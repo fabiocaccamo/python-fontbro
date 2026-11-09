@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.33.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.33.0) - 2026-11-09
+-   Add `default` option to `parse_version` (default `0.0`, backward compatible): with `default=None` a value that cannot be parsed returns `None`, and a zero version (eg. `"Version 0.000"`) is parsed as `0.0`.
+
 ## [0.32.1](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.32.1) - 2026-11-09
 -   Add Python 3.15 support.
 -   Fix `get_variable_instance_by_style_name` and `to_static` with `style_name` raising `TypeError` when a named instance has no name record: instances without a name are skipped.
