@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any
+from typing import Any, overload
 
 from fontTools.misc.fixedTools import fixedToStr, floatToFixed
 from fontTools.ttLib import TTFont
@@ -74,23 +74,43 @@ def format_version(
     return f"{prefix}{major}.{minor}"
 
 
+@overload
 def parse_version(
     value: str | None,
-) -> float:
+    *,
+    default: float = ...,
+) -> float: ...
+
+
+@overload
+def parse_version(
+    value: str | None,
+    *,
+    default: None,
+) -> float | None: ...
+
+
+def parse_version(
+    value: str | None,
+    *,
+    default: float | None = 0.0,
+) -> float | None:
     """
     Parses the version value from the given version name record value,
     eg. "Version 1.015;git-0a5106e0b" -> 1.015.
     The value is matched from the beginning of the string to avoid reading
     unrelated numbers (eg. a date or a tool version).
-    Returns 0.0 if the value cannot be parsed, or if it holds a value that
-    cannot be stored as a font version.
+    Returns the default (0.0) if the value cannot be parsed, or if it holds
+    a value that cannot be stored as a font version. A zero version
+    (eg. "Version 0.000") is parsed as 0.0: with default=None it can be told
+    apart from a value that cannot be parsed.
     """
     match = _VERSION_PATTERN.match((value or "").strip())
     if not match:
-        return 0.0
+        return default
     version = float(f"{match[1]}.{match[2]}")
-    if not 0 < version <= _VERSION_MAX_VALUE:
-        return 0.0
+    if not 0 <= version <= _VERSION_MAX_VALUE:
+        return default
     return normalize_version(version)
 
 

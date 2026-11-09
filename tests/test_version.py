@@ -76,6 +76,24 @@ class VersionTestCase(AbstractTestCase):
             with self.subTest(f"Test with value: {value!r}", value=value):
                 self.assertEqual(parse_version(value), expected_value)
 
+    def test_parse_version_with_default(self):
+        values = [
+            ("Version 1.015", 1.015),
+            # a zero version is a version (eg. a font in development)
+            ("Version 0.000", 0.0),
+            ("0.000", 0.0),
+            # invalid values
+            (None, None),
+            ("", None),
+            ("Regular", None),
+            ("1", None),
+            ("Version 32768.0", None),
+        ]
+        for value, expected_value in values:
+            with self.subTest(f"Test with value: {value!r}", value=value):
+                self.assertEqual(parse_version(value, default=None), expected_value)
+        self.assertEqual(parse_version("Regular", default=1.0), 1.0)
+
     def test_normalize_version(self):
         values = [
             (1.0149993896484375, 1.015),
