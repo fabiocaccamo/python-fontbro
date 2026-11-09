@@ -85,6 +85,36 @@ class VariableTestCase(AbstractTestCase):
         instances = font.get_variable_instances()
         self.assertEqual(instances, None)
 
+    def test_get_variable_instance_by_style_name(self):
+        font = self._get_font("/Roboto_Mono/RobotoMono-VariableFont_wght.ttf")
+        instance = font.get_variable_instance_by_style_name("Bold")
+        self.assertEqual(
+            instance,
+            {
+                "coordinates": {"wght": 700.0},
+                "style_name": "Bold",
+            },
+        )
+        instance = font.get_variable_instance_by_style_name("Black")
+        self.assertEqual(instance, None)
+
+    def test_get_variable_instance_by_style_name_with_unnamed_instance(self):
+        font = self._get_font("/Roboto_Mono/RobotoMono-VariableFont_wght.ttf")
+        ttfont = font.get_ttfont()
+        thin_instance = ttfont["fvar"].instances[0]
+        ttfont["name"].removeNames(nameID=thin_instance.subfamilyNameID)
+        self.assertEqual(font.get_variable_instances()[0]["style_name"], None)
+        instance = font.get_variable_instance_by_style_name("Bold")
+        self.assertEqual(
+            instance,
+            {
+                "coordinates": {"wght": 700.0},
+                "style_name": "Bold",
+            },
+        )
+        instance = font.get_variable_instance_by_style_name("Thin")
+        self.assertEqual(instance, None)
+
     def test_get_variable_instance_closest_to_coordinates(self):
         font = self._get_font("/Roboto_Mono/RobotoMono-VariableFont_wght.ttf")
         closest_instance = font.get_variable_instance_closest_to_coordinates(

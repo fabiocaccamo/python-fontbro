@@ -85,6 +85,15 @@ class InstantiationTestCase(AbstractTestCase):
         self.assertNotIn("STAT", ttfont)
         self.assertEqual(font.get_name(Font.NAME_POSTSCRIPT_NAME), "Tourney-Black")
 
+    def test_to_static_with_style_name_and_unnamed_instance(self):
+        font = self._get_variable_font()
+        ttfont = font.get_ttfont()
+        thin_instance = ttfont["fvar"].instances[0]
+        ttfont["name"].removeNames(nameID=thin_instance.subfamilyNameID)
+        font.to_static(style_name="Black")
+        self.assertTrue(font.is_static())
+        self.assertEqual(font.get_weight()["value"], 900)
+
     def test_to_static_with_style_name_invalid(self):
         font = self._get_variable_font()
         with self.assertRaises(ValueError):

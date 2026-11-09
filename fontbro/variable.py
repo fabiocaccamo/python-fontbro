@@ -175,11 +175,13 @@ def get_variable_instance_by_style_name(
     style_name: str,
 ) -> dict[str, Any] | None:
     """
-    Gets the variable instance of the given font by style name.
+    Gets the variable instance of the given font by style name,
+    the instances without a name record (style name None) are skipped.
     """
     instances = get_variable_instances(ttfont) or []
     for instance in instances:
-        if slugify(instance["style_name"]) == slugify(style_name):
+        instance_style_name = instance["style_name"]
+        if instance_style_name and slugify(instance_style_name) == slugify(style_name):
             return instance
     return None
 
