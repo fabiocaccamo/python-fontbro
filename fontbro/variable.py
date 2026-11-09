@@ -178,6 +178,8 @@ def get_variable_instance_by_style_name(
     Gets the variable instance of the given font by style name,
     the instances without a name record (style name None) are skipped.
     """
+    if not style_name:
+        return None
     instances = get_variable_instances(ttfont) or []
     for instance in instances:
         instance_style_name = instance["style_name"]

@@ -115,6 +115,17 @@ class VariableTestCase(AbstractTestCase):
         instance = font.get_variable_instance_by_style_name("Thin")
         self.assertEqual(instance, None)
 
+    def test_get_variable_instance_by_style_name_without_style_name(self):
+        font = self._get_font("/Roboto_Mono/RobotoMono-VariableFont_wght.ttf")
+        ttfont = font.get_ttfont()
+        # a style name without ascii characters has an empty slug
+        thin_instance = ttfont["fvar"].instances[0]
+        ttfont["name"].setName("太字", thin_instance.subfamilyNameID, 3, 1, 0x409)
+        instance = font.get_variable_instance_by_style_name("")
+        self.assertEqual(instance, None)
+        instance = font.get_variable_instance_by_style_name(None)
+        self.assertEqual(instance, None)
+
     def test_get_variable_instance_closest_to_coordinates(self):
         font = self._get_font("/Roboto_Mono/RobotoMono-VariableFont_wght.ttf")
         closest_instance = font.get_variable_instance_closest_to_coordinates(
