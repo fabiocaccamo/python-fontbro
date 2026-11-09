@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.32.1](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.32.1) - 2026-11-09
 -   Add Python 3.15 support.
 -   Fix `get_variable_instance_by_style_name` and `to_static` with `style_name` raising `TypeError` when a named instance has no name record: instances without a name are skipped.
+-   Fix `get_variable_instance_by_style_name` with an empty or `None` style name: return `None` instead of raising `TypeError` or matching an instance whose style name slug is empty.
+-   Bump requirements and `pre-commit` hooks.
 
 ## [0.32.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.32.0) - 2026-10-13
 -   Drop Python 3.10 support (`fonttools` requires Python >= 3.11 since 4.66.0).
