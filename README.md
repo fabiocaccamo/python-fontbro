@@ -639,6 +639,8 @@ scripts = font.get_unicode_scripts(coverage_threshold=0.00001)
 ```python
 """
 Gets the font variable axes.
+The axis name is read from the name table (fvar axisNameID), with the
+registered axis name as fallback.
 Each axis has a "hidden" key, True when the fvar flags mark it as hidden
 from user interfaces.
 

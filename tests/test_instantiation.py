@@ -412,7 +412,7 @@ class InstantiationTestCase(AbstractTestCase):
             font.get_variable_axis_by_tag("XOPQ"),
             {
                 "tag": "XOPQ",
-                "name": "Thick Stroke",
+                "name": "Parametric Thick Stroke",
                 "min_value": 50,
                 "max_value": 150,
                 "default_value": 96.0,

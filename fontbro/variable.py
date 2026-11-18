@@ -100,6 +100,23 @@ def is_variable(
     return "fvar" in ttfont
 
 
+def _get_variable_axis_name(
+    ttfont: TTFont,
+    axis: Any,
+) -> str:
+    """
+    Gets the name of the given fvar axis: the name record of its axisNameID,
+    falling back to the registered axis name and then to the titled tag.
+    """
+    name = _names.get_name(ttfont, axis.axisNameID)
+    if name:
+        return name
+    registered_name: str = _VARIABLE_AXES_BY_TAG.get(axis.axisTag, {}).get(
+        "name", axis.axisTag.title()
+    )
+    return registered_name
+
+
 def get_variable_axes(
     ttfont: TTFont,
     *,
@@ -108,6 +125,8 @@ def get_variable_axes(
 ) -> list[dict[str, Any]] | None:
     """
     Gets the variable axes of the given font, None if the font is not variable.
+    The axis name is read from the name table (fvar axisNameID), with the
+    registered axis name as fallback.
     Each axis has a "hidden" key, True when the fvar flags mark it as hidden
     from user interfaces; with include_hidden=False the hidden axes are skipped.
     """
@@ -116,9 +135,7 @@ def get_variable_axes(
     axes = [
         {
             "tag": axis.axisTag,
-            "name": _VARIABLE_AXES_BY_TAG.get(axis.axisTag, {}).get(
-                "name", axis.axisTag.title()
-            ),
+            "name": _get_variable_axis_name(ttfont, axis),
             "min_value": axis.minValue,
             "max_value": axis.maxValue,
             "default_value": axis.defaultValue,

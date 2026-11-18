@@ -83,12 +83,36 @@ class VariableTestCase(AbstractTestCase):
             axis,
             {
                 "tag": "XOPQ",
-                "name": "Thick Stroke",
+                "name": "Parametric Thick Stroke",
                 "min_value": 27.0,
                 "max_value": 175.0,
                 "default_value": 96.0,
                 "hidden": True,
             },
+        )
+
+    def test_get_variable_axes_names_from_name_table(self):
+        # the fvar name of SHLN is "Shadow", the registered one "Shadow Length"
+        font = self._get_font("/Honk/Honk-Regular-VariableFont_MORF,SHLN.ttf")
+        axes = font.get_variable_axes()
+        self.assertEqual(
+            [(axis["tag"], axis["name"]) for axis in axes],
+            [("MORF", "Morph"), ("SHLN", "Shadow")],
+        )
+
+    def test_get_variable_axes_names_without_name_record(self):
+        # without the name record of the axis: the registered axis name,
+        # then the titled tag for an unregistered axis
+        font = self._get_font("/Honk/Honk-Regular-VariableFont_MORF,SHLN.ttf")
+        ttfont = font.get_ttfont()
+        fvar_axes = ttfont["fvar"].axes
+        fvar_axes[1].axisTag = "ABCD"
+        for fvar_axis in fvar_axes:
+            ttfont["name"].removeNames(nameID=fvar_axis.axisNameID)
+        axes = font.get_variable_axes()
+        self.assertEqual(
+            [(axis["tag"], axis["name"]) for axis in axes],
+            [("MORF", "Morph"), ("ABCD", "Abcd")],
         )
 
     def test_get_variable_axes_tags_with_static_font(self):
