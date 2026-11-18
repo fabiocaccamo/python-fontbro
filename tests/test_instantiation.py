@@ -206,6 +206,7 @@ class InstantiationTestCase(AbstractTestCase):
         expected_axes = [
             {
                 "default_value": 100.0,
+                "hidden": False,
                 "max_value": 900.0,
                 "min_value": 100.0,
                 "name": "Weight",
@@ -213,6 +214,7 @@ class InstantiationTestCase(AbstractTestCase):
             },
             {
                 "default_value": 100.0,
+                "hidden": False,
                 "max_value": 125.0,
                 "min_value": 75.0,
                 "name": "Width",
@@ -224,6 +226,7 @@ class InstantiationTestCase(AbstractTestCase):
         expected_axes = [
             {
                 "default_value": 100.0,
+                "hidden": False,
                 "max_value": 400.0,
                 "min_value": 100.0,
                 "name": "Weight",
@@ -231,6 +234,7 @@ class InstantiationTestCase(AbstractTestCase):
             },
             {
                 "default_value": 100.0,
+                "hidden": False,
                 "max_value": 110.0,
                 "min_value": 100.0,
                 "name": "Width",
@@ -244,6 +248,7 @@ class InstantiationTestCase(AbstractTestCase):
         expected_axes = [
             {
                 "default_value": 100.0,
+                "hidden": False,
                 "max_value": 900.0,
                 "min_value": 100.0,
                 "name": "Weight",
@@ -251,6 +256,7 @@ class InstantiationTestCase(AbstractTestCase):
             },
             {
                 "default_value": 100.0,
+                "hidden": False,
                 "max_value": 125.0,
                 "min_value": 75.0,
                 "name": "Width",
@@ -262,6 +268,7 @@ class InstantiationTestCase(AbstractTestCase):
         expected_axes = [
             {
                 "default_value": 100.0,
+                "hidden": False,
                 "max_value": 400.0,
                 "min_value": 100.0,
                 "name": "Weight",
@@ -269,6 +276,7 @@ class InstantiationTestCase(AbstractTestCase):
             },
             {
                 "default_value": 100.0,
+                "hidden": False,
                 "max_value": 110.0,
                 "min_value": 100.0,
                 "name": "Width",
@@ -282,6 +290,7 @@ class InstantiationTestCase(AbstractTestCase):
         expected_axes = [
             {
                 "default_value": 100.0,
+                "hidden": False,
                 "max_value": 900.0,
                 "min_value": 100.0,
                 "name": "Weight",
@@ -289,6 +298,7 @@ class InstantiationTestCase(AbstractTestCase):
             },
             {
                 "default_value": 100.0,
+                "hidden": False,
                 "max_value": 125.0,
                 "min_value": 75.0,
                 "name": "Width",
@@ -305,6 +315,7 @@ class InstantiationTestCase(AbstractTestCase):
         expected_axes = [
             {
                 "default_value": 100.0,
+                "hidden": False,
                 "max_value": 400.0,
                 "min_value": 100.0,
                 "name": "Weight",
@@ -312,6 +323,7 @@ class InstantiationTestCase(AbstractTestCase):
             },
             {
                 "default_value": 100.0,
+                "hidden": False,
                 "max_value": 110.0,
                 "min_value": 100.0,
                 "name": "Width",
@@ -330,6 +342,7 @@ class InstantiationTestCase(AbstractTestCase):
         expected_axes = [
             {
                 "default_value": 100.0,
+                "hidden": False,
                 "max_value": 900.0,
                 "min_value": 100.0,
                 "name": "Weight",
@@ -337,6 +350,7 @@ class InstantiationTestCase(AbstractTestCase):
             },
             {
                 "default_value": 100.0,
+                "hidden": False,
                 "max_value": 125.0,
                 "min_value": 100.0,
                 "name": "Width",
@@ -389,11 +403,30 @@ class InstantiationTestCase(AbstractTestCase):
             coordinates, {"wght": [100, 400], "wdth": {"min": 100, "max": 110}}
         )
 
+    def test_to_sliced_variable_keeps_hidden_axes_flags(self):
+        font = self._get_font(
+            "/Roboto_Flex/RobotoFlex-VariableFont_GRAD,XOPQ,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf"
+        )
+        font.to_sliced_variable(coordinates={"wght": (400, 700), "XOPQ": (50, 150)})
+        self.assertEqual(
+            font.get_variable_axis_by_tag("XOPQ"),
+            {
+                "tag": "XOPQ",
+                "name": "Thick Stroke",
+                "min_value": 50,
+                "max_value": 150,
+                "default_value": 96.0,
+                "hidden": True,
+            },
+        )
+        self.assertFalse(font.get_variable_axis_by_tag("wght")["hidden"])
+
     def test_to_sliced_variable_with_coordinates_sliced_and_pinned(self):
         font = self._get_variable_font()
         expected_axes = [
             {
                 "default_value": 100.0,
+                "hidden": False,
                 "max_value": 900.0,
                 "min_value": 100.0,
                 "name": "Weight",
@@ -401,6 +434,7 @@ class InstantiationTestCase(AbstractTestCase):
             },
             {
                 "default_value": 100.0,
+                "hidden": False,
                 "max_value": 125.0,
                 "min_value": 75.0,
                 "name": "Width",
@@ -412,6 +446,7 @@ class InstantiationTestCase(AbstractTestCase):
         expected_axes = [
             {
                 "default_value": 100.0,
+                "hidden": False,
                 "max_value": 400.0,
                 "min_value": 100.0,
                 "name": "Weight",

@@ -937,19 +937,28 @@ class Font:
         self,
         *,
         sort: bool = False,
+        include_hidden: bool = True,
     ) -> list[dict[str, Any]] | None:
         """
         Gets the font variable axes.
+        Each axis has a "hidden" key, True when the fvar flags mark it as hidden
+        from user interfaces.
 
         :param sort: If True, axes are sorted following the Google Fonts naming convention:
             uppercase custom axes first, then lowercase standard axes, each group alphabetical.
         :type sort: bool
+        :param include_hidden: If False, the hidden axes are skipped.
+        :type include_hidden: bool
 
         :returns: The list of axes if the font is a variable font otherwise None.
         :rtype: list of dict or None
         """
         ttfont = self.get_ttfont()
-        return _variable.get_variable_axes(ttfont, sort=sort)
+        return _variable.get_variable_axes(
+            ttfont,
+            sort=sort,
+            include_hidden=include_hidden,
+        )
 
     def get_variable_axis_by_tag(
         self,
@@ -957,6 +966,8 @@ class Font:
     ) -> dict[str, Any] | None:
         """
         Gets a variable axis by tag.
+        The axis has a "hidden" key, True when the fvar flags mark it as hidden
+        from user interfaces.
 
         :param tag: The tag
         :type tag: string

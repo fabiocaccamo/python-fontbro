@@ -639,12 +639,20 @@ scripts = font.get_unicode_scripts(coverage_threshold=0.00001)
 ```python
 """
 Gets the font variable axes.
+Each axis has a "hidden" key, True when the fvar flags mark it as hidden
+from user interfaces.
+
+:param sort: If True, axes are sorted following the Google Fonts naming convention:
+    uppercase custom axes first, then lowercase standard axes, each group alphabetical.
+:type sort: bool
+:param include_hidden: If False, the hidden axes are skipped.
+:type include_hidden: bool
 
 :returns: The list of axes if the font is a variable font otherwise None.
 :rtype: list of dict or None
 """
 
-axes = font.get_variable_axes()
+axes = font.get_variable_axes(sort=False, include_hidden=True)
 ```
 
 #### `get_variable_axes_tags`
@@ -663,6 +671,8 @@ axes_tags = font.get_variable_axes_tags()
 ```python
 """
 Gets a variable axis by tag.
+The axis has a "hidden" key, True when the fvar flags mark it as hidden
+from user interfaces.
 
 :param tag: The tag
 :type tag: string

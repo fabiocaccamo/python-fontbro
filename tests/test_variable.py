@@ -6,6 +6,12 @@ class VariableTestCase(AbstractTestCase):
     Test case for the methods related to the static/variable font.
     """
 
+    def _get_roboto_flex_font(self):
+        # 13 axes, the 8 parametric ones hidden by the fvar flags
+        return self._get_font(
+            "/Roboto_Flex/RobotoFlex-VariableFont_GRAD,XOPQ,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf"
+        )
+
     def test_get_variable_axes_with_static_font(self):
         font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
         axes = font.get_variable_axes()
@@ -23,6 +29,65 @@ class VariableTestCase(AbstractTestCase):
                 "min_value": 100.0,
                 "max_value": 700.0,
                 "default_value": 400.0,
+                "hidden": False,
+            },
+        )
+
+    def test_get_variable_axes_without_hidden_axes_with_static_font(self):
+        font = self._get_font("/Roboto_Mono/static/RobotoMono-Regular.ttf")
+        axes = font.get_variable_axes(include_hidden=False)
+        self.assertEqual(axes, None)
+
+    def test_get_variable_axes_with_hidden_axes(self):
+        font = self._get_roboto_flex_font()
+        axes = font.get_variable_axes()
+        self.assertEqual(
+            [(axis["tag"], axis["hidden"]) for axis in axes],
+            [
+                ("opsz", False),
+                ("wght", False),
+                ("GRAD", False),
+                ("wdth", False),
+                ("slnt", False),
+                ("XOPQ", True),
+                ("YOPQ", True),
+                ("XTRA", True),
+                ("YTUC", True),
+                ("YTLC", True),
+                ("YTAS", True),
+                ("YTDE", True),
+                ("YTFI", True),
+            ],
+        )
+
+    def test_get_variable_axes_without_hidden_axes(self):
+        font = self._get_roboto_flex_font()
+        axes = font.get_variable_axes(include_hidden=False)
+        self.assertEqual(
+            [axis["tag"] for axis in axes],
+            ["opsz", "wght", "GRAD", "wdth", "slnt"],
+        )
+
+    def test_get_variable_axes_sorted_without_hidden_axes(self):
+        font = self._get_roboto_flex_font()
+        axes = font.get_variable_axes(sort=True, include_hidden=False)
+        self.assertEqual(
+            [axis["tag"] for axis in axes],
+            ["GRAD", "opsz", "slnt", "wdth", "wght"],
+        )
+
+    def test_get_variable_axis_by_tag_with_hidden_axis(self):
+        font = self._get_roboto_flex_font()
+        axis = font.get_variable_axis_by_tag("XOPQ")
+        self.assertEqual(
+            axis,
+            {
+                "tag": "XOPQ",
+                "name": "Thick Stroke",
+                "min_value": 27.0,
+                "max_value": 175.0,
+                "default_value": 96.0,
+                "hidden": True,
             },
         )
 
@@ -50,6 +115,7 @@ class VariableTestCase(AbstractTestCase):
                 "min_value": 100.0,
                 "max_value": 700.0,
                 "default_value": 400.0,
+                "hidden": False,
             },
         )
 

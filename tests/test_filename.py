@@ -44,6 +44,16 @@ class FilenameTestCase(AbstractTestCase):
             "RobotoMono[wght].ttf",
         )
 
+    def test_get_filename_with_variable_font_with_hidden_axes(self):
+        # the hidden axes are part of the filename axes tags
+        font = self._get_font(
+            "/Roboto_Flex/RobotoFlex-VariableFont_GRAD,XOPQ,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf"
+        )
+        self.assertEqual(
+            font.get_filename(),
+            "RobotoFlex[GRAD,XOPQ,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght].ttf",
+        )
+
     def test_get_filename_with_variable_font_and_custom_suffixes(self):
         font = self._get_font("/Tourney/Tourney-VariableFont_wdth,wght.ttf")
         self.assertEqual(

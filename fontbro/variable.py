@@ -10,6 +10,7 @@ from fontTools.varLib.instancer import OverlapMode
 from fontbro import names as _names
 from fontbro import style_flags as _style_flags
 from fontbro.exceptions import ArgumentError, VariableFontRequiredError
+from fontbro.flags import get_flag
 from fontbro.math import get_euclidean_distance
 from fontbro.tables import get_table_or_raise
 from fontbro.utils import slugify
@@ -74,6 +75,10 @@ _VARIABLE_AXES: list[dict[str, Any]] = [
 ]
 _VARIABLE_AXES_BY_TAG: dict[str, Any] = {axis["tag"]: axis for axis in _VARIABLE_AXES}
 
+# https://learn.microsoft.com/en-us/typography/opentype/spec/fvar#variationaxisrecord
+# fvar axis flags bit: the axis should not be exposed in user interfaces
+_HIDDEN_AXIS_FLAG_BIT = 0
+
 
 def _all_axes_pinned(
     axes: dict[str, Any],
@@ -99,9 +104,12 @@ def get_variable_axes(
     ttfont: TTFont,
     *,
     sort: bool = False,
+    include_hidden: bool = True,
 ) -> list[dict[str, Any]] | None:
     """
     Gets the variable axes of the given font, None if the font is not variable.
+    Each axis has a "hidden" key, True when the fvar flags mark it as hidden
+    from user interfaces; with include_hidden=False the hidden axes are skipped.
     """
     if not is_variable(ttfont):
         return None
@@ -114,9 +122,12 @@ def get_variable_axes(
             "min_value": axis.minValue,
             "max_value": axis.maxValue,
             "default_value": axis.defaultValue,
+            "hidden": get_flag(axis.flags, _HIDDEN_AXIS_FLAG_BIT),
         }
         for axis in ttfont["fvar"].axes
     ]
+    if not include_hidden:
+        axes = [axis for axis in axes if not axis["hidden"]]
     if sort:
         axes = sorted(
             axes,
