@@ -201,6 +201,45 @@ class VersionTestCase(AbstractTestCase):
         with self.assertRaises(ArgumentError):
             font.get_version(use_head_revision=False, use_name_record=False)
 
+    def _get_font_with_versions(self, head_revision, version_name_record):
+        font = self._get_font(self.FONT_FILEPATH)
+        font.get_ttfont()["head"].fontRevision = head_revision
+        font.set_name(Font.NAME_VERSION, version_name_record)
+        return font
+
+    def test_get_version_with_head_revision_lower_than_name_record(self):
+        # eg. the fonts exported by Fontself Maker leave head.fontRevision to 1.0
+        font = self._get_font_with_versions(1.0, "Version 1.057;Fontself Maker 3.6.12")
+        self.assertEqual(font.get_version(), 1.057)
+        self.assertEqual(font.get_version_formatted(), "v1.057")
+
+    def test_get_version_with_head_revision_higher_than_name_record(self):
+        font = self._get_font_with_versions(2.0, "Version 1.500")
+        self.assertEqual(font.get_version(), 2.0)
+        self.assertEqual(font.get_version_formatted(), "v2.000")
+
+    def test_get_version_with_head_revision_equal_to_name_record(self):
+        font = self._get_font_with_versions(1.015, "Version 1.015")
+        self.assertEqual(font.get_version(), 1.015)
+
+    def test_get_version_with_different_versions_and_a_single_source(self):
+        font = self._get_font_with_versions(1.0, "Version 1.057")
+        self.assertEqual(font.get_version(use_name_record=False), 1.0)
+        self.assertEqual(font.get_version(use_head_revision=False), 1.057)
+
+    def test_set_version_with_head_revision_lower_than_name_record(self):
+        # the unique identifier holds the version of the name record, the
+        # highest one: it is the version replaced
+        font = self._get_font_with_versions(1.0, "Version 1.057")
+        font.set_name(Font.NAME_UNIQUE_IDENTIFIER, "1.057;UKWN;Tourney-Regular")
+        font.set_version(1.058)
+        self.assertEqual(font.get_version(), 1.058)
+        self.assertEqual(font.get_name(Font.NAME_VERSION), "Version 1.058")
+        self.assertEqual(
+            font.get_name(Font.NAME_UNIQUE_IDENTIFIER),
+            "1.058;UKWN;Tourney-Regular",
+        )
+
     def test_get_version_formatted(self):
         font = self._get_font(self.FONT_FILEPATH)
         self.assertEqual(font.get_version_formatted(), "v1.015")

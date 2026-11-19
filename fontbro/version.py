@@ -121,8 +121,10 @@ def get_version(
     use_name_record: bool = True,
 ) -> float:
     """
-    Gets the version of the given font reading it from head.fontRevision,
-    with fallback on the version name record (name id 5) parsed value.
+    Gets the version of the given font reading it from head.fontRevision
+    and from the version name record (name id 5) parsed value: the highest
+    of the two (font versions only grow, a tool can update only one of them,
+    eg. head.fontRevision left to 1.0), or the only one that can be read.
     The value is normalized to its shortest decimal representation,
     so that it doesn't depend on the source it has been read from.
     """
@@ -131,19 +133,41 @@ def get_version(
             "Invalid arguments: at least one of 'use_head_revision' "
             "and 'use_name_record' options must be True."
         )
+    versions = []
     if use_head_revision:
-        # the head table is read only if the font has it
-        head = ttfont.get("head")
-        if head is not None:
-            # fontRevision is 0.0 when it has not been set
-            version = float(getattr(head, "fontRevision", None) or 0.0)
-            if 0 < version <= _VERSION_MAX_VALUE:
-                return normalize_version(version)
+        versions.append(_get_head_revision(ttfont))
     if use_name_record:
-        version = parse_version(_names.get_name(ttfont, _names.NAME_VERSION))
-        if version > 0:
-            return version
-    return 0.0
+        versions.append(_get_name_version(ttfont))
+    return max(versions)
+
+
+def _get_head_revision(
+    ttfont: TTFont,
+) -> float:
+    """
+    Gets the normalized head.fontRevision value of the given font,
+    0.0 if the font has no head table or if the value is not set
+    or cannot be stored as a font version.
+    """
+    head = ttfont.get("head")
+    if head is None:
+        return 0.0
+    # fontRevision is 0.0 when it has not been set
+    version = float(getattr(head, "fontRevision", None) or 0.0)
+    if not 0 < version <= _VERSION_MAX_VALUE:
+        return 0.0
+    return normalize_version(version)
+
+
+def _get_name_version(
+    ttfont: TTFont,
+) -> float:
+    """
+    Gets the version parsed from the version name record (name id 5)
+    of the given font, 0.0 if the font has no such record or if its value
+    cannot be parsed.
+    """
+    return parse_version(_names.get_name(ttfont, _names.NAME_VERSION))
 
 
 def get_version_formatted(
