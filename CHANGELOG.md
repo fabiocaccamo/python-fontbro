@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.35.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.35.0) - 2026-11-19
+-   Change `get_version` and `get_version_formatted` to return the highest version between `head.fontRevision` and the version name record (name ID 5) when both are read, instead of the name record only as a fallback.
+
 ## [0.34.0](https://github.com/fabiocaccamo/python-fontbro/releases/tag/0.34.0) - 2026-11-18
 -   Add `hidden` key to the axes returned by `get_variable_axes` and `get_variable_axis_by_tag`: `True` when the `fvar` axis flags mark the axis as hidden from user interfaces.
 -   Add `include_hidden` option to `get_variable_axes` (default `True`, backward compatible): with `include_hidden=False` the hidden axes are skipped.
